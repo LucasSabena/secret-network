@@ -27,4 +27,25 @@ export type Categoria = {
   icono: string | null;
 };
 
+// Tipo para posts del blog
+export type BlogPost = {
+  id: number;
+  titulo: string;
+  slug: string;
+  descripcion_corta: string | null;
+  contenido: string;
+  imagen_portada_url: string | null;
+  autor: string | null;
+  fecha_publicacion: string;
+  actualizado_en: string;
+  publicado: boolean;
+  tags: string[] | null;
+};
+
+// Tipo para relaciones de alternativas
+export type ProgramaAlternativa = {
+  programa_original_id: number;
+  programa_alternativa_id: number;
+};
+
 // Añadiremos más tipos para plataformas, modelos_de_precios, etc., aquí.
