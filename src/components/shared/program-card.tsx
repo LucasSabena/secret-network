@@ -196,7 +196,7 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
 
             {/* BACK SIDE - Information */}
             <Card 
-              className="absolute inset-0 overflow-hidden flex flex-col pb-0"
+              className="absolute inset-0 overflow-hidden flex flex-col"
               style={{ 
                 backfaceVisibility: 'hidden',
                 transform: 'rotateY(180deg)'
@@ -248,27 +248,24 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
                 )}
               </CardHeader>
 
-              {/* Information - scrollable if needed */}
-              <CardContent className="flex-1 overflow-y-auto flex flex-col gap-3 min-h-0">
-                <CardDescription className="line-clamp-3 text-sm">
+              {/* Information */}
+              <CardContent className="flex-1 flex flex-col gap-3">
+                <CardDescription className="line-clamp-2 lg:line-clamp-3 text-sm leading-relaxed">
                   {stripHtml(program.descripcion_corta || "No hay descripción disponible.")}
                 </CardDescription>
 
                 {program.subcategorias && program.subcategorias.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5">
-                    {program.subcategorias.slice(0, 4).map((subcat) => (
-                      <span
-                        key={subcat.id}
-                        className="inline-flex items-center rounded-md bg-accent/50 px-2 py-0.5 text-xs font-medium text-accent-foreground"
-                      >
-                        #{stripHtml(subcat.nombre)}
-                      </span>
-                    ))}
-                    {program.subcategorias.length > 4 && (
-                      <span className="inline-flex items-center rounded-md bg-accent/50 px-2 py-0.5 text-xs font-medium text-accent-foreground">
-                        +{program.subcategorias.length - 4}
-                      </span>
-                    )}
+                  <div className="overflow-x-auto -mx-6 px-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                    <div className="flex gap-1.5 min-w-max">
+                      {program.subcategorias.map((subcat) => (
+                        <span
+                          key={subcat.id}
+                          className="inline-flex items-center rounded-md bg-accent/50 px-2 py-0.5 text-xs font-medium text-accent-foreground whitespace-nowrap"
+                        >
+                          #{stripHtml(subcat.nombre)}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 )}
 
