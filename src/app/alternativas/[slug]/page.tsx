@@ -31,13 +31,14 @@ export async function generateStaticParams() {
 }
 
 // Generar metadata dinámica
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
   const supabase = await createClient();
   
   const { data: programa } = await supabase
     .from('programas')
     .select('*')
-    .eq('slug', params.slug)
+    .eq('slug', slug)
     .single();
 
   if (!programa) {
@@ -52,14 +53,15 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default async function AlternativasDetailPage({ params }: { params: { slug: string } }) {
+export default async function AlternativasDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   const supabase = await createClient();
   
   // Obtener el programa original
   const { data: programa, error: programaError } = await supabase
     .from('programas')
     .select('*')
-    .eq('slug', params.slug)
+    .eq('slug', slug)
     .single();
 
   if (programaError || !programa) {
