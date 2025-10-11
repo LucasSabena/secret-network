@@ -72,6 +72,32 @@ Los colores se definen como variables CSS en HSL en `globals.css` y se mapean en
 - **Fondo (Dark):** Gris oscuro (`#202020` aprox., `hsl(240 10% 3.9%)`)
 - **Texto (Dark):** Blanco roto (`#FAFAFA`, `hsl(0 0% 98%)`)
 
+#### Uso de Degradados (Gradient Pattern)
+Para resaltar palabras clave en títulos y headings, se utiliza el siguiente patrón estándar:
+
+**Degradado Primario (Rosa a Rosa Oscuro):**
+```jsx
+<span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+  palabra clave
+</span>
+```
+
+Este degradado debe usarse consistentemente en:
+- Títulos principales de hero sections
+- Palabras destacadas en headings (h1, h2)
+- CTAs importantes
+- Nombres de programas/herramientas destacadas
+
+**Ejemplo de implementación:**
+```jsx
+<h1>
+  Descubrí programas de{" "}
+  <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+    diseño
+  </span>
+</h1>
+```
+
 ### 5.3. Código de Implementación del Design System
 
 #### Archivo: `src/app/globals.css`
