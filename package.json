@@ -17,6 +17,7 @@
     "deep:diagnosis": "tsx scripts/deep-diagnosis.ts"
   },
   "dependencies": {
+    "@radix-ui/react-slot": "^1.2.3",
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.75.0",
     "@tanstack/react-query": "^5.90.2",

@@ -1,8 +1,16 @@
 import { createClient } from "@/lib/supabase";
-import { ChevronRight, Home } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { ProgramCard } from "@/components/shared/program-card";
 import { notFound } from "next/navigation";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 interface PageProps {
   params: Promise<{
@@ -50,30 +58,29 @@ export default async function SubcategoryPage({ params }: PageProps) {
       <main className="min-h-screen bg-background">
         <div className="container mx-auto px-4 py-8 md:py-12">
           {/* Breadcrumb */}
-          <nav className="mb-6 flex items-center gap-2 text-sm text-muted-foreground">
-            <Link 
-              href="/" 
-              className="flex items-center gap-1 transition-colors hover:text-foreground"
-            >
-              <Home className="h-4 w-4" />
-            </Link>
-            <ChevronRight className="h-4 w-4" />
-            <Link 
-              href="/categorias"
-              className="transition-colors hover:text-foreground"
-            >
-              Categories
-            </Link>
-            <ChevronRight className="h-4 w-4" />
-            <Link 
-              href={`/categorias`}
-              className="transition-colors hover:text-foreground"
-            >
-              {categoriaPadre.nombre}
-            </Link>
-            <ChevronRight className="h-4 w-4" />
-            <span className="text-foreground">{subcategoria.nombre}</span>
-          </nav>
+          <div className="mb-6">
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem>
+                  <BreadcrumbLink href="/">Inicio</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbLink href="/categorias">Categorías</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbLink href={`/categorias/${categoriaPadre.slug}`}>
+                    {categoriaPadre.nombre}
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>{subcategoria.nombre}</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+          </div>
 
           {/* Header */}
           <div className="mb-8">
@@ -157,30 +164,29 @@ export default async function SubcategoryPage({ params }: PageProps) {
     <main className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8 md:py-12">
         {/* Breadcrumb */}
-        <nav className="mb-6 flex items-center gap-2 text-sm text-muted-foreground">
-          <Link 
-            href="/" 
-            className="flex items-center gap-1 transition-colors hover:text-foreground"
-          >
-            <Home className="h-4 w-4" />
-          </Link>
-          <ChevronRight className="h-4 w-4" />
-          <Link 
-            href="/categorias"
-            className="transition-colors hover:text-foreground"
-          >
-            Categories
-          </Link>
-          <ChevronRight className="h-4 w-4" />
-          <Link 
-            href={`/categorias`}
-            className="transition-colors hover:text-foreground"
-          >
-            {categoriaPadre.nombre}
-          </Link>
-          <ChevronRight className="h-4 w-4" />
-          <span className="text-foreground">{subcategoria.nombre}</span>
-        </nav>
+        <div className="mb-6">
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/">Inicio</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/categorias">Categorías</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbLink href={`/categorias/${categoriaPadre.slug}`}>
+                  {categoriaPadre.nombre}
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>{subcategoria.nombre}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        </div>
 
         {/* Header */}
         <div className="mb-8 md:mb-12">

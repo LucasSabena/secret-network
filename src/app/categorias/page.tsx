@@ -1,6 +1,14 @@
 import { createClient } from "@/lib/supabase";
-import { ChevronRight, Home } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import Link from "next/link";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 export default async function CategoriasPage() {
   const supabase = await createClient();
@@ -56,17 +64,19 @@ export default async function CategoriasPage() {
     <main className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8 md:py-12">
         {/* Breadcrumb */}
-        <nav className="mb-6 flex items-center gap-2 text-sm text-muted-foreground">
-          <Link 
-            href="/" 
-            className="flex items-center gap-1 transition-colors hover:text-foreground"
-          >
-            <Home className="h-4 w-4" />
-            Home
-          </Link>
-          <ChevronRight className="h-4 w-4" />
-          <span className="text-foreground">Categories</span>
-        </nav>
+        <div className="mb-6">
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/">Inicio</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>Categorías</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        </div>
 
         {/* Header */}
         <div className="mb-8 md:mb-12">
@@ -111,15 +121,6 @@ export default async function CategoriasPage() {
               )}
             </div>
           ))}
-        </div>
-
-        {/* Footer info */}
-        <div className="mt-12 rounded-lg border border-border bg-card p-6">
-          <p className="text-sm text-muted-foreground">
-            Showing {categoriasConSubs?.length || 0} main categories with{" "}
-            {categoriasConSubs?.reduce((acc, cat) => acc + (cat.subcategorias?.length || 0), 0) || 0}{" "}
-            subcategories total.
-          </p>
         </div>
       </div>
     </main>

@@ -16,6 +16,15 @@ import {
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ProgramCard } from "@/components/shared/program-card";
+import { FormattedText } from "@/components/shared/formatted-text";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 /**
  * Strip HTML tags from a string
@@ -23,6 +32,17 @@ import { ProgramCard } from "@/components/shared/program-card";
 function stripHtml(html: string | null | undefined): string {
   if (!html) return '';
   return html.replace(/<[^>]*>/g, '').trim();
+}
+
+/**
+ * Ensure URL has a protocol (https://)
+ */
+function ensureProtocol(url: string | null | undefined): string {
+  if (!url) return '';
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url;
+  }
+  return `https://${url}`;
 }
 
 interface ProgramPageProps {
@@ -182,16 +202,30 @@ export default async function ProgramPage({ params }: ProgramPageProps) {
 
   return (
     <main className="min-h-screen">
-      {/* Back Button */}
+      {/* Breadcrumb Navigation */}
       <div className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto px-4 py-4">
-          <Link 
-            href="/"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Volver al inicio
-          </Link>
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/">Inicio</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              {programaCompleto.categoria && (
+                <>
+                  <BreadcrumbItem>
+                    <BreadcrumbLink href={`/categorias/${programaCompleto.categoria.slug}`}>
+                      {stripHtml(programaCompleto.categoria.nombre)}
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                </>
+              )}
+              <BreadcrumbItem>
+                <BreadcrumbPage>{programaCompleto.nombre}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
         </div>
       </div>
 
@@ -259,7 +293,7 @@ export default async function ProgramPage({ params }: ProgramPageProps) {
               <div className="flex flex-wrap gap-3">
                 {programaCompleto.web_oficial_url && (
                   <a
-                    href={programaCompleto.web_oficial_url}
+                    href={ensureProtocol(programaCompleto.web_oficial_url)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
@@ -277,9 +311,9 @@ export default async function ProgramPage({ params }: ProgramPageProps) {
 
       {/* Main Content */}
       <div className="container mx-auto px-4 py-12">
-        <div className="grid gap-8 lg:grid-cols-3">
-          {/* Left Column - Main Content */}
-          <div className="lg:col-span-2 space-y-8">
+        <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
+          {/* Left Column - Main Content (wider) */}
+          <div className="space-y-8">
             {/* Screenshot */}
             {programaCompleto.captura_url && (
               <Card>
@@ -296,7 +330,7 @@ export default async function ProgramPage({ params }: ProgramPageProps) {
               </Card>
             )}
 
-            {/* Long Description */}
+            {/* Long Description with Better Formatting */}
             {programaCompleto.descripcion_larga && (
               <Card>
                 <CardHeader>
@@ -304,19 +338,14 @@ export default async function ProgramPage({ params }: ProgramPageProps) {
                 </CardHeader>
                 <CardContent>
                   <div className="prose prose-neutral dark:prose-invert max-w-none">
-                    <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
-                      {stripHtml(programaCompleto.descripcion_larga || "")}
-                    </p>
+                    <FormattedText text={stripHtml(programaCompleto.descripcion_larga || "")} />
                   </div>
                 </CardContent>
               </Card>
             )}
-          </div>
 
-          {/* Right Column - Metadata */}
-          <div className="space-y-6">
-            {/* Details Card */}
-            <Card>
+            {/* Details Card - Moved to main column for mobile, hidden on desktop */}
+            <Card className="lg:hidden">
               <CardHeader>
                 <CardTitle className="text-lg">Detalles</CardTitle>
               </CardHeader>
@@ -399,12 +428,117 @@ export default async function ProgramPage({ params }: ProgramPageProps) {
               </CardContent>
             </Card>
           </div>
+
+          {/* Right Column - Sticky Sidebar */}
+          <aside className="hidden lg:block">
+            <div className="sticky top-4 space-y-6">
+              {/* Details Card */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Detalles</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {/* Difficulty */}
+                  {programaCompleto.dificultad && (
+                    <div>
+                      <h3 className="mb-2 text-sm font-medium text-foreground">Dificultad</h3>
+                      <span className={`inline-flex items-center rounded-md px-2.5 py-1 text-sm font-medium ${
+                        programaCompleto.dificultad === 'Facil' 
+                          ? 'bg-success/10 text-success' 
+                          : programaCompleto.dificultad === 'Intermedio'
+                          ? 'bg-warning/10 text-warning'
+                          : 'bg-destructive/10 text-destructive'
+                      }`}>
+                        {programaCompleto.dificultad}
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Subcategories */}
+                  {programaCompleto.subcategorias.length > 0 && (
+                    <div>
+                      <h3 className="mb-2 text-sm font-medium text-foreground">Subcategorías</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {programaCompleto.subcategorias.map((subcat: any) => (
+                          <span
+                            key={subcat.id}
+                            className="inline-flex items-center rounded-md bg-accent px-2.5 py-1 text-sm font-medium text-accent-foreground"
+                          >
+                            {subcat.nombre}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Platforms */}
+                  {programaCompleto.plataformas.length > 0 && (
+                    <div>
+                      <h3 className="mb-2 text-sm font-medium text-foreground">Plataformas</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {programaCompleto.plataformas.map((plat: any) => (
+                          <span
+                            key={plat.id}
+                            className="inline-flex items-center gap-1.5 rounded-md bg-muted px-2.5 py-1 text-sm font-medium text-foreground"
+                          >
+                            {plat.icono_url && (
+                              <Image
+                                src={plat.icono_url}
+                                alt={plat.nombre}
+                                width={16}
+                                height={16}
+                                className="object-contain"
+                              />
+                            )}
+                            {plat.nombre}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Pricing Models */}
+                  {programaCompleto.modelos_precio.length > 0 && (
+                    <div>
+                      <h3 className="mb-2 text-sm font-medium text-foreground">Modelo de Precios</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {programaCompleto.modelos_precio.map((modelo: any) => (
+                          <span
+                            key={modelo.id}
+                            className="inline-flex items-center rounded-md bg-primary/10 px-2.5 py-1 text-sm font-medium text-primary"
+                          >
+                            {modelo.nombre}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Alternatives - Sticky on sidebar */}
+              {programaCompleto.alternativas.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Alternativas</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {programaCompleto.alternativas.slice(0, 5).map((alternativa: any) => (
+                        <ProgramCard key={alternativa.id} program={alternativa} variant="small" />
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+          </aside>
         </div>
 
-        {/* Alternatives Section */}
+        {/* Alternatives Section - Mobile/Tablet */}
         {programaCompleto.alternativas.length > 0 && (
-          <section className="mt-16">
-            <div className="mb-8">
+          <section className="mt-12 lg:hidden">
+            <div className="mb-6">
               <h2 className="text-2xl font-bold text-foreground">
                 Alternativas Recomendadas
               </h2>
@@ -413,7 +547,7 @@ export default async function ProgramPage({ params }: ProgramPageProps) {
               </p>
             </div>
 
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="grid gap-6 sm:grid-cols-2">
               {programaCompleto.alternativas.map((alternativa: any) => (
                 <ProgramCard key={alternativa.id} program={alternativa} />
               ))}
