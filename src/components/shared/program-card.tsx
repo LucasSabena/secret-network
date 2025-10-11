@@ -11,7 +11,7 @@ import {
   CardContent,
   CardFooter 
 } from "@/components/ui/card";
-import { ExternalLink, Github, Star, RotateCcw } from "lucide-react";
+import { ExternalLink, Github, Star, Info } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -100,16 +100,16 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
           <div className="h-4" /> {/* Bottom spacer */}
         </div>
         
-        {/* Flip button - solo visible en mobile/tablet */}
+        {/* Flip button - abajo a la derecha, sobre la imagen */}
         <button
           onClick={(e) => {
             e.preventDefault();
             setIsFlipped(!isFlipped);
           }}
-          className="absolute top-2 right-2 z-10 lg:hidden bg-background/80 backdrop-blur-sm border border-border rounded-full p-2 shadow-lg hover:bg-background transition-colors"
-          aria-label="Girar card"
+          className="absolute bottom-3 right-3 z-10 lg:hidden bg-primary/90 backdrop-blur-sm border border-primary rounded-full p-2.5 shadow-lg hover:bg-primary transition-colors"
+          aria-label="Ver información"
         >
-          <RotateCcw className="h-4 w-4 text-foreground" />
+          <Info className="h-4 w-4 text-primary-foreground" />
         </button>
         
         <Link 
