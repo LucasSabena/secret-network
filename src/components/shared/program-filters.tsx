@@ -236,17 +236,21 @@ export function ProgramFilters({
             <div className="space-y-2">
               <label className="text-sm font-medium">Precio</label>
               <div className="space-y-2 rounded-lg border border-border bg-background p-3">
-                {modelosPrecios.map(modelo => (
-                  <label key={modelo.id} className="flex cursor-pointer items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={filters.modelosPrecioIds.includes(modelo.id)}
-                      onChange={() => toggleModeloPrecio(modelo.id)}
-                      className="h-4 w-4 rounded border-border text-primary focus:ring-2 focus:ring-primary/20"
-                    />
-                    <span className="text-sm">{modelo.nombre}</span>
-                  </label>
-                ))}
+                {modelosPrecios.length > 0 ? (
+                  modelosPrecios.map(modelo => (
+                    <label key={modelo.id} className="flex cursor-pointer items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={filters.modelosPrecioIds.includes(modelo.id)}
+                        onChange={() => toggleModeloPrecio(modelo.id)}
+                        className="h-4 w-4 rounded border-border text-primary focus:ring-2 focus:ring-primary/20"
+                      />
+                      <span className="text-sm">{modelo.nombre}</span>
+                    </label>
+                  ))
+                ) : (
+                  <p className="text-xs text-muted-foreground">No hay modelos de precio disponibles</p>
+                )}
               </div>
             </div>
 
