@@ -17,6 +17,14 @@ const fontSpaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   title: "Secret Network",
   description: "Discover the best design tools and resources",
+  icons: {
+    icon: [
+      {
+        url: '/icon.svg',
+        type: 'image/svg+xml',
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
