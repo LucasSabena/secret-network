@@ -9,6 +9,7 @@ interface Programa {
   nombre: string;
   slug: string;
   descripcion_corta?: string;
+  descripcion_larga?: string;
   dificultad?: string;
   es_open_source: boolean;
   es_recomendado: boolean;
@@ -94,7 +95,10 @@ export function ProgramsListClient({
         const subcategoriasMatch = programa.subcategorias?.some(
           sub => sub.nombre.toLowerCase().includes(searchLower)
         );
-        return nombreMatch || categoriaMatch || subcategoriasMatch;
+        const descripcionCortaMatch = programa.descripcion_corta?.toLowerCase().includes(searchLower);
+        const descripcionLargaMatch = programa.descripcion_larga?.toLowerCase().includes(searchLower);
+        
+        return nombreMatch || categoriaMatch || subcategoriasMatch || descripcionCortaMatch || descripcionLargaMatch;
       });
     }
 
