@@ -1,10 +1,10 @@
-# Project Manifesto: Secret Station
+# Project Manifesto: Secret Network
 
-**IMPORTANTE:** Este documento es la única fuente de verdad para el desarrollo del proyecto "Secret Station". Todo el código generado debe adherirse estrictamente a las reglas, arquitecturas y sistemas de diseño definidos aquí.
+**IMPORTANTE:** Este documento es la única fuente de verdad para el desarrollo del proyecto "Secret Network". Todo el código generado debe adherirse estrictamente a las reglas, arquitecturas y sistemas de diseño definidos aquí.
 
 ## 1. Resumen del Proyecto y Objetivo
 
-**Secret Station** es un directorio moderno y curado de software y recursos para diseñadores. El objetivo es crear un sitio web rápido, estético y funcional donde los usuarios puedan descubrir herramientas, filtrar por categorías específicas (plataforma, precio, etc.), y encontrar alternativas de código abierto a programas populares.
+**Secret Network** es un directorio moderno y curado de software y recursos para diseñadores. El objetivo es crear un sitio web rápido, estético y funcional donde los usuarios puedan descubrir herramientas, filtrar por categorías específicas (plataforma, precio, etc.), y encontrar alternativas de código abierto a programas populares.
 
 - **Público Objetivo:** Diseñadores (UI/UX, gráficos), desarrolladores, estudiantes y creativos.
 - **Tono:** Moderno, limpio, tecnológico y profesional. La estética principal es *dark mode*.

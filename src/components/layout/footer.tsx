@@ -16,7 +16,7 @@ export function Footer() {
             <Link href="/" className="group inline-block transition-opacity hover:opacity-80">
               <Image
                 src="/logo.svg"
-                alt="Secret Station"
+                alt="Secret Network"
                 width={256}
                 height={23}
                 className="h-6 w-auto"
@@ -63,7 +63,7 @@ export function Footer() {
             <h3 className="font-semibold text-foreground">Acerca de</h3>
             <div className="space-y-3 text-sm">
               <p className="text-muted-foreground">
-                Secret Station es un proyecto que reúne las mejores herramientas para diseñadores y desarrolladores.
+                Secret Network es un proyecto que reúne las mejores herramientas para diseñadores y desarrolladores.
               </p>
               <a
                 href="https://binarystudio.com.ar"
@@ -82,7 +82,7 @@ export function Footer() {
         <div className="mt-12 border-t border-border pt-8">
           <div className="flex flex-col items-center justify-between gap-4 text-sm text-muted-foreground md:flex-row">
             <p>
-              © {currentYear} Secret Station. Todos los derechos reservados.
+              © {currentYear} Secret Network. Todos los derechos reservados.
             </p>
             <a
               href="https://binarystudio.com.ar"

@@ -10,7 +10,7 @@ export function Navbar() {
         <Link href="/" className="group flex items-center transition-opacity hover:opacity-80">
           <Image
             src="/logo.svg"
-            alt="Secret Station"
+            alt="Secret Network"
             width={256}
             height={23}
             className="h-4 w-auto sm:h-6"

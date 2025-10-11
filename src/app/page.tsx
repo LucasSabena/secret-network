@@ -10,7 +10,7 @@ export const revalidate = 3600; // 1 hora
 
 // 🚀 Generar metadata para SEO
 export const metadata = {
-  title: 'Secret Station - Design Tools & Resources',
+  title: 'Secret Network - Design Tools & Resources',
   description: 'Discover the best design tools, software, and resources for creative professionals.',
 };
 
@@ -18,7 +18,7 @@ export const metadata = {
  * HomePage Component - Updated with filtering and search
  * 
  * Main landing page that displays:
- * - Hero section explaining what Secret Station is
+ * - Hero section explaining what Secret Network is
  * - Filters, search, and sorting controls
  * - All programs in a grid layout with full details
  * 

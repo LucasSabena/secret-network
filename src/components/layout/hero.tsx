@@ -7,7 +7,7 @@ import { Sparkles } from "lucide-react";
  * 
  * Main hero section for the homepage.
  * Inspired by OpenAlternative's clean, centered design.
- * Explains what Secret Station is about.
+ * Explains what Secret Network is about.
  */
 export function Hero() {
   return (
