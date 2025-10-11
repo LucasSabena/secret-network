@@ -1,0 +1,38 @@
+# Robots.txt para Secret Network
+# Permitir a todos los bots indexar el sitio
+
+User-agent: *
+Allow: /
+
+# Permitir específicamente a bots de IA
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Disallow páginas no indexables
+Disallow: /api/
+Disallow: /_next/
+Disallow: /test/
+
+# Sitemap
+Sitemap: https://secret-network.vercel.app/sitemap.xml

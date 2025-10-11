@@ -6,6 +6,8 @@ import { notFound } from "next/navigation";
 import { BlogContent } from "@/components/blog/blog-content";
 import { BlogPostHeader } from "@/components/blog/blog-post-header";
 import { RelatedPosts } from "@/components/blog/related-posts";
+import { JsonLdArticle } from "@/components/seo/json-ld-article";
+import { JsonLdBreadcrumb } from "@/components/seo/json-ld-breadcrumb";
 import type { BlogPost } from "@/lib/types";
 
 export const revalidate = 3600; // 1 hora
@@ -45,11 +47,23 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: `${post.titulo} | Secret Network Blog`,
     description: post.descripcion_corta || post.titulo,
+    keywords: post.tags || [],
+    authors: post.autor ? [{ name: post.autor }] : [{ name: 'Secret Network' }],
     openGraph: {
+      type: 'article',
       title: post.titulo,
       description: post.descripcion_corta || '',
       images: post.imagen_portada_url ? [post.imagen_portada_url] : [],
-      type: 'article',
+      publishedTime: post.fecha_publicacion,
+      modifiedTime: post.actualizado_en,
+      authors: post.autor ? [post.autor] : undefined,
+      tags: post.tags || undefined,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.titulo,
+      description: post.descripcion_corta || '',
+      images: post.imagen_portada_url ? [post.imagen_portada_url] : [],
     },
   };
 }
@@ -79,6 +93,16 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   return (
     <div className="container mx-auto px-4 py-8">
+      {/* JSON-LD Structured Data */}
+      <JsonLdArticle post={post as BlogPost} />
+      <JsonLdBreadcrumb 
+        items={[
+          { name: 'Inicio', url: '/' },
+          { name: 'Blog', url: '/blog' },
+          { name: post.titulo, url: `/blog/${post.slug}` },
+        ]}
+      />
+
       <article className="max-w-4xl mx-auto">
         <BlogPostHeader post={post as BlogPost} />
         <BlogContent content={post.contenido} />

@@ -15,6 +15,7 @@ import { ExternalLink, Github, Star, Info } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { programEvents } from "@/components/analytics/analytics-events";
 
 function stripHtml(html: string | null | undefined): string {
   if (!html) return '';
@@ -30,9 +31,30 @@ interface ProgramCardProps {
 }
 
 export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
+  const handleClick = () => {
+    programEvents.clickProgram(
+      program.nombre, 
+      program.categoria?.nombre || 'Sin categoría'
+    );
+  };
+
+  const handleVisitWebsite = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    programEvents.visitWebsite(program.nombre);
+    if (program.web_oficial_url) {
+      window.open(program.web_oficial_url, '_blank', 'noopener,noreferrer');
+    }
+  };
+
   if (variant === 'small') {
     return (
-      <Link href={`/programas/${program.slug}`} className="block" prefetch={false}>
+      <Link 
+        href={`/programas/${program.slug}`} 
+        className="block" 
+        prefetch={false}
+        onClick={handleClick}
+      >
         <Card className="group relative overflow-hidden transition-all duration-200 hover:border-primary hover:shadow-md hover:shadow-primary/10">
           <CardContent className="px-3 py-2">
             <div className="flex gap-3">
@@ -116,6 +138,7 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
           href={`/programas/${program.slug}`} 
           className="block w-full absolute inset-0"
           prefetch={false}
+          onClick={handleClick}
         >
           <div 
             className={`relative w-full h-full transition-transform duration-700 lg:hover:[transform:rotateY(180deg)] ${isFlipped ? '[transform:rotateY(180deg)]' : ''}`}

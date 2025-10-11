@@ -4,6 +4,7 @@ import { createClient, createStaticClient } from "@/lib/supabase";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { Metadata } from "next";
 import { 
   ExternalLink, 
   ArrowLeft, 
@@ -17,6 +18,8 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ProgramCard } from "@/components/shared/program-card";
 import { FormattedText } from "@/components/shared/formatted-text";
+import { JsonLdSoftware } from "@/components/seo/json-ld-software";
+import { JsonLdBreadcrumb } from "@/components/seo/json-ld-breadcrumb";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -49,6 +52,54 @@ interface ProgramPageProps {
   params: Promise<{
     slug: string;
   }>;
+}
+
+/**
+ * Generate metadata for SEO
+ */
+export async function generateMetadata({ params }: ProgramPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const supabase = await createClient();
+  
+  const { data: programa } = await supabase
+    .from('programas')
+    .select('nombre, descripcion_corta, descripcion_larga, icono_url, captura_url, es_open_source')
+    .eq('slug', slug)
+    .single();
+
+  if (!programa) {
+    return {
+      title: 'Programa no encontrado',
+    };
+  }
+
+  const description = stripHtml(programa.descripcion_corta || programa.descripcion_larga) || `Descubre ${programa.nombre}, una herramienta de diseño profesional.`;
+  const imageUrl = programa.captura_url || programa.icono_url || '/og-image.png';
+
+  return {
+    title: programa.nombre,
+    description,
+    keywords: [
+      programa.nombre,
+      'herramienta de diseño',
+      'software de diseño',
+      programa.es_open_source ? 'open source' : 'software',
+      programa.es_open_source ? 'gratis' : '',
+      `alternativa ${programa.nombre}`,
+    ],
+    openGraph: {
+      title: `${programa.nombre} - Secret Network`,
+      description,
+      images: [imageUrl],
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${programa.nombre} - Secret Network`,
+      description,
+      images: [imageUrl],
+    },
+  };
 }
 
 /**
@@ -202,6 +253,19 @@ export default async function ProgramPage({ params }: ProgramPageProps) {
 
   return (
     <main className="min-h-screen">
+      {/* JSON-LD Structured Data */}
+      <JsonLdSoftware programa={programaCompleto} />
+      <JsonLdBreadcrumb 
+        items={[
+          { name: 'Inicio', url: '/' },
+          ...(programaCompleto.categoria ? [{ 
+            name: stripHtml(programaCompleto.categoria.nombre), 
+            url: `/categorias/${programaCompleto.categoria.slug}` 
+          }] : []),
+          { name: programaCompleto.nombre, url: `/programas/${programaCompleto.slug}` },
+        ]}
+      />
+
       {/* Breadcrumb Navigation */}
       <div className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto px-4 py-4">
