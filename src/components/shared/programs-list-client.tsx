@@ -175,8 +175,8 @@ export function ProgramsListClient({
       {/* Results Count */}
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
-          Showing <span className="font-semibold text-foreground">{filteredPrograms.length}</span> of{' '}
-          <span className="font-semibold text-foreground">{initialPrograms.length}</span> programs
+          Mostrando <span className="font-semibold text-foreground">{filteredPrograms.length}</span> de{' '}
+          <span className="font-semibold text-foreground">{initialPrograms.length}</span> programas
         </p>
       </div>
 
@@ -190,9 +190,9 @@ export function ProgramsListClient({
       ) : (
         <div className="flex min-h-[400px] items-center justify-center rounded-lg border border-border bg-card">
           <div className="text-center">
-            <p className="text-lg font-medium text-foreground">No programs found</p>
+            <p className="text-lg font-medium text-foreground">No se encontraron programas</p>
             <p className="mt-1 text-sm text-muted-foreground">
-              Try adjusting your filters or search term
+              Intenta ajustar tus filtros o término de búsqueda
             </p>
           </div>
         </div>

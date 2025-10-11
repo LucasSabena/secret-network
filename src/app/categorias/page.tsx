@@ -81,10 +81,10 @@ export default async function CategoriasPage() {
         {/* Header */}
         <div className="mb-8 md:mb-12">
           <h1 className="mb-3 text-3xl font-bold tracking-tight md:text-4xl">
-            Open Source Software Categories
+            Explora las categorías
           </h1>
           <p className="text-base text-muted-foreground md:text-lg">
-            Browse top categories to find your best Open Source software options.
+            Encontrá el programa o página que necesitas de forma rápida.
           </p>
         </div>
 
@@ -116,7 +116,7 @@ export default async function CategoriasPage() {
                 </ul>
               ) : (
                 <p className="text-sm text-muted-foreground/60">
-                  No subcategories available
+                  No hay subcategorías disponibles
                 </p>
               )}
             </div>

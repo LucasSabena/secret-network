@@ -143,10 +143,10 @@ export default async function HomePage() {
       <section className="container mx-auto px-4 py-12">
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-foreground sm:text-3xl">
-            Browse All Tools
+            Explorar Todas las Herramientas
           </h2>
           <p className="mt-2 text-muted-foreground">
-            Explore our complete collection of design tools
+            Explora nuestra colección completa de herramientas de diseño
           </p>
         </div>
 

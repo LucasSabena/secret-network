@@ -104,14 +104,14 @@ export default async function SubcategoryPage({ params }: PageProps) {
           <div className="flex min-h-[400px] items-center justify-center rounded-lg border border-border bg-card p-12">
             <div className="text-center">
               <p className="text-lg text-muted-foreground">
-                No programs found in this category yet.
+                No se encontraron programas en esta categoría aún.
               </p>
               <Link 
                 href="/categorias"
                 className="mt-4 inline-flex items-center gap-2 text-primary transition-colors hover:text-primary-hover"
               >
                 <ChevronRight className="h-4 w-4 rotate-180" />
-                Browse all categories
+                Ver todas las categorías
               </Link>
             </div>
           </div>
@@ -205,7 +205,7 @@ export default async function SubcategoryPage({ params }: PageProps) {
             </p>
           )}
           <p className="mt-2 text-sm text-muted-foreground">
-            {programasConDatos.length} {programasConDatos.length === 1 ? 'program' : 'programs'} found
+            {programasConDatos.length} {programasConDatos.length === 1 ? 'programa' : 'programas'} encontrados
           </p>
         </div>
 

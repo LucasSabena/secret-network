@@ -31,14 +31,14 @@ export function Hero() {
 
           {/* Main heading */}
           <h1 className="mb-6 text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
-            Descubre Alternativas a{" "}
+            Descubrí programas y páginas de{" "}
             <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              Software Popular
+              diseño
             </span>
           </h1>
 
           {/* Description */}
-          <p className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground sm:text-xl">
+          <p className="mx-auto mb-8 max-w-2xl text-lg text-foreground sm:text-xl">
             Tu directorio secreto de herramientas de diseño. Encuentra software 
             open-source, alternativas gratuitas y las mejores herramientas 
             cuidadosamente curadas para diseñadores y creativos.
@@ -53,10 +53,6 @@ export function Hero() {
             <div className="flex items-center gap-2">
               <div className="h-2 w-2 rounded-full bg-primary animate-pulse"></div>
               <span>Actualizaciones Continuas</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="h-2 w-2 rounded-full bg-accent animate-pulse"></div>
-              <span>100% Gratis</span>
             </div>
           </div>
         </div>
