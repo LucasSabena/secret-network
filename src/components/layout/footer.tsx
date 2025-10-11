@@ -1,7 +1,8 @@
 // FILE: src/components/layout/footer.tsx
 
 import Link from "next/link";
-import { Code2, Github, ExternalLink } from "lucide-react";
+import Image from "next/image";
+import { ExternalLink } from "lucide-react";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -9,14 +10,17 @@ export function Footer() {
   return (
     <footer className="border-t border-border bg-background">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-8 md:grid-cols-3">
           {/* Logo y descripción */}
           <div className="space-y-4">
-            <Link href="/" className="flex items-center gap-2 group">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/20">
-                <Code2 className="h-5 w-5 text-primary" />
-              </div>
-              <span className="text-xl font-bold">Secret Station</span>
+            <Link href="/" className="group inline-block transition-opacity hover:opacity-80">
+              <Image
+                src="/logo.svg"
+                alt="Secret Station"
+                width={256}
+                height={23}
+                className="h-6 w-auto"
+              />
             </Link>
             <p className="text-sm text-muted-foreground">
               Tu directorio secreto de herramientas de diseño y desarrollo. Descubre las mejores soluciones open source y propietarias.
@@ -54,40 +58,6 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Recursos */}
-          <div className="space-y-4">
-            <h3 className="font-semibold text-foreground">Recursos</h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link 
-                  href="/" 
-                  className="text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  Programas Recomendados
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  href="/" 
-                  className="text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  Open Source
-                </Link>
-              </li>
-              <li>
-                <a 
-                  href="https://github.com/LucasSabena/secret-station" 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  GitHub
-                  <ExternalLink className="h-3 w-3" />
-                </a>
-              </li>
-            </ul>
-          </div>
-
           {/* Acerca de */}
           <div className="space-y-4">
             <h3 className="font-semibold text-foreground">Acerca de</h3>
@@ -101,7 +71,6 @@ export function Footer() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-lg bg-primary/10 px-4 py-2 font-medium text-primary transition-colors hover:bg-primary/20"
               >
-                <Github className="h-4 w-4" />
                 <span>Creado por Binary Studio</span>
                 <ExternalLink className="h-3 w-3" />
               </a>
@@ -115,31 +84,15 @@ export function Footer() {
             <p>
               © {currentYear} Secret Station. Todos los derechos reservados.
             </p>
-            <div className="flex items-center gap-4">
-              <Link 
-                href="/" 
-                className="transition-colors hover:text-foreground"
-              >
-                Términos
-              </Link>
-              <span>•</span>
-              <Link 
-                href="/" 
-                className="transition-colors hover:text-foreground"
-              >
-                Privacidad
-              </Link>
-              <span>•</span>
-              <a
-                href="https://binarystudio.com.ar"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 transition-colors hover:text-foreground"
-              >
-                Binary Studio
-                <ExternalLink className="h-3 w-3" />
-              </a>
-            </div>
+            <a
+              href="https://binarystudio.com.ar"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 transition-colors hover:text-foreground"
+            >
+              Binary Studio
+              <ExternalLink className="h-3 w-3" />
+            </a>
           </div>
         </div>
       </div>
