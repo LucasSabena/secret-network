@@ -1,0 +1,45 @@
+{
+  "name": "tu-proyecto-de-diseno",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "seed:categories": "tsx scripts/seed-categories.ts",
+    "migrate:images": "tsx scripts/migrate-images-to-cloudinary.ts",
+    "upload:icons": "tsx scripts/upload-local-icons.ts",
+    "upload:corrected": "tsx scripts/upload-corrected-icons.ts",
+    "diagnose": "tsx scripts/diagnose-performance.ts",
+    "create:indexes": "tsx scripts/create-indexes.ts",
+    "test:performance": "tsx scripts/test-performance.ts",
+    "deep:diagnosis": "tsx scripts/deep-diagnosis.ts"
+  },
+  "dependencies": {
+    "@supabase/ssr": "^0.7.0",
+    "@supabase/supabase-js": "^2.75.0",
+    "@tanstack/react-query": "^5.90.2",
+    "class-variance-authority": "^0.7.1",
+    "cloudinary": "^2.7.0",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.23.24",
+    "lucide-react": "^0.545.0",
+    "next": "15.5.4",
+    "next-themes": "^0.4.6",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "tailwind-merge": "^3.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "autoprefixer": "^10.4.20",
+    "dotenv": "^17.2.3",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "tsx": "^4.20.6",
+    "typescript": "^5"
+  }
+}

@@ -1,0 +1,30 @@
+// FILE: src/lib/types.ts
+
+// Este tipo define la estructura de un objeto 'programa'
+// tal como lo recibimos de la base de datos.
+export type Programa = {
+  id: number;
+  nombre: string;
+  slug: string;
+  icono_url: string | null;
+  categoria_id: number;
+  descripcion_corta: string | null;
+  descripcion_larga: string | null;
+  captura_url: string | null;
+  dificultad: 'Facil' | 'Intermedio' | 'Dificil' | null;
+  es_open_source: boolean;
+  es_recomendado: boolean;
+  web_oficial_url: string | null;
+};
+
+// Ejemplo para la tabla 'categorias'
+export type Categoria = {
+  id: number;
+  nombre: string;
+  slug: string;
+  descripcion: string | null;
+  id_categoria_padre: number | null;
+  icono: string | null;
+};
+
+// Añadiremos más tipos para plataformas, modelos_de_precios, etc., aquí.

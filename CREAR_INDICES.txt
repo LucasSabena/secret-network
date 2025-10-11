@@ -1,0 +1,94 @@
+┌─────────────────────────────────────────────────────────────────────┐
+│                                                                     │
+│  🚀 GUÍA RÁPIDA: CREAR ÍNDICES EN SUPABASE                        │
+│                                                                     │
+└─────────────────────────────────────────────────────────────────────┘
+
+📋 PASOS PARA MEJORAR LA VELOCIDAD:
+
+1. Ve a: https://supabase.com/dashboard
+2. Selecciona tu proyecto
+3. En el menú lateral, haz clic en "SQL Editor"
+4. Copia y pega el siguiente código:
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+-- ⚡ ÍNDICES PARA MEJORAR PERFORMANCE
+-- Estos índices acelerarán las consultas de 761ms a ~100-150ms
+
+-- 1. Índice para buscar programas por categoría
+CREATE INDEX IF NOT EXISTS idx_programas_categoria_id 
+ON programas(categoria_id);
+
+-- 2. Índice para relaciones programa-subcategoría (por programa)
+CREATE INDEX IF NOT EXISTS idx_programas_subcategorias_programa_id 
+ON programas_subcategorias(programa_id);
+
+-- 3. Índice para relaciones programa-subcategoría (por subcategoría)
+CREATE INDEX IF NOT EXISTS idx_programas_subcategorias_subcategoria_id 
+ON programas_subcategorias(subcategoria_id);
+
+-- 4. Índice para buscar programas por slug (URLs amigables)
+CREATE INDEX IF NOT EXISTS idx_programas_slug 
+ON programas(slug);
+
+-- 5. Índice para buscar categorías por slug
+CREATE INDEX IF NOT EXISTS idx_categorias_slug 
+ON categorias(slug);
+
+-- 6. Índice para buscar subcategorías por categoría padre
+CREATE INDEX IF NOT EXISTS idx_categorias_id_categoria_padre 
+ON categorias(id_categoria_padre);
+
+-- 7. Índice para relaciones programa-modelos de precios
+CREATE INDEX IF NOT EXISTS idx_programas_modelos_programa_id 
+ON programas_modelos_de_precios(programa_id);
+
+-- 8. Índice para relaciones programa-modelos de precios (por modelo)
+CREATE INDEX IF NOT EXISTS idx_programas_modelos_modelo_id 
+ON programas_modelos_de_precios(modelo_precio_id);
+
+-- ✅ VERIFICAR QUE SE CREARON CORRECTAMENTE
+SELECT 
+    tablename,
+    indexname,
+    indexdef
+FROM pg_indexes
+WHERE schemaname = 'public'
+AND tablename IN ('programas', 'programas_subcategorias', 'categorias', 'programas_modelos_de_precios')
+ORDER BY tablename, indexname;
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+5. Haz clic en "RUN" (o presiona Ctrl+Enter)
+6. Deberías ver: "Success. No rows returned"
+7. Ejecuta de nuevo el diagnóstico:
+   
+   npm run diagnose
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📊 RESULTADOS ESPERADOS:
+
+ANTES:
+⏱️  Consulta con relaciones: 761ms
+
+DESPUÉS:
+⏱️  Consulta con relaciones: ~100-150ms
+
+🎯 MEJORA ESPERADA: 80-85% más rápido
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💡 ¿POR QUÉ ESTO MEJORA LA VELOCIDAD?
+
+Los índices son como un "índice" de un libro. Sin ellos, Supabase
+tiene que revisar TODAS las filas una por una (scan completo).
+
+Con índices, puede ir directamente a los datos que necesita.
+
+Ejemplo:
+- Sin índice: Buscar 1 programa entre 200 = revisar 200 filas
+- Con índice: Buscar 1 programa entre 200 = ir directo (1 operación)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
