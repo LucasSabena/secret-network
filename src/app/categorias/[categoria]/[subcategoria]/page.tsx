@@ -12,6 +12,12 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
+// Función para limpiar HTML
+function stripHtml(html: string | null | undefined): string {
+  if (!html) return '';
+  return html.replace(/<[^>]*>/g, '').trim();
+}
+
 interface PageProps {
   params: Promise<{
     categoria: string;
@@ -89,7 +95,7 @@ export default async function SubcategoryPage({ params }: PageProps) {
             </h1>
             {subcategoria.descripcion && (
               <p className="text-base text-muted-foreground md:text-lg">
-                {subcategoria.descripcion}
+                {stripHtml(subcategoria.descripcion)}
               </p>
             )}
           </div>
@@ -195,7 +201,7 @@ export default async function SubcategoryPage({ params }: PageProps) {
           </h1>
           {subcategoria.descripcion && (
             <p className="text-base text-muted-foreground md:text-lg">
-              {subcategoria.descripcion}
+              {stripHtml(subcategoria.descripcion)}
             </p>
           )}
           <p className="mt-2 text-sm text-muted-foreground">

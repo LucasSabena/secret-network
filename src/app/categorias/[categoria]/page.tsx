@@ -2,9 +2,75 @@ import { createClient } from "@/lib/supabase";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import Link from "next/link";
-import { ChevronRight, Home, Tag } from "lucide-react";
+import { 
+  ChevronRight, 
+  Home, 
+  Tag, 
+  Image as ImageIcon, 
+  Video, 
+  Smile, 
+  Shapes, 
+  FileText, 
+  Music, 
+  Type,
+  Palette,
+  Wand2,
+  Sparkles,
+  Globe,
+  Code,
+  Database,
+  Layout,
+  Brush,
+  PenTool,
+  Camera,
+  Film,
+  Mic
+} from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ProgramCard } from "@/components/shared/program-card";
+
+// Función para obtener el icono apropiado según el slug de la subcategoría
+function getSubcategoryIcon(slug: string) {
+  const iconMap: Record<string, any> = {
+    // Recursos de diseño
+    'bancos-de-imagenes-y-video': Video,
+    'iconos': Smile,
+    'logos-y-vectores': Shapes,
+    'plantillas-y-archivos-editables': FileText,
+    'sonidos-y-musica-de-stock': Music,
+    'tipografias-y-fuentes': Type,
+    
+    // Herramientas generales
+    'paletas-de-colores': Palette,
+    'editores': PenTool,
+    'visualizacion': Camera,
+    'animacion': Film,
+    'audio': Mic,
+    'ilustracion': Brush,
+    'fotografia': Camera,
+    'video-edicion': Film,
+    
+    // IA
+    'generacion-de-imagenes': Wand2,
+    'generacion-de-video': Sparkles,
+    'procesamiento-de-texto': Type,
+    'asistentes': Sparkles,
+    
+    // Web/Desarrollo
+    'frameworks': Code,
+    'cms': Database,
+    'hosting': Globe,
+    'diseno-web': Layout,
+  };
+  
+  return iconMap[slug] || Tag;
+}
+
+// Función para limpiar HTML
+function stripHtml(html: string | null | undefined): string {
+  if (!html) return '';
+  return html.replace(/<[^>]*>/g, '').trim();
+}
 
 type Props = {
   params: Promise<{ categoria: string }>;
@@ -187,7 +253,7 @@ export default async function CategoriaPage({ params }: Props) {
         </h1>
         {categoria.descripcion && (
           <p className="text-lg text-muted-foreground max-w-3xl">
-            {categoria.descripcion}
+            {stripHtml(categoria.descripcion)}
           </p>
         )}
         <div className="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
@@ -206,6 +272,7 @@ export default async function CategoriaPage({ params }: Props) {
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {subcategorias.map((subcategoria: Subcategoria) => {
                 const numProgramas = programasPorSubcategoria.get(subcategoria.id) || 0;
+                const IconComponent = getSubcategoryIcon(subcategoria.slug);
                 
                 return (
                   <Link
@@ -216,7 +283,7 @@ export default async function CategoriaPage({ params }: Props) {
                       <CardHeader>
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex items-center gap-2 flex-1">
-                            <Tag className="h-5 w-5 text-primary flex-shrink-0" />
+                            <IconComponent className="h-5 w-5 text-primary flex-shrink-0" />
                             <CardTitle className="text-lg">
                               {subcategoria.nombre}
                             </CardTitle>
@@ -226,7 +293,7 @@ export default async function CategoriaPage({ params }: Props) {
                       <CardContent>
                         {subcategoria.descripcion && (
                           <CardDescription className="mb-3 line-clamp-2">
-                            {subcategoria.descripcion}
+                            {stripHtml(subcategoria.descripcion)}
                           </CardDescription>
                         )}
                         <div className="text-sm text-muted-foreground">
