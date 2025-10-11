@@ -13,7 +13,7 @@ export function Navbar() {
             alt="Secret Station"
             width={256}
             height={23}
-            className="h-6 w-auto"
+            className="h-4 w-auto sm:h-6"
             priority
           />
         </Link>

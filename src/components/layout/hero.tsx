@@ -11,9 +11,9 @@ import { Sparkles } from "lucide-react";
  */
 export function Hero() {
   return (
-    <section className="relative py-16 md:py-24">
+    <section className="relative py-16 md:py-24 overflow-x-hidden">
       {/* Background gradient effect */}
-      <div className="absolute inset-0 -z-10 overflow-visible">
+      <div className="absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 blur-3xl opacity-20">
           <div className="h-[600px] w-[1000px] rounded-full bg-primary"></div>
         </div>

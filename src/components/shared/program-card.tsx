@@ -1,5 +1,7 @@
 // FILE: src/components/shared/program-card.tsx
 
+'use client';
+
 import { type Programa, type Categoria } from "@/lib/types";
 import { 
   Card, 
@@ -9,9 +11,10 @@ import {
   CardContent,
   CardFooter 
 } from "@/components/ui/card";
-import { ExternalLink, Github, Star } from "lucide-react";
+import { ExternalLink, Github, Star, RotateCcw } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 function stripHtml(html: string | null | undefined): string {
   if (!html) return '';
@@ -83,6 +86,8 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
 
   // Large variant with 3D flip effect on hover
   if (variant === 'large') {
+    const [isFlipped, setIsFlipped] = useState(false);
+    
     return (
       <div className="w-full relative" style={{ perspective: '1000px' }}>
         {/* Spacer invisible - define la altura real basada en el contenido */}
@@ -95,13 +100,25 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
           <div className="h-4" /> {/* Bottom spacer */}
         </div>
         
+        {/* Flip button - solo visible en mobile/tablet */}
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            setIsFlipped(!isFlipped);
+          }}
+          className="absolute top-2 right-2 z-10 lg:hidden bg-background/80 backdrop-blur-sm border border-border rounded-full p-2 shadow-lg hover:bg-background transition-colors"
+          aria-label="Girar card"
+        >
+          <RotateCcw className="h-4 w-4 text-foreground" />
+        </button>
+        
         <Link 
           href={`/programas/${program.slug}`} 
           className="block w-full absolute inset-0"
           prefetch={false}
         >
           <div 
-            className="relative w-full h-full transition-transform duration-700 hover:[transform:rotateY(180deg)]"
+            className={`relative w-full h-full transition-transform duration-700 lg:hover:[transform:rotateY(180deg)] ${isFlipped ? '[transform:rotateY(180deg)]' : ''}`}
             style={{ transformStyle: 'preserve-3d' }}
           >
             {/* FRONT SIDE - Screenshot */}
