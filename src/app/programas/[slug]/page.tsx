@@ -26,9 +26,9 @@ function stripHtml(html: string | null | undefined): string {
 }
 
 interface ProgramPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 /**
