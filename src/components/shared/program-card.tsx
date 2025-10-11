@@ -255,8 +255,8 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
                 </CardDescription>
 
                 {program.subcategorias && program.subcategorias.length > 0 && (
-                  <div className="overflow-x-auto -mx-6 px-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                    <div className="flex gap-1.5 min-w-max">
+                  <div className="overflow-x-auto lg:overflow-x-visible -mx-6 px-6 lg:mx-0 lg:px-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                    <div className="flex lg:flex-wrap gap-1.5 min-w-max lg:min-w-0">
                       {program.subcategorias.map((subcat) => (
                         <span
                           key={subcat.id}

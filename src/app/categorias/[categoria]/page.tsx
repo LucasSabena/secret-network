@@ -99,7 +99,7 @@ export default async function CategoriaPage({ params }: Props) {
     if (programaIds.length > 0) {
       const { data: programasData } = await supabase
         .from("programas")
-        .select("id, nombre, slug, descripcion_corta, icono_url, es_recomendado, es_open_source, dificultad, categoria_id, web_oficial_url")
+        .select("id, nombre, slug, descripcion_corta, icono_url, captura_url, es_recomendado, es_open_source, dificultad, categoria_id, web_oficial_url")
         .in("id", programaIds)
         .order("nombre");
 
@@ -248,7 +248,7 @@ export default async function CategoriaPage({ params }: Props) {
               </h2>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {programas.map((programa) => (
-                  <ProgramCard key={programa.id} program={programa} />
+                  <ProgramCard key={programa.id} program={programa} variant="large" />
                 ))}
               </div>
             </div>

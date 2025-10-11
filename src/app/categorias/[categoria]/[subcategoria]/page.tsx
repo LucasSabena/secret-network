@@ -125,7 +125,7 @@ export default async function SubcategoryPage({ params }: PageProps) {
   const { data: categorias } = await supabase
     .from('categorias')
     .select('id, nombre, slug')
-    .in('id', programas?.map(p => p.id_categoria) || []);
+    .in('id', programas?.map(p => p.categoria_id) || []);
 
   const categoriaMap = new Map(categorias?.map(c => [c.id, c]) || []);
 
@@ -156,7 +156,7 @@ export default async function SubcategoryPage({ params }: PageProps) {
   // 7. Ensamblar datos finales
   const programasConDatos = programas?.map(programa => ({
     ...programa,
-    categoria: categoriaMap.get(programa.id_categoria) || null,
+    categoria: categoriaMap.get(programa.categoria_id) || null,
     subcategorias: programaSubcatsMap.get(programa.id) || []
   })) || [];
 
@@ -204,9 +204,9 @@ export default async function SubcategoryPage({ params }: PageProps) {
         </div>
 
         {/* Programs Grid */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {programasConDatos.map((programa) => (
-            <ProgramCard key={programa.id} program={programa} />
+            <ProgramCard key={programa.id} program={programa} variant="large" />
           ))}
         </div>
       </div>
