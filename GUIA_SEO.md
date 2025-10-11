@@ -53,7 +53,7 @@ NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
 NEXT_PUBLIC_GTM_ID=GTM-XXXXXXX
 
 # Site URL
-NEXT_PUBLIC_SITE_URL=https://secretnetwork.vercel.app
+NEXT_PUBLIC_SITE_URL=https://secret-network.vercel.app
 ```
 
 ### Paso 2: Obtener Google Analytics ID
@@ -87,7 +87,7 @@ NEXT_PUBLIC_SITE_URL=https://secretnetwork.vercel.app
 ### 1. Agregar tu sitio
 
 1. Ve a [Google Search Console](https://search.google.com/search-console)
-2. Agrega una nueva propiedad: `https://secretnetwork.vercel.app`
+2. Agrega una nueva propiedad: `https://secret-network.vercel.app`
 3. Verifica la propiedad usando uno de estos métodos:
    - **HTML Tag**: Copia el código y agrégalo en `src/app/layout.tsx` en la metadata
    - **Google Analytics**: Si ya configuraste GA4, será automático
@@ -95,7 +95,7 @@ NEXT_PUBLIC_SITE_URL=https://secretnetwork.vercel.app
 ### 2. Enviar el sitemap
 
 1. En Search Console, ve a "Sitemaps"
-2. Ingresa: `https://secretnetwork.vercel.app/sitemap.xml`
+2. Ingresa: `https://secret-network.vercel.app/sitemap.xml`
 3. Haz clic en "Submit"
 
 ### 3. Verificar indexación
@@ -402,3 +402,4 @@ Si necesitas ayuda:
 
 **Última actualización:** Octubre 2025
 **Versión:** 1.0.0
+

@@ -13,7 +13,7 @@ export function JsonLdSoftware({ programa }: JsonLdSoftwareProps) {
     '@type': 'SoftwareApplication',
     name: programa.nombre,
     description: programa.descripcion_corta || programa.descripcion_larga,
-    url: `https://secretnetwork.vercel.app/programas/${programa.slug}`,
+    url: `https://secret-network.vercel.app/programas/${programa.slug}`,
     image: programa.icono_url || programa.captura_url,
     applicationCategory: 'DesignApplication',
     operatingSystem: 'Windows, macOS, Linux, Web',

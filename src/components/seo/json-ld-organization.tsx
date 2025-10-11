@@ -7,8 +7,8 @@ export function JsonLdOrganization() {
     '@type': 'Organization',
     name: 'Secret Network',
     description: 'Directorio completo de herramientas y programas de diseño, con alternativas gratuitas y open source.',
-    url: 'https://secretnetwork.vercel.app',
-    logo: 'https://secretnetwork.vercel.app/logo.svg',
+    url: 'https://secret-network.vercel.app',
+    logo: 'https://secret-network.vercel.app/logo.svg',
     foundingDate: '2024',
     sameAs: [
       // Agregar tus redes sociales aquí cuando las tengas

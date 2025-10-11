@@ -25,12 +25,12 @@ export function JsonLdArticle({ post }: JsonLdArticleProps) {
       name: 'Secret Network',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://secretnetwork.vercel.app/logo.svg',
+        url: 'https://secret-network.vercel.app/logo.svg',
       },
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://secretnetwork.vercel.app/blog/${post.slug}`,
+      '@id': `https://secret-network.vercel.app/blog/${post.slug}`,
     },
     keywords: post.tags?.join(', '),
   };

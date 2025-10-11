@@ -71,11 +71,11 @@
 ```bash
 # Pasos:
 1. Ir a https://search.google.com/search-console
-2. Agregar propiedad: https://secretnetwork.vercel.app
+2. Agregar propiedad: https://secret-network.vercel.app
 3. Verificar mediante:
    - HTML tag (agregar en layout.tsx metadata)
    - O esperar verificación automática por GA4
-4. Enviar sitemap: https://secretnetwork.vercel.app/sitemap.xml
+4. Enviar sitemap: https://secret-network.vercel.app/sitemap.xml
 5. Esperar 24-48h para ver indexación
 ```
 
@@ -114,8 +114,8 @@ VALUES
 ## 🚀 URLs Importantes
 
 ### Sitemap y Robots
-- **Sitemap**: https://secretnetwork.vercel.app/sitemap.xml
-- **Robots**: https://secretnetwork.vercel.app/robots.txt
+- **Sitemap**: https://secret-network.vercel.app/sitemap.xml
+- **Robots**: https://secret-network.vercel.app/robots.txt
 
 ### Herramientas de Verificación
 - **Google Search Console**: https://search.google.com/search-console
@@ -164,13 +164,13 @@ VALUES
 
 ```bash
 # 1. Verificar Sitemap
-curl https://secretnetwork.vercel.app/sitemap.xml
+curl https://secret-network.vercel.app/sitemap.xml
 
 # 2. Verificar Robots
-curl https://secretnetwork.vercel.app/robots.txt
+curl https://secret-network.vercel.app/robots.txt
 
 # 3. Verificar Metadata en una página
-curl -I https://secretnetwork.vercel.app/programas/figma
+curl -I https://secret-network.vercel.app/programas/figma
 
 # 4. Ver Schema.org en navegador
 # Abrir DevTools → Elements → Buscar <script type="application/ld+json">
@@ -248,3 +248,4 @@ Una vez configures Google Analytics y Search Console, tu sitio comenzará a inde
 - "mejores programas diseño gráfico"
 
 **📧 ¿Necesitas ayuda?** Revisa `GUIA_SEO.md` para instrucciones detalladas.
+
