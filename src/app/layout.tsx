@@ -12,6 +12,7 @@ import { GoogleAnalytics } from "@/components/analytics/google-analytics";
 import { GoogleTagManager, GoogleTagManagerNoScript } from "@/components/analytics/google-tag-manager";
 import { JsonLdOrganization } from "@/components/seo/json-ld-organization";
 import { JsonLdWebsite } from "@/components/seo/json-ld-website";
+import { Toaster } from "@/components/ui/toaster";
 
 const fontSpaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -119,6 +120,7 @@ export default function RootLayout({
               </main>
               <Footer />
             </div>
+            <Toaster />
           </ReactQueryProvider>
         </ThemeProvider>
 

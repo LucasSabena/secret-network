@@ -48,4 +48,19 @@ export type ProgramaAlternativa = {
   programa_alternativa_id: number;
 };
 
+// Tipo para plataformas
+export type Plataforma = {
+  id: number;
+  nombre: string;
+  slug: string;
+  icono_url: string | null;
+};
+
+// Tipo para modelos de precio
+export type ModeloDePrecio = {
+  id: number;
+  nombre: string;
+  slug: string;
+};
+
 // Añadiremos más tipos para plataformas, modelos_de_precios, etc., aquí.
