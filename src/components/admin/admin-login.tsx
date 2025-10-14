@@ -35,6 +35,8 @@ export default function AdminLogin() {
       }
 
       if (data.user) {
+        console.log('✅ Usuario autenticado:', data.user.email);
+        
         // Verificar si el usuario es admin
         const { data: adminData, error: adminError } = await supabase
           .from('admin_users')
@@ -42,12 +44,19 @@ export default function AdminLogin() {
           .eq('email', data.user.email)
           .single();
 
+        console.log('🔍 Verificando admin...');
+        console.log('- Email buscado:', data.user.email);
+        console.log('- Resultado:', adminData);
+        console.log('- Error:', adminError);
+
         if (adminError || !adminData) {
+          console.error('❌ No es admin:', { adminError, adminData });
           // No es admin, cerrar sesión
           await supabase.auth.signOut();
           throw new Error('No tienes permisos de administrador');
         }
 
+        console.log('✅ Usuario es admin');
         toast({
           title: '¡Bienvenido!',
           description: 'Iniciaste sesión correctamente',
