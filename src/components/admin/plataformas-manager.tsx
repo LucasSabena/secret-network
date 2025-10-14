@@ -23,7 +23,7 @@ export default function PlataformasManager() {
 
   const cargarPlataformas = async () => {
     setLoading(true);
-    const { data, error } = await supabaseBrowserClientBrowserClient
+    const { data, error } = await supabaseBrowserClient
       .from('Plataformas')
       .select('*')
       .order('nombre', { ascending: true });
