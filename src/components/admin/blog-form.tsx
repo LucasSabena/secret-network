@@ -56,7 +56,7 @@ export default function BlogForm({ post, onClose }: BlogFormProps) {
   async function onSubmit(data: FormData) {
     try {
       setIsSaving(true);
-      const supabase = supabaseBrowserClient();
+      const supabase = supabaseBrowserClient;
 
       let imagenUrl = post?.imagen_portada_url;
 

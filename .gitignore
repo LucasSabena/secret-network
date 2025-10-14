@@ -49,3 +49,6 @@ next-env.d.ts
 # Info para Copilot
 /.github
 copilot-instrucciones.md
+GUIA_CARGA_BASE_DATOS.md
+QUICK_START.md
+RESUMEN_CAMBIOS_OCT2025.md

@@ -14,7 +14,7 @@ export default function AdminHeader() {
 
   async function handleLogout() {
     try {
-      const supabase = supabaseBrowserClient();
+      const supabase = supabaseBrowserClient;
       await supabase.auth.signOut();
       
       toast({

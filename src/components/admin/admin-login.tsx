@@ -23,7 +23,7 @@ export default function AdminLogin() {
     setIsLoading(true);
 
     try {
-      const supabase = supabaseBrowserClient();
+      const supabase = supabaseBrowserClient;
       
       const { data, error } = await supabase.auth.signInWithPassword({
         email,

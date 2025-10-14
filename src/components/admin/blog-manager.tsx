@@ -38,7 +38,7 @@ export default function BlogManager() {
   async function loadPosts() {
     try {
       setIsLoading(true);
-      const supabase = supabaseBrowserClient();
+      const supabase = supabaseBrowserClient;
       const { data, error } = await supabase
         .from('blog_posts')
         .select('*')
@@ -63,7 +63,7 @@ export default function BlogManager() {
     if (!confirm('¿Estás seguro de eliminar este post?')) return;
 
     try {
-      const supabase = supabaseBrowserClient();
+      const supabase = supabaseBrowserClient;
       const { error } = await supabase.from('blog_posts').delete().eq('id', id);
 
       if (error) throw error;

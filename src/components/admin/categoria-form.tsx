@@ -72,7 +72,7 @@ export default function CategoriaForm({
   async function onSubmit(data: FormData) {
     try {
       setIsSaving(true);
-      const supabase = supabaseBrowserClient();
+      const supabase = supabaseBrowserClient;
 
       const categoriaData = {
         nombre: data.nombre,

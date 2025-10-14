@@ -88,7 +88,7 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
 
   async function loadProgramas() {
     try {
-      const supabase = supabaseBrowserClient();
+      const supabase = supabaseBrowserClient;
       const { data, error } = await supabase
         .from('programas')
         .select('id, nombre, slug')
@@ -167,7 +167,7 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
 
   async function loadCategorias() {
     try {
-      const supabase = supabaseBrowserClient();
+      const supabase = supabaseBrowserClient;
       const { data, error } = await supabase
         .from('categorias')
         .select('*')
@@ -201,7 +201,7 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
   useEffect(() => {
     const cargarSubcategorias = async () => {
       if (programa) {
-        const supabase = supabaseBrowserClient();
+        const supabase = supabaseBrowserClient;
         // Obtener subcategorías desde la tabla intermedia
         const { data, error } = await supabase
           .from('programas_subcategorias')
@@ -220,7 +220,7 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
 
     const cargarAlternativas = async () => {
       if (programa) {
-        const supabase = supabaseBrowserClient();
+        const supabase = supabaseBrowserClient;
         // Obtener alternativas desde la tabla intermedia
         const { data, error } = await supabase
           .from('programas_alternativas')
@@ -263,7 +263,7 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
       }
 
       setIsSaving(true);
-      const supabase = supabaseBrowserClient();
+      const supabase = supabaseBrowserClient;
 
       let iconUrl = programa?.icono_url;
       let capturaUrl = programa?.captura_url;

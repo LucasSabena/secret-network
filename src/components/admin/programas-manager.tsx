@@ -105,7 +105,7 @@ export default function ProgramasManager() {
 
   async function loadCategorias() {
     try {
-      const supabase = supabaseBrowserClient();
+      const supabase = supabaseBrowserClient;
       const { data, error } = await supabase
         .from('categorias')
         .select('*')
@@ -122,7 +122,7 @@ export default function ProgramasManager() {
   async function loadProgramas() {
     try {
       setIsLoading(true);
-      const supabase = supabaseBrowserClient();
+      const supabase = supabaseBrowserClient;
       const { data, error } = await supabase
         .from('programas')
         .select('*')
@@ -147,7 +147,7 @@ export default function ProgramasManager() {
     if (!confirm('¿Estás seguro de eliminar este programa?')) return;
 
     try {
-      const supabase = supabaseBrowserClient();
+      const supabase = supabaseBrowserClient;
       const { error } = await supabase.from('programas').delete().eq('id', id);
 
       if (error) throw error;

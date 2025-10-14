@@ -17,7 +17,7 @@ export default function AdminAuthCheck({ children }: { children: React.ReactNode
 
   async function checkAuth() {
     try {
-      const supabase = supabaseBrowserClient();
+      const supabase = supabaseBrowserClient;
       
       // Si estamos en la página de login, no verificar
       if (pathname === '/admin/login') {

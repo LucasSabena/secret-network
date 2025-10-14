@@ -55,7 +55,7 @@ export default function AlternativasManager() {
   async function loadProgramas() {
     try {
       setIsLoading(true);
-      const supabase = supabaseBrowserClient();
+      const supabase = supabaseBrowserClient;
       const { data, error } = await supabase
         .from('programas')
         .select('*')
@@ -77,7 +77,7 @@ export default function AlternativasManager() {
 
   async function loadAlternativas(programaId: number) {
     try {
-      const supabase = supabaseBrowserClient();
+      const supabase = supabaseBrowserClient;
       
       // Intentar cargar alternativas normalmente
       const { data, error } = await supabase
@@ -137,7 +137,7 @@ export default function AlternativasManager() {
     }
 
     try {
-      const supabase = supabaseBrowserClient();
+      const supabase = supabaseBrowserClient;
 
       // Add bidirectional relationship
       const { error: error1 } = await supabase
@@ -184,7 +184,7 @@ export default function AlternativasManager() {
     if (!confirm('¿Estás seguro de eliminar esta relación?')) return;
 
     try {
-      const supabase = supabaseBrowserClient();
+      const supabase = supabaseBrowserClient;
 
       // Remove both directions
       const { error: error1 } = await supabase

@@ -45,7 +45,7 @@ export default function CategoriasManager() {
   async function loadCategorias() {
     try {
       setIsLoading(true);
-      const supabase = supabaseBrowserClient();
+      const supabase = supabaseBrowserClient;
       const { data, error } = await supabase
         .from('categorias')
         .select('*')
@@ -75,7 +75,7 @@ export default function CategoriasManager() {
       return;
 
     try {
-      const supabase = supabaseBrowserClient();
+      const supabase = supabaseBrowserClient;
       const { error } = await supabase.from('categorias').delete().eq('id', id);
 
       if (error) throw error;
