@@ -83,12 +83,24 @@ export function OpenSourceListClient({
       case 'nombre-desc':
         result.sort((a, b) => b.nombre.localeCompare(a.nombre));
         break;
+      case 'nuevos':
+        // Ordenar por ID descendente (más recientes primero)
+        result.sort((a, b) => b.id - a.id);
+        break;
       case 'recomendado':
         result.sort((a, b) => {
           if (a.es_recomendado === b.es_recomendado) {
             return a.nombre.localeCompare(b.nombre);
           }
           return a.es_recomendado ? -1 : 1;
+        });
+        break;
+      case 'nombre-recomendado':
+        result.sort((a, b) => {
+          if (a.es_recomendado !== b.es_recomendado) {
+            return a.es_recomendado ? -1 : 1;
+          }
+          return a.nombre.localeCompare(b.nombre);
         });
         break;
     }

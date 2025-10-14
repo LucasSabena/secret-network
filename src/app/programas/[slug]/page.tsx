@@ -401,9 +401,10 @@ export default async function ProgramPage({ params }: ProgramPageProps) {
                   <CardTitle>Acerca de {programaCompleto.nombre}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="prose prose-neutral dark:prose-invert max-w-none">
-                    <FormattedText text={stripHtml(programaCompleto.descripcion_larga || "")} />
-                  </div>
+                  <div 
+                    className="prose prose-neutral dark:prose-invert max-w-none prose-p:text-foreground/90 prose-headings:text-foreground prose-strong:text-foreground prose-ul:text-foreground/90 prose-li:text-foreground/90"
+                    dangerouslySetInnerHTML={{ __html: programaCompleto.descripcion_larga }}
+                  />
                 </CardContent>
               </Card>
             )}

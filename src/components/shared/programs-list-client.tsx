@@ -147,6 +147,10 @@ export function ProgramsListClient({
       case 'nombre-desc':
         result.sort((a, b) => b.nombre.localeCompare(a.nombre));
         break;
+      case 'nuevos':
+        // Ordenar por ID descendente (más recientes primero)
+        result.sort((a, b) => b.id - a.id);
+        break;
       case 'recomendado':
         result.sort((a, b) => {
           if (a.es_recomendado === b.es_recomendado) return 0;

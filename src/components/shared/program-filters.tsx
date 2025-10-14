@@ -24,7 +24,7 @@ export interface FilterOptions {
   dificultad: string | null;
   esOpenSource: boolean | null;
   esRecomendado: boolean | null;
-  sortBy: 'nombre-asc' | 'nombre-desc' | 'recomendado' | 'nombre-recomendado';
+  sortBy: 'nombre-asc' | 'nombre-desc' | 'recomendado' | 'nombre-recomendado' | 'nuevos';
 }
 
 interface ProgramFiltersProps {
@@ -160,6 +160,7 @@ export function ProgramFilters({
           >
             <option value="nombre-asc">A → Z</option>
             <option value="nombre-desc">Z → A</option>
+            <option value="nuevos">Nuevos primero</option>
             <option value="recomendado">Recomendados</option>
             <option value="nombre-recomendado">A → Z + Recomendados</option>
           </select>
