@@ -6,14 +6,72 @@ Esta guía detalla cómo agregar nuevos programas, categorías y subcategorías 
 
 ## 📋 Tabla de Contenidos
 
-1. [Requisitos Previos](#requisitos-previos)
-2. [Estructura de la Base de Datos](#estructura-de-la-base-de-datos)
-3. [Formato del JSON](#formato-del-json)
-4. [Crear Nuevas Subcategorías](#crear-nuevas-subcategorías)
-5. [Agregar Nuevos Programas](#agregar-nuevos-programas)
-6. [Ejecutar el Script](#ejecutar-el-script)
-7. [Actualizar Imágenes](#actualizar-imágenes)
-8. [Troubleshooting](#troubleshooting)
+1. [⚠️ VERIFICACIÓN PRE-CARGA (OBLIGATORIO)](#verificación-pre-carga-obligatorio)
+2. [Requisitos Previos](#requisitos-previos)
+3. [Estructura de la Base de Datos](#estructura-de-la-base-de-datos)
+4. [Formato del JSON](#formato-del-json)
+5. [Crear Nuevas Subcategorías](#crear-nuevas-subcategorías)
+6. [Agregar Nuevos Programas](#agregar-nuevos-programas)
+7. [Ejecutar el Script](#ejecutar-el-script)
+8. [Actualizar Imágenes](#actualizar-imágenes)
+9. [Verificación Post-Carga](#verificación-post-carga)
+10. [Troubleshooting](#troubleshooting)
+
+---
+
+## ⚠️ VERIFICACIÓN PRE-CARGA (OBLIGATORIO)
+
+**ANTES de crear el JSON o ejecutar cualquier script, SIEMPRE ejecuta:**
+
+### 1. Listar todas las categorías disponibles
+
+```bash
+node scripts/list-categories.js
+```
+
+**Esto genera:**
+- Lista completa de 69+ categorías con IDs
+- Identificación de categorías ESPECÍFICAS (IDs altos)
+- Archivo: `temporal/categorias-subcategorias.md`
+
+**⚠️ CRÍTICO:** El sistema NO usa jerarquía tradicional. Usa categorías **ESPECÍFICAS**:
+- ✅ Correcto: "Generadores de texto" (ID: 49) 
+- ❌ Incorrecto: "Creación con IA" (ID: 44) - Demasiado genérica
+
+**Ejemplo de output:**
+```
+📂 Categoría: Creación con IA (ID: 44)
+   └── Sin subcategorías directas
+
+📂 Categoría: Generadores de texto (ID: 49) ← USA ESTE
+   └── 15 programas asignados
+```
+
+### 2. Listar todos los programas existentes
+
+```bash
+node scripts/list-all-programs.js
+```
+
+**Esto genera:**
+- Lista de 268+ programas con slugs
+- Archivo JSON: `temporal/programas-disponibles.json`
+- Archivo TXT: `temporal/slugs-disponibles.txt`
+
+**Úsalo para:**
+- ✅ Verificar que slugs de `alternativas_slugs` existen
+- ✅ Evitar duplicados de programas
+- ✅ Ver qué programas están disponibles para referencias
+
+### 3. Validar el JSON ANTES de ejecutar script
+
+**Checklist de validación:**
+- [ ] `subcategorias_slugs` mapean a categorías ESPECÍFICAS (consultar `list-categories.js`)
+- [ ] TODOS los `alternativas_slugs` existen en `slugs-disponibles.txt`
+- [ ] Comillas simples en HTML, NO dobles
+- [ ] `plataformas_slugs` coinciden: web, macos, windows, linux, ios, android, ipados
+- [ ] `modelos_precios_slugs` coinciden: gratis, freemium, compra-unica, suscripcion, prueba-gratuita
+- [ ] `dificultad` es exactamente: "Facil", "Intermedio" o "Dificil"
 
 ---
 
@@ -43,6 +101,35 @@ CLOUDINARY_API_SECRET=tu_cloudinary_api_secret
 
 ```bash
 npm install @supabase/supabase-js dotenv
+```
+
+### 3. Scripts de Verificación Disponibles
+
+Secret Network incluye scripts esenciales para verificar datos ANTES y DESPUÉS de cargar:
+
+| Script | Propósito | Output | Cuándo usar |
+|--------|-----------|--------|-------------|
+| `list-categories.js` | Lista TODAS las categorías con IDs | `temporal/categorias-subcategorias.md` | **ANTES** de crear JSON para ver categorías específicas |
+| `list-all-programs.js` | Lista TODOS los programas | `temporal/programas-disponibles.json`<br>`temporal/slugs-disponibles.txt` | **ANTES** de crear JSON para verificar alternativas |
+| `check-alternatives.js` | Verifica alternativas asignadas | Consola | **DESPUÉS** de carga para confirmar alternativas |
+| `fix-categories.js` | Corrige categorías incorrectas | Consola | **DESPUÉS** si categorías son genéricas |
+| `generate-images-list.js` | Genera checklist de imágenes | `temporal/LISTA_ICONOS_CAPTURAS.md` | **DESPUÉS** de carga antes de buscar imágenes |
+
+**Uso básico:**
+```bash
+# Pre-carga (OBLIGATORIO)
+node scripts/list-categories.js       # Ver categorías disponibles
+node scripts/list-all-programs.js     # Ver programas para alternativas
+
+# Post-carga (VERIFICACIÓN)
+node scripts/check-alternatives.js    # ¿Alternativas insertadas?
+node scripts/list-categories.js       # ¿Categorías correctas?
+
+# Post-carga (CORRECCIÓN si necesario)
+node scripts/fix-categories.js        # Reasignar categorías
+
+# Pre-imágenes
+node scripts/generate-images-list.js  # Generar checklist
 ```
 
 ---
@@ -254,16 +341,31 @@ Crea o edita el archivo `temporal/nuevos-programas.json` con tus programas.
 
 ### Paso 2: Verificar los Slugs
 
+**⚠️ IMPORTANTE:** Usa SOLO categorías ESPECÍFICAS verificadas con `list-categories.js`
+
 Asegúrate de que los slugs de categorías, subcategorías, plataformas y alternativas **existan en la base de datos**.
 
-**Categorías principales disponibles:**
-- `programas-de-diseño` → "Programas de diseño"
-- `productividad-y-gestión` → "Productividad y gestión"
-- `creación-con-ia` → "Creación con IA"
-- `utilidades-de-apoyo` → "Utilidades de apoyo"
-- `recursos-y-activos` → "Recursos y activos"
+**Categorías ESPECÍFICAS disponibles (ejemplos):**
+- `editor-de-imagenes` (ID: 70) → "Editor de imágenes" 
+- `edicion-de-video` (ID: 35) → "Edición de video"
+- `generadores-de-texto` (ID: 49) → "Generadores de texto" (chatbots)
+- `generadores-de-código` (ID: 51) → "Generadores de código"
+- `toma-de-notas-y-conocimiento` (ID: 77) → "Toma de notas y conocimiento"
+- `dibujo-digital-y-pintura` (ID: 37) → "Dibujo digital y pintura"
 
-⚠️ **NOTA:** El script intentará buscar por nombre si el slug no existe, pero es mejor usar el slug correcto.
+**Categorías genéricas (NO USAR en subcategorias_slugs):**
+- ❌ `programas-de-diseño` (ID: 29) - Demasiado genérica
+- ❌ `creación-con-ia` (ID: 44) - Demasiado genérica
+- ❌ `productividad-y-gestión` (ID: 43) - Demasiado genérica
+
+⚠️ **REGLA:** Usa `list-categories.js` para ver la lista COMPLETA y actualizada de categorías específicas.
+
+**Verificar alternativas:**
+```bash
+# Verifica que estos slugs existan en slugs-disponibles.txt
+cat temporal/slugs-disponibles.txt | grep "gimp"
+cat temporal/slugs-disponibles.txt | grep "affinity-photo"
+```
 
 ### Paso 3: Alternativas
 
@@ -393,6 +495,64 @@ Y ejecuta un script de actualización (puedes crear uno basado en `upload-new-pr
 
 ---
 
+## ✅ Verificación Post-Carga
+
+Después de ejecutar el script de carga, **SIEMPRE verifica:**
+
+### 1. Verificar alternativas se insertaron
+
+```bash
+node scripts/check-alternatives.js
+```
+
+**Output esperado:**
+```
+✅ claude: 5 alternativas
+✅ cursor-ai: 4 alternativas
+⚠️ nuevo-programa: 0 alternativas
+```
+
+Si ves `0 alternativas`, verifica que los slugs en el JSON existan.
+
+### 2. Verificar categorías son correctas
+
+```bash
+node scripts/list-categories.js
+```
+
+**Busca tus programas nuevos en el output:**
+```
+📂 Categoría: Generadores de texto (ID: 49)
+   └── Programas (15):
+       - claude (ID: 261) ✓
+       - mistral-ai (ID: 262) ✓
+```
+
+**⚠️ Si ves tus programas en categoría GENÉRICA:**
+```
+📂 Categoría: Creación con IA (ID: 44)  ← INCORRECTO
+   └── Programas (3):
+       - claude (ID: 261) ❌
+```
+
+**Solución:** Ejecuta el script de corrección:
+```bash
+node scripts/fix-categories.js
+```
+
+### 3. Generar checklist de imágenes
+
+```bash
+node scripts/generate-images-list.js
+```
+
+Esto crea `temporal/LISTA_ICONOS_CAPTURAS.md` con:
+- Lista de todos los programas nuevos
+- URLs oficiales para buscar imágenes
+- Checkboxes para tracking
+
+---
+
 ## 🔍 Troubleshooting
 
 ### Error: "Could not find the 'created_at' column"
@@ -431,6 +591,188 @@ categoria_slug: categoria.slug, // ⚠️ Necesario
 $content = Get-Content 'temporal/nuevos-programas.json' -Raw
 $fixed = $content -replace '""', "'"
 Set-Content 'temporal/nuevos-programas.json' -Value $fixed
+```
+
+### Categorías genéricas asignadas (MUY COMÚN)
+
+**Problema:** Los programas aparecen en categorías genéricas como "Creación con IA" o "Programas de diseño" en lugar de específicas.
+
+**Causa:** El JSON usó slugs genéricos en `subcategorias_slugs` o el sistema no encontró la categoría específica.
+
+**Solución:**
+
+1. **Verificar las categorías asignadas:**
+   ```bash
+   node scripts/list-categories.js
+   ```
+   
+2. **Buscar tus programas en el output** - si están en categoría genérica:
+   ```
+   📂 Categoría: Creación con IA (ID: 44)
+      └── Programas: claude, mistral-ai ← INCORRECTO
+   ```
+
+3. **Crear script de corrección** con mapeo:
+   ```javascript
+   // scripts/fix-categories.js
+   const categoryMapping = {
+     'chatbot': 49,                   // Generadores de texto
+     'editor-de-imagenes': 70,
+     'generadores-de-código': 51,
+     // ... más mappings
+   };
+   ```
+
+4. **Ejecutar corrección:**
+   ```bash
+   node scripts/fix-categories.js
+   ```
+
+### Alternativas no se insertan
+
+**Problema:** Campo `alternativas_slugs` en JSON pero tabla `programas_alternativas` vacía.
+
+**Verificación:**
+```bash
+node scripts/check-alternatives.js
+```
+
+**Posibles causas:**
+1. Los slugs en `alternativas_slugs` no existen en la base de datos
+2. Error en el script de carga
+3. Query con problema
+
+**Solución:**
+```bash
+# Re-ejecutar script de actualización
+node scripts/update-programs.js
+```
+
+### Programas duplicados
+
+**Problema:** El script intenta insertar programa que ya existe.
+
+**Prevención:**
+```bash
+# Antes de cargar, verifica
+node scripts/list-all-programs.js
+cat temporal/slugs-disponibles.txt | grep "nombre-programa"
+```
+
+---
+
+## 🎓 Lecciones Aprendidas (Experiencia Real)
+
+### Problema 1: Sistema de Categorías NO Tradicional
+
+**Descubrimiento:** Secret Network NO usa jerarquía padre-hijo tradicional.
+
+**Sistema real:**
+- ❌ NO: Creación con IA → Generadores de texto → Claude
+- ✅ SÍ: Claude directamente en "Generadores de texto" (ID: 49)
+
+**Consecuencia:** Los 28 primeros programas se insertaron con categorías genéricas incorrectas.
+
+**Solución aplicada:** 
+1. Creado `list-categories.js` para ver estructura real
+2. Creado `fix-categories.js` con diccionario de mapeo
+3. Re-asignadas las 28 categorías correctamente
+
+### Problema 2: Alternativas NULL Inicialmente
+
+**Problema:** Tabla `programas_alternativas` vacía a pesar de JSON correcto.
+
+**Causa:** Error en query del script original.
+
+**Solución aplicada:** Re-ejecutar script de actualización que insertó alternativas correctamente.
+
+### Problema 3: HTML Stripping en UI
+
+**Problema:** Descripciones en web mostraban texto plano sin formato.
+
+**Causa:** Componente usaba `stripHtml()` que eliminaba TODAS las etiquetas.
+
+**Solución aplicada:**
+```jsx
+// ANTES
+<FormattedText text={stripHtml(programaCompleto.descripcion_larga)} />
+
+// DESPUÉS
+<div dangerouslySetInnerHTML={{ __html: programaCompleto.descripcion_larga }} 
+     className="prose prose-neutral dark:prose-invert max-w-none" />
+```
+
+---
+
+## 📊 Workflow Completo y Correcto
+
+```bash
+# ============================================================
+# FASE 1: PREPARACIÓN (OBLIGATORIA)
+# ============================================================
+
+# 1. Listar categorías disponibles
+node scripts/list-categories.js
+# Output: temporal/categorias-subcategorias.md
+# Acción: Revisar IDs de categorías ESPECÍFICAS
+
+# 2. Listar programas para alternativas
+node scripts/list-all-programs.js
+# Output: temporal/programas-disponibles.json
+#         temporal/slugs-disponibles.txt
+# Acción: Verificar slugs para alternativas_slugs
+
+# 3. Validar JSON
+# - Verificar subcategorias_slugs sean categorías ESPECÍFICAS
+# - Verificar alternativas_slugs existan en slugs-disponibles.txt
+# - Comillas simples en HTML
+
+# ============================================================
+# FASE 2: CARGA INICIAL
+# ============================================================
+
+# 4. Ejecutar script de carga
+node scripts/upload-new-programs.js
+# Acción: Observar output, confirmar éxito
+
+# ============================================================
+# FASE 3: VERIFICACIÓN POST-CARGA
+# ============================================================
+
+# 5. Verificar alternativas
+node scripts/check-alternatives.js
+# Acción: Confirmar que todos tienen alternativas (no 0)
+
+# 6. Verificar categorías asignadas
+node scripts/list-categories.js
+# Acción: Buscar programas nuevos, confirmar están en categorías ESPECÍFICAS
+
+# ============================================================
+# FASE 4: CORRECCIONES (SI NECESARIO)
+# ============================================================
+
+# 7. SI categorías son genéricas → Corregir
+node scripts/fix-categories.js
+# Acción: Re-verificar con list-categories.js
+
+# 8. SI alternativas son 0 → Re-ejecutar
+node scripts/update-programs.js
+
+# ============================================================
+# FASE 5: FINALIZACIÓN
+# ============================================================
+
+# 9. Generar checklist de imágenes
+node scripts/generate-images-list.js
+# Output: temporal/LISTA_ICONOS_CAPTURAS.md
+
+# 10. Commit y push
+git add .
+git commit -m "feat: Agregar X programas nuevos con categorías correctas"
+git push origin main
+
+# 11. Subir imágenes a Cloudinary (manual)
+# 12. Actualizar URLs en Supabase (SQL)
 ```
 
 ---
@@ -474,22 +816,45 @@ Cuando el usuario selecciona "Nuevos primero", verá:
 
 ## 📊 Checklist de Carga Completa
 
-### Antes de ejecutar el script:
+### ⚠️ ANTES de crear el JSON:
+
+- [ ] Ejecutado `node scripts/list-categories.js` (ver categorías disponibles)
+- [ ] Ejecutado `node scripts/list-all-programs.js` (ver programas para alternativas)
+- [ ] Revisado `temporal/categorias-subcategorias.md` para identificar categorías ESPECÍFICAS
+- [ ] Revisado `temporal/slugs-disponibles.txt` para verificar alternativas
+
+### Durante preparación del JSON:
 
 - [ ] `.env.local` tiene `SUPABASE_SERVICE_ROLE_KEY`
 - [ ] Archivo JSON creado en `temporal/nuevos-programas.json`
-- [ ] Todos los slugs verificados (categorías, plataformas, alternativas)
+- [ ] `subcategorias_slugs` mapean a categorías ESPECÍFICAS (IDs altos: 49, 70, 77, etc.)
+- [ ] Todos los `alternativas_slugs` verificados en `slugs-disponibles.txt`
+- [ ] `plataformas_slugs` correctos: web, macos, windows, linux, ios, android, ipados
+- [ ] `modelos_precios_slugs` correctos: gratis, freemium, compra-unica, suscripcion, prueba-gratuita
 - [ ] HTML sin comillas dobles escapadas incorrectamente
 - [ ] Campos `es_open_source` y `es_recomendado` definidos
+- [ ] `dificultad` exactamente: "Facil", "Intermedio" o "Dificil"
 
 ### Después de ejecutar el script:
 
+- [ ] Script ejecutado sin errores (`node scripts/upload-new-programs.js`)
 - [ ] Verificar en Supabase que los programas se insertaron
-- [ ] Verificar las relaciones en las tablas intermedias
-- [ ] Subir logos a Cloudinary
-- [ ] Subir capturas a Cloudinary
-- [ ] Actualizar `icono_url` y `captura_url` en la base de datos
-- [ ] Verificar que el programa se muestra correctamente en el sitio
+- [ ] Ejecutado `node scripts/check-alternatives.js` → Todos con alternativas (no 0)
+- [ ] Ejecutado `node scripts/list-categories.js` → Programas en categorías ESPECÍFICAS
+- [ ] **SI categorías incorrectas:** Ejecutar `node scripts/fix-categories.js`
+- [ ] **SI alternativas = 0:** Ejecutar `node scripts/update-programs.js`
+- [ ] Verificar las relaciones en las tablas intermedias (Supabase UI)
+- [ ] Ejecutado `node scripts/generate-images-list.js` (generar checklist)
+
+### Finalización:
+
+- [ ] Subir logos a Cloudinary (`secret-network/logos/`)
+- [ ] Subir capturas a Cloudinary (`secret-network/screenshots/`)
+- [ ] Actualizar `icono_url` y `captura_url` en la base de datos (SQL)
+- [ ] Verificar que el programa se muestra correctamente en localhost:3000
+- [ ] Verificar categorías correctas en la web
+- [ ] Git commit y push a GitHub
+- [ ] Verificar deployment en Vercel
 
 ---
 

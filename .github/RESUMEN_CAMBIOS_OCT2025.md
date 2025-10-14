@@ -72,22 +72,11 @@ case 'nuevos':
 
 ---
 
-### 3. 🗄️ Carga Exitosa de 16 Nuevos Programas
+### 3. 🗄️ Carga Exitosa de 28 Nuevos Programas (2 Batches)
 
-**Script ejecutado:** `scripts/upload-new-programs.js`
+**Scripts ejecutados:** `scripts/upload-new-programs.js` + correcciones manuales
 
-#### Nuevas Subcategorías Creadas (9):
-1. Editor de imágenes (ID: 70)
-2. Escultura digital (ID: 71)
-3. Texturizado 3D (ID: 72)
-4. Diagramas de flujo de usuario (ID: 73)
-5. Documentación de sistemas de diseño (ID: 74)
-6. Gestión de tipografías (ID: 75)
-7. Mejora y escalado de imagen (ID: 76)
-8. Toma de notas y conocimiento (ID: 77)
-9. Modelos y activos 3D (ID: 78)
-
-#### Programas Insertados (16):
+#### BATCH 1: 16 Programas Iniciales (IDs 225-240)
 1. **Adobe Lightroom Classic** (ID: 225) - Editor de imágenes profesional
 2. **Adobe Lightroom** (ID: 226) - Editor basado en la nube
 3. **Adobe Substance 3D Painter** (ID: 227) - Texturizado 3D
@@ -105,22 +94,85 @@ case 'nuevos':
 15. **Artlist** (ID: 239) - Música libre de regalías
 16. **Epidemic Sound** (ID: 240) - Música para creadores
 
-**Relaciones creadas:**
-- ✅ 27 vínculos con subcategorías
-- ✅ 39 vínculos con plataformas
-- ✅ 31 vínculos con modelos de precio
-- ✅ 51 vínculos con alternativas
+#### BATCH 2: 12 Programas Adicionales (IDs 241-268)
+**Open Source (9 programas):**
+1. **darktable** (ID: 241) - Editor RAW open source
+2. **Olive Video Editor** (ID: 242) - Editor de video no lineal
+3. **QCAD** (ID: 243) - CAD 2D open source
+4. **Joplin** (ID: 244) - Notas con Markdown
+5. **Anytype** (ID: 245) - Base de conocimiento local-first
+6. **Upscayl** (ID: 246) - Mejora de imágenes con IA
+7. **Open WebUI** (ID: 247) - Interfaz web para LLMs
+8. **Synfig Studio** (ID: 248) - Animación 2D vectorial
+9. **FreeCAD** (ID: 249) - CAD paramétrico 3D
 
-**Total de inserciones en base de datos:** ~150+ filas
+**Freemium/Comercial (19 programas):**
+10. **RemNote** (ID: 250) - Notas con spaced repetition
+11. **Vizcom** (ID: 251) - Bocetos con IA
+12. **Kaiber** (ID: 252) - Video generativo con IA
+13. **Leonardo.Ai** (ID: 253) - Generación de imágenes con IA
+14. **Gamma** (ID: 254) - Presentaciones con IA
+15. **Udio** (ID: 255) - Generación de música con IA
+16. **Galileo AI** (ID: 256) - Diseño UI con IA
+17. **Recraft AI** (ID: 257) - Edición de vectores con IA
+18. **Poised** (ID: 258) - Coach de presentaciones con IA
+19. **Cursor** (ID: 259) - Editor de código con IA
+20. **D-ID** (ID: 260) - Avatares con IA
+21. **Claude** (ID: 261) - Chatbot de Anthropic
+22. **Mistral AI** (ID: 262) - Chatbot europeo
+23. **Perplexity** (ID: 263) - Buscador con IA
+24. **Meta AI** (ID: 264) - Chatbot de Meta
+25. **Grok** (ID: 265) - Chatbot de X/Twitter
+26. **Kimi** (ID: 266) - Chatbot chino con contexto largo
+27. **Z.ai (GLM)** (ID: 267) - Chatbot chino multimodal
+28. **Google AI Studio** (ID: 268) - Playground de Gemini
+
+#### Nuevas Subcategorías Creadas (9):
+1. Editor de imágenes (ID: 70)
+2. Escultura digital (ID: 71)
+3. Texturizado 3D (ID: 72)
+4. Diagramas de flujo de usuario (ID: 73)
+5. Documentación de sistemas de diseño (ID: 74)
+6. Gestión de tipografías (ID: 75)
+7. Mejora y escalado de imagen (ID: 76)
+8. Toma de notas y conocimiento (ID: 77)
+9. Modelos y activos 3D (ID: 78)
+
+**Relaciones creadas:**
+- ✅ ~50+ vínculos con subcategorías
+- ✅ ~70+ vínculos con plataformas
+- ✅ ~60+ vínculos con modelos de precio
+- ✅ ~140+ vínculos con alternativas (5 por programa)
+
+**Total de inserciones en base de datos:** ~350+ filas
+
+#### ⚠️ PROBLEMAS DETECTADOS Y CORREGIDOS:
+
+**1. Categorías Incorrectas (CRÍTICO)**
+- **Problema:** Los 28 programas se insertaron con categorías genéricas incorrectas
+  - Ejemplo: Claude → "Creación con IA" (ID: 44) en lugar de "Generadores de texto" (ID: 49)
+  - Ejemplo: darktable → "Programas de diseño" (ID: 29) en lugar de "Editor de imágenes" (ID: 70)
+- **Causa:** El JSON usaba `subcategorias_slugs` pero el sistema requiere categorías específicas
+- **Solución:** Script `fix-categories.js` con diccionario de mapeo (28/28 programas corregidos)
+
+**2. Alternativas NULL**
+- **Problema:** Tabla `programas_alternativas` vacía inicialmente
+- **Causa:** Error en query del script de actualización
+- **Solución:** Re-ejecutar `update-programs.js` que insertó las alternativas correctamente
+
+**3. HTML Stripping en Descripciones**
+- **Problema:** Descripciones mostraban texto plano sin formato (sin listas, párrafos, negrita)
+- **Causa:** Función `stripHtml()` eliminaba TODAS las etiquetas HTML
+- **Solución:** Cambio a `dangerouslySetInnerHTML` con prose classes para renderizado correcto
 
 ---
 
 ## 📊 Estado Actual del Proyecto
 
 ### Base de Datos (Supabase)
-- **Total de Categorías:** 29+ (principales y subcategorías)
-- **Total de Programas:** 240+ (224 anteriores + 16 nuevos)
-- **Total de Subcategorías:** 78+ (70 anteriores + 9 nuevas)
+- **Total de Categorías:** 29 principales
+- **Total de Programas:** 268 (240 anteriores + 28 nuevos)
+- **Total de Subcategorías/Categorías Específicas:** 78+ (69 anteriores + 9 nuevas)
 - **Total de Plataformas:** 7
 - **Total de Modelos de Precio:** 5
 
@@ -143,12 +195,14 @@ case 'nuevos':
 ## 🎯 Próximos Pasos Pendientes
 
 ### 1. Completar Imágenes
-Los 16 programas nuevos tienen campos vacíos:
+Los 28 programas nuevos tienen campos vacíos:
 - `icono_url` → `null` (logos por agregar)
 - `captura_url` → `null` (screenshots por agregar)
 
+**Checklist disponible:** `temporal/LISTA_ICONOS_CAPTURAS.md`
+
 **Acción requerida:**
-1. Buscar logos de cada programa
+1. Buscar logos de cada programa (ver lista en `LISTA_ICONOS_CAPTURAS.md`)
 2. Subir a Cloudinary carpeta: `secret-network/logos/`
 3. Buscar capturas de pantalla
 4. Subir a Cloudinary carpeta: `secret-network/screenshots/`
@@ -169,11 +223,101 @@ Una vez agregadas las imágenes:
 - [ ] Probar la nueva opción "Nuevos primero"
 - [ ] Verificar links y alternativas
 - [ ] Revisar SEO metadata de los nuevos programas
+- [ ] Confirmar que las categorías se muestran correctamente en navegación
 
 ### 3. Analytics
 - [ ] Monitorear clicks en los nuevos programas
 - [ ] Verificar que se registran los eventos de Analytics
 - [ ] Revisar conversiones de alternativas
+
+---
+
+## 📚 Lecciones Aprendidas
+
+### ⚠️ CRÍTICO: Verificaciones PRE-Carga
+
+**ANTES de ejecutar el script de carga, SIEMPRE hacer:**
+
+1. **Listar todas las categorías disponibles:**
+   ```bash
+   node scripts/list-categories.js
+   ```
+   - Verifica que las categorías del JSON existan
+   - Confirma los IDs de categorías específicas (NO genéricas)
+   - El sistema usa categorías ESPECÍFICAS, no jerárquicas tradicionales
+
+2. **Listar todos los programas existentes:**
+   ```bash
+   node scripts/list-all-programs.js
+   ```
+   - Verifica que los slugs de alternativas existan
+   - Evita duplicados de programas
+   - Genera archivo `temporal/programas-disponibles.json` para referencia
+
+3. **Validar el JSON antes de cargar:**
+   - ✅ Comillas simples en HTML, NO dobles
+   - ✅ `subcategorias_slugs` deben mapear a categorías ESPECÍFICAS existentes
+   - ✅ Todos los `alternativas_slugs` deben existir en la base de datos
+   - ✅ `plataformas_slugs` deben coincidir con: web, macos, windows, linux, ios, android, ipados
+   - ✅ `modelos_precios_slugs` deben coincidir con: gratis, freemium, compra-unica, suscripcion, prueba-gratuita
+
+### 🔑 Arquitectura de Categorías (IMPORTANTE)
+
+**Sistema NO tradicional:**
+- ❌ NO hay relación padre-hijo estricta
+- ✅ Usa categorías ESPECÍFICAS (IDs más altos) en lugar de genéricas
+- ✅ Ejemplo correcto: "Generadores de texto" (ID: 49) NO "Creación con IA" (ID: 44)
+- ✅ Ejemplo correcto: "Editor de imágenes" (ID: 70) NO "Programas de diseño" (ID: 29)
+
+**Mapeo crítico de subcategorias_slugs → category_id:**
+```javascript
+const categoryMapping = {
+  'editor-de-imagenes': 70,
+  'edicion-de-video': 35,
+  'generadores-de-texto': 49,  // chatbots
+  'generadores-de-código': 51,
+  'dibujo-digital-y-pintura': 37,
+  'toma-de-notas-y-conocimiento': 77,
+  // ... ver scripts/fix-categories.js para lista completa
+};
+```
+
+### 🛠️ Scripts Útiles Creados
+
+1. **`scripts/list-categories.js`** → Lista TODAS las categorías con IDs
+2. **`scripts/fix-categories.js`** → Corrige categorías incorrectas post-carga
+3. **`scripts/check-alternatives.js`** → Verifica alternativas asignadas
+4. **`scripts/generate-images-list.js`** → Genera checklist de imágenes
+
+### 📝 Workflow Correcto
+
+```bash
+# 1. VERIFICACIÓN PRE-CARGA
+node scripts/list-categories.js       # Ver categorías disponibles
+node scripts/list-all-programs.js     # Ver programas para alternativas
+
+# 2. PREPARAR JSON
+# Editar temporal/nuevos-programas.json
+# Validar que TODAS las referencias existan
+
+# 3. CARGA INICIAL
+node scripts/upload-new-programs.js   # Insertar programas
+
+# 4. VERIFICACIÓN POST-CARGA
+node scripts/check-alternatives.js    # Verificar alternativas
+node scripts/list-categories.js       # Ver si categorías son correctas
+
+# 5. CORRECCIONES (si necesario)
+node scripts/fix-categories.js        # Corregir categorías incorrectas
+
+# 6. GENERAR CHECKLIST
+node scripts/generate-images-list.js  # Lista de imágenes pendientes
+
+# 7. GIT PUSH
+git add .
+git commit -m "feat: Agregar X programas nuevos"
+git push origin main
+```
 
 ---
 
