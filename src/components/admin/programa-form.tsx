@@ -304,7 +304,7 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
               variant: 'destructive',
             });
           } else {
-            capturaUrl = await uploadToCloudinary(capturaFile, 'programas/capturas');
+            capturaUrl = await uploadToCloudinary(capturaFile, 'programas/screenshots');
             console.log('✅ Captura subida:', capturaUrl);
           }
         } catch (error) {
