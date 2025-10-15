@@ -6,7 +6,6 @@ import { ThemeToggle } from "./theme-toggle";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
@@ -20,14 +19,9 @@ const navLinks = [
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
-  const { theme, resolvedTheme } = useTheme();
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const closeMenu = () => setIsOpen(false);
-
-  // Determinar qué logo usar según el tema
-  const currentTheme = theme === 'system' ? resolvedTheme : theme;
-  const logoSrc = currentTheme === 'dark' ? '/logo-dark.svg' : '/logo-light.svg';
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -38,12 +32,22 @@ export function Navbar() {
           className="group flex items-center transition-opacity hover:opacity-80 z-50"
           onClick={closeMenu}
         >
+          {/* Logo Dark - visible solo en dark mode */}
           <Image
-            src={logoSrc}
+            src="/logo-dark.svg"
             alt="Secret Network"
             width={256}
             height={23}
-            className="h-4 w-auto sm:h-6"
+            className="h-4 w-auto sm:h-6 dark:block hidden"
+            priority
+          />
+          {/* Logo Light - visible solo en light mode */}
+          <Image
+            src="/logo-light.svg"
+            alt="Secret Network"
+            width={256}
+            height={23}
+            className="h-4 w-auto sm:h-6 dark:hidden block"
             priority
           />
         </Link>

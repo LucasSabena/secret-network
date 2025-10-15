@@ -1,19 +1,11 @@
 // FILE: src/components/layout/footer.tsx
 
-'use client';
-
 import Link from "next/link";
 import Image from "next/image";
 import { ExternalLink } from "lucide-react";
-import { useTheme } from "next-themes";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
-  const { theme, resolvedTheme } = useTheme();
-
-  // Determinar qué logo usar según el tema
-  const currentTheme = theme === 'system' ? resolvedTheme : theme;
-  const logoSrc = currentTheme === 'dark' ? '/logo-dark.svg' : '/logo-light.svg';
 
   return (
     <footer className="border-t border-border bg-background">
@@ -22,12 +14,21 @@ export function Footer() {
           {/* Logo y descripción */}
           <div className="space-y-4">
             <Link href="/" className="group inline-block transition-opacity hover:opacity-80">
+              {/* Logo Dark - visible solo en dark mode */}
               <Image
-                src={logoSrc}
+                src="/logo-dark.svg"
                 alt="Secret Network"
                 width={256}
                 height={23}
-                className="h-6 w-auto"
+                className="h-6 w-auto dark:block hidden"
+              />
+              {/* Logo Light - visible solo en light mode */}
+              <Image
+                src="/logo-light.svg"
+                alt="Secret Network"
+                width={256}
+                height={23}
+                className="h-6 w-auto dark:hidden block"
               />
             </Link>
             <p className="text-sm text-muted-foreground">
