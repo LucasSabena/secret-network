@@ -8,7 +8,7 @@ import { Metadata } from "next";
 import { 
   ExternalLink, 
   ArrowLeft, 
-  Check, 
+  Github, 
   Star,
   Tag,
   Download,
@@ -333,7 +333,7 @@ export default async function ProgramPage({ params }: ProgramPageProps) {
                   )}
                   {programaCompleto.es_open_source && (
                     <span className="inline-flex items-center gap-1 rounded-full bg-secondary/10 px-3 py-1 text-sm font-medium text-secondary">
-                      <Check className="h-4 w-4" />
+                      <Github className="h-4 w-4" />
                       Open Source
                     </span>
                   )}
