@@ -254,14 +254,16 @@ FROM programa_ids p
 ON CONFLICT (programa_id, subcategoria_id) DO NOTHING;
 
 -- =====================================================
--- CONFIGURAR ALTERNATIVAS (todos conectados entre sí + Figma)
+-- CONFIGURAR ALTERNATIVAS
 -- =====================================================
+-- Cada programa tendrá 5 alternativas:
+--   - Los otros 4 programas de UX/Testing (bidireccional)
+--   - Figma (id = 218)
+-- 
+-- IMPORTANTE: Figma NO tendrá estos programas como alternativas
 
--- Primero, verificar el ID de Figma
--- SELECT id, slug FROM programas WHERE slug = 'figma';
--- Asumamos que Figma tiene id = 1 (ajusta según tu BD)
-
--- Crear relaciones bidireccionales entre todos los programas de UX
+-- 1. Crear relaciones bidireccionales entre los 5 programas de UX
+--    (Cada uno → los otros 4)
 WITH programa_ids AS (
   SELECT id, slug FROM programas WHERE slug IN ('maze', 'useberry', 'uxtweak', 'optimal-workshop', 'lyssna')
 ),
@@ -275,28 +277,11 @@ INSERT INTO programas_alternativas (programa_original_id, programa_alternativa_i
 SELECT original_id, alternativa_id FROM all_combinations
 ON CONFLICT (programa_original_id, programa_alternativa_id) DO NOTHING;
 
--- Agregar Figma como alternativa de todos estos programas
-WITH programa_ids AS (
-  SELECT id FROM programas WHERE slug IN ('maze', 'useberry', 'uxtweak', 'optimal-workshop', 'lyssna')
-),
-figma_id AS (
-  SELECT id FROM programas WHERE slug = 'figma'
-)
+-- 2. Agregar Figma (id = 218) como alternativa de cada uno de estos 5 programas
 INSERT INTO programas_alternativas (programa_original_id, programa_alternativa_id)
-SELECT p.id, f.id
-FROM programa_ids p, figma_id f
-ON CONFLICT (programa_original_id, programa_alternativa_id) DO NOTHING;
-
--- Agregar estos programas como alternativas de Figma
-WITH programa_ids AS (
-  SELECT id FROM programas WHERE slug IN ('maze', 'useberry', 'uxtweak', 'optimal-workshop', 'lyssna')
-),
-figma_id AS (
-  SELECT id FROM programas WHERE slug = 'figma'
-)
-INSERT INTO programas_alternativas (programa_original_id, programa_alternativa_id)
-SELECT f.id, p.id
-FROM figma_id f, programa_ids p
+SELECT p.id, 218
+FROM programas p
+WHERE p.slug IN ('maze', 'useberry', 'uxtweak', 'optimal-workshop', 'lyssna')
 ON CONFLICT (programa_original_id, programa_alternativa_id) DO NOTHING;
 
 -- =====================================================
@@ -317,10 +302,25 @@ JOIN categorias c ON ps.subcategoria_id = c.id
 WHERE p.slug IN ('maze', 'useberry', 'uxtweak', 'optimal-workshop', 'lyssna')
 ORDER BY p.nombre;
 
-SELECT 'Alternativas configuradas:' AS status;
-SELECT p1.nombre AS programa, p2.nombre AS alternativa
+SELECT 'Total de alternativas por programa (debe ser 5 para cada uno):' AS status;
+SELECT p.nombre, COUNT(*) AS total_alternativas
+FROM programas_alternativas pa
+JOIN programas p ON pa.programa_original_id = p.id
+WHERE p.slug IN ('maze', 'useberry', 'uxtweak', 'optimal-workshop', 'lyssna')
+GROUP BY p.nombre
+ORDER BY p.nombre;
+
+SELECT 'Alternativas de Maze (ejemplo - debe tener 5):' AS status;
+SELECT p2.nombre AS alternativa
 FROM programas_alternativas pa
 JOIN programas p1 ON pa.programa_original_id = p1.id
 JOIN programas p2 ON pa.programa_alternativa_id = p2.id
-WHERE p1.slug IN ('maze', 'useberry', 'uxtweak', 'optimal-workshop', 'lyssna')
-ORDER BY p1.nombre, p2.nombre;
+WHERE p1.slug = 'maze'
+ORDER BY p2.nombre;
+
+SELECT 'Verificar que Figma NO tiene estos programas como alternativas:' AS status;
+SELECT COUNT(*) AS count_debe_ser_0
+FROM programas_alternativas pa
+JOIN programas p ON pa.programa_alternativa_id = p.id
+WHERE pa.programa_original_id = 218
+  AND p.slug IN ('maze', 'useberry', 'uxtweak', 'optimal-workshop', 'lyssna');
