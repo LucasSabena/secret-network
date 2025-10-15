@@ -6,6 +6,7 @@ import { ThemeToggle } from "./theme-toggle";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
+import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
@@ -19,9 +20,14 @@ const navLinks = [
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const { theme, resolvedTheme } = useTheme();
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const closeMenu = () => setIsOpen(false);
+
+  // Determinar qué logo usar según el tema
+  const currentTheme = theme === 'system' ? resolvedTheme : theme;
+  const logoSrc = currentTheme === 'dark' ? '/logo-dark.svg' : '/logo-light.svg';
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -33,7 +39,7 @@ export function Navbar() {
           onClick={closeMenu}
         >
           <Image
-            src="/logo.svg"
+            src={logoSrc}
             alt="Secret Network"
             width={256}
             height={23}
