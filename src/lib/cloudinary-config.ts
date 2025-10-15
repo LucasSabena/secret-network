@@ -1,10 +1,10 @@
 // Configuración de Cloudinary
 export const cloudinaryConfig = {
   cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-  uploadPreset: 'ml_default', // Asegúrate de crear este preset en Cloudinary
+  uploadPreset: process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || 'secret_network_unsigned',
   folders: {
     programasIcons: 'programas/icons',
-    programasCapturas: 'programas/capturas',
+    programasCapturas: 'programas/screenshots',
     blog: 'blog',
     categorias: 'categorias',
   },
@@ -14,6 +14,10 @@ export const cloudinaryConfig = {
 export function validateCloudinaryConfig(): boolean {
   if (!cloudinaryConfig.cloudName) {
     console.error('NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME no está configurado');
+    return false;
+  }
+  if (!cloudinaryConfig.uploadPreset) {
+    console.error('NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET no está configurado');
     return false;
   }
   return true;
