@@ -279,7 +279,9 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
               variant: 'destructive',
             });
           } else {
-            iconUrl = await uploadToCloudinary(iconFile, 'programas/icons');
+            // Usar el slug como public_id para sobrescribir la imagen anterior
+            const publicId = `${data.slug}-icon`;
+            iconUrl = await uploadToCloudinary(iconFile, 'programas/icons', publicId);
             console.log('✅ Icono subido:', iconUrl);
           }
         } catch (error) {
@@ -304,7 +306,9 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
               variant: 'destructive',
             });
           } else {
-            capturaUrl = await uploadToCloudinary(capturaFile, 'programas/screenshots');
+            // Usar el slug como public_id para sobrescribir la imagen anterior
+            const publicId = `${data.slug}-screenshot`;
+            capturaUrl = await uploadToCloudinary(capturaFile, 'programas/screenshots', publicId);
             console.log('✅ Captura subida:', capturaUrl);
           }
         } catch (error) {

@@ -9,7 +9,8 @@ import {
 // Helper function to upload images to Cloudinary
 export async function uploadToCloudinary(
   file: File,
-  folder: string = 'programas'
+  folder: string = 'programas',
+  publicId?: string // ID único para sobrescribir la imagen anterior
 ): Promise<string> {
   // Validate configuration
   if (!validateCloudinaryConfig()) {
@@ -26,6 +27,12 @@ export async function uploadToCloudinary(
   formData.append('file', file);
   formData.append('upload_preset', cloudinaryConfig.uploadPreset);
   formData.append('folder', folder);
+  
+  // Si se proporciona un public_id, Cloudinary sobrescribirá la imagen anterior
+  if (publicId) {
+    formData.append('public_id', publicId);
+    formData.append('invalidate', 'true'); // Invalida el cache de CDN
+  }
 
   const cloudName = cloudinaryConfig.cloudName;
 
