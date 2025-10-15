@@ -318,9 +318,25 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
         }
       }
 
+      // Obtener el slug de la categoría principal seleccionada
+      const categoriaPrincipal = categoriasPrincipales.find(
+        cat => cat.id === parseInt(data.categoria_principal_id)
+      );
+      
+      if (!categoriaPrincipal) {
+        toast({
+          title: 'Error',
+          description: 'No se encontró la categoría seleccionada',
+          variant: 'destructive',
+        });
+        setIsSaving(false);
+        return;
+      }
+
       const programaData = {
         nombre: data.nombre,
         slug: data.slug,
+        categoria_slug: categoriaPrincipal.slug,
         categoria_id: parseInt(data.categoria_principal_id),
         descripcion_corta: data.descripcion_corta || null,
         descripcion_larga: descripcionLarga || null,
