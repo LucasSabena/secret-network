@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Home, Search, Sparkles, Code, Laugh } from "lucide-react";
+import { Home, Search, Sparkles, Code, Laugh, HelpCircle, Lightbulb, Rocket, Target } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -61,8 +61,9 @@ export default function NotFound() {
               <p className="text-lg md:text-xl text-muted-foreground mb-2">
                 La página más especial de Secret Network
               </p>
-              <p className="text-base text-muted-foreground">
-                Diseñada exclusivamente para cuando <span className="text-primary font-semibold">escribiste mal un link</span> 🎯
+              <p className="text-base text-muted-foreground flex items-center justify-center gap-2">
+                Diseñada exclusivamente para cuando <span className="text-primary font-semibold">escribiste mal un link</span>
+                <Target className="h-4 w-4 text-primary" />
               </p>
             </div>
 
@@ -128,16 +129,20 @@ export default function NotFound() {
                 <strong className="text-foreground">Programa 404</strong> es nuestra herramienta exclusiva y 
                 ultra-especializada para detectar cuando alguien se perdió en la web. Con un diseño minimalista 
                 y siguiendo nuestro design system al pie de la letra, esta página te informa con elegancia que 
-                el contenido que buscabas... simplemente no existe (o tal vez nunca existió 🤔).
+                el contenido que buscabas... simplemente no existe (o tal vez nunca existió{" "}
+                <HelpCircle className="inline h-4 w-4 text-muted-foreground" />).
               </p>
               <p className="text-muted-foreground mb-3">
                 A diferencia de otras herramientas del directorio, esta no la elegiste vos, ella te eligió a vos. 
                 Es como un error 404, pero con más <span className="text-primary font-semibold">estilo</span> y 
                 mejor <span className="text-primary font-semibold">tipografía</span>.
               </p>
-              <p className="text-muted-foreground text-sm italic">
-                💡 <strong>Pro tip:</strong> Si llegaste acá, probablemente querías ir a otro lado. 
-                Los botones de abajo son tus amigos.
+              <p className="text-muted-foreground text-sm italic flex items-start gap-2">
+                <Lightbulb className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+                <span>
+                  <strong>Pro tip:</strong> Si llegaste acá, probablemente querías ir a otro lado. 
+                  Los botones de abajo son tus amigos.
+                </span>
               </p>
             </div>
 
@@ -159,10 +164,13 @@ export default function NotFound() {
 
             {/* Nota sobre el futuro blog */}
             <div className="mt-8 pt-6 border-t border-border/50 text-center">
-              <p className="text-sm text-muted-foreground">
-                🚀 <strong className="text-foreground">Próximamente:</strong> Un artículo sobre las mejores páginas 404 de diseño. 
+              <p className="text-sm text-muted-foreground flex items-center justify-center gap-2 flex-wrap">
+                <Rocket className="h-4 w-4 text-primary" />
+                <span>
+                  <strong className="text-foreground">Próximamente:</strong> Un artículo sobre las mejores páginas 404 de diseño.
+                </span>
                 <br className="hidden sm:inline" />
-                Mientras tanto, disfrutá de esta.
+                <span>Mientras tanto, disfrutá de esta.</span>
               </p>
             </div>
           </div>
