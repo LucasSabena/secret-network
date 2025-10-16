@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Plus, Search, Edit, Trash2, Loader2, Filter, X } from 'lucide-react';
+import { Plus, Search, Edit, Trash2, Loader2, Filter, X, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
@@ -16,6 +16,7 @@ import {
 import { useToast } from '@/components/ui/use-toast';
 import { Programa, Categoria } from '@/lib/types';
 import ProgramaForm from './programa-form';
+import BatchIconUpload from './batch-icon-upload';
 import { supabaseBrowserClient } from '@/lib/supabase-browser';
 
 export default function ProgramasManager() {
@@ -29,6 +30,7 @@ export default function ProgramasManager() {
   const [sortBy, setSortBy] = useState<string>('nombre');
   const [selectedPrograma, setSelectedPrograma] = useState<Programa | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isBatchUploadOpen, setIsBatchUploadOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
   const { toast } = useToast();
@@ -219,6 +221,14 @@ export default function ProgramasManager() {
                 </Badge>
               )}
             </Button>
+            <Button
+              variant="outline"
+              onClick={() => setIsBatchUploadOpen(true)}
+              className="gap-2 border-primary text-primary hover:bg-primary/10"
+            >
+              <Upload className="h-4 w-4" />
+              Subida por Lote
+            </Button>
             <Button onClick={handleNew} className="gap-2 bg-pink-500 hover:bg-pink-600">
               <Plus className="h-4 w-4" />
               Nuevo Programa
@@ -397,6 +407,13 @@ export default function ProgramasManager() {
         <ProgramaForm
           programa={selectedPrograma}
           onClose={handleFormClose}
+        />
+      )}
+
+      {isBatchUploadOpen && (
+        <BatchIconUpload
+          onClose={() => setIsBatchUploadOpen(false)}
+          onSuccess={loadProgramas}
         />
       )}
     </div>

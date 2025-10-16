@@ -31,7 +31,8 @@ export async function uploadToCloudinary(
   // Si se proporciona un public_id, Cloudinary sobrescribirá la imagen anterior
   if (publicId) {
     formData.append('public_id', publicId);
-    formData.append('invalidate', 'true'); // Invalida el cache de CDN
+    // Nota: invalidate no está permitido en unsigned uploads
+    // Para invalidar cache, necesitas usar signed uploads o API backend
   }
 
   const cloudName = cloudinaryConfig.cloudName;

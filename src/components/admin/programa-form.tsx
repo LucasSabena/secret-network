@@ -747,9 +747,33 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Icono con Drag & Drop */}
             <div className="space-y-2">
               <Label>Icono del Programa</Label>
-              <div className="flex items-center gap-4">
+              <div
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  e.currentTarget.classList.add('border-primary', 'bg-primary/5');
+                }}
+                onDragLeave={(e) => {
+                  e.preventDefault();
+                  e.currentTarget.classList.remove('border-primary', 'bg-primary/5');
+                }}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  e.currentTarget.classList.remove('border-primary', 'bg-primary/5');
+                  const files = Array.from(e.dataTransfer.files);
+                  const imageFile = files.find(f => f.type.startsWith('image/'));
+                  if (imageFile) {
+                    setIconFile(imageFile);
+                    toast({
+                      title: 'Icono cargado',
+                      description: 'El icono se ha cargado correctamente',
+                    });
+                  }
+                }}
+                className="flex items-center gap-4 p-4 border-2 border-dashed rounded-lg transition-colors hover:border-primary/50"
+              >
                 {(programa?.icono_url || iconFile) && (
                   <img
                     src={
@@ -758,36 +782,63 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
                         : programa?.icono_url || ''
                     }
                     alt="Icon preview"
-                    className="w-16 h-16 rounded object-cover"
+                    className="w-16 h-16 rounded object-cover border"
                   />
                 )}
-                <label className="cursor-pointer">
-                  <div className="flex items-center gap-2 px-4 py-2 border rounded-md hover:bg-accent">
-                    <Upload className="h-4 w-4" />
-                    <span className="text-sm">Subir Icono</span>
-                  </div>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => setIconFile(e.target.files?.[0] || null)}
-                    className="hidden"
-                  />
-                </label>
+                <div className="flex flex-col gap-2">
+                  <label className="cursor-pointer">
+                    <div className="flex items-center gap-2 px-4 py-2 border rounded-md hover:bg-accent">
+                      <Upload className="h-4 w-4" />
+                      <span className="text-sm">Subir Icono</span>
+                    </div>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => setIconFile(e.target.files?.[0] || null)}
+                      className="hidden"
+                    />
+                  </label>
+                  <p className="text-xs text-muted-foreground">
+                    o arrastra un archivo aquí
+                  </p>
+                </div>
               </div>
             </div>
 
+            {/* Captura con Drag & Drop y Paste */}
             <div className="space-y-2">
               <Label>Captura de Pantalla</Label>
               <p className="text-xs text-muted-foreground mb-2">
                 💡 Tip: Puedes pegar una imagen directamente con Ctrl+V en cualquier lugar del formulario
               </p>
-              <div 
-                className={`flex items-center gap-4 p-4 border-2 rounded-lg transition-colors ${
-                  isPasteAreaFocused ? 'border-pink-500 bg-pink-50 dark:bg-pink-950' : 'border-dashed'
-                }`}
+              <div
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  e.currentTarget.classList.add('border-primary', 'bg-primary/5');
+                }}
+                onDragLeave={(e) => {
+                  e.preventDefault();
+                  e.currentTarget.classList.remove('border-primary', 'bg-primary/5');
+                }}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  e.currentTarget.classList.remove('border-primary', 'bg-primary/5');
+                  const files = Array.from(e.dataTransfer.files);
+                  const imageFile = files.find(f => f.type.startsWith('image/'));
+                  if (imageFile) {
+                    setCapturaFile(imageFile);
+                    toast({
+                      title: 'Captura cargada',
+                      description: 'La captura se ha cargado correctamente',
+                    });
+                  }
+                }}
                 onFocus={() => setIsPasteAreaFocused(true)}
                 onBlur={() => setIsPasteAreaFocused(false)}
                 tabIndex={0}
+                className={`flex items-center gap-4 p-4 border-2 rounded-lg transition-colors ${
+                  isPasteAreaFocused ? 'border-primary bg-primary/5' : 'border-dashed hover:border-primary/50'
+                }`}
               >
                 {(programa?.captura_url || capturaFile) && (
                   <img
@@ -814,7 +865,7 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
                     />
                   </label>
                   <p className="text-xs text-muted-foreground">
-                    o presiona Ctrl+V para pegar
+                    o arrastra/pega (Ctrl+V)
                   </p>
                 </div>
               </div>
