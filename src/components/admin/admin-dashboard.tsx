@@ -6,7 +6,7 @@ import { Package, FileText, FolderTree, Link2, Monitor, DollarSign } from 'lucid
 import ProgramasManager from './programas-manager';
 import BlogManager from './blog-manager';
 import CategoriasManager from './categorias-manager';
-import AlternativasManager from './alternativas-manager';
+import AlternativasManagerNew from './alternativas-manager-new';
 import PlataformasManager from './plataformas-manager';
 import ModelosDePrecioManager from './modelos-de-precio-manager';
 import AdminHeader from './admin-header';
@@ -29,32 +29,39 @@ export default function AdminDashboard() {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-6 lg:w-[1000px]">
-            <TabsTrigger value="programas" className="flex items-center gap-2">
-              <Package className="h-4 w-4" />
-              Programas
-            </TabsTrigger>
-            <TabsTrigger value="blogs" className="flex items-center gap-2">
-              <FileText className="h-4 w-4" />
-              Blogs
-            </TabsTrigger>
-            <TabsTrigger value="categorias" className="flex items-center gap-2">
-              <FolderTree className="h-4 w-4" />
-              Categorías
-            </TabsTrigger>
-            <TabsTrigger value="alternativas" className="flex items-center gap-2">
-              <Link2 className="h-4 w-4" />
-              Alternativas
-            </TabsTrigger>
-            <TabsTrigger value="plataformas" className="flex items-center gap-2">
-              <Monitor className="h-4 w-4" />
-              Plataformas
-            </TabsTrigger>
-            <TabsTrigger value="modelos" className="flex items-center gap-2">
-              <DollarSign className="h-4 w-4" />
-              Precios
-            </TabsTrigger>
-          </TabsList>
+          {/* Tabs responsive: grid en desktop, scroll horizontal en mobile */}
+          <div className="overflow-x-auto pb-2 -mx-4 px-4">
+            <TabsList className="inline-flex lg:grid w-full lg:grid-cols-6 lg:w-[1000px] min-w-max">
+              <TabsTrigger value="programas" className="flex items-center gap-2 whitespace-nowrap">
+                <Package className="h-4 w-4" />
+                <span className="hidden sm:inline">Programas</span>
+                <span className="sm:hidden">Prog.</span>
+              </TabsTrigger>
+              <TabsTrigger value="blogs" className="flex items-center gap-2 whitespace-nowrap">
+                <FileText className="h-4 w-4" />
+                <span>Blogs</span>
+              </TabsTrigger>
+              <TabsTrigger value="categorias" className="flex items-center gap-2 whitespace-nowrap">
+                <FolderTree className="h-4 w-4" />
+                <span className="hidden sm:inline">Categorías</span>
+                <span className="sm:hidden">Cat.</span>
+              </TabsTrigger>
+              <TabsTrigger value="alternativas" className="flex items-center gap-2 whitespace-nowrap">
+                <Link2 className="h-4 w-4" />
+                <span className="hidden sm:inline">Alternativas</span>
+                <span className="sm:hidden">Alt.</span>
+              </TabsTrigger>
+              <TabsTrigger value="plataformas" className="flex items-center gap-2 whitespace-nowrap">
+                <Monitor className="h-4 w-4" />
+                <span className="hidden sm:inline">Plataformas</span>
+                <span className="sm:hidden">Plat.</span>
+              </TabsTrigger>
+              <TabsTrigger value="modelos" className="flex items-center gap-2 whitespace-nowrap">
+                <DollarSign className="h-4 w-4" />
+                <span>Precios</span>
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="programas" className="mt-6">
             <ProgramasManager />
@@ -69,7 +76,7 @@ export default function AdminDashboard() {
           </TabsContent>
 
           <TabsContent value="alternativas" className="mt-6">
-            <AlternativasManager />
+            <AlternativasManagerNew />
           </TabsContent>
 
           <TabsContent value="plataformas" className="mt-6">
