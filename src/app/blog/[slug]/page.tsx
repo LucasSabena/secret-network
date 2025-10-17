@@ -117,7 +117,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         <div className="mt-12 pt-8 border-t border-border">
           <BlogShareButtons 
             title={post.titulo}
-            url={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://secret-network.vercel.app'}/blog/${post.slug}`}
+            url={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://secretnetwork.co'}/blog/${post.slug}`}
           />
         </div>
       </article>

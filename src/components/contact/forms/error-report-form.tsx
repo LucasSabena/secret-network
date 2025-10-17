@@ -118,7 +118,7 @@ export function ErrorReportForm({
           id="pageUrl"
           name="pageUrl"
           type="url"
-          placeholder="https://secret-network.vercel.app/..."
+          placeholder="https://secretnetwork.co/..."
           value={formData.pageUrl}
           onChange={handleChange}
           required

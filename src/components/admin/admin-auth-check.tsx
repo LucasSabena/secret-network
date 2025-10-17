@@ -19,8 +19,8 @@ export default function AdminAuthCheck({ children }: { children: React.ReactNode
     try {
       const supabase = supabaseBrowserClient;
       
-      // Si estamos en la página de login, no verificar
-      if (pathname === '/admin/login') {
+      // Si estamos en la página de login o setup-password, no verificar
+      if (pathname === '/admin/login' || pathname === '/admin/setup-password') {
         setIsLoading(false);
         return;
       }
@@ -55,8 +55,8 @@ export default function AdminAuthCheck({ children }: { children: React.ReactNode
     }
   }
 
-  // Si estamos en login, mostrar la página directamente
-  if (pathname === '/admin/login') {
+  // Si estamos en login o setup-password, mostrar la página directamente
+  if (pathname === '/admin/login' || pathname === '/admin/setup-password') {
     return <>{children}</>;
   }
 

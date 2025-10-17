@@ -20,7 +20,7 @@ const fontSpaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://secret-network.vercel.app'),
+  metadataBase: new URL('https://secretnetwork.co'),
   title: {
     default: 'Secret Network - Directorio de Herramientas de Diseño',
     template: '%s | Secret Network',
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'es_ES',
-    url: 'https://secret-network.vercel.app',
+    url: 'https://secretnetwork.co',
     title: 'Secret Network - Directorio de Herramientas de Diseño',
     description: 'Descubre las mejores herramientas y programas de diseño. Encuentra alternativas gratuitas y open source.',
     siteName: 'Secret Network',

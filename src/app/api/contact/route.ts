@@ -23,8 +23,8 @@ export async function POST(request: NextRequest) {
 
     // Enviar email con Resend
     const data = await resend.emails.send({
-      from: 'Secret Network <onboarding@resend.dev>',
-      to: ['01studiobinary@gmail.com'],
+      from: 'onboarding@resend.dev', // Email de prueba de Resend
+      to: ['phlucassabena@gmail.com'], // Temporalmente a tu email verificado
       replyTo: formData.email,
       subject: emailContent.subject,
       html: emailContent.html,

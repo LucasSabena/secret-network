@@ -10,8 +10,8 @@ export const revalidate = 3600; // 1 hora
 
 // 🚀 Generar metadata para SEO
 export const metadata = {
-  title: 'Secret Network - Design Tools & Resources',
-  description: 'Discover the best design tools, software, and resources for creative professionals.',
+  title: 'Secret Network - Directorio de Herramientas de Diseño',
+  description: 'Descubre las mejores herramientas y programas de diseño. Encuentra alternativas gratuitas y open source a Photoshop, Illustrator, Figma y más.',
 };
 
 /**

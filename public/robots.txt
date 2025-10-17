@@ -35,4 +35,4 @@ Disallow: /_next/
 Disallow: /test/
 
 # Sitemap
-Sitemap: https://secret-network.vercel.app/sitemap.xml
+Sitemap: https://secretnetwork.co/sitemap.xml

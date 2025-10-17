@@ -18,7 +18,7 @@ export function JsonLdBreadcrumb({ items }: JsonLdBreadcrumbProps) {
       '@type': 'ListItem',
       position: index + 1,
       name: item.name,
-      item: `https://secret-network.vercel.app${item.url}`,
+      item: `https://secretnetwork.co${item.url}`,
     })),
   };
 

@@ -23,7 +23,7 @@ export function generateSEOMetadata({
   description,
   canonical,
   keywords = [],
-  ogImage = 'https://secret-network.vercel.app/og-image.png',
+  ogImage = 'https://secretnetwork.co/og-image.png',
   ogType = 'website',
   publishedTime,
   modifiedTime,
@@ -32,7 +32,7 @@ export function generateSEOMetadata({
   tags = [],
   noindex = false,
 }: SEOMetadataProps): Metadata {
-  const baseUrl = 'https://secret-network.vercel.app';
+  const baseUrl = 'https://secretnetwork.co';
   const fullTitle = `${title} | Secret Network`;
   const url = canonical ? `${baseUrl}${canonical}` : baseUrl;
 

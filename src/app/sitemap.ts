@@ -9,7 +9,7 @@ export const revalidate = 3600; // Revalidar cada hora
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const supabase = await createClient();
-  const baseUrl = 'https://secret-network.vercel.app';
+  const baseUrl = 'https://secretnetwork.co';
 
   // Páginas estáticas
   const staticPages: MetadataRoute.Sitemap = [

@@ -31,7 +31,7 @@
 - **Iconos:** **Lucide React** (`lucide-react`).
 - **Animaciones:** **Framer Motion**.
 - **Hosting de Imágenes:** **Cloudinary + Unsplash**. La base de datos solo almacena las URLs.
-- **Despliegue:** **Vercel** - URL: `https://secret-network.vercel.app`
+- **Despliegue:** **Vercel** - URL: `https://secretnetwork.co`
 - **Control de Versiones:** **Git & GitHub** - Repo: `LucasSabena/secret-network`
 - **SEO:** Schema.org JSON-LD, Open Graph, Twitter Cards
 - **Analytics:** Google Analytics 4, Google Tag Manager
@@ -419,7 +419,7 @@ Sistema completo de formularios de contacto:
 #### Metadata Global (`src/app/layout.tsx`)
 ```typescript
 export const metadata: Metadata = {
-  metadataBase: new URL('https://secret-network.vercel.app'),
+  metadataBase: new URL('https://secretnetwork.co'),
   title: {
     default: 'Secret Network - Directorio de Herramientas de Diseño',
     template: '%s | Secret Network',
@@ -446,7 +446,7 @@ Variables de entorno necesarias:
 ```bash
 NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
 NEXT_PUBLIC_GTM_ID=GTM-XXXXXXX
-NEXT_PUBLIC_SITE_URL=https://secret-network.vercel.app
+NEXT_PUBLIC_SITE_URL=https://secretnetwork.co
 ```
 
 #### Componentes
@@ -625,7 +625,7 @@ git push origin main                  # Auto-deploy en Vercel
 - [x] Obtener Google Tag Manager Container ID
 - [x] Agregar IDs a `.env.local` y Vercel
 - [x] Verificar sitio en Google Search Console
-- [x] Enviar sitemap: `https://secret-network.vercel.app/sitemap.xml`
+- [x] Enviar sitemap: `https://secretnetwork.co/sitemap.xml`
 - [ ] Crear imagen OG: `/public/og-image.png` (1200x630px)
 - [x] Configurar Resend API Key para sistema de contacto
 
@@ -949,7 +949,7 @@ Los scripts usan `process.env` para leer variables de entorno localmente. Esto e
 - NO hay API keys hardcodeadas
 - Variables de entorno en `.env.local` (ignorado)
 - Admin usa Supabase Auth (sin credenciales en código)
-- URLs públicas son correctas (vercel.app)
+- URLs públicas son correctas (secretnetwork.co)
 
 ---
 
