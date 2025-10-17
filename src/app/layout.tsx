@@ -94,6 +94,15 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         
+        {/* Redirección automática para invitaciones */}
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            if (window.location.hash && window.location.hash.includes('type=invite')) {
+              window.location.href = '/admin/setup-password' + window.location.hash;
+            }
+          `
+        }} />
+        
         {/* JSON-LD Structured Data */}
         <JsonLdOrganization />
         <JsonLdWebsite />
