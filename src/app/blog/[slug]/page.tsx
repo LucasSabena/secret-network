@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { BlogContent } from "@/components/blog/blog-content";
 import { BlogPostHeader } from "@/components/blog/blog-post-header";
 import { RelatedPosts } from "@/components/blog/related-posts";
+import BlogShareButtons from "@/components/blog/blog-share-buttons";
 import { JsonLdArticle } from "@/components/seo/json-ld-article";
 import { JsonLdBreadcrumb } from "@/components/seo/json-ld-breadcrumb";
 import type { BlogPost } from "@/lib/types";
@@ -106,6 +107,14 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       <article className="max-w-4xl mx-auto">
         <BlogPostHeader post={post as BlogPost} />
         <BlogContent content={post.contenido} />
+        
+        {/* Botones de Compartir */}
+        <div className="mt-12 pt-8 border-t border-border">
+          <BlogShareButtons 
+            title={post.titulo}
+            url={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://secret-network.vercel.app'}/blog/${post.slug}`}
+          />
+        </div>
       </article>
       
       {relatedPosts && relatedPosts.length > 0 && (

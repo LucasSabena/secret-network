@@ -36,10 +36,26 @@ export type BlogPost = {
   contenido: string;
   imagen_portada_url: string | null;
   autor: string | null;
+  autor_id: number | null; // Nueva relación con tabla autores
   fecha_publicacion: string;
   actualizado_en: string;
   publicado: boolean;
   tags: string[] | null;
+};
+
+// Tipo para autores del blog
+export type Autor = {
+  id: number;
+  nombre: string;
+  slug: string;
+  bio: string | null;
+  avatar_url: string | null;
+  email: string | null;
+  website_url: string | null;
+  twitter_handle: string | null;
+  linkedin_url: string | null;
+  created_at: string;
+  updated_at: string;
 };
 
 // Tipo para relaciones de alternativas
