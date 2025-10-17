@@ -57,35 +57,40 @@ function generateProgramCardHTML(
   // HTML según el tamaño
   if (size === 'small') {
     return `
-<div style="${cardStyles} display: inline-block; max-width: 100%;">
+<div style="border: 1px solid rgb(51, 51, 51); border-radius: 12px; background: rgb(26, 26, 26); overflow: hidden; transition: all 0.2s; margin: 24px 0; display: inline-block; max-width: 100%;">
   <a href="/programas/${program.slug}" style="text-decoration: none; color: inherit; display: block;">
-    <div style="padding: 0.5rem 0.75rem;">
-      <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
-        ${program.icono_url ? `
-          <img 
-            src="${program.icono_url}" 
-            alt="${program.nombre}" 
-            style="width: 48px; height: 48px; border-radius: 0.5rem; object-fit: contain; background: #27272a; padding: 6px; flex-shrink: 0;"
-          />
-        ` : `
-          <div style="width: 48px; height: 48px; border-radius: 0.5rem; background: #27272a; flex-shrink: 0;"></div>
-        `}
-        <div style="flex: 1; min-width: 0;">
-          <div style="display: flex; align-items: center; gap: 0.375rem; margin-bottom: 0.25rem;">
-            <h4 style="font-size: 0.875rem; font-weight: 600; margin: 0; color: #fafafa; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-              ${program.nombre}
-            </h4>
-            ${program.es_open_source ? '<span style="color: #a1a1aa; font-size: 0.75rem;">★</span>' : ''}
-          </div>
-          <p style="font-size: 0.75rem; color: #a1a1aa; margin: 0 0 0.25rem 0; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-            ${description}
-          </p>
-          <span style="font-size: 0.625rem; color: #ff3399; font-weight: 500;">
-            #${stripHtml(categoryName)}
-          </span>
-        </div>
-      </div>
-    </div>
+    <table cellpadding="0" cellspacing="0" style="width: 100%; border-collapse: collapse;">
+      <tr>
+        <td style="padding: 8px 12px;">
+          <table cellpadding="0" cellspacing="0" style="width: 100%;">
+            <tr>
+              <td style="width: 48px; vertical-align: top; padding-right: 12px;">
+                ${program.icono_url ? `
+                  <img 
+                    src="${program.icono_url}" 
+                    alt="${program.nombre}" 
+                    style="width: 48px; height: 48px; border-radius: 8px; object-fit: contain; background: rgb(39, 39, 42); padding: 6px; display: block;"
+                  />
+                ` : `
+                  <div style="width: 48px; height: 48px; border-radius: 8px; background: rgb(39, 39, 42);"></div>
+                `}
+              </td>
+              <td style="vertical-align: top;">
+                <h4 style="font-size: 14px; font-weight: 600; margin: 0 0 4px 0; color: rgb(250, 250, 250); line-height: 1.4;">
+                  ${program.nombre}${program.es_open_source ? ' <span style="color: rgb(161, 161, 170);">★</span>' : ''}
+                </h4>
+                <p style="font-size: 12px; color: rgb(161, 161, 170); margin: 0 0 4px 0; line-height: 1.5;">
+                  ${description.substring(0, 80)}${description.length > 80 ? '...' : ''}
+                </p>
+                <span style="font-size: 10px; color: rgb(255, 51, 153); font-weight: 500;">
+                  #${stripHtml(categoryName)}
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
   </a>
 </div>
     `.trim();
@@ -93,48 +98,56 @@ function generateProgramCardHTML(
 
   if (size === 'large') {
     return `
-<div style="${cardStyles} max-width: 100%;">
+<div style="border: 1px solid rgb(51, 51, 51); border-radius: 12px; background: rgb(26, 26, 26); overflow: hidden; margin: 24px 0; max-width: 100%;">
   <a href="/programas/${program.slug}" style="text-decoration: none; color: inherit; display: block;">
     ${program.captura_url ? `
       <img 
         src="${program.captura_url}" 
         alt="${program.nombre}" 
-        style="width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block;"
+        style="width: 100%; height: auto; aspect-ratio: 16/9; object-fit: cover; display: block;"
       />
     ` : `
-      <div style="width: 100%; aspect-ratio: 16/9; background: linear-gradient(135deg, #ff3399 0%, #9933ff 100%); display: flex; align-items: center; justify-content: center;">
-        <span style="font-size: 4rem; font-weight: bold; color: white;">${program.nombre.charAt(0)}</span>
+      <div style="width: 100%; padding-bottom: 56.25%; position: relative; background: linear-gradient(135deg, rgb(255, 51, 153) 0%, rgb(153, 51, 255) 100%);">
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 64px; font-weight: bold; color: white;">${program.nombre.charAt(0)}</div>
       </div>
     `}
-    <div style="padding: 1.5rem;">
-      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
-        ${program.icono_url ? `
-          <img 
-            src="${program.icono_url}" 
-            alt="${program.nombre}" 
-            style="width: 48px; height: 48px; border-radius: 0.5rem; object-fit: contain; background: #27272a; padding: 6px;"
-          />
-        ` : ''}
-        <div>
-          <h3 style="font-size: 1.5rem; font-weight: 700; margin: 0 0 0.25rem 0; color: #fafafa;">
-            ${program.nombre}
-          </h3>
-          <span style="font-size: 0.875rem; color: #ff3399; font-weight: 500;">
-            #${stripHtml(categoryName)}
-          </span>
-        </div>
-      </div>
-      <p style="font-size: 0.9375rem; color: #a1a1aa; margin: 0; line-height: 1.6;">
-        ${description}
-      </p>
-      ${program.web_oficial_url ? `
-        <div style="margin-top: 1.25rem;">
-          <span style="display: inline-block; padding: 0.625rem 1.25rem; background: linear-gradient(135deg, #ff3399 0%, #9933ff 100%); color: white; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 600;">
-            Ver programa →
-          </span>
-        </div>
-      ` : ''}
-    </div>
+    <table cellpadding="0" cellspacing="0" style="width: 100%; border-collapse: collapse;">
+      <tr>
+        <td style="padding: 24px;">
+          <table cellpadding="0" cellspacing="0" style="width: 100%; margin-bottom: 16px;">
+            <tr>
+              ${program.icono_url ? `
+                <td style="width: 48px; vertical-align: middle; padding-right: 12px;">
+                  <img 
+                    src="${program.icono_url}" 
+                    alt="${program.nombre}" 
+                    style="width: 48px; height: 48px; border-radius: 8px; object-fit: contain; background: rgb(39, 39, 42); padding: 6px; display: block;"
+                  />
+                </td>
+              ` : ''}
+              <td style="vertical-align: middle;">
+                <h3 style="font-size: 24px; font-weight: 700; margin: 0 0 4px 0; color: rgb(250, 250, 250); line-height: 1.3;">
+                  ${program.nombre}
+                </h3>
+                <span style="font-size: 14px; color: rgb(255, 51, 153); font-weight: 500;">
+                  #${stripHtml(categoryName)}
+                </span>
+              </td>
+            </tr>
+          </table>
+          <p style="font-size: 15px; color: rgb(161, 161, 170); margin: 0 0 16px 0; line-height: 1.6;">
+            ${description}
+          </p>
+          ${program.web_oficial_url ? `
+            <div>
+              <span style="display: inline-block; padding: 10px 20px; background: linear-gradient(135deg, rgb(255, 51, 153) 0%, rgb(153, 51, 255) 100%); color: white; border-radius: 8px; font-size: 14px; font-weight: 600;">
+                Ver programa →
+              </span>
+            </div>
+          ` : ''}
+        </td>
+      </tr>
+    </table>
   </a>
 </div>
     `.trim();
@@ -142,37 +155,45 @@ function generateProgramCardHTML(
 
   // Medium (default)
   return `
-<div style="${cardStyles} max-width: 400px;">
+<div style="border: 1px solid rgb(51, 51, 51); border-radius: 12px; background: rgb(26, 26, 26); overflow: hidden; margin: 24px 0; max-width: 400px;">
   <a href="/programas/${program.slug}" style="text-decoration: none; color: inherit; display: block;">
-    <div style="padding: 1.25rem;">
-      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
-        ${program.icono_url ? `
-          <img 
-            src="${program.icono_url}" 
-            alt="${program.nombre}" 
-            style="width: 64px; height: 64px; border-radius: 0.75rem; object-fit: contain; background: #27272a; padding: 8px;"
-          />
-        ` : ''}
-        <div style="flex: 1;">
-          <h3 style="font-size: 1.25rem; font-weight: 700; margin: 0 0 0.375rem 0; color: #fafafa;">
-            ${program.nombre}
-          </h3>
-          <span style="font-size: 0.8125rem; color: #ff3399; font-weight: 500;">
-            #${stripHtml(categoryName)}
-          </span>
-        </div>
-      </div>
-      ${program.captura_url ? `
-        <img 
-          src="${program.captura_url}" 
-          alt="${program.nombre}" 
-          style="width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 0.5rem; margin-bottom: 1rem; display: block;"
-        />
-      ` : ''}
-      <p style="font-size: 0.875rem; color: #a1a1aa; margin: 0; line-height: 1.6;">
-        ${description}
-      </p>
-    </div>
+    <table cellpadding="0" cellspacing="0" style="width: 100%; border-collapse: collapse;">
+      <tr>
+        <td style="padding: 20px;">
+          <table cellpadding="0" cellspacing="0" style="width: 100%; margin-bottom: 16px;">
+            <tr>
+              ${program.icono_url ? `
+                <td style="width: 64px; vertical-align: middle; padding-right: 12px;">
+                  <img 
+                    src="${program.icono_url}" 
+                    alt="${program.nombre}" 
+                    style="width: 64px; height: 64px; border-radius: 12px; object-fit: contain; background: rgb(39, 39, 42); padding: 8px; display: block;"
+                  />
+                </td>
+              ` : ''}
+              <td style="vertical-align: middle;">
+                <h3 style="font-size: 20px; font-weight: 700; margin: 0 0 6px 0; color: rgb(250, 250, 250); line-height: 1.3;">
+                  ${program.nombre}
+                </h3>
+                <span style="font-size: 13px; color: rgb(255, 51, 153); font-weight: 500;">
+                  #${stripHtml(categoryName)}
+                </span>
+              </td>
+            </tr>
+          </table>
+          ${program.captura_url ? `
+            <img 
+              src="${program.captura_url}" 
+              alt="${program.nombre}" 
+              style="width: 100%; height: auto; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; margin-bottom: 16px; display: block;"
+            />
+          ` : ''}
+          <p style="font-size: 14px; color: rgb(161, 161, 170); margin: 0; line-height: 1.6;">
+            ${description}
+          </p>
+        </td>
+      </tr>
+    </table>
   </a>
 </div>
   `.trim();

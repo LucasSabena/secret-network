@@ -30,6 +30,7 @@ import { BlogPost, Autor } from '@/lib/types';
 import { supabaseBrowserClient } from '@/lib/supabase-browser';
 import { uploadToCloudinary } from '@/lib/cloudinary-upload';
 import { validateImageFile } from '@/lib/cloudinary-config';
+import { ImageManager } from '@/lib/image-manager';
 
 interface BlogFormProps {
   post: BlogPost | null;
@@ -120,6 +121,40 @@ export default function BlogForm({ post, onClose }: BlogFormProps) {
         imagenUrl = await uploadToCloudinary(imageFile, 'blog');
       }
 
+      // 🚀 NUEVO: Procesar imágenes pendientes en el contenido
+      let contenidoFinal = contenido;
+      const imageUrls = ImageManager.extractImageUrls(contenido);
+      const dataUrls = imageUrls.filter(url => ImageManager.isDataUrl(url));
+      
+      if (dataUrls.length > 0) {
+        toast({
+          title: 'Subiendo imágenes...',
+          description: `${dataUrls.length} imagen(es) en proceso`,
+        });
+
+        // Subir cada data URL a Cloudinary y reemplazar en el HTML
+        for (const dataUrl of dataUrls) {
+          try {
+            // Convertir data URL a File
+            const response = await fetch(dataUrl);
+            const blob = await response.blob();
+            const file = new File([blob], `image-${Date.now()}.png`, { type: blob.type });
+            
+            // Subir a Cloudinary
+            const cloudinaryUrl = await uploadToCloudinary(file, 'blog-content');
+            
+            // Reemplazar en el HTML
+            contenidoFinal = contenidoFinal.replace(dataUrl, cloudinaryUrl);
+          } catch (error) {
+            console.error('Error uploading inline image:', error);
+            // Continuar con las demás imágenes
+          }
+        }
+
+        // Limpiar imágenes pendientes del manager
+        ImageManager.clearPendingImages();
+      }
+
       // Generate slug from title if not provided
       const slug =
         data.slug ||
@@ -138,7 +173,7 @@ export default function BlogForm({ post, onClose }: BlogFormProps) {
         titulo: data.titulo,
         slug,
         descripcion_corta: data.descripcion_corta || null,
-        contenido: contenido,
+        contenido: contenidoFinal, // ✅ Usar contenido con URLs de Cloudinary
         imagen_portada_url: imagenUrl || null,
         autor: data.autor || null, // Legacy field (mantener por compatibilidad)
         autor_id: data.autor_id || null, // Nuevo campo relacional
@@ -187,7 +222,11 @@ export default function BlogForm({ post, onClose }: BlogFormProps) {
   }
 
   return (
-    <Dialog open onOpenChange={() => onClose()}>
+    <Dialog open onOpenChange={() => {
+      // Limpiar imágenes pendientes al cancelar
+      ImageManager.clearPendingImages();
+      onClose();
+    }}>
       <DialogContent className="max-w-6xl max-h-[90vh] overflow-hidden flex flex-col">
         <DialogHeader>
           <DialogTitle className="text-2xl flex items-center gap-2">

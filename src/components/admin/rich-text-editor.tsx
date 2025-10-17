@@ -42,8 +42,8 @@ import {
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useState, useCallback } from 'react';
-import { uploadToCloudinary } from '@/lib/cloudinary-upload';
 import { validateImageFile } from '@/lib/cloudinary-config';
+import { ImageManager } from '@/lib/image-manager';
 import { useToast } from '@/components/ui/use-toast';
 import {
   Dialog,
@@ -56,6 +56,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import ComponentsPicker from './blog-components/components-picker';
+import { ImageMenu } from './image-menu';
 
 const lowlight = createLowlight();
 lowlight.register('javascript', javascript);
@@ -79,6 +80,8 @@ export default function RichTextEditor({
   const [isLinkDialogOpen, setIsLinkDialogOpen] = useState(false);
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
   const [isComponentsPickerOpen, setIsComponentsPickerOpen] = useState(false);
+  const [isImageMenuOpen, setIsImageMenuOpen] = useState(false);
+  const [selectedImageUrl, setSelectedImageUrl] = useState('');
   const [linkUrl, setLinkUrl] = useState('');
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const { toast } = useToast();
@@ -116,7 +119,7 @@ export default function RichTextEditor({
       }),
       Image.configure({
         HTMLAttributes: {
-          class: 'rounded-lg max-w-full h-auto my-4',
+          class: 'rounded-lg max-w-full h-auto my-4 cursor-pointer hover:opacity-80 transition-opacity',
         },
       }),
       CodeBlockLowlight.configure({
@@ -161,17 +164,20 @@ export default function RichTextEditor({
 
       try {
         setIsUploadingImage(true);
-        const url = await uploadToCloudinary(file, 'blog-content');
-        editor.chain().focus().setImage({ src: url }).run();
+        
+        // En lugar de subir a Cloudinary inmediatamente, convertir a data URL
+        const dataUrl = await ImageManager.addPendingImage(file);
+        editor.chain().focus().setImage({ src: dataUrl }).run();
+        
         toast({
           title: 'Éxito',
-          description: 'Imagen subida correctamente',
+          description: 'Imagen agregada (se subirá a Cloudinary al guardar)',
         });
       } catch (error) {
-        console.error('Error uploading image:', error);
+        console.error('Error adding image:', error);
         toast({
           title: 'Error',
-          description: 'No se pudo subir la imagen',
+          description: 'No se pudo agregar la imagen',
           variant: 'destructive',
         });
       } finally {
@@ -336,7 +342,21 @@ export default function RichTextEditor({
         </div>
       )}
 
-      <EditorContent editor={editor} />
+      <div 
+        onClick={(e) => {
+          const target = e.target as HTMLElement;
+          if (target.tagName === 'IMG') {
+            const imgSrc = target.getAttribute('src');
+            if (imgSrc) {
+              setSelectedImageUrl(imgSrc);
+              setIsImageMenuOpen(true);
+            }
+          }
+        }}
+      >
+        <EditorContent editor={editor} />
+      </div>
+
       <Dialog open={isLinkDialogOpen} onOpenChange={setIsLinkDialogOpen}>
         <DialogContent>
           <DialogHeader>
@@ -372,6 +392,14 @@ export default function RichTextEditor({
         isOpen={isComponentsPickerOpen}
         onClose={() => setIsComponentsPickerOpen(false)}
         onInsert={insertComponent}
+      />
+
+      {/* Menú contextual de imagen */}
+      <ImageMenu
+        editor={editor}
+        isOpen={isImageMenuOpen}
+        onClose={() => setIsImageMenuOpen(false)}
+        imageUrl={selectedImageUrl}
       />
     </div>
   );
