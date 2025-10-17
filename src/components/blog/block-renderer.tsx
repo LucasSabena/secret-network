@@ -9,6 +9,7 @@ import { Info, AlertTriangle, CheckCircle2, XCircle } from 'lucide-react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import { cn } from '@/lib/utils';
+import { parseTextWithIcons } from '@/lib/icon-renderer';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { supabaseBrowserClient } from '@/lib/supabase-browser';
@@ -33,20 +34,23 @@ function TextBlockComponent({ block }: { block: Extract<Block, { type: 'text' }>
     code: 'relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold',
   }[format];
 
+  // Parsear el contenido para convertir [icon:nombre] en iconos reales
+  const contentWithIcons = parseTextWithIcons(content);
+
   if (format === 'paragraph') {
-    return <p className={className} dangerouslySetInnerHTML={{ __html: content }} />;
+    return <p className={className}>{contentWithIcons}</p>;
   }
   if (format === 'h1') {
-    return <h1 className={className} dangerouslySetInnerHTML={{ __html: content }} />;
+    return <h1 className={className}>{contentWithIcons}</h1>;
   }
   if (format === 'h2') {
-    return <h2 className={className} dangerouslySetInnerHTML={{ __html: content }} />;
+    return <h2 className={className}>{contentWithIcons}</h2>;
   }
   if (format === 'h3') {
-    return <h3 className={className} dangerouslySetInnerHTML={{ __html: content }} />;
+    return <h3 className={className}>{contentWithIcons}</h3>;
   }
   if (format === 'h4') {
-    return <h4 className={className} dangerouslySetInnerHTML={{ __html: content }} />;
+    return <h4 className={className}>{contentWithIcons}</h4>;
   }
   if (format === 'ul') {
     return <ul className={className} dangerouslySetInnerHTML={{ __html: content }} />;
@@ -55,7 +59,7 @@ function TextBlockComponent({ block }: { block: Extract<Block, { type: 'text' }>
     return <ol className={className} dangerouslySetInnerHTML={{ __html: content }} />;
   }
   if (format === 'quote') {
-    return <blockquote className={className} dangerouslySetInnerHTML={{ __html: content }} />;
+    return <blockquote className={className}>{contentWithIcons}</blockquote>;
   }
   if (format === 'code') {
     return <code className={className}>{content}</code>;

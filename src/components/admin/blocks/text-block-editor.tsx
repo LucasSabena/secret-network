@@ -5,6 +5,8 @@ import { Block } from '@/lib/types';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
+import { IconSelector } from './icon-selector';
+import { useState, useRef } from 'react';
 
 interface TextBlockEditorProps {
   block: Extract<Block, { type: 'text' }>;
@@ -12,6 +14,29 @@ interface TextBlockEditorProps {
 }
 
 export function TextBlockEditor({ block, onChange }: TextBlockEditorProps) {
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const insertIcon = (iconName: string) => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const text = block.data.content;
+    
+    // Insertar el placeholder del icono en la posición del cursor
+    const iconPlaceholder = `[icon:${iconName}]`;
+    const newText = text.substring(0, start) + iconPlaceholder + text.substring(end);
+    
+    onChange({ ...block, data: { ...block.data, content: newText } });
+    
+    // Mover el cursor después del icono insertado
+    setTimeout(() => {
+      textarea.focus();
+      textarea.setSelectionRange(start + iconPlaceholder.length, start + iconPlaceholder.length);
+    }, 0);
+  };
+
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-4">
@@ -37,9 +62,12 @@ export function TextBlockEditor({ block, onChange }: TextBlockEditorProps) {
             <SelectItem value="code">Código inline</SelectItem>
           </SelectContent>
         </Select>
+
+        <IconSelector onSelect={insertIcon} />
       </div>
 
       <Textarea
+        ref={textareaRef}
         value={block.data.content}
         onChange={(e) =>
           onChange({ ...block, data: { ...block.data, content: e.target.value } })
@@ -50,6 +78,8 @@ export function TextBlockEditor({ block, onChange }: TextBlockEditorProps) {
       
       <p className="text-xs text-muted-foreground">
         Puedes usar HTML básico: &lt;strong&gt;, &lt;em&gt;, &lt;a href=""&gt;, &lt;code&gt;
+        <br />
+        Para insertar iconos usa: <code className="text-primary">[icon:nombre-icono]</code> (ej: [icon:heart])
       </p>
     </div>
   );
