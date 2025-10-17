@@ -6,8 +6,6 @@ import { ProgramCard } from '@/components/shared/program-card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Separator } from '@/components/ui/separator';
 import { Info, AlertTriangle, CheckCircle2, XCircle } from 'lucide-react';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { cn } from '@/lib/utils';
 import { parseTextWithIcons } from '@/lib/icon-renderer';
 import Image from 'next/image';
@@ -254,16 +252,9 @@ function ImageBlockComponent({ block }: { block: Extract<Block, { type: 'image' 
 function CodeBlockComponent({ block }: { block: Extract<Block, { type: 'code' }> }) {
   return (
     <div className="my-8">
-      <SyntaxHighlighter
-        language={block.data.language}
-        style={vscDarkPlus}
-        customStyle={{
-          borderRadius: '0.5rem',
-          fontSize: '0.875rem',
-        }}
-      >
-        {block.data.code}
-      </SyntaxHighlighter>
+      <pre className="rounded-lg text-sm overflow-auto bg-[#1e1e1e] p-4">
+        <code className="text-gray-300 font-mono">{block.data.code}</code>
+      </pre>
     </div>
   );
 }

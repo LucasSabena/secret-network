@@ -5,8 +5,6 @@ import { Block } from '@/lib/types';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 interface CodeBlockEditorProps {
   block: Extract<Block, { type: 'code' }>;
@@ -66,17 +64,9 @@ export function CodeBlockEditor({ block, onChange }: CodeBlockEditorProps) {
       {block.data.code && (
         <div>
           <Label className="text-xs text-muted-foreground mb-2 block">Vista previa:</Label>
-          <SyntaxHighlighter
-            language={block.data.language}
-            style={vscDarkPlus}
-            customStyle={{
-              borderRadius: '0.5rem',
-              fontSize: '0.875rem',
-              maxHeight: '300px',
-            }}
-          >
-            {block.data.code}
-          </SyntaxHighlighter>
+          <pre className="rounded-lg text-sm max-h-[300px] overflow-auto bg-[#1e1e1e] p-4">
+            <code className="text-gray-300 font-mono">{block.data.code}</code>
+          </pre>
         </div>
       )}
     </div>
