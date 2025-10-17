@@ -51,6 +51,7 @@ const variantConfig = {
 
 function generateAlertHTML(variant: AlertVariant, title: string, description: string): string {
   const config = variantConfig[variant];
+  const uniqueId = `alert-${Date.now()}-${Math.random().toString(36).substring(7)}`;
   
   // Iconos SVG
   const icons = {
@@ -61,22 +62,22 @@ function generateAlertHTML(variant: AlertVariant, title: string, description: st
   };
 
   return `
-<div style="
-  background-color: ${config.bgColor};
-  border: 1px solid ${config.borderColor};
-  border-radius: 0.5rem;
-  padding: 1rem;
-  margin: 1.5rem 0;
-  display: flex;
-  gap: 0.75rem;
-  color: ${config.textColor};
+<div class="blog-alert-${uniqueId}" style="
+  background-color: ${config.bgColor} !important;
+  border: 1px solid ${config.borderColor} !important;
+  border-radius: 0.5rem !important;
+  padding: 1rem !important;
+  margin: 1.5rem 0 !important;
+  display: flex !important;
+  gap: 0.75rem !important;
+  color: ${config.textColor} !important;
 ">
-  <div style="flex-shrink: 0; margin-top: 0.125rem;">
+  <div class="alert-icon-${uniqueId}" style="flex-shrink: 0 !important; margin-top: 0.125rem !important;">
     ${icons[config.icon as keyof typeof icons]}
   </div>
-  <div style="flex: 1;">
-    ${title ? `<h5 style="font-weight: 600; margin-bottom: 0.25rem; font-size: 1rem;">${title}</h5>` : ''}
-    <div style="font-size: 0.875rem; line-height: 1.5;">${description}</div>
+  <div class="alert-content-${uniqueId}" style="flex: 1 !important;">
+    ${title ? `<h5 class="alert-title-${uniqueId}" style="font-weight: 600 !important; margin: 0 0 0.25rem 0 !important; padding: 0 !important; font-size: 1rem !important; color: ${config.textColor} !important;">${title}</h5>` : ''}
+    <div class="alert-description-${uniqueId}" style="font-size: 0.875rem !important; line-height: 1.5 !important; margin: 0 !important; padding: 0 !important; color: ${config.textColor} !important;">${description}</div>
   </div>
 </div>
   `.trim();

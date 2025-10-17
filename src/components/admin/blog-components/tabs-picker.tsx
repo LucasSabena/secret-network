@@ -22,71 +22,80 @@ interface TabsPickerProps {
 }
 
 function generateTabsHTML(tabs: Tab[]): string {
-  const tabListItems = tabs.map(tab => 
-    `<button data-tab="${tab.id}" style="
-      padding: 0.5rem 1rem;
-      border-radius: 0.375rem;
-      font-size: 0.875rem;
-      font-weight: 500;
-      cursor: pointer;
-      border: 1px solid transparent;
-      background: transparent;
-      color: #94a3b8;
-      transition: all 0.2s;
-    " onmouseover="this.style.backgroundColor='#1e293b'; this.style.color='#f1f5f9'" onmouseout="this.style.backgroundColor='transparent'; this.style.color='#94a3b8'">${tab.label}</button>`
+  const uniqueId = `tabs-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+  
+  const radioButtons = tabs.map((tab, index) => 
+    `<input type="radio" id="${uniqueId}-${tab.id}" name="${uniqueId}" class="tab-radio-${uniqueId}" ${index === 0 ? 'checked' : ''} />`
+  ).join('\n');
+
+  const tabLabels = tabs.map(tab => 
+    `<label for="${uniqueId}-${tab.id}" class="tab-label-${uniqueId}" data-tab="${tab.id}">${tab.label}</label>`
   ).join('\n    ');
 
   const tabContents = tabs.map((tab, index) => 
-    `<div data-tab-content="${tab.id}" style="display: ${index === 0 ? 'block' : 'none'}; padding: 1rem 0;">
+    `<div class="tab-content-${uniqueId}" data-tab="${tab.id}">
       ${tab.content}
     </div>`
+  ).join('\n    ');
+
+  const radioStyles = tabs.map(tab => 
+    `#${uniqueId}-${tab.id}:checked ~ .tabs-list-${uniqueId} .tab-label-${uniqueId}[data-tab="${tab.id}"] {
+      background: rgb(30, 41, 59) !important;
+      color: rgb(241, 245, 249) !important;
+      border-color: rgb(71, 85, 105) !important;
+    }
+    #${uniqueId}-${tab.id}:checked ~ .tabs-content-${uniqueId} .tab-content-${uniqueId}[data-tab="${tab.id}"] {
+      display: block !important;
+    }`
   ).join('\n  ');
 
   return `
-<div style="margin: 1.5rem 0; border: 1px solid #334155; border-radius: 0.5rem; padding: 1rem; background: #0f172a;">
-  <div style="display: flex; gap: 0.25rem; border-bottom: 1px solid #334155; padding-bottom: 0.5rem; margin-bottom: 1rem;">
-    ${tabListItems}
+<div class="blog-tabs-container-${uniqueId}" style="margin: 1.5rem 0 !important; border: 1px solid rgb(51, 65, 85) !important; border-radius: 0.5rem !important; padding: 1rem !important; background: rgb(15, 23, 42) !important;">
+  ${radioButtons}
+  
+  <div class="tabs-list-${uniqueId}" style="display: flex !important; gap: 0.25rem !important; border-bottom: 1px solid rgb(51, 65, 85) !important; padding-bottom: 0.5rem !important; margin-bottom: 1rem !important; flex-wrap: wrap !important;">
+    ${tabLabels}
   </div>
-  ${tabContents}
+  
+  <div class="tabs-content-${uniqueId}">
+    ${tabContents}
+  </div>
 </div>
 
-<script>
-(function() {
-  const buttons = document.querySelectorAll('[data-tab]');
-  const contents = document.querySelectorAll('[data-tab-content]');
-  
-  buttons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const tabId = btn.getAttribute('data-tab');
-      
-      // Reset all buttons
-      buttons.forEach(b => {
-        b.style.backgroundColor = 'transparent';
-        b.style.color = '#94a3b8';
-        b.style.borderColor = 'transparent';
-      });
-      
-      // Activate clicked button
-      btn.style.backgroundColor = '#1e293b';
-      btn.style.color = '#f1f5f9';
-      btn.style.borderColor = '#475569';
-      
-      // Hide all contents
-      contents.forEach(c => c.style.display = 'none');
-      
-      // Show selected content
-      document.querySelector('[data-tab-content="' + tabId + '"]').style.display = 'block';
-    });
-  });
-  
-  // Activate first tab by default
-  if (buttons.length > 0) {
-    buttons[0].style.backgroundColor = '#1e293b';
-    buttons[0].style.color = '#f1f5f9';
-    buttons[0].style.borderColor = '#475569';
+<style>
+  .tab-radio-${uniqueId} {
+    display: none !important;
   }
-})();
-</script>
+  
+  .tab-label-${uniqueId} {
+    padding: 0.5rem 1rem !important;
+    border-radius: 0.375rem !important;
+    font-size: 0.875rem !important;
+    font-weight: 500 !important;
+    cursor: pointer !important;
+    border: 1px solid transparent !important;
+    background: transparent !important;
+    color: rgb(148, 163, 184) !important;
+    transition: all 0.2s !important;
+    user-select: none !important;
+    display: inline-block !important;
+    margin: 0 !important;
+  }
+  
+  .tab-content-${uniqueId} {
+    display: none !important;
+    padding: 1rem 0 !important;
+    color: rgb(203, 213, 225) !important;
+    line-height: 1.6 !important;
+  }
+  
+  ${radioStyles}
+  
+  .tab-label-${uniqueId}:hover {
+    background: rgb(30, 41, 59) !important;
+    color: rgb(241, 245, 249) !important;
+  }
+</style>
   `.trim();
 }
 

@@ -22,30 +22,25 @@ interface AccordionPickerProps {
 }
 
 function generateAccordionHTML(items: AccordionItemData[]): string {
+  const uniqueId = `accordion-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+  
   const accordionItems = items.map((item, index) => `
-  <div style="border-bottom: 1px solid #334155;">
-    <button 
-      data-accordion-trigger="${item.id}"
-      style="
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 1rem 0;
-        font-weight: 500;
-        cursor: pointer;
-        background: transparent;
-        border: none;
-        text-align: left;
-        color: #f1f5f9;
-        transition: all 0.2s;
-      "
-      onmouseover="this.style.color='#ff3399'"
-      onmouseout="this.style.color='#f1f5f9'"
-    >
-      <span>${item.title}</span>
+  <details class="blog-accordion-item-${uniqueId}" style="border-bottom: 1px solid rgb(51, 65, 85) !important; padding: 1rem 0 !important; margin: 0 !important;">
+    <summary style="
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      font-weight: 500 !important;
+      cursor: pointer !important;
+      color: rgb(241, 245, 249) !important;
+      list-style: none !important;
+      user-select: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    ">
+      <span style="flex: 1 !important;">${item.title}</span>
       <svg 
-        data-accordion-icon="${item.id}"
+        class="accordion-icon-${uniqueId}"
         xmlns="http://www.w3.org/2000/svg" 
         width="20" 
         height="20" 
@@ -55,53 +50,42 @@ function generateAccordionHTML(items: AccordionItemData[]): string {
         stroke-width="2" 
         stroke-linecap="round" 
         stroke-linejoin="round"
-        style="transition: transform 0.2s;"
+        style="flex-shrink: 0 !important; transition: transform 0.2s !important; transform: rotate(0deg) !important;"
       >
         <path d="m6 9 6 6 6-6"/>
       </svg>
-    </button>
-    <div 
-      data-accordion-content="${item.id}"
-      style="
-        display: none;
-        overflow: hidden;
-        padding-bottom: 1rem;
-        color: #cbd5e1;
-        font-size: 0.875rem;
-        line-height: 1.5;
-      "
-    >
+    </summary>
+    <div style="
+      margin-top: 0.75rem !important;
+      padding-left: 0.5rem !important;
+      color: rgb(203, 213, 225) !important;
+      font-size: 0.875rem !important;
+      line-height: 1.6 !important;
+    ">
       ${item.content}
     </div>
-  </div>
+  </details>
   `).join('');
 
   return `
-<div style="margin: 1.5rem 0; border: 1px solid #334155; border-radius: 0.5rem; background: #0f172a;">
+<div class="blog-accordion-${uniqueId}" style="margin: 1.5rem 0 !important; border: 1px solid rgb(51, 65, 85) !important; border-radius: 0.5rem !important; background: rgb(15, 23, 42) !important; overflow: hidden !important; padding: 0 1rem !important;">
   ${accordionItems}
 </div>
 
-<script>
-(function() {
-  const triggers = document.querySelectorAll('[data-accordion-trigger]');
-  
-  triggers.forEach(trigger => {
-    trigger.addEventListener('click', () => {
-      const id = trigger.getAttribute('data-accordion-trigger');
-      const content = document.querySelector('[data-accordion-content="' + id + '"]');
-      const icon = document.querySelector('[data-accordion-icon="' + id + '"]');
-      
-      if (content.style.display === 'none' || content.style.display === '') {
-        content.style.display = 'block';
-        icon.style.transform = 'rotate(180deg)';
-      } else {
-        content.style.display = 'none';
-        icon.style.transform = 'rotate(0deg)';
-      }
-    });
-  });
-})();
-</script>
+<style>
+  .blog-accordion-item-${uniqueId}[open] > summary .accordion-icon-${uniqueId} {
+    transform: rotate(180deg) !important;
+  }
+  .blog-accordion-item-${uniqueId} > summary:hover {
+    color: rgb(255, 51, 153) !important;
+  }
+  .blog-accordion-item-${uniqueId} > summary::-webkit-details-marker {
+    display: none !important;
+  }
+  .blog-accordion-item-${uniqueId}:last-child {
+    border-bottom: none !important;
+  }
+</style>
   `.trim();
 }
 

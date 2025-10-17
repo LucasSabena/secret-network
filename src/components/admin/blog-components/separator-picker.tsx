@@ -16,7 +16,8 @@ interface SeparatorPickerProps {
 type SeparatorStyle = 'solid' | 'dashed' | 'dotted';
 
 function generateSeparatorHTML(style: SeparatorStyle): string {
-  return `<hr style="border: none; border-top: 1px ${style} #334155; margin: 2rem 0;" />`;
+  const uniqueId = `separator-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+  return `<hr class="blog-separator-${uniqueId}" style="border: none !important; border-top: 1px ${style} #334155 !important; margin: 2rem 0 !important;" />`;
 }
 
 export function SeparatorPicker({ isOpen, onClose, onInsert }: SeparatorPickerProps) {
