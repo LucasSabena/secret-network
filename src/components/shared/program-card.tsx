@@ -16,6 +16,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { programEvents } from "@/components/analytics/analytics-events";
+import { optimizeImageUrl } from "@/lib/image-optimizer";
 
 function stripHtml(html: string | null | undefined): string {
   if (!html) return '';
@@ -61,7 +62,7 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
               {program.icono_url ? (
                 <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-muted">
                   <Image
-                    src={program.icono_url}
+                    src={optimizeImageUrl(program.icono_url, { width: 48, quality: 85 })}
                     alt={`${program.nombre} icon`}
                     fill
                     className="object-contain p-1.5"

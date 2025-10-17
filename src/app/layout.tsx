@@ -6,8 +6,13 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { Navbar } from "@/components/layout/navbar";
-import { Footer } from "@/components/layout/footer";
+import dynamic from "next/dynamic";
 import { ReactQueryProvider } from "@/components/providers/react-query-provider";
+
+// Lazy load del Footer - no se necesita inmediatamente
+const Footer = dynamic(() => import("@/components/layout/footer").then(mod => ({ default: mod.Footer })), {
+  ssr: true,
+});
 import { GoogleAnalytics } from "@/components/analytics/google-analytics";
 import { GoogleTagManager, GoogleTagManagerNoScript } from "@/components/analytics/google-tag-manager";
 import { JsonLdOrganization } from "@/components/seo/json-ld-organization";
