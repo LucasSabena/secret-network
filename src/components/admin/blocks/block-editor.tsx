@@ -128,11 +128,11 @@ export function BlockEditor({ blocks, onChange }: BlockEditorProps) {
         >
           {/* Toolbar del bloque (aparece al hover) */}
           {hoveredBlockId === block.id && (
-            <div className="absolute -left-12 top-2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="absolute -left-12 top-2 flex flex-col gap-1 z-10">
               <Button
                 size="icon"
                 variant="ghost"
-                className="h-6 w-6 cursor-grab"
+                className="h-6 w-6 cursor-grab bg-background/80 backdrop-blur-sm border border-border"
                 title="Arrastrar (próximamente)"
               >
                 <GripVertical className="h-4 w-4" />
@@ -140,8 +140,12 @@ export function BlockEditor({ blocks, onChange }: BlockEditorProps) {
               <Button
                 size="icon"
                 variant="ghost"
-                className="h-6 w-6 text-destructive hover:text-destructive"
-                onClick={() => deleteBlock(block.id)}
+                className="h-6 w-6 text-destructive hover:text-destructive hover:bg-destructive/10 bg-background/80 backdrop-blur-sm border border-border"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  deleteBlock(block.id);
+                }}
                 title="Eliminar bloque"
               >
                 <Trash2 className="h-4 w-4" />

@@ -252,7 +252,7 @@ export function BlockRenderer({ blocks }: BlockRendererProps) {
   }
 
   return (
-    <div className="space-y-0">
+    <div className="space-y-6">
       {blocks.map((block) => {
         switch (block.type) {
           case 'text':
