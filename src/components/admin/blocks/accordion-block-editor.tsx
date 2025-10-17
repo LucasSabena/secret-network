@@ -7,6 +7,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Plus, Trash2 } from 'lucide-react';
+import { IconSelector } from './icon-selector';
+import { useRef } from 'react';
 
 interface AccordionBlockEditorProps {
   block: Extract<Block, { type: 'accordion' }>;
@@ -15,6 +17,7 @@ interface AccordionBlockEditorProps {
 
 export function AccordionBlockEditor({ block, onChange }: AccordionBlockEditorProps) {
   const generateId = () => `accordion-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+  const contentRefs = useRef<{ [key: string]: HTMLTextAreaElement | null }>({});
 
   const addItem = () => {
     onChange({
@@ -42,6 +45,30 @@ export function AccordionBlockEditor({ block, onChange }: AccordionBlockEditorPr
         items: block.data.items.map((item) => (item.id === id ? { ...item, [field]: value } : item)),
       },
     });
+  };
+
+  const insertIcon = (itemId: string, iconName: string) => {
+    const textarea = contentRefs.current[itemId];
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const item = block.data.items.find(i => i.id === itemId);
+    if (!item) return;
+
+    const text = item.content;
+    const before = text.substring(0, start);
+    const after = text.substring(end);
+    const newText = before + `[icon:${iconName}]` + after;
+
+    updateItem(itemId, 'content', newText);
+
+    // Restaurar foco y posición del cursor
+    setTimeout(() => {
+      textarea.focus();
+      const newPos = start + `[icon:${iconName}]`.length;
+      textarea.setSelectionRange(newPos, newPos);
+    }, 0);
   };
 
   return (
@@ -81,13 +108,20 @@ export function AccordionBlockEditor({ block, onChange }: AccordionBlockEditorPr
             </div>
 
             <div>
-              <Label className="text-xs mb-1 block">Contenido:</Label>
+              <div className="flex items-center justify-between mb-1">
+                <Label className="text-xs">Contenido:</Label>
+                <IconSelector onSelect={(iconName: string) => insertIcon(item.id, iconName)} />
+              </div>
               <Textarea
+                ref={(el) => { contentRefs.current[item.id] = el; }}
                 value={item.content}
                 onChange={(e) => updateItem(item.id, 'content', e.target.value)}
-                placeholder="Contenido del item (puedes usar HTML)"
+                placeholder="Contenido del item. Puedes usar [icon:nombre] para insertar iconos."
                 className="min-h-[100px] font-mono text-sm"
               />
+              <p className="text-xs text-muted-foreground mt-1">
+                Usa [icon:nombre] para insertar iconos inline (ej: [icon:heart])
+              </p>
             </div>
           </div>
         ))}

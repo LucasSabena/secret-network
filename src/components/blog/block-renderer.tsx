@@ -138,13 +138,17 @@ function TabsBlockComponent({ block }: { block: Extract<Block, { type: 'tabs' }>
 
       {/* Tab Content */}
       <div className="prose prose-invert max-w-none">
-        {block.data.tabs.map((tab) => (
-          <div
-            key={tab.id}
-            className={activeTab === tab.id ? 'block' : 'hidden'}
-            dangerouslySetInnerHTML={{ __html: tab.content }}
-          />
-        ))}
+        {block.data.tabs.map((tab) => {
+          const contentWithIcons = parseTextWithIcons(tab.content);
+          return (
+            <div
+              key={tab.id}
+              className={activeTab === tab.id ? 'block' : 'hidden'}
+            >
+              {contentWithIcons}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -168,6 +172,7 @@ function AccordionBlockComponent({ block }: { block: Extract<Block, { type: 'acc
     <div className="my-8 space-y-2">
       {block.data.items.map((item) => {
         const isOpen = openItems.has(item.id);
+        const contentWithIcons = parseTextWithIcons(item.content);
         return (
           <div key={item.id} className="rounded-lg border border-border bg-card overflow-hidden">
             <button
@@ -185,7 +190,9 @@ function AccordionBlockComponent({ block }: { block: Extract<Block, { type: 'acc
               </svg>
             </button>
             {isOpen && (
-              <div className="p-4 pt-0 prose prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: item.content }} />
+              <div className="p-4 pt-0 prose prose-invert max-w-none">
+                {contentWithIcons}
+              </div>
             )}
           </div>
         );
@@ -205,12 +212,13 @@ function AlertBlockComponent({ block }: { block: Extract<Block, { type: 'alert' 
 
   const config = variantConfig[block.data.variant];
   const Icon = config.icon;
+  const descriptionWithIcons = parseTextWithIcons(block.data.description);
 
   return (
     <Alert className={`my-8 ${config.className}`}>
       <Icon className="h-4 w-4" />
       {block.data.title && <AlertTitle>{block.data.title}</AlertTitle>}
-      <AlertDescription>{block.data.description}</AlertDescription>
+      <AlertDescription>{descriptionWithIcons}</AlertDescription>
     </Alert>
   );
 }

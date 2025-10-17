@@ -45,9 +45,10 @@ next-env.d.ts
 # Información admin
 /.informacion-admin
 
-
-# Info para Copilot
-/.github
+# Info para Copilot (algunos archivos, pero NO copilot-instructions.md)
+/.github/GUIA_CARGA_BASE_DATOS.md
+/.github/QUICK_START.md
+/.github/RESUMEN_CAMBIOS_OCT2025.md
 copilot-instrucciones.md
 GUIA_CARGA_BASE_DATOS.md
 QUICK_START.md

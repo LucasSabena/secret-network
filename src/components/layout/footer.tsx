@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Star } from "lucide-react";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -93,15 +93,26 @@ export function Footer() {
             <p>
               © {currentYear} Secret Network
             </p>
-            <a
-              href="https://binarystudio.com.ar"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 transition-colors hover:text-foreground"
-            >
-              Binary Studio
-              <ExternalLink className="h-3 w-3" />
-            </a>
+            <div className="flex items-center gap-4">
+              <a
+                href="https://github.com/LucasSabena/secret-network"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 font-medium transition-colors hover:bg-accent hover:text-foreground"
+              >
+                <Star className="h-4 w-4" />
+                <span>Star en GitHub</span>
+              </a>
+              <a
+                href="https://binarystudio.com.ar"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 transition-colors hover:text-foreground"
+              >
+                Binary Studio
+                <ExternalLink className="h-3 w-3" />
+              </a>
+            </div>
           </div>
         </div>
       </div>
