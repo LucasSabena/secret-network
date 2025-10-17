@@ -27,13 +27,117 @@ export type Categoria = {
   icono: string | null;
 };
 
+// ========================================
+// SISTEMA DE BLOQUES PARA BLOG
+// ========================================
+
+// Bloque de texto (párrafo, headings, listas, etc.)
+export type TextBlock = {
+  id: string;
+  type: 'text';
+  data: {
+    format: 'paragraph' | 'h1' | 'h2' | 'h3' | 'h4' | 'ul' | 'ol' | 'quote' | 'code';
+    content: string; // HTML simple o texto
+  };
+};
+
+// Bloque de tarjeta de programa
+export type ProgramCardBlock = {
+  id: string;
+  type: 'program-card';
+  data: {
+    programId: number;
+    variant?: 'default' | 'large';
+  };
+};
+
+// Bloque de tabs
+export type TabsBlock = {
+  id: string;
+  type: 'tabs';
+  data: {
+    tabs: Array<{
+      id: string;
+      label: string;
+      content: string; // HTML o markdown
+    }>;
+  };
+};
+
+// Bloque de accordion
+export type AccordionBlock = {
+  id: string;
+  type: 'accordion';
+  data: {
+    items: Array<{
+      id: string;
+      title: string;
+      content: string; // HTML o markdown
+    }>;
+  };
+};
+
+// Bloque de alerta
+export type AlertBlock = {
+  id: string;
+  type: 'alert';
+  data: {
+    variant: 'default' | 'destructive' | 'success' | 'warning';
+    title?: string;
+    description: string;
+  };
+};
+
+// Bloque de separador
+export type SeparatorBlock = {
+  id: string;
+  type: 'separator';
+  data: {
+    style: 'solid' | 'dashed' | 'dotted';
+  };
+};
+
+// Bloque de imagen
+export type ImageBlock = {
+  id: string;
+  type: 'image';
+  data: {
+    url: string;
+    alt?: string;
+    caption?: string;
+    width?: number;
+  };
+};
+
+// Bloque de código
+export type CodeBlock = {
+  id: string;
+  type: 'code';
+  data: {
+    language: string;
+    code: string;
+  };
+};
+
+// Unión de todos los tipos de bloques
+export type Block =
+  | TextBlock
+  | ProgramCardBlock
+  | TabsBlock
+  | AccordionBlock
+  | AlertBlock
+  | SeparatorBlock
+  | ImageBlock
+  | CodeBlock;
+
 // Tipo para posts del blog
 export type BlogPost = {
   id: number;
   titulo: string;
   slug: string;
   descripcion_corta: string | null;
-  contenido: string;
+  contenido: string; // Mantener por compatibilidad (legacy)
+  contenido_bloques?: Block[]; // Nuevo sistema de bloques
   imagen_portada_url: string | null;
   autor: string | null;
   autor_id: number | null; // Nueva relación con tabla autores

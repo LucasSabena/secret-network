@@ -111,7 +111,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
       <article className="max-w-4xl mx-auto">
         <BlogPostHeader post={post as BlogPost} />
-        <BlogContent content={post.contenido} />
+        <BlogContent content={post.contenido} blocks={post.contenido_bloques} />
         
         {/* Botones de Compartir */}
         <div className="mt-12 pt-8 border-t border-border">

@@ -25,8 +25,10 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import RichTextEditor from './rich-text-editor';
+import { BlockEditor } from './blocks/block-editor';
+import { BlockRenderer } from '@/components/blog/block-renderer';
 import BlogStats from './blog-stats';
-import { BlogPost, Autor } from '@/lib/types';
+import { BlogPost, Autor, Block } from '@/lib/types';
 import { supabaseBrowserClient } from '@/lib/supabase-browser';
 import { uploadToCloudinary } from '@/lib/cloudinary-upload';
 import { validateImageFile } from '@/lib/cloudinary-config';
@@ -50,7 +52,7 @@ interface FormData {
 export default function BlogForm({ post, onClose }: BlogFormProps) {
   const [isSaving, setIsSaving] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [contenido, setContenido] = useState(post?.contenido || '');
+  const [blocks, setBlocks] = useState<Block[]>(post?.contenido_bloques || []);
   const [activeTab, setActiveTab] = useState<'edit' | 'preview'>('edit');
   const [autores, setAutores] = useState<Autor[]>([]);
   const [selectedAutorNombre, setSelectedAutorNombre] = useState<string>('');
@@ -121,40 +123,6 @@ export default function BlogForm({ post, onClose }: BlogFormProps) {
         imagenUrl = await uploadToCloudinary(imageFile, 'blog');
       }
 
-      // 🚀 NUEVO: Procesar imágenes pendientes en el contenido
-      let contenidoFinal = contenido;
-      const imageUrls = ImageManager.extractImageUrls(contenido);
-      const dataUrls = imageUrls.filter(url => ImageManager.isDataUrl(url));
-      
-      if (dataUrls.length > 0) {
-        toast({
-          title: 'Subiendo imágenes...',
-          description: `${dataUrls.length} imagen(es) en proceso`,
-        });
-
-        // Subir cada data URL a Cloudinary y reemplazar en el HTML
-        for (const dataUrl of dataUrls) {
-          try {
-            // Convertir data URL a File
-            const response = await fetch(dataUrl);
-            const blob = await response.blob();
-            const file = new File([blob], `image-${Date.now()}.png`, { type: blob.type });
-            
-            // Subir a Cloudinary
-            const cloudinaryUrl = await uploadToCloudinary(file, 'blog-content');
-            
-            // Reemplazar en el HTML
-            contenidoFinal = contenidoFinal.replace(dataUrl, cloudinaryUrl);
-          } catch (error) {
-            console.error('Error uploading inline image:', error);
-            // Continuar con las demás imágenes
-          }
-        }
-
-        // Limpiar imágenes pendientes del manager
-        ImageManager.clearPendingImages();
-      }
-
       // Generate slug from title if not provided
       const slug =
         data.slug ||
@@ -173,10 +141,11 @@ export default function BlogForm({ post, onClose }: BlogFormProps) {
         titulo: data.titulo,
         slug,
         descripcion_corta: data.descripcion_corta || null,
-        contenido: contenidoFinal, // ✅ Usar contenido con URLs de Cloudinary
+        contenido: '', // Legacy field - keep empty for now
+        contenido_bloques: blocks, // ✅ NUEVO: Guardar bloques estructurados
         imagen_portada_url: imagenUrl || null,
-        autor: data.autor || null, // Legacy field (mantener por compatibilidad)
-        autor_id: data.autor_id || null, // Nuevo campo relacional
+        autor: data.autor || null,
+        autor_id: data.autor_id || null,
         publicado: data.publicado,
         tags: tagsArray.length > 0 ? tagsArray : null,
         fecha_publicacion: post?.fecha_publicacion || new Date().toISOString(),
@@ -360,16 +329,13 @@ export default function BlogForm({ post, onClose }: BlogFormProps) {
               <Card className="p-4 bg-muted/30">
                 <h3 className="font-semibold mb-3 text-sm uppercase tracking-wide">Contenido Principal *</h3>
                 <div className="space-y-2">
-                  <RichTextEditor
-                    content={contenido}
-                    onChange={setContenido}
-                    placeholder="Escribe el contenido completo del artículo aquí. Puedes insertar imágenes, enlaces, código y más..."
+                  <BlockEditor
+                    blocks={blocks}
+                    onChange={setBlocks}
                   />
-                  <p className="text-xs text-muted-foreground flex items-center gap-1.5">
-                    <ImageIcon className="w-3.5 h-3.5" />
-                    Usa el botón de imagen en el toolbar para insertar imágenes directamente en el contenido
+                  <p className="text-xs text-muted-foreground mt-4">
+                    Usa el botón "+ Agregar Bloque" para agregar párrafos, imágenes, tarjetas de programas, tabs, acordeones, alertas y más.
                   </p>
-                  <BlogStats content={contenido} />
                 </div>
               </Card>
 
@@ -544,10 +510,9 @@ export default function BlogForm({ post, onClose }: BlogFormProps) {
                 )}
 
                 {/* Content */}
-                <div
-                  className="prose prose-sm dark:prose-invert max-w-none pt-8"
-                  dangerouslySetInnerHTML={{ __html: contenido || '<p class="text-muted-foreground">El contenido aparecerá aquí...</p>' }}
-                />
+                <div className="prose prose-sm dark:prose-invert max-w-none pt-8">
+                  <BlockRenderer blocks={blocks} />
+                </div>
               </div>
             </Card>
           </TabsContent>
