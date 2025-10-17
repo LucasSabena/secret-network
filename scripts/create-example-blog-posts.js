@@ -4,15 +4,23 @@
 const { createClient } = require('@supabase/supabase-js');
 require('dotenv').config({ path: '.env.local' });
 
+// Usar Service Role Key para bypassear RLS
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false
+    }
+  }
 );
 
 const post1_404 = {
   titulo: '¿Perdido? Estas 30 Páginas 404 Te Harán Feliz de Equivocarte',
   slug: 'mejores-paginas-404-creatividad-diseno',
   descripcion_corta: 'Una página 404 no tiene por qué ser aburrida. Descubre 30 ejemplos creativos que convierten errores en experiencias memorables.',
+  contenido: '', // Columna legacy (requerida por NOT NULL)
   imagen_portada_url: null, // Usuario agregará después
   autor: 'Secret Network',
   publicado: true,
@@ -207,6 +215,7 @@ const post2_ia = {
   titulo: '¿Diseñador Web? La IA es el Copiloto que No Sabías que Necesitabas',
   slug: 'ia-herramientas-disenadores-web-workflow',
   descripcion_corta: 'Descubre cómo la IA puede transformar tu flujo de trabajo de diseño web: desde el primer boceto hasta el código final en producción.',
+  contenido: '', // Columna legacy (requerida por NOT NULL)
   imagen_portada_url: null,
   autor: 'Secret Network',
   publicado: true,
