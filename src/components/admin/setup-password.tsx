@@ -30,22 +30,8 @@ export default function SetupPassword() {
     try {
       const supabase = supabaseBrowserClient;
       
-      // Primero, verificar si hay un hash en la URL (viene del email de invitación)
-      const hashParams = new URLSearchParams(window.location.hash.substring(1));
-      const accessToken = hashParams.get('access_token');
-      const type = hashParams.get('type');
-
-      // Si hay un token en el hash, establecer la sesión
-      if (accessToken && type === 'invite') {
-        const { error: sessionError } = await supabase.auth.setSession({
-          access_token: accessToken,
-          refresh_token: hashParams.get('refresh_token') || '',
-        });
-
-        if (sessionError) {
-          console.error('Error estableciendo sesión:', sessionError);
-        }
-      }
+      // Esperar un momento para que Supabase procese el hash de la URL automáticamente
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
       // Verificar si hay un usuario en sesión
       const { data: { user }, error } = await supabase.auth.getUser();
