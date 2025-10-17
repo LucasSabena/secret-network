@@ -7,6 +7,7 @@ import { BlogContent } from "@/components/blog/blog-content";
 import { BlogPostHeader } from "@/components/blog/blog-post-header";
 import { RelatedPosts } from "@/components/blog/related-posts";
 import BlogShareButtons from "@/components/blog/blog-share-buttons";
+import { ReadingProgressBar } from "@/components/blog/reading-progress-bar";
 import { JsonLdArticle } from "@/components/seo/json-ld-article";
 import { JsonLdBreadcrumb } from "@/components/seo/json-ld-breadcrumb";
 import type { BlogPost } from "@/lib/types";
@@ -93,16 +94,20 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     .limit(3);
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      {/* JSON-LD Structured Data */}
-      <JsonLdArticle post={post as BlogPost} />
-      <JsonLdBreadcrumb 
-        items={[
-          { name: 'Inicio', url: '/' },
-          { name: 'Blog', url: '/blog' },
-          { name: post.titulo, url: `/blog/${post.slug}` },
-        ]}
-      />
+    <>
+      {/* Barra de progreso de lectura */}
+      <ReadingProgressBar />
+      
+      <div className="container mx-auto px-4 py-8">
+        {/* JSON-LD Structured Data */}
+        <JsonLdArticle post={post as BlogPost} />
+        <JsonLdBreadcrumb 
+          items={[
+            { name: 'Inicio', url: '/' },
+            { name: 'Blog', url: '/blog' },
+            { name: post.titulo, url: `/blog/${post.slug}` },
+          ]}
+        />
 
       <article className="max-w-4xl mx-auto">
         <BlogPostHeader post={post as BlogPost} />
@@ -122,6 +127,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           <RelatedPosts posts={relatedPosts as BlogPost[]} />
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 }

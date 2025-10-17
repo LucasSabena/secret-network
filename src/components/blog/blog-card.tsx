@@ -3,8 +3,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Calendar, User, ArrowRight } from "lucide-react";
+import { Calendar, User, ArrowRight, Clock } from "lucide-react";
 import type { BlogPost } from "@/lib/types";
+import { calculateReadingTime } from "@/lib/reading-time";
 
 interface BlogCardProps {
   post: BlogPost;
@@ -18,6 +19,8 @@ export function BlogCard({ post }: BlogCardProps) {
       day: 'numeric'
     });
   };
+
+  const readingTime = calculateReadingTime(post.contenido);
 
   return (
     <Link href={`/blog/${post.slug}`} className="block h-full" prefetch={false}>
@@ -35,18 +38,23 @@ export function BlogCard({ post }: BlogCardProps) {
         )}
         
         <CardHeader>
-          <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-2">
+          <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground mb-2">
             <div className="flex items-center gap-1">
-              <Calendar className="h-4 w-4" />
+              <Calendar className="h-3.5 w-3.5" />
               <span>{formatDate(post.fecha_publicacion)}</span>
             </div>
             
             {post.autor && (
               <div className="flex items-center gap-1">
-                <User className="h-4 w-4" />
+                <User className="h-3.5 w-3.5" />
                 <span>{post.autor}</span>
               </div>
             )}
+
+            <div className="flex items-center gap-1">
+              <Clock className="h-3.5 w-3.5" />
+              <span>{readingTime.text}</span>
+            </div>
           </div>
 
           <CardTitle className="text-xl group-hover:text-primary transition-colors line-clamp-2">

@@ -1,9 +1,10 @@
 // FILE: src/components/blog/blog-post-header.tsx
 
 import Image from "next/image";
-import { Calendar, User, ArrowLeft } from "lucide-react";
+import { Calendar, User, ArrowLeft, Clock } from "lucide-react";
 import Link from "next/link";
 import type { BlogPost } from "@/lib/types";
+import { calculateReadingTime } from "@/lib/reading-time";
 
 interface BlogPostHeaderProps {
   post: BlogPost;
@@ -17,6 +18,8 @@ export function BlogPostHeader({ post }: BlogPostHeaderProps) {
       day: 'numeric'
     });
   };
+
+  const readingTime = calculateReadingTime(post.contenido);
 
   return (
     <header className="mb-8">
@@ -53,6 +56,11 @@ export function BlogPostHeader({ post }: BlogPostHeaderProps) {
             <span>{post.autor}</span>
           </div>
         )}
+
+        <div className="flex items-center gap-1">
+          <Clock className="h-4 w-4" />
+          <span>{readingTime.text}</span>
+        </div>
       </div>
 
       <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
