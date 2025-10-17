@@ -90,12 +90,16 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
       <head>
+        {/* Preconnect para mejorar rendimiento */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        
         {/* JSON-LD Structured Data */}
         <JsonLdOrganization />
         <JsonLdWebsite />
         
-        {/* Google Tag Manager */}
-        <GoogleTagManager gtmId={gtmId} />
+        {/* Google Tag Manager - Solo en producción */}
+        {process.env.NODE_ENV === 'production' && <GoogleTagManager gtmId={gtmId} />}
       </head>
       <body
         className={cn(
@@ -103,8 +107,8 @@ export default function RootLayout({
           fontSpaceGrotesk.variable
         )}
       >
-        {/* GTM NoScript */}
-        <GoogleTagManagerNoScript gtmId={gtmId} />
+        {/* GTM NoScript - Solo en producción */}
+        {process.env.NODE_ENV === 'production' && <GoogleTagManagerNoScript gtmId={gtmId} />}
         
         <ThemeProvider
           attribute="class"
@@ -124,8 +128,8 @@ export default function RootLayout({
           </ReactQueryProvider>
         </ThemeProvider>
 
-        {/* Google Analytics */}
-        <GoogleAnalytics measurementId={gaId} />
+        {/* Google Analytics - Solo en producción */}
+        {process.env.NODE_ENV === 'production' && <GoogleAnalytics measurementId={gaId} />}
       </body>
     </html>
   );
