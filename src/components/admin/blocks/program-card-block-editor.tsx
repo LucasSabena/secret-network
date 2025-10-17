@@ -127,6 +127,7 @@ export function ProgramCardBlockEditor({ block, onChange }: ProgramCardBlockEdit
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value="small">Pequeño</SelectItem>
               <SelectItem value="default">Normal</SelectItem>
               <SelectItem value="large">Grande</SelectItem>
             </SelectContent>
@@ -138,7 +139,14 @@ export function ProgramCardBlockEditor({ block, onChange }: ProgramCardBlockEdit
       {program && (
         <div>
           <Label className="text-xs text-muted-foreground mb-2 block">Vista previa:</Label>
-          <ProgramCard program={program} variant={block.data.variant === 'large' ? 'large' : 'medium'} />
+          <ProgramCard 
+            program={program} 
+            variant={
+              block.data.variant === 'large' ? 'large' : 
+              block.data.variant === 'small' ? 'small' : 
+              'medium'
+            } 
+          />
         </div>
       )}
 

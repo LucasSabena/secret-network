@@ -47,7 +47,7 @@ export type ProgramCardBlock = {
   type: 'program-card';
   data: {
     programId: number;
-    variant?: 'default' | 'large';
+    variant?: 'small' | 'default' | 'large';
   };
 };
 

@@ -8,6 +8,7 @@ import { Separator } from '@/components/ui/separator';
 import { Info, AlertTriangle, CheckCircle2, XCircle } from 'lucide-react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { supabaseBrowserClient } from '@/lib/supabase-browser';
@@ -91,9 +92,19 @@ function ProgramCardBlockComponent({ block }: { block: Extract<Block, { type: 'p
     return null;
   }
 
+  // Mapear variant del bloque a variant del ProgramCard
+  const cardVariant = 
+    block.data.variant === 'large' ? 'large' : 
+    block.data.variant === 'small' ? 'small' : 
+    'medium';
+
   return (
-    <div className="my-8">
-      <ProgramCard program={program} variant={block.data.variant === 'large' ? 'large' : 'medium'} />
+    <div className={cn(
+      "my-8",
+      // Si es small, limitar el ancho máximo (como en la home)
+      block.data.variant === 'small' && "max-w-sm"
+    )}>
+      <ProgramCard program={program} variant={cardVariant} />
     </div>
   );
 }
