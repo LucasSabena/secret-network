@@ -30,20 +30,10 @@ export default function SetupPassword() {
     try {
       const supabase = supabaseBrowserClient;
       
-      console.log('🔍 URL completa:', window.location.href);
-      console.log('🔍 Hash:', window.location.hash);
-      
-      // Esperar más tiempo para que Supabase procese el hash de la URL automáticamente
-      await new Promise(resolve => setTimeout(resolve, 2000));
-
       // Verificar si hay un usuario en sesión
-      const { data: { user }, error } = await supabase.auth.getUser();
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
 
-      console.log('👤 Usuario:', user);
-      console.log('❌ Error:', error);
-
-      if (error || !user) {
-        console.error('❌ No hay usuario o hay error');
+      if (sessionError || !session) {
         toast({
           title: 'Link inválido o expirado',
           description: 'Por favor, solicita una nueva invitación',
@@ -52,6 +42,8 @@ export default function SetupPassword() {
         setTimeout(() => router.push('/admin/login'), 3000);
         return;
       }
+
+      const user = session.user;
 
       // Verificar que el usuario esté en admin_users
       const { data: adminData, error: adminError } = await supabase
