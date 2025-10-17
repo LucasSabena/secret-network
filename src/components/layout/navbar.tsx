@@ -14,6 +14,7 @@ const navLinks = [
   { href: "/alternativas", label: "Alternativas" },
   { href: "/blog", label: "Blog" },
   { href: "/sobre-nosotros", label: "Sobre Nosotros" },
+  { href: "/contacto", label: "Contacto" },
 ];
 
 export function Navbar() {

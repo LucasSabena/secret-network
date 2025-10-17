@@ -226,6 +226,8 @@ El proyecto usa el directorio `src/` y sigue la siguiente organización:
   │   └── page.tsx
   └── open-source/                    # Programas open source ⭐ NUEVO
       └── page.tsx
+  └── contacto/                       # Sistema de contacto ⭐ NUEVO
+      └── page.tsx
 
 /src/components                       # Componentes React reutilizables
   ├── ui/                             # shadcn/ui base components
@@ -269,6 +271,15 @@ El proyecto usa el directorio `src/` y sigue la siguiente organización:
   └── open-source/                    # Componentes Open Source ⭐ NUEVO
       ├── open-source-hero.tsx
       └── open-source-list-client.tsx
+  └── contact/                        # Componentes de Contacto ⭐ NUEVO
+      ├── contact-hero.tsx            # Hero animado
+      ├── contact-form.tsx            # Orquestador principal
+      ├── contact-info.tsx            # Sidebar con info
+      └── forms/
+          ├── sponsor-form.tsx        # Form de sponsors
+          ├── error-report-form.tsx   # Form de errores
+          ├── program-suggestion-form.tsx  # Form de sugerencias
+          └── general-contact-form.tsx # Form general
 
 /src/lib                              # Lógica auxiliar y configuración
   ├── supabase.js                     # Cliente de Supabase
@@ -380,6 +391,20 @@ Programas exclusivamente open source:
 - Sistema de filtros adaptado
 - Hero explicando importancia del open source
 
+### 7.8. Contacto (`/contacto`) ⭐ NUEVO
+Sistema completo de formularios de contacto:
+- **Índice** (`/contacto`): Página con 4 tipos de formularios dinámicos
+- **Hero animado**: Con Framer Motion y gradiente rosa
+- **Formularios específicos**:
+  - **Sponsor**: Para empresas (8 campos, dropdowns de presupuesto y tipo)
+  - **Reporte de error**: Para bugs (7 campos, tipo de error, navegador, URL)
+  - **Sugerencia de programa**: Para agregar herramientas (8 campos, categoría, open source)
+  - **Contacto general**: Consultas simples (3 campos básicos)
+- **Emails HTML**: Formateados profesionalmente con gradiente rosa
+- **Resend**: Servicio de email transaccional integrado
+- **Validación**: Campos obligatorios marcados, feedback con toast
+- **Responsive**: Mobile-first, animaciones suaves
+
 ---
 
 ## 8. SEO y Analytics
@@ -466,7 +491,102 @@ conversionEvents.viewAlternatives(programName, alternativesCount)
 
 ---
 
-## 9. Comandos y Scripts
+## 9. Sistema de Contacto ⭐ NUEVO
+
+### 9.1. Arquitectura
+
+Sistema completo de formularios dinámicos con envío de emails a través de Resend.
+
+#### API Route: `/api/contact`
+- Procesa formularios de 4 tipos diferentes
+- Genera emails HTML formateados profesionalmente
+- Usa Resend para envío transaccional
+- Email destino: `01studiobinary@gmail.com`
+
+#### Tipos de Formulario
+
+1. **Sponsor** (8 campos)
+   - Nombre, Email, Empresa, Website
+   - Tipo de sponsoreo (dropdown): Banner, Newsletter, Categoría, Personalizado
+   - Presupuesto (dropdown): Menos de $1,000, $1,000-$5,000, $5,000-$10,000, $10,000-$25,000, $25,000+
+   - Mensaje
+
+2. **Reporte de Error** (7 campos)
+   - Nombre (opcional), Email
+   - Tipo de error (dropdown): Visual, Funcional, Datos, Performance, Link roto, Otro
+   - URL del error, Navegador (dropdown)
+   - Descripción, Pasos para reproducir
+
+3. **Sugerencia de Programa** (8 campos)
+   - Nombre (opcional), Email
+   - Nombre del programa, Website oficial
+   - Categoría (dropdown), Open Source (dropdown)
+   - Descripción, Por qué agregarlo
+
+4. **Contacto General** (3 campos)
+   - Nombre, Email, Mensaje
+
+### 9.2. Configuración de Resend
+
+#### Variables de Entorno
+```bash
+RESEND_API_KEY=re_xxxxxxxxxxxxx
+```
+
+#### Implementación
+```typescript
+// src/app/api/contact/route.ts
+import { Resend } from 'resend';
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+
+await resend.emails.send({
+  from: 'Secret Network <onboarding@resend.dev>',
+  to: ['01studiobinary@gmail.com'],
+  replyTo: formData.email,
+  subject: emailContent.subject,
+  html: emailContent.html,
+});
+```
+
+### 9.3. Estructura de Emails HTML
+
+Cada tipo de formulario genera un email con:
+- **Header**: Gradiente rosa (`#ff3399`) con título
+- **Campos**: Organizados en secciones con bordes rosa
+- **Badges**: Para información destacada (tipo, presupuesto, etc.)
+- **Footer**: Branding de Secret Network
+- **Responsive**: Optimizado para mobile
+
+### 9.4. Componentes
+
+```
+src/components/contact/
+├── contact-hero.tsx              # Hero con animaciones Framer Motion
+├── contact-form.tsx              # Orquestador con selector de tipo
+├── contact-info.tsx              # Sidebar con info y FAQ
+└── forms/
+    ├── sponsor-form.tsx          # Form específico para sponsors
+    ├── error-report-form.tsx     # Form específico para errores
+    ├── program-suggestion-form.tsx # Form específico para sugerencias
+    └── general-contact-form.tsx  # Form general simplificado
+```
+
+### 9.5. Features
+
+- ✅ Formularios dinámicos según tipo seleccionado
+- ✅ Animaciones suaves con Framer Motion (AnimatePresence)
+- ✅ Validación HTML5 nativa
+- ✅ Toast notifications para feedback
+- ✅ Emails HTML profesionales
+- ✅ Responsive mobile-first
+- ✅ Integrado en Navbar y Footer
+- ✅ SEO optimizado (breadcrumbs, metadata)
+- ✅ CERO emojis (solo Lucide icons)
+
+---
+
+## 10. Comandos y Scripts
 
 ### Desarrollo
 ```bash
@@ -489,7 +609,7 @@ git push origin main                  # Auto-deploy en Vercel
 
 ---
 
-## 10. Documentación Adicional
+## 11. Documentación Adicional
 
 - **`GUIA_SEO.md`**: Guía completa de configuración SEO (20+ páginas)
 - **`RESUMEN_SEO.md`**: Resumen ejecutivo con checklist
@@ -498,15 +618,16 @@ git push origin main                  # Auto-deploy en Vercel
 
 ---
 
-## 11. Tareas Pendientes del Usuario
+## 12. Tareas Pendientes del Usuario
 
 ### Configuración Obligatoria
-- [ ] Obtener Google Analytics Measurement ID
-- [ ] Obtener Google Tag Manager Container ID
-- [ ] Agregar IDs a `.env.local` y Vercel
-- [ ] Verificar sitio en Google Search Console
-- [ ] Enviar sitemap: `https://secret-network.vercel.app/sitemap.xml`
+- [x] Obtener Google Analytics Measurement ID
+- [x] Obtener Google Tag Manager Container ID
+- [x] Agregar IDs a `.env.local` y Vercel
+- [x] Verificar sitio en Google Search Console
+- [x] Enviar sitemap: `https://secret-network.vercel.app/sitemap.xml`
 - [ ] Crear imagen OG: `/public/og-image.png` (1200x630px)
+- [x] Configurar Resend API Key para sistema de contacto
 
 ### Base de Datos
 - [ ] Marcar programas como `es_recomendado=true`
@@ -515,7 +636,7 @@ git push origin main                  # Auto-deploy en Vercel
 
 ---
 
-## 12. Sistema de Bloques para Blog ⭐ NUEVO
+## 13. Sistema de Bloques para Blog ⭐ NUEVO
 
 ### 12.1. Arquitectura
 
@@ -616,7 +737,7 @@ import { BlockRenderer } from '@/components/blog/block-renderer';
 
 ---
 
-## 13. Sistema de Iconos Inline ⭐ NUEVO
+## 14. Sistema de Iconos Inline ⭐ NUEVO
 
 ### 13.1. Filosofía
 **CERO EMOJIS** - Solo Lucide Icons para profesionalidad y consistencia.
@@ -720,7 +841,7 @@ En `BlockRenderer`:
 
 ---
 
-## 14. Scripts de Base de Datos
+## 15. Scripts de Base de Datos
 
 ### 14.1. `scripts/create-example-blog-posts.js`
 Crea 2 posts de ejemplo con 35+ bloques totales demostrando:
@@ -763,7 +884,7 @@ ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS contenido_bloques JSONB;
 
 ---
 
-## 15. Flujo de Trabajo: Crear un Blog Post
+## 16. Flujo de Trabajo: Crear un Blog Post
 
 1. **Admin Panel**: `/admin` → Tab "Blog Posts"
 2. **Nuevo Post**: Clic en "+ Crear Post"
@@ -793,7 +914,7 @@ ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS contenido_bloques JSONB;
 
 ---
 
-## 16. Seguridad del Repositorio
+## 17. Seguridad del Repositorio
 
 ### 16.1. Archivos Sensibles (NO en Git)
 - `.env.local` - Contiene:
@@ -832,7 +953,7 @@ Los scripts usan `process.env` para leer variables de entorno localmente. Esto e
 
 ---
 
-## 17. Troubleshooting y Reglas de Oro
+## 18. Troubleshooting y Reglas de Oro
 
 ### 17.1. Emojis
 - ❌ NUNCA usar emojis en UI/contenido
@@ -864,7 +985,7 @@ Los scripts usan `process.env` para leer variables de entorno localmente. Esto e
 
 ---
 
-## 18. Estructura de Archivos ACTUALIZADA
+## 19. Estructura de Archivos ACTUALIZADA
 
 ```
 /src/app                              # Rutas y páginas (Next.js App Router)

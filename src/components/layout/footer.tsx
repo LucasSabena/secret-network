@@ -58,10 +58,34 @@ export function Footer() {
               </li>
               <li>
                 <Link 
-                  href="/" 
+                  href="/open-source" 
                   className="text-muted-foreground transition-colors hover:text-foreground"
                 >
-                  Herramientas Destacadas
+                  Open Source
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/alternativas" 
+                  className="text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  Alternativas
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/blog" 
+                  className="text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  Blog
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/contacto" 
+                  className="text-muted-foreground transition-colors hover:text-primary font-medium"
+                >
+                  Contacto
                 </Link>
               </li>
             </ul>
