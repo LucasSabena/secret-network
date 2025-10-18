@@ -183,7 +183,7 @@ Este proyecto es de código cerrado. Todos los derechos reservados.
 **Lucas Sabena**
 
 - GitHub: [@LucasSabena](https://github.com/LucasSabena)
-- Email: lukitassabena@gmail.com
+- Email: 01studiobinary@gmail.com
 
 ---
 
