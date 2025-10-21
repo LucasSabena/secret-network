@@ -1,11 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Plus, Search, Edit, Trash2, Loader2, Filter, X, Upload } from 'lucide-react';
+import { Plus, Search, Edit, Trash2, Loader2, Filter, X, Upload, Image as ImageIcon, CheckCircle2, XCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Switch } from '@/components/ui/switch';
 import {
   Select,
   SelectContent,
@@ -13,8 +14,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuCheckboxItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
+} from '@/components/ui/dropdown-menu';
 import { useToast } from '@/components/ui/use-toast';
-import { Programa, Categoria } from '@/lib/types';
+import { Programa, Categoria, Plataforma, ModeloDePrecio } from '@/lib/types';
 import ProgramaForm from './programa-form';
 import BatchIconUpload from './batch-icon-upload';
 import { supabaseBrowserClient } from '@/lib/supabase-browser';
@@ -22,6 +31,10 @@ import { supabaseBrowserClient } from '@/lib/supabase-browser';
 export default function ProgramasManager() {
   const [programas, setProgramas] = useState<Programa[]>([]);
   const [categorias, setCategorias] = useState<Categoria[]>([]);
+  const [plataformas, setPlataformas] = useState<Plataforma[]>([]);
+  const [modelosPrecios, setModelosPrecios] = useState<ModeloDePrecio[]>([]);
+  const [programasPlataformas, setProgramasPlataformas] = useState<Record<number, number[]>>({});
+  const [programasPrecios, setProgramasPrecios] = useState<Record<number, number[]>>({});
   const [filteredProgramas, setFilteredProgramas] = useState<Programa[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategoria, setFilterCategoria] = useState<string>('all');
@@ -38,6 +51,8 @@ export default function ProgramasManager() {
   useEffect(() => {
     loadProgramas();
     loadCategorias();
+    loadPlataformas();
+    loadModelosPrecios();
   }, []);
 
   useEffect(() => {
@@ -121,6 +136,68 @@ export default function ProgramasManager() {
     }
   }
 
+  async function loadPlataformas() {
+    try {
+      const supabase = supabaseBrowserClient;
+      const { data, error } = await supabase
+        .from('Plataformas')
+        .select('*')
+        .order('nombre');
+
+      if (error) throw error;
+      setPlataformas(data || []);
+    } catch (error) {
+      console.error('Error loading plataformas:', error);
+    }
+  }
+
+  async function loadModelosPrecios() {
+    try {
+      const supabase = supabaseBrowserClient;
+      const { data, error } = await supabase
+        .from('Modelos de Precios')
+        .select('*')
+        .order('nombre');
+
+      if (error) throw error;
+      setModelosPrecios(data || []);
+    } catch (error) {
+      console.error('Error loading modelos de precio:', error);
+    }
+  }
+
+  async function loadProgramasRelaciones() {
+    try {
+      const supabase = supabaseBrowserClient;
+      
+      // Cargar plataformas de programas
+      const { data: platData } = await supabase
+        .from('programas_plataformas')
+        .select('programa_id, plataforma_id');
+      
+      const platMap: Record<number, number[]> = {};
+      platData?.forEach(rel => {
+        if (!platMap[rel.programa_id]) platMap[rel.programa_id] = [];
+        platMap[rel.programa_id].push(rel.plataforma_id);
+      });
+      setProgramasPlataformas(platMap);
+
+      // Cargar precios de programas
+      const { data: precioData } = await supabase
+        .from('programas_precios')
+        .select('programa_id, precio_id');
+      
+      const precioMap: Record<number, number[]> = {};
+      precioData?.forEach(rel => {
+        if (!precioMap[rel.programa_id]) precioMap[rel.programa_id] = [];
+        precioMap[rel.programa_id].push(rel.precio_id);
+      });
+      setProgramasPrecios(precioMap);
+    } catch (error) {
+      console.error('Error loading relaciones:', error);
+    }
+  }
+
   async function loadProgramas() {
     try {
       setIsLoading(true);
@@ -133,6 +210,7 @@ export default function ProgramasManager() {
       if (error) throw error;
       setProgramas(data || []);
       setFilteredProgramas(data || []);
+      await loadProgramasRelaciones();
     } catch (error) {
       console.error('Error loading programas:', error);
       toast({
@@ -183,6 +261,156 @@ export default function ProgramasManager() {
     setIsFormOpen(false);
     setSelectedPrograma(null);
     loadProgramas();
+  }
+
+  async function updateDificultad(programaId: number, dificultad: 'Facil' | 'Intermedio' | 'Dificil') {
+    try {
+      const supabase = supabaseBrowserClient;
+      const { error } = await supabase
+        .from('programas')
+        .update({ dificultad })
+        .eq('id', programaId);
+
+      if (error) throw error;
+
+      setProgramas(prev => prev.map(p => 
+        p.id === programaId ? { ...p, dificultad } : p
+      ));
+
+      toast({
+        title: 'Actualizado',
+        description: 'Dificultad actualizada correctamente',
+      });
+    } catch (error) {
+      console.error('Error updating dificultad:', error);
+      toast({
+        title: 'Error',
+        description: 'No se pudo actualizar la dificultad',
+        variant: 'destructive',
+      });
+    }
+  }
+
+  async function toggleRecomendado(programaId: number, currentValue: boolean) {
+    try {
+      const supabase = supabaseBrowserClient;
+      const { error } = await supabase
+        .from('programas')
+        .update({ es_recomendado: !currentValue })
+        .eq('id', programaId);
+
+      if (error) throw error;
+
+      setProgramas(prev => prev.map(p => 
+        p.id === programaId ? { ...p, es_recomendado: !currentValue } : p
+      ));
+
+      toast({
+        title: 'Actualizado',
+        description: `Programa ${!currentValue ? 'marcado como' : 'desmarcado de'} recomendado`,
+      });
+    } catch (error) {
+      console.error('Error toggling recomendado:', error);
+      toast({
+        title: 'Error',
+        description: 'No se pudo actualizar',
+        variant: 'destructive',
+      });
+    }
+  }
+
+  async function toggleOpenSource(programaId: number, currentValue: boolean) {
+    try {
+      const supabase = supabaseBrowserClient;
+      const { error } = await supabase
+        .from('programas')
+        .update({ es_open_source: !currentValue })
+        .eq('id', programaId);
+
+      if (error) throw error;
+
+      setProgramas(prev => prev.map(p => 
+        p.id === programaId ? { ...p, es_open_source: !currentValue } : p
+      ));
+
+      toast({
+        title: 'Actualizado',
+        description: `Programa ${!currentValue ? 'marcado como' : 'desmarcado de'} Open Source`,
+      });
+    } catch (error) {
+      console.error('Error toggling open source:', error);
+      toast({
+        title: 'Error',
+        description: 'No se pudo actualizar',
+        variant: 'destructive',
+      });
+    }
+  }
+
+  async function updatePlataformas(programaId: number, plataformaId: number, isChecked: boolean) {
+    try {
+      const supabase = supabaseBrowserClient;
+
+      if (isChecked) {
+        const { error } = await supabase
+          .from('programas_plataformas')
+          .insert({ programa_id: programaId, plataforma_id: plataformaId });
+        if (error) throw error;
+      } else {
+        const { error } = await supabase
+          .from('programas_plataformas')
+          .delete()
+          .eq('programa_id', programaId)
+          .eq('plataforma_id', plataformaId);
+        if (error) throw error;
+      }
+
+      await loadProgramasRelaciones();
+      toast({
+        title: 'Actualizado',
+        description: 'Plataformas actualizadas',
+      });
+    } catch (error) {
+      console.error('Error updating plataformas:', error);
+      toast({
+        title: 'Error',
+        description: 'No se pudo actualizar',
+        variant: 'destructive',
+      });
+    }
+  }
+
+  async function updatePrecios(programaId: number, precioId: number, isChecked: boolean) {
+    try {
+      const supabase = supabaseBrowserClient;
+
+      if (isChecked) {
+        const { error } = await supabase
+          .from('programas_precios')
+          .insert({ programa_id: programaId, precio_id: precioId });
+        if (error) throw error;
+      } else {
+        const { error } = await supabase
+          .from('programas_precios')
+          .delete()
+          .eq('programa_id', programaId)
+          .eq('precio_id', precioId);
+        if (error) throw error;
+      }
+
+      await loadProgramasRelaciones();
+      toast({
+        title: 'Actualizado',
+        description: 'Modelos de precio actualizados',
+      });
+    } catch (error) {
+      console.error('Error updating precios:', error);
+      toast({
+        title: 'Error',
+        description: 'No se pudo actualizar',
+        variant: 'destructive',
+      });
+    }
   }
 
   if (isLoading) {
@@ -334,67 +562,183 @@ export default function ProgramasManager() {
 
       {/* Grid de programas */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filteredProgramas.map((programa) => (
-          <Card key={programa.id} className="p-4 space-y-3">
-            <div className="flex items-start gap-3">
-              {programa.icono_url && (
-                <img
-                  src={programa.icono_url}
-                  alt={programa.nombre}
-                  className="w-12 h-12 rounded object-cover"
-                />
-              )}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <h3 className="font-semibold truncate">{programa.nombre}</h3>
-                  <span className="text-xs text-muted-foreground shrink-0">#{programa.id}</span>
+        {filteredProgramas.map((programa) => {
+          const plataformasPrograma = programasPlataformas[programa.id] || [];
+          const preciosPrograma = programasPrecios[programa.id] || [];
+
+          return (
+            <Card key={programa.id} className="p-4 space-y-3">
+              {/* Header con título e indicadores de imágenes */}
+              <div className="flex items-start gap-3">
+                <div className="relative">
+                  {programa.icono_url ? (
+                    <img
+                      src={programa.icono_url}
+                      alt={programa.nombre}
+                      className="w-12 h-12 rounded object-cover border"
+                    />
+                  ) : (
+                    <div className="w-12 h-12 rounded border-2 border-dashed border-muted-foreground/30 flex items-center justify-center">
+                      <ImageIcon className="w-5 h-5 text-muted-foreground/50" />
+                    </div>
+                  )}
                 </div>
-                <p className="text-sm text-muted-foreground truncate">
-                  {programa.slug}
-                </p>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-semibold truncate">{programa.nombre}</h3>
+                    <span className="text-xs text-muted-foreground shrink-0">#{programa.id}</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground truncate">
+                    {programa.slug}
+                  </p>
+                  {/* Indicadores de imágenes */}
+                  <div className="flex items-center gap-2 mt-1">
+                    <div className="flex items-center gap-1 text-xs">
+                      {programa.icono_url ? (
+                        <CheckCircle2 className="w-3 h-3 text-green-500" />
+                      ) : (
+                        <XCircle className="w-3 h-3 text-muted-foreground/50" />
+                      )}
+                      <span className="text-muted-foreground">Icono</span>
+                    </div>
+                    <div className="flex items-center gap-1 text-xs">
+                      {programa.captura_url ? (
+                        <CheckCircle2 className="w-3 h-3 text-green-500" />
+                      ) : (
+                        <XCircle className="w-3 h-3 text-muted-foreground/50" />
+                      )}
+                      <span className="text-muted-foreground">Captura</span>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-            {programa.descripcion_corta && (
-              <p className="text-sm line-clamp-2">{programa.descripcion_corta}</p>
-            )}
-            <div className="flex flex-wrap gap-2">
-              {programa.es_open_source && (
-                <Badge variant="success" className="text-xs">
-                  Open Source
-                </Badge>
+
+              {/* Descripción corta */}
+              {programa.descripcion_corta && (
+                <p className="text-sm line-clamp-2 text-muted-foreground">
+                  {programa.descripcion_corta.replace(/<[^>]*>/g, '')}
+                </p>
               )}
-              {programa.es_recomendado && (
-                <Badge variant="default" className="text-xs bg-pink-500">
-                  Recomendado
-                </Badge>
-              )}
-              {programa.dificultad && (
-                <Badge variant="outline" className="text-xs">
-                  {programa.dificultad}
-                </Badge>
-              )}
-            </div>
-            <div className="flex gap-2 pt-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleEdit(programa)}
-                className="flex-1 gap-2"
-              >
-                <Edit className="h-4 w-4" />
-                Editar
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleDelete(programa.id)}
-                className="gap-2 text-destructive hover:text-destructive"
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
-            </div>
-          </Card>
-        ))}
+
+              {/* Controles rápidos */}
+              <div className="space-y-2 pt-2 border-t">
+                {/* Dificultad */}
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Dificultad</span>
+                  <Select
+                    value={programa.dificultad || 'Intermedio'}
+                    onValueChange={(value) => updateDificultad(programa.id, value as any)}
+                  >
+                    <SelectTrigger className="w-32 h-8">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Facil">Fácil</SelectItem>
+                      <SelectItem value="Intermedio">Intermedio</SelectItem>
+                      <SelectItem value="Dificil">Difícil</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Toggles */}
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Recomendado</span>
+                  <Switch
+                    checked={programa.es_recomendado}
+                    onCheckedChange={() => toggleRecomendado(programa.id, programa.es_recomendado)}
+                  />
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Open Source</span>
+                  <Switch
+                    checked={programa.es_open_source}
+                    onCheckedChange={() => toggleOpenSource(programa.id, programa.es_open_source)}
+                  />
+                </div>
+
+                {/* Plataformas */}
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Plataformas</span>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" size="sm" className="h-8">
+                        {plataformasPrograma.length > 0 ? (
+                          <span className="text-xs">{plataformasPrograma.length} seleccionadas</span>
+                        ) : (
+                          <span className="text-xs text-muted-foreground">Ninguna</span>
+                        )}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-56">
+                      <DropdownMenuLabel>Sistemas Operativos</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      {plataformas.map((plat) => (
+                        <DropdownMenuCheckboxItem
+                          key={plat.id}
+                          checked={plataformasPrograma.includes(plat.id)}
+                          onCheckedChange={(checked) => updatePlataformas(programa.id, plat.id, checked)}
+                        >
+                          {plat.nombre}
+                        </DropdownMenuCheckboxItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+
+                {/* Modelos de Precio */}
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Precio</span>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" size="sm" className="h-8">
+                        {preciosPrograma.length > 0 ? (
+                          <span className="text-xs">{preciosPrograma.length} seleccionados</span>
+                        ) : (
+                          <span className="text-xs text-muted-foreground">Ninguno</span>
+                        )}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-56">
+                      <DropdownMenuLabel>Modelos de Precio</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      {modelosPrecios.map((precio) => (
+                        <DropdownMenuCheckboxItem
+                          key={precio.id}
+                          checked={preciosPrograma.includes(precio.id)}
+                          onCheckedChange={(checked) => updatePrecios(programa.id, precio.id, checked)}
+                        >
+                          {precio.nombre}
+                        </DropdownMenuCheckboxItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              </div>
+
+              {/* Botones de acción */}
+              <div className="flex gap-2 pt-2 border-t">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleEdit(programa)}
+                  className="flex-1 gap-2"
+                >
+                  <Edit className="h-4 w-4" />
+                  Editar
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleDelete(programa.id)}
+                  className="gap-2 text-destructive hover:text-destructive"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            </Card>
+          );
+        })}
       </div>
 
       {filteredProgramas.length === 0 && (
