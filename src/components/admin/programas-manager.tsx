@@ -626,11 +626,11 @@ export default function ProgramasManager() {
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Dificultad</span>
                   <Select
-                    value={programa.dificultad || 'Intermedio'}
+                    value={programa.dificultad || undefined}
                     onValueChange={(value) => updateDificultad(programa.id, value as any)}
                   >
                     <SelectTrigger className="w-32 h-8">
-                      <SelectValue />
+                      <SelectValue placeholder="Seleccionar" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Facil">Fácil</SelectItem>
