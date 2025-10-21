@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { X, Upload, Loader2, Image as ImageIcon, Search } from 'lucide-react';
+import { X, Upload, Loader2, Image as ImageIcon, Search, FolderTree, Tag, Monitor, DollarSign, Repeat } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -51,7 +51,8 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
   const [categoriasSeleccionadas, setCategoriasSeleccionadas] = useState<number[]>([]);
   const [subcategoriasDisponibles, setSubcategoriasDisponibles] = useState<Categoria[]>([]);
   const [subcategoriasSeleccionadas, setSubcategoriasSeleccionadas] = useState<number[]>([]);
-  const [programasDisponibles, setProgramasDisponibles] = useState<{ id: number; nombre: string; slug: string }[]>([]);
+  const [busquedaSubcategorias, setBusquedaSubcategorias] = useState('');
+  const [programasDisponibles, setProgramasDisponibles] = useState<{ id: number; nombre: string; slug: string; subcategorias?: number[] }[]>([]);
   const [alternativasSeleccionadas, setAlternativasSeleccionadas] = useState<number[]>([]);
   const [busquedaAlternativas, setBusquedaAlternativas] = useState('');
   const [plataformas, setPlataformas] = useState<Plataforma[]>([]);
@@ -98,7 +99,23 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
         .order('nombre');
 
       if (error) throw error;
-      setProgramasDisponibles(data || []);
+      
+      // Cargar subcategorías de cada programa
+      const programasConSubcats = await Promise.all(
+        (data || []).map(async (prog) => {
+          const { data: subsData } = await supabase
+            .from('programas_subcategorias')
+            .select('subcategoria_id')
+            .eq('programa_id', prog.id);
+          
+          return {
+            ...prog,
+            subcategorias: subsData?.map(s => s.subcategoria_id) || []
+          };
+        })
+      );
+      
+      setProgramasDisponibles(programasConSubcats);
     } catch (error) {
       console.error('Error loading programas:', error);
     }
@@ -700,7 +717,10 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
           {/* Categorías Principales - Selección Múltiple */}
           <div className="space-y-3 p-4 bg-primary/5 rounded-lg border-2 border-primary/20">
             <div className="flex items-center justify-between">
-              <Label className="text-base font-semibold">Categorías Principales * (puedes seleccionar varias)</Label>
+              <div className="flex items-center gap-2">
+                <FolderTree className="w-5 h-5 text-primary" />
+                <Label className="text-base font-semibold">Categorías Principales * (puedes seleccionar varias)</Label>
+              </div>
               <span className="text-xs text-muted-foreground">
                 {categoriasSeleccionadas.length} seleccionadas
               </span>
@@ -738,8 +758,19 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
           </div>
 
           {/* Subcategorías con checkboxes */}
-          <div className="space-y-2">
-            <Label>Subcategorías * (selecciona al menos una)</Label>
+          <div className="space-y-3 p-4 bg-accent/30 rounded-lg border">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Tag className="w-5 h-5" />
+                <Label className="text-base font-semibold">Subcategorías * (selecciona al menos una)</Label>
+              </div>
+              {categoriasSeleccionadas.length > 0 && subcategoriasDisponibles.length > 0 && (
+                <span className="text-xs text-muted-foreground">
+                  {subcategoriasSeleccionadas.length} de {subcategoriasDisponibles.length}
+                </span>
+              )}
+            </div>
+
             {categoriasSeleccionadas.length === 0 ? (
               <p className="text-sm text-muted-foreground p-4 border rounded-lg bg-muted/30">
                 Primero selecciona al menos una categoría principal
@@ -749,52 +780,82 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
                 No hay subcategorías disponibles para las categorías seleccionadas
               </p>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 p-4 border rounded-lg">
-                {subcategoriasDisponibles.map((subcat) => {
-                  const categoriaPadre = categoriasPrincipales.find(c => c.id === subcat.id_categoria_padre);
-                  return (
-                    <div key={subcat.id} className="flex items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        id={`subcat-${subcat.id}`}
-                        checked={subcategoriasSeleccionadas.includes(subcat.id)}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setSubcategoriasSeleccionadas([...subcategoriasSeleccionadas, subcat.id]);
-                          } else {
-                            setSubcategoriasSeleccionadas(
-                              subcategoriasSeleccionadas.filter(id => id !== subcat.id)
-                            );
-                          }
-                        }}
-                        className="w-4 h-4 rounded border-gray-300"
-                      />
-                      <label
-                        htmlFor={`subcat-${subcat.id}`}
-                        className="text-sm cursor-pointer flex-1"
-                      >
-                        {subcat.icono && `${subcat.icono} `}
-                        {subcat.nombre}
-                        <span className="text-xs text-muted-foreground ml-1">
-                          ({categoriaPadre?.nombre})
-                        </span>
-                      </label>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-            {categoriasSeleccionadas.length > 0 && subcategoriasDisponibles.length > 0 && (
-              <p className="text-xs text-muted-foreground">
-                Seleccionadas: {subcategoriasSeleccionadas.length} de {subcategoriasDisponibles.length}
-              </p>
+              <>
+                {/* Buscador de subcategorías */}
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    type="text"
+                    placeholder="Buscar subcategoría..."
+                    value={busquedaSubcategorias}
+                    onChange={(e) => setBusquedaSubcategorias(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
+
+                {/* Subcategorías agrupadas por categoría */}
+                <div className="space-y-4 max-h-96 overflow-y-auto p-2">
+                  {categoriasSeleccionadas.map(catId => {
+                    const categoriaPadre = categoriasPrincipales.find(c => c.id === catId);
+                    const subcatsDeCategoria = subcategoriasDisponibles.filter(
+                      sub => sub.id_categoria_padre === catId &&
+                      (busquedaSubcategorias === '' || 
+                       sub.nombre.toLowerCase().includes(busquedaSubcategorias.toLowerCase()))
+                    );
+
+                    if (subcatsDeCategoria.length === 0) return null;
+
+                    return (
+                      <div key={catId} className="space-y-2">
+                        <div className="flex items-center gap-2 px-2 py-1 bg-primary/10 rounded-md">
+                          <span className="text-sm font-semibold text-primary">
+                            {categoriaPadre?.icono && `${categoriaPadre.icono} `}
+                            {categoriaPadre?.nombre}
+                          </span>
+                          <span className="text-xs text-muted-foreground">
+                            ({subcatsDeCategoria.filter(s => subcategoriasSeleccionadas.includes(s.id)).length}/{subcatsDeCategoria.length})
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 pl-4">
+                          {subcatsDeCategoria.map((subcat) => (
+                            <label
+                              key={subcat.id}
+                              className="flex items-center space-x-2 p-2 rounded hover:bg-accent cursor-pointer"
+                            >
+                              <input
+                                type="checkbox"
+                                checked={subcategoriasSeleccionadas.includes(subcat.id)}
+                                onChange={(e) => {
+                                  if (e.target.checked) {
+                                    setSubcategoriasSeleccionadas([...subcategoriasSeleccionadas, subcat.id]);
+                                  } else {
+                                    setSubcategoriasSeleccionadas(
+                                      subcategoriasSeleccionadas.filter(id => id !== subcat.id)
+                                    );
+                                  }
+                                }}
+                                className="w-4 h-4 rounded border-gray-300"
+                              />
+                              <span className="text-sm flex-1">
+                                {subcat.icono && `${subcat.icono} `}
+                                {subcat.nombre}
+                              </span>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </>
             )}
           </div>
 
           {/* Selector de Plataformas */}
           <div className="space-y-3 p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
             <div className="flex items-center gap-2">
-              <Label className="text-base font-semibold">💻 Plataformas / Sistemas Operativos</Label>
+              <Monitor className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              <Label className="text-base font-semibold">Plataformas / Sistemas Operativos</Label>
               <span className="text-xs text-muted-foreground">(Opcional)</span>
             </div>
             <p className="text-xs text-muted-foreground">
@@ -843,7 +904,8 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
           {/* Selector de Modelos de Precio */}
           <div className="space-y-3 p-4 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
             <div className="flex items-center gap-2">
-              <Label className="text-base font-semibold">💰 Modelos de Precio</Label>
+              <DollarSign className="w-5 h-5 text-green-600 dark:text-green-400" />
+              <Label className="text-base font-semibold">Modelos de Precio</Label>
               <span className="text-xs text-muted-foreground">(Opcional)</span>
             </div>
             <p className="text-xs text-muted-foreground">
@@ -885,13 +947,14 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
           </div>
 
           {/* Selector de Alternativas */}
-          <div className="space-y-3 p-4 bg-muted/30 rounded-lg">
+          <div className="space-y-3 p-4 bg-muted/30 rounded-lg border">
             <div className="flex items-center gap-2">
-              <Label className="text-base font-semibold">🔄 Alternativas a este programa</Label>
+              <Repeat className="w-5 h-5" />
+              <Label className="text-base font-semibold">Alternativas a este programa</Label>
               <span className="text-xs text-muted-foreground">(Opcional)</span>
             </div>
             <p className="text-xs text-muted-foreground">
-              Selecciona programas que sean alternativas a este (por ejemplo, alternativas a Photoshop: GIMP, Krita, etc.)
+              Los programas con subcategorías similares aparecen primero. Selecciona las alternativas relevantes.
             </p>
             
             {/* Buscador de alternativas */}
@@ -907,38 +970,117 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
             </div>
             
             {programasDisponibles.length > 0 ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 max-h-48 overflow-y-auto p-2 border rounded-md">
-                {programasDisponibles
-                  .filter(p => p.id !== programa?.id) // Excluir el programa actual
-                  .filter(p => 
-                    busquedaAlternativas === '' || 
-                    p.nombre.toLowerCase().includes(busquedaAlternativas.toLowerCase())
-                  )
-                  .map((prog) => (
-                    <label
-                      key={prog.id}
-                      className="flex items-center space-x-2 p-2 rounded hover:bg-accent cursor-pointer"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={alternativasSeleccionadas.includes(prog.id)}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setAlternativasSeleccionadas([...alternativasSeleccionadas, prog.id]);
-                          } else {
-                            setAlternativasSeleccionadas(
-                              alternativasSeleccionadas.filter((id) => id !== prog.id)
-                            );
-                          }
-                        }}
-                        className="rounded border-gray-300"
-                      />
-                      <span className="text-sm flex items-center gap-1">
-                        {prog.nombre}
-                        <span className="text-xs text-muted-foreground">#{prog.id}</span>
-                      </span>
-                    </label>
-                  ))}
+              <div className="space-y-3 max-h-96 overflow-y-auto p-2">
+                {(() => {
+                  // Filtrar programas (excluir el actual)
+                  const programasFiltrados = programasDisponibles
+                    .filter(p => p.id !== programa?.id)
+                    .filter(p => 
+                      busquedaAlternativas === '' || 
+                      p.nombre.toLowerCase().includes(busquedaAlternativas.toLowerCase())
+                    );
+
+                  // Calcular relevancia basado en subcategorías compartidas
+                  const programasConRelevancia = programasFiltrados.map(prog => {
+                    const subcatsCompartidas = (prog.subcategorias || []).filter(
+                      subId => subcategoriasSeleccionadas.includes(subId)
+                    ).length;
+                    
+                    return {
+                      ...prog,
+                      relevancia: subcatsCompartidas
+                    };
+                  });
+
+                  // Ordenar por relevancia (más subcategorías compartidas primero)
+                  const programasOrdenados = programasConRelevancia.sort((a, b) => {
+                    if (b.relevancia !== a.relevancia) {
+                      return b.relevancia - a.relevancia;
+                    }
+                    return a.nombre.localeCompare(b.nombre);
+                  });
+
+                  // Separar en grupos: relevantes y otros
+                  const relevantes = programasOrdenados.filter(p => p.relevancia > 0);
+                  const otros = programasOrdenados.filter(p => p.relevancia === 0);
+
+                  return (
+                    <div className="space-y-4">
+                      {relevantes.length > 0 && (
+                        <div className="space-y-2">
+                          <div className="text-xs font-semibold text-primary px-2">
+                            Más relevantes (comparten subcategorías)
+                          </div>
+                          <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                            {relevantes.map((prog) => (
+                              <label
+                                key={prog.id}
+                                className="flex items-center space-x-2 p-2 rounded hover:bg-accent cursor-pointer border border-primary/20 bg-primary/5"
+                              >
+                                <input
+                                  type="checkbox"
+                                  checked={alternativasSeleccionadas.includes(prog.id)}
+                                  onChange={(e) => {
+                                    if (e.target.checked) {
+                                      setAlternativasSeleccionadas([...alternativasSeleccionadas, prog.id]);
+                                    } else {
+                                      setAlternativasSeleccionadas(
+                                        alternativasSeleccionadas.filter((id) => id !== prog.id)
+                                      );
+                                    }
+                                  }}
+                                  className="rounded border-gray-300"
+                                />
+                                <span className="text-sm flex flex-col flex-1">
+                                  <span>{prog.nombre}</span>
+                                  <span className="text-xs text-primary">
+                                    {prog.relevancia} subcategoría{prog.relevancia > 1 ? 's' : ''} en común
+                                  </span>
+                                </span>
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {otros.length > 0 && (
+                        <div className="space-y-2">
+                          {relevantes.length > 0 && (
+                            <div className="text-xs font-semibold text-muted-foreground px-2">
+                              Otros programas
+                            </div>
+                          )}
+                          <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                            {otros.map((prog) => (
+                              <label
+                                key={prog.id}
+                                className="flex items-center space-x-2 p-2 rounded hover:bg-accent cursor-pointer"
+                              >
+                                <input
+                                  type="checkbox"
+                                  checked={alternativasSeleccionadas.includes(prog.id)}
+                                  onChange={(e) => {
+                                    if (e.target.checked) {
+                                      setAlternativasSeleccionadas([...alternativasSeleccionadas, prog.id]);
+                                    } else {
+                                      setAlternativasSeleccionadas(
+                                        alternativasSeleccionadas.filter((id) => id !== prog.id)
+                                      );
+                                    }
+                                  }}
+                                  className="rounded border-gray-300"
+                                />
+                                <span className="text-sm">
+                                  {prog.nombre}
+                                </span>
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
               </div>
             ) : (
               <p className="text-sm text-muted-foreground">Cargando programas...</p>
