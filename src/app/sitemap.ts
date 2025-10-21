@@ -54,36 +54,47 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Obtener todas las categorías
   const { data: categorias } = await supabase
     .from('categorias')
-    .select('slug, updated_at');
+    .select('slug');
 
   const categoriasPages: MetadataRoute.Sitemap = (categorias || []).map((categoria) => ({
     url: `${baseUrl}/categorias/${categoria.slug}`,
-    lastModified: new Date(categoria.updated_at || new Date()),
+    lastModified: new Date(),
     changeFrequency: 'daily' as const,
     priority: 0.8,
   }));
 
-  // Obtener todas las subcategorías
+  // Obtener todas las subcategorías (necesitamos obtener el slug del padre)
   const { data: subcategorias } = await supabase
     .from('categorias')
-    .select('slug, categoria_padre_slug, updated_at')
-    .not('categoria_padre_slug', 'is', null);
+    .select('slug, id_categoria_padre')
+    .not('id_categoria_padre', 'is', null);
 
-  const subcategoriasPages: MetadataRoute.Sitemap = (subcategorias || []).map((sub) => ({
-    url: `${baseUrl}/categorias/${sub.categoria_padre_slug}/${sub.slug}`,
-    lastModified: new Date(sub.updated_at || new Date()),
-    changeFrequency: 'daily' as const,
-    priority: 0.7,
-  }));
+  // Obtener los slugs de las categorías padre
+  const padreIds = [...new Set(subcategorias?.map(s => s.id_categoria_padre) || [])];
+  const { data: padres } = await supabase
+    .from('categorias')
+    .select('id, slug')
+    .in('id', padreIds);
+
+  const padresMap = new Map(padres?.map(p => [p.id, p.slug]) || []);
+
+  const subcategoriasPages: MetadataRoute.Sitemap = (subcategorias || [])
+    .filter(sub => padresMap.has(sub.id_categoria_padre))
+    .map((sub) => ({
+      url: `${baseUrl}/categorias/${padresMap.get(sub.id_categoria_padre)}/${sub.slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'daily' as const,
+      priority: 0.7,
+    }));
 
   // Obtener todos los programas
   const { data: programas } = await supabase
     .from('programas')
-    .select('slug, updated_at');
+    .select('slug');
 
   const programasPages: MetadataRoute.Sitemap = (programas || []).map((programa) => ({
     url: `${baseUrl}/programas/${programa.slug}`,
-    lastModified: new Date(programa.updated_at || new Date()),
+    lastModified: new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.9,
   }));
@@ -91,13 +102,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Obtener todos los posts del blog
   const { data: blogPosts } = await supabase
     .from('blog_posts')
-    .select('slug, fecha_publicacion, updated_at')
+    .select('slug, fecha_publicacion, actualizado_en')
     .eq('publicado', true)
     .order('fecha_publicacion', { ascending: false });
 
   const blogPages: MetadataRoute.Sitemap = (blogPosts || []).map((post) => ({
     url: `${baseUrl}/blog/${post.slug}`,
-    lastModified: new Date(post.updated_at || post.fecha_publicacion || new Date()),
+    lastModified: new Date(post.actualizado_en || post.fecha_publicacion || new Date()),
     changeFrequency: 'monthly' as const,
     priority: 0.7,
   }));
@@ -105,12 +116,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Obtener programas recomendados para alternativas
   const { data: programasRecomendados } = await supabase
     .from('programas')
-    .select('slug, updated_at')
+    .select('slug')
     .eq('es_recomendado', true);
 
   const alternativasPages: MetadataRoute.Sitemap = (programasRecomendados || []).map((programa) => ({
     url: `${baseUrl}/alternativas/${programa.slug}`,
-    lastModified: new Date(programa.updated_at || new Date()),
+    lastModified: new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.8,
   }));
