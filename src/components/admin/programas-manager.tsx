@@ -40,6 +40,8 @@ export default function ProgramasManager() {
   const [filterCategoria, setFilterCategoria] = useState<string>('all');
   const [filterOpenSource, setFilterOpenSource] = useState<string>('all');
   const [filterRecomendado, setFilterRecomendado] = useState<string>('all');
+  const [filterSinIcono, setFilterSinIcono] = useState(false);
+  const [filterSinCaptura, setFilterSinCaptura] = useState(false);
   const [sortBy, setSortBy] = useState<string>('nombre');
   const [selectedPrograma, setSelectedPrograma] = useState<Programa | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -57,7 +59,7 @@ export default function ProgramasManager() {
 
   useEffect(() => {
     applyFilters();
-  }, [searchTerm, programas, filterCategoria, filterOpenSource, filterRecomendado, sortBy]);
+  }, [searchTerm, programas, filterCategoria, filterOpenSource, filterRecomendado, filterSinIcono, filterSinCaptura, sortBy]);
 
   function applyFilters() {
     let filtered = [...programas];
@@ -86,6 +88,16 @@ export default function ProgramasManager() {
       filtered = filtered.filter((p) => p.es_recomendado === isRecomendado);
     }
 
+    // Filtro por programas sin icono
+    if (filterSinIcono) {
+      filtered = filtered.filter((p) => !p.icono_url);
+    }
+
+    // Filtro por programas sin captura
+    if (filterSinCaptura) {
+      filtered = filtered.filter((p) => !p.captura_url);
+    }
+
     // Ordenamiento
     filtered.sort((a, b) => {
       switch (sortBy) {
@@ -110,6 +122,8 @@ export default function ProgramasManager() {
     setFilterCategoria('all');
     setFilterOpenSource('all');
     setFilterRecomendado('all');
+    setFilterSinIcono(false);
+    setFilterSinCaptura(false);
     setSortBy('nombre');
   }
 
@@ -118,6 +132,8 @@ export default function ProgramasManager() {
     filterCategoria !== 'all' || 
     filterOpenSource !== 'all' || 
     filterRecomendado !== 'all' || 
+    filterSinIcono ||
+    filterSinCaptura ||
     sortBy !== 'nombre';
 
   async function loadCategorias() {
@@ -550,10 +566,46 @@ export default function ProgramasManager() {
                 </div>
               </div>
 
+              {/* Filtros de recursos faltantes */}
+              <div className="space-y-3 pt-4 border-t">
+                <label className="text-sm font-medium">Filtrar por recursos faltantes</label>
+                <div className="flex flex-wrap gap-3">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <Switch
+                      checked={filterSinIcono}
+                      onCheckedChange={setFilterSinIcono}
+                    />
+                    <span className="text-sm">Sin icono</span>
+                    {filterSinIcono && (
+                      <Badge variant="destructive" className="text-xs">
+                        {programas.filter(p => !p.icono_url).length}
+                      </Badge>
+                    )}
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <Switch
+                      checked={filterSinCaptura}
+                      onCheckedChange={setFilterSinCaptura}
+                    />
+                    <span className="text-sm">Sin captura</span>
+                    {filterSinCaptura && (
+                      <Badge variant="destructive" className="text-xs">
+                        {programas.filter(p => !p.captura_url).length}
+                      </Badge>
+                    )}
+                  </label>
+                </div>
+              </div>
+
               {/* Contador de resultados */}
               <div className="text-sm text-muted-foreground pt-2 border-t">
                 Mostrando <strong>{filteredProgramas.length}</strong> de{' '}
                 <strong>{programas.length}</strong> programas
+                {(filterSinIcono || filterSinCaptura) && (
+                  <span className="ml-2 text-destructive">
+                    (filtrado por recursos faltantes)
+                  </span>
+                )}
               </div>
             </div>
           </Card>
