@@ -23,7 +23,7 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/components/ui/use-toast';
 import RichTextEditor from './rich-text-editor';
-import { Programa, Categoria } from '@/lib/types';
+import { Programa, Categoria, Plataforma, ModeloDePrecio } from '@/lib/types';
 import { supabaseBrowserClient } from '@/lib/supabase-browser';
 import { uploadToCloudinary } from '@/lib/cloudinary-upload';
 import { validateImageFile } from '@/lib/cloudinary-config';
@@ -47,12 +47,17 @@ interface FormData {
 
 export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
   const [categoriasPrincipales, setCategoriasPrincipales] = useState<Categoria[]>([]);
-  const [subcategorias, setSubcategorias] = useState<Categoria[]>([]);
   const [todasCategorias, setTodasCategorias] = useState<Categoria[]>([]);
+  const [categoriasSeleccionadas, setCategoriasSeleccionadas] = useState<number[]>([]);
+  const [subcategoriasDisponibles, setSubcategoriasDisponibles] = useState<Categoria[]>([]);
   const [subcategoriasSeleccionadas, setSubcategoriasSeleccionadas] = useState<number[]>([]);
   const [programasDisponibles, setProgramasDisponibles] = useState<{ id: number; nombre: string; slug: string }[]>([]);
   const [alternativasSeleccionadas, setAlternativasSeleccionadas] = useState<number[]>([]);
   const [busquedaAlternativas, setBusquedaAlternativas] = useState('');
+  const [plataformas, setPlataformas] = useState<Plataforma[]>([]);
+  const [plataformasSeleccionadas, setPlataformasSeleccionadas] = useState<number[]>([]);
+  const [modelosPrecios, setModelosPrecios] = useState<ModeloDePrecio[]>([]);
+  const [preciosSeleccionados, setPreciosSeleccionados] = useState<number[]>([]);
   const [isSaving, setIsSaving] = useState(false);
   const [iconFile, setIconFile] = useState<File | null>(null);
   const [capturaFile, setCapturaFile] = useState<File | null>(null);
@@ -62,13 +67,10 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
   const [isPasteAreaFocused, setIsPasteAreaFocused] = useState(false);
   const { toast } = useToast();
   
-  const [categoriaPrincipalInicial, setCategoriaPrincipalInicial] = useState('');
-  
   const { register, handleSubmit, watch, setValue, reset } = useForm<FormData>({
     defaultValues: {
       nombre: programa?.nombre || '',
       slug: programa?.slug || '',
-      categoria_principal_id: programa?.categoria_id?.toString() || '',
       descripcion_corta: programa?.descripcion_corta || '',
       descripcion_larga: programa?.descripcion_larga || '',
       dificultad: programa?.dificultad || 'Intermedio',
@@ -79,11 +81,12 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
   });
 
   const nombre = watch('nombre');
-  const categoriaPrincipalId = watch('categoria_principal_id');
 
   useEffect(() => {
     loadCategorias();
     loadProgramas();
+    loadPlataformas();
+    loadModelosPrecios();
   }, []);
 
   async function loadProgramas() {
@@ -101,23 +104,26 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
     }
   }
 
-  // Cuando cambia la categoría principal, actualizar subcategorías
+  // Cuando cambian las categorías seleccionadas, actualizar subcategorías disponibles
   useEffect(() => {
-    if (categoriaPrincipalId) {
+    if (categoriasSeleccionadas.length > 0) {
       const subs = todasCategorias.filter(
-        cat => cat.id_categoria_padre === parseInt(categoriaPrincipalId)
+        cat => cat.id_categoria_padre && categoriasSeleccionadas.includes(cat.id_categoria_padre)
       );
-      setSubcategorias(subs);
+      setSubcategoriasDisponibles(subs);
       
-      // Limpiar subcategorías seleccionadas si cambió la categoría principal
-      if (categoriaPrincipalId !== categoriaPrincipalInicial) {
-        setSubcategoriasSeleccionadas([]);
+      // Limpiar subcategorías que ya no son válidas
+      const subsValidas = subcategoriasSeleccionadas.filter(subId => 
+        subs.some(sub => sub.id === subId)
+      );
+      if (subsValidas.length !== subcategoriasSeleccionadas.length) {
+        setSubcategoriasSeleccionadas(subsValidas);
       }
     } else {
-      setSubcategorias([]);
+      setSubcategoriasDisponibles([]);
       setSubcategoriasSeleccionadas([]);
     }
-  }, [categoriaPrincipalId, todasCategorias]);
+  }, [categoriasSeleccionadas, todasCategorias]);
 
   useEffect(() => {
     if (nombre && !programa) {
@@ -182,72 +188,115 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
       const principales = todas.filter(cat => !cat.id_categoria_padre);
       setCategoriasPrincipales(principales);
       
-      // Si estamos editando, cargar la categoría principal y sus subcategorías
+      // Si estamos editando, cargar la categoría principal
       if (programa?.categoria_id) {
-        setCategoriaPrincipalInicial(programa.categoria_id.toString());
-        setValue('categoria_principal_id', programa.categoria_id.toString());
-        
-        // Cargar subcategorías de esa categoría principal
-        const subs = todas.filter(cat => cat.id_categoria_padre === programa.categoria_id);
-        setSubcategorias(subs);
-        // Las subcategorías se cargarán en el useEffect siguiente desde la tabla intermedia
+        setCategoriasSeleccionadas([programa.categoria_id]);
       }
     } catch (error) {
       console.error('Error loading categorias:', error);
     }
   }
 
-  // Cargar subcategorías del programa si estamos editando
+  async function loadPlataformas() {
+    try {
+      const supabase = supabaseBrowserClient;
+      const { data, error } = await supabase
+        .from('Plataformas')
+        .select('*')
+        .order('nombre');
+
+      if (error) throw error;
+      setPlataformas(data || []);
+    } catch (error) {
+      console.error('Error loading plataformas:', error);
+    }
+  }
+
+  async function loadModelosPrecios() {
+    try {
+      const supabase = supabaseBrowserClient;
+      const { data, error } = await supabase
+        .from('Modelos de Precios')
+        .select('*')
+        .order('nombre');
+
+      if (error) throw error;
+      setModelosPrecios(data || []);
+    } catch (error) {
+      console.error('Error loading modelos de precio:', error);
+    }
+  }
+
+  // Cargar datos relacionados del programa si estamos editando
   useEffect(() => {
-    const cargarSubcategorias = async () => {
-      if (programa) {
-        const supabase = supabaseBrowserClient;
-        // Obtener subcategorías desde la tabla intermedia
-        const { data, error } = await supabase
-          .from('programas_subcategorias')
-          .select('subcategoria_id')
-          .eq('programa_id', programa.id);
+    const cargarDatosPrograma = async () => {
+      if (!programa) return;
+      
+      const supabase = supabaseBrowserClient;
 
-        if (error) {
-          console.error('Error al cargar subcategorías:', error);
-        } else if (data) {
-          const ids = data.map(item => item.subcategoria_id);
-          console.log('📚 Subcategorías cargadas desde BD:', ids);
-          setSubcategoriasSeleccionadas(ids);
-        }
+      // Cargar subcategorías
+      const { data: subsData, error: subsError } = await supabase
+        .from('programas_subcategorias')
+        .select('subcategoria_id')
+        .eq('programa_id', programa.id);
+
+      if (subsError) {
+        console.error('Error al cargar subcategorías:', subsError);
+      } else if (subsData) {
+        const ids = subsData.map(item => item.subcategoria_id);
+        console.log('📚 Subcategorías cargadas:', ids);
+        setSubcategoriasSeleccionadas(ids);
+      }
+
+      // Cargar alternativas
+      const { data: altData, error: altError } = await supabase
+        .from('programas_alternativas')
+        .select('programa_alternativa_id')
+        .eq('programa_original_id', programa.id);
+
+      if (altError) {
+        console.error('Error al cargar alternativas:', altError);
+      } else if (altData) {
+        const ids = altData.map(item => item.programa_alternativa_id);
+        console.log('🔄 Alternativas cargadas:', ids);
+        setAlternativasSeleccionadas(ids);
+      }
+
+      // Cargar plataformas (si existe la tabla intermedia)
+      const { data: platData, error: platError } = await supabase
+        .from('programas_plataformas')
+        .select('plataforma_id')
+        .eq('programa_id', programa.id);
+
+      if (!platError && platData) {
+        const ids = platData.map(item => item.plataforma_id);
+        console.log('💻 Plataformas cargadas:', ids);
+        setPlataformasSeleccionadas(ids);
+      }
+
+      // Cargar precios (si existe la tabla intermedia)
+      const { data: precioData, error: precioError } = await supabase
+        .from('programas_precios')
+        .select('precio_id')
+        .eq('programa_id', programa.id);
+
+      if (!precioError && precioData) {
+        const ids = precioData.map(item => item.precio_id);
+        console.log('💰 Precios cargados:', ids);
+        setPreciosSeleccionados(ids);
       }
     };
 
-    const cargarAlternativas = async () => {
-      if (programa) {
-        const supabase = supabaseBrowserClient;
-        // Obtener alternativas desde la tabla intermedia
-        const { data, error } = await supabase
-          .from('programas_alternativas')
-          .select('programa_alternativa_id')
-          .eq('programa_original_id', programa.id);
-
-        if (error) {
-          console.error('Error al cargar alternativas:', error);
-        } else if (data) {
-          const ids = data.map(item => item.programa_alternativa_id);
-          console.log('🔄 Alternativas cargadas desde BD:', ids);
-          setAlternativasSeleccionadas(ids);
-        }
-      }
-    };
-
-    cargarSubcategorias();
-    cargarAlternativas();
+    cargarDatosPrograma();
   }, [programa]);
 
   async function onSubmit(data: FormData) {
     try {
       // Validaciones
-      if (!data.categoria_principal_id) {
+      if (categoriasSeleccionadas.length === 0) {
         toast({
           title: 'Error de validación',
-          description: 'Debes seleccionar una categoría principal',
+          description: 'Debes seleccionar al menos una categoría principal',
           variant: 'destructive',
         });
         return;
@@ -322,9 +371,9 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
         }
       }
 
-      // Obtener el slug de la categoría principal seleccionada
+      // Usar la primera categoría seleccionada como principal
       const categoriaPrincipal = categoriasPrincipales.find(
-        cat => cat.id === parseInt(data.categoria_principal_id)
+        cat => cat.id === categoriasSeleccionadas[0]
       );
       
       if (!categoriaPrincipal) {
@@ -341,7 +390,7 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
         nombre: data.nombre,
         slug: data.slug,
         categoria_slug: categoriaPrincipal.slug,
-        categoria_id: parseInt(data.categoria_principal_id),
+        categoria_id: categoriaPrincipal.id,
         descripcion_corta: data.descripcion_corta || null,
         descripcion_larga: descripcionLarga || null,
         icono_url: iconUrl || null,
@@ -454,6 +503,60 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
           console.log('✅ Alternativas guardadas en BD:', alternativasGuardadas?.map(a => a.programa_alternativa_id));
         }
 
+        // =========== GUARDAR PLATAFORMAS ===========
+        const { error: deletePlatError } = await supabase
+          .from('programas_plataformas')
+          .delete()
+          .eq('programa_id', programa.id);
+
+        if (deletePlatError && deletePlatError.code !== 'PGRST116') {
+          console.error('❌ Error al eliminar plataformas:', deletePlatError);
+        }
+
+        if (plataformasSeleccionadas.length > 0) {
+          const plataformasData = plataformasSeleccionadas.map(platId => ({
+            programa_id: programa.id,
+            plataforma_id: platId
+          }));
+
+          const { error: insertPlatError } = await supabase
+            .from('programas_plataformas')
+            .insert(plataformasData);
+
+          if (insertPlatError) {
+            console.error('❌ Error al insertar plataformas:', insertPlatError);
+          } else {
+            console.log('✅ Plataformas guardadas');
+          }
+        }
+
+        // =========== GUARDAR PRECIOS ===========
+        const { error: deletePrecioError } = await supabase
+          .from('programas_precios')
+          .delete()
+          .eq('programa_id', programa.id);
+
+        if (deletePrecioError && deletePrecioError.code !== 'PGRST116') {
+          console.error('❌ Error al eliminar precios:', deletePrecioError);
+        }
+
+        if (preciosSeleccionados.length > 0) {
+          const preciosData = preciosSeleccionados.map(precioId => ({
+            programa_id: programa.id,
+            precio_id: precioId
+          }));
+
+          const { error: insertPrecioError } = await supabase
+            .from('programas_precios')
+            .insert(preciosData);
+
+          if (insertPrecioError) {
+            console.error('❌ Error al insertar precios:', insertPrecioError);
+          } else {
+            console.log('✅ Precios guardados');
+          }
+        }
+
         toast({
           title: 'Éxito',
           description: 'Programa actualizado correctamente',
@@ -509,6 +612,42 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
           }
         }
 
+        // Insertar plataformas para el nuevo programa
+        if (plataformasSeleccionadas.length > 0 && insertedData) {
+          const plataformasData = plataformasSeleccionadas.map(platId => ({
+            programa_id: insertedData.id,
+            plataforma_id: platId
+          }));
+
+          const { error: insertPlatError } = await supabase
+            .from('programas_plataformas')
+            .insert(plataformasData);
+
+          if (insertPlatError) {
+            console.error('❌ Error al insertar plataformas:', insertPlatError);
+          } else {
+            console.log('✅ Plataformas insertadas para nuevo programa');
+          }
+        }
+
+        // Insertar precios para el nuevo programa
+        if (preciosSeleccionados.length > 0 && insertedData) {
+          const preciosData = preciosSeleccionados.map(precioId => ({
+            programa_id: insertedData.id,
+            precio_id: precioId
+          }));
+
+          const { error: insertPrecioError } = await supabase
+            .from('programas_precios')
+            .insert(preciosData);
+
+          if (insertPrecioError) {
+            console.error('❌ Error al insertar precios:', insertPrecioError);
+          } else {
+            console.log('✅ Precios insertados para nuevo programa');
+          }
+        }
+
         toast({
           title: 'Éxito',
           description: 'Programa creado correctamente',
@@ -558,75 +697,189 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="categoria_principal">Categoría Principal *</Label>
-              <Select
-                value={watch('categoria_principal_id')}
-                onValueChange={(value) => setValue('categoria_principal_id', value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecciona categoría principal" />
-                </SelectTrigger>
-                <SelectContent>
-                  {categoriasPrincipales.map((cat) => (
-                    <SelectItem key={cat.id} value={cat.id.toString()}>
-                      {cat.icono && `${cat.icono} `}
-                      {cat.nombre}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <p className="text-xs text-muted-foreground">
-                Primero selecciona la categoría principal
-              </p>
+          {/* Categorías Principales - Selección Múltiple */}
+          <div className="space-y-3 p-4 bg-primary/5 rounded-lg border-2 border-primary/20">
+            <div className="flex items-center justify-between">
+              <Label className="text-base font-semibold">Categorías Principales * (puedes seleccionar varias)</Label>
+              <span className="text-xs text-muted-foreground">
+                {categoriasSeleccionadas.length} seleccionadas
+              </span>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Selecciona todas las categorías principales a las que pertenece este programa
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 p-3 bg-background rounded-lg">
+              {categoriasPrincipales.map((cat) => (
+                <label
+                  key={cat.id}
+                  className="flex items-center space-x-2 p-2 rounded hover:bg-accent cursor-pointer"
+                >
+                  <input
+                    type="checkbox"
+                    checked={categoriasSeleccionadas.includes(cat.id)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setCategoriasSeleccionadas([...categoriasSeleccionadas, cat.id]);
+                      } else {
+                        setCategoriasSeleccionadas(
+                          categoriasSeleccionadas.filter(id => id !== cat.id)
+                        );
+                      }
+                    }}
+                    className="w-4 h-4 rounded border-gray-300"
+                  />
+                  <span className="text-sm font-medium">
+                    {cat.icono && `${cat.icono} `}
+                    {cat.nombre}
+                  </span>
+                </label>
+              ))}
             </div>
           </div>
 
           {/* Subcategorías con checkboxes */}
           <div className="space-y-2">
             <Label>Subcategorías * (selecciona al menos una)</Label>
-            {!categoriaPrincipalId ? (
-              <p className="text-sm text-muted-foreground">
-                Primero selecciona una categoría principal
+            {categoriasSeleccionadas.length === 0 ? (
+              <p className="text-sm text-muted-foreground p-4 border rounded-lg bg-muted/30">
+                Primero selecciona al menos una categoría principal
               </p>
-            ) : subcategorias.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
-                No hay subcategorías disponibles para esta categoría
+            ) : subcategoriasDisponibles.length === 0 ? (
+              <p className="text-sm text-muted-foreground p-4 border rounded-lg bg-muted/30">
+                No hay subcategorías disponibles para las categorías seleccionadas
               </p>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 p-4 border rounded-lg">
-                {subcategorias.map((subcat) => (
-                  <div key={subcat.id} className="flex items-center space-x-2">
+                {subcategoriasDisponibles.map((subcat) => {
+                  const categoriaPadre = categoriasPrincipales.find(c => c.id === subcat.id_categoria_padre);
+                  return (
+                    <div key={subcat.id} className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        id={`subcat-${subcat.id}`}
+                        checked={subcategoriasSeleccionadas.includes(subcat.id)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setSubcategoriasSeleccionadas([...subcategoriasSeleccionadas, subcat.id]);
+                          } else {
+                            setSubcategoriasSeleccionadas(
+                              subcategoriasSeleccionadas.filter(id => id !== subcat.id)
+                            );
+                          }
+                        }}
+                        className="w-4 h-4 rounded border-gray-300"
+                      />
+                      <label
+                        htmlFor={`subcat-${subcat.id}`}
+                        className="text-sm cursor-pointer flex-1"
+                      >
+                        {subcat.icono && `${subcat.icono} `}
+                        {subcat.nombre}
+                        <span className="text-xs text-muted-foreground ml-1">
+                          ({categoriaPadre?.nombre})
+                        </span>
+                      </label>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+            {categoriasSeleccionadas.length > 0 && subcategoriasDisponibles.length > 0 && (
+              <p className="text-xs text-muted-foreground">
+                Seleccionadas: {subcategoriasSeleccionadas.length} de {subcategoriasDisponibles.length}
+              </p>
+            )}
+          </div>
+
+          {/* Selector de Plataformas */}
+          <div className="space-y-3 p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
+            <div className="flex items-center gap-2">
+              <Label className="text-base font-semibold">💻 Plataformas / Sistemas Operativos</Label>
+              <span className="text-xs text-muted-foreground">(Opcional)</span>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Selecciona en qué plataformas está disponible este programa
+            </p>
+            {plataformas.length > 0 ? (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 p-3 bg-background rounded-md">
+                {plataformas.map((plat) => (
+                  <label
+                    key={plat.id}
+                    className="flex items-center space-x-2 p-2 rounded hover:bg-accent cursor-pointer"
+                  >
                     <input
                       type="checkbox"
-                      id={`subcat-${subcat.id}`}
-                      checked={subcategoriasSeleccionadas.includes(subcat.id)}
+                      checked={plataformasSeleccionadas.includes(plat.id)}
                       onChange={(e) => {
                         if (e.target.checked) {
-                          setSubcategoriasSeleccionadas([...subcategoriasSeleccionadas, subcat.id]);
+                          setPlataformasSeleccionadas([...plataformasSeleccionadas, plat.id]);
                         } else {
-                          setSubcategoriasSeleccionadas(
-                            subcategoriasSeleccionadas.filter(id => id !== subcat.id)
+                          setPlataformasSeleccionadas(
+                            plataformasSeleccionadas.filter((id) => id !== plat.id)
                           );
                         }
                       }}
-                      className="w-4 h-4 rounded border-gray-300"
+                      className="rounded border-gray-300"
                     />
-                    <label
-                      htmlFor={`subcat-${subcat.id}`}
-                      className="text-sm cursor-pointer"
-                    >
-                      {subcat.icono && `${subcat.icono} `}
-                      {subcat.nombre}
-                    </label>
-                  </div>
+                    <span className="text-sm flex items-center gap-1">
+                      {plat.icono_url && (
+                        <img src={plat.icono_url} alt={plat.nombre} className="w-4 h-4" />
+                      )}
+                      {plat.nombre}
+                    </span>
+                  </label>
                 ))}
               </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">Cargando plataformas...</p>
             )}
-            {categoriaPrincipalId && subcategorias.length > 0 && (
+            {plataformasSeleccionadas.length > 0 && (
               <p className="text-xs text-muted-foreground">
-                Seleccionadas: {subcategoriasSeleccionadas.length} de {subcategorias.length}
+                Seleccionadas: {plataformasSeleccionadas.length} plataformas
+              </p>
+            )}
+          </div>
+
+          {/* Selector de Modelos de Precio */}
+          <div className="space-y-3 p-4 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
+            <div className="flex items-center gap-2">
+              <Label className="text-base font-semibold">💰 Modelos de Precio</Label>
+              <span className="text-xs text-muted-foreground">(Opcional)</span>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Selecciona los modelos de precio disponibles para este programa
+            </p>
+            {modelosPrecios.length > 0 ? (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 p-3 bg-background rounded-md">
+                {modelosPrecios.map((precio) => (
+                  <label
+                    key={precio.id}
+                    className="flex items-center space-x-2 p-2 rounded hover:bg-accent cursor-pointer"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={preciosSeleccionados.includes(precio.id)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setPreciosSeleccionados([...preciosSeleccionados, precio.id]);
+                        } else {
+                          setPreciosSeleccionados(
+                            preciosSeleccionados.filter((id) => id !== precio.id)
+                          );
+                        }
+                      }}
+                      className="rounded border-gray-300"
+                    />
+                    <span className="text-sm">{precio.nombre}</span>
+                  </label>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">Cargando modelos de precio...</p>
+            )}
+            {preciosSeleccionados.length > 0 && (
+              <p className="text-xs text-muted-foreground">
+                Seleccionados: {preciosSeleccionados.length} modelos
               </p>
             )}
           </div>
@@ -634,7 +887,7 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
           {/* Selector de Alternativas */}
           <div className="space-y-3 p-4 bg-muted/30 rounded-lg">
             <div className="flex items-center gap-2">
-              <Label className="text-base font-semibold">Alternativas a este programa</Label>
+              <Label className="text-base font-semibold">🔄 Alternativas a este programa</Label>
               <span className="text-xs text-muted-foreground">(Opcional)</span>
             </div>
             <p className="text-xs text-muted-foreground">
