@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Plus, Search, Edit, Trash2, Loader2, Filter, X, Upload, Image as ImageIcon, CheckCircle2, XCircle } from 'lucide-react';
+import { Plus, Search, Edit, Trash2, Loader2, Filter, X, Upload, Image as ImageIcon, CheckCircle2, XCircle, ExternalLink, Pencil } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
@@ -767,6 +767,32 @@ export default function ProgramasManager() {
                   </DropdownMenu>
                 </div>
               </div>
+
+              {/* Link del sitio web */}
+              {programa.web_oficial_url && (
+                <div className="flex items-center gap-2 pt-2 border-t">
+                  <a
+                    href={programa.web_oficial_url.startsWith('http') ? programa.web_oficial_url : `https://${programa.web_oficial_url}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 flex items-center gap-2 px-3 py-2 text-sm rounded-md border hover:bg-accent transition-colors"
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                    <span className="truncate">{programa.web_oficial_url}</span>
+                  </a>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      // Aquí podrías abrir un modal para editar solo el URL
+                      handleEdit(programa);
+                    }}
+                    className="shrink-0"
+                  >
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                </div>
+              )}
 
               {/* Botones de acción */}
               <div className="flex gap-2 pt-2 border-t">

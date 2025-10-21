@@ -1136,9 +1136,12 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
             <Input
               id="web_oficial_url"
               {...register('web_oficial_url')}
-              placeholder="https://ejemplo.com"
-              type="url"
+              placeholder="ejemplo.com o https://ejemplo.com"
+              type="text"
             />
+            <p className="text-xs text-muted-foreground">
+              Puedes escribir con o sin https://
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
