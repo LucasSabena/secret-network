@@ -18,6 +18,7 @@ import { GoogleTagManager, GoogleTagManagerNoScript } from "@/components/analyti
 import { JsonLdOrganization } from "@/components/seo/json-ld-organization";
 import { JsonLdWebsite } from "@/components/seo/json-ld-website";
 import { Toaster } from "@/components/ui/toaster";
+import { Analytics } from "@vercel/analytics/next";
 
 const fontSpaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -144,6 +145,9 @@ export default function RootLayout({
 
         {/* Google Analytics - Solo en producción */}
         {process.env.NODE_ENV === 'production' && <GoogleAnalytics measurementId={gaId} />}
+        
+        {/* Vercel Analytics */}
+        <Analytics />
       </body>
     </html>
   );
