@@ -109,7 +109,10 @@ export function SEOPanel({ blocks, titulo, descripcion, slug, imagenPortada }: S
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">SEO Score</span>
-              <Badge className={seoLevel.color}>
+              <Badge 
+                variant={analysis.seoScore >= 80 ? 'default' : analysis.seoScore >= 60 ? 'secondary' : 'destructive'}
+                className="font-bold"
+              >
                 {analysis.seoScore}/100
               </Badge>
             </div>
@@ -194,7 +197,10 @@ export function SEOPanel({ blocks, titulo, descripcion, slug, imagenPortada }: S
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">Legibilidad</span>
-              <Badge className={readabilityLevel.color}>
+              <Badge 
+                variant={analysis.readabilityScore >= 80 ? 'default' : analysis.readabilityScore >= 60 ? 'secondary' : 'destructive'}
+                className="font-bold"
+              >
                 {Math.round(analysis.readabilityScore)}/100
               </Badge>
             </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Layers, FileText, Search, BarChart3 } from 'lucide-react';
 import { BlocksOutlinePanel } from './blocks-outline-panel';
 import { PostMetadataPanel } from './post-metadata-panel';
@@ -154,12 +155,16 @@ export function EditorSidebarTabs({
         />
       </TabsContent>
 
-      <TabsContent value="stats" className="flex-1 m-0 overflow-hidden p-4">
-        <EditorStats
-          blocks={blocks}
-          title={titulo}
-          description={descripcionCorta}
-        />
+      <TabsContent value="stats" className="flex-1 m-0 overflow-hidden">
+        <ScrollArea className="h-full">
+          <div className="p-4">
+            <EditorStats
+              blocks={blocks}
+              title={titulo}
+              description={descripcionCorta}
+            />
+          </div>
+        </ScrollArea>
       </TabsContent>
     </Tabs>
   );

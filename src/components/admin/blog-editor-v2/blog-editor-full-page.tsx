@@ -528,6 +528,24 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
               <EditorHelp />
 
               <Button
+                variant={activeTab === 'preview' ? 'default' : 'outline'}
+                onClick={() => setActiveTab(activeTab === 'edit' ? 'preview' : 'edit')}
+                className="gap-2"
+              >
+                {activeTab === 'preview' ? (
+                  <>
+                    <Edit className="h-4 w-4" />
+                    Editor
+                  </>
+                ) : (
+                  <>
+                    <Eye className="h-4 w-4" />
+                    Preview
+                  </>
+                )}
+              </Button>
+
+              <Button
                 onClick={handleSubmit(onSubmit)}
                 disabled={isSaving}
                 className="gap-2"

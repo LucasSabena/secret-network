@@ -19,6 +19,7 @@ import { SidebarTools } from './sidebar-tools';
 import { CanvasArea } from './canvas-area';
 import { SidebarProperties } from './sidebar-properties';
 import { EditorSidebarTabs } from './editor-sidebar-tabs';
+import { ResizablePanels } from './resizable-panels';
 import { BlockFactory } from './block-factory';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -409,52 +410,52 @@ export function DragDropEditor({ blocks, onChange, postSettings }: DragDropEdito
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
     >
-      <div className="flex flex-col md:flex-row h-full gap-0 md:gap-4 relative">
-        {/* Sidebar izquierdo: Herramientas - Hidden en mobile */}
-        <div className="hidden md:block w-64 shrink-0 border-r bg-muted/30">
-          <SidebarTools />
-        </div>
+      <ResizablePanels
+        leftPanel={<SidebarTools />}
+        centerPanel={
+          <>
+            {/* Botones de Undo/Redo */}
+            <div className="sticky top-0 z-10 bg-background/95 backdrop-blur border-b p-2 flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleUndo}
+                disabled={!canUndo}
+                title="Deshacer (Ctrl+Z)"
+              >
+                <Undo2 className="h-4 w-4 mr-2" />
+                Deshacer
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleRedo}
+                disabled={!canRedo}
+                title="Rehacer (Ctrl+Y)"
+              >
+                <Redo2 className="h-4 w-4 mr-2" />
+                Rehacer
+              </Button>
+            </div>
 
-        {/* Canvas central */}
-        <div className="flex-1 bg-background overflow-auto">
-          {/* Botones de Undo/Redo */}
-          <div className="sticky top-0 z-10 bg-background/95 backdrop-blur border-b p-2 flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleUndo}
-              disabled={!canUndo}
-              title="Deshacer (Ctrl+Z)"
-            >
-              <Undo2 className="h-4 w-4 mr-2" />
-              Deshacer
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleRedo}
-              disabled={!canRedo}
-              title="Rehacer (Ctrl+Y)"
-            >
-              <Redo2 className="h-4 w-4 mr-2" />
-              Rehacer
-            </Button>
-          </div>
+            <div className="overflow-auto h-[calc(100%-56px)]">
+              <CanvasArea
+                blocks={historyBlocks}
+                selectedBlockId={selectedBlockId}
+                onSelectBlock={setSelectedBlockId}
+                onUpdateBlock={handleUpdateBlock}
+                onDeleteBlock={handleDeleteBlock}
+                onBlocksChange={setHistoryBlocks}
+                dropTargetIndex={dropTargetIndex}
+              />
+            </div>
 
-          <CanvasArea
-            blocks={historyBlocks}
-            selectedBlockId={selectedBlockId}
-            onSelectBlock={setSelectedBlockId}
-            onUpdateBlock={handleUpdateBlock}
-            onDeleteBlock={handleDeleteBlock}
-            onBlocksChange={setHistoryBlocks}
-            dropTargetIndex={dropTargetIndex}
-          />
-        </div>
-
-        {/* Sidebar derecho: Tabs mejorado - Hidden en mobile */}
-        <div className="hidden md:block w-80 shrink-0 border-l bg-muted/30">
-          {postSettings ? (
+            {/* Botón flotante en mobile para agregar bloques */}
+            <MobileBlocksMenu blocks={historyBlocks} onChange={setHistoryBlocks} />
+          </>
+        }
+        rightPanel={
+          postSettings ? (
             <EditorSidebarTabs
               blocks={historyBlocks}
               selectedBlockId={selectedBlockId}
@@ -503,12 +504,9 @@ export function DragDropEditor({ blocks, onChange, postSettings }: DragDropEdito
             />
           ) : (
             <SidebarProperties selectedBlock={selectedBlock} />
-          )}
-        </div>
-
-        {/* Botón flotante en mobile para agregar bloques */}
-        <MobileBlocksMenu blocks={historyBlocks} onChange={setHistoryBlocks} />
-      </div>
+          )
+        }
+      />
 
       {/* Overlay para el drag */}
       <DragOverlay>
