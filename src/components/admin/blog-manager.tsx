@@ -7,6 +7,16 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { BlogPost } from '@/lib/types';
 import { BlogQuickCreate } from './blog-editor-v2/blog-quick-create';
 import { EditorAnnouncement } from './blog-editor-v2/editor-announcement';
@@ -19,6 +29,8 @@ export default function BlogManager() {
   const [searchTerm, setSearchTerm] = useState('');
   const [isQuickCreateOpen, setIsQuickCreateOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [postToDelete, setPostToDelete] = useState<number | null>(null);
+  const [postToDuplicate, setPostToDuplicate] = useState<BlogPost | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -61,12 +73,12 @@ export default function BlogManager() {
     }
   }
 
-  async function handleDelete(id: number) {
-    if (!confirm('¿Estás seguro de eliminar este post?')) return;
+  async function confirmDelete() {
+    if (!postToDelete) return;
 
     try {
       const supabase = supabaseBrowserClient;
-      const { error } = await supabase.from('blog_posts').delete().eq('id', id);
+      const { error } = await supabase.from('blog_posts').delete().eq('id', postToDelete);
 
       if (error) throw error;
 
@@ -82,6 +94,8 @@ export default function BlogManager() {
         description: 'No se pudo eliminar el post',
         variant: 'destructive',
       });
+    } finally {
+      setPostToDelete(null);
     }
   }
 
@@ -93,23 +107,29 @@ export default function BlogManager() {
     router.push(`/admin/blog/editor?id=${post.id}`);
   }
 
-  async function handleDuplicate(post: BlogPost) {
-    if (!confirm('¿Duplicar este post?')) return;
+  async function confirmDuplicate() {
+    if (!postToDuplicate) return;
 
     try {
       const supabase = supabaseBrowserClient;
       
       // Crear slug único
-      const baseSlug = post.slug;
+      const baseSlug = postToDuplicate.slug;
       const timestamp = Date.now();
       const newSlug = `${baseSlug}-copia-${timestamp}`;
 
+      // Crear objeto limpio solo con los campos necesarios
       const newPost = {
-        ...post,
-        id: undefined, // Dejar que Supabase genere nuevo ID
-        titulo: `${post.titulo} (Copia)`,
+        titulo: `${postToDuplicate.titulo} (Copia)`,
         slug: newSlug,
+        descripcion_corta: postToDuplicate.descripcion_corta,
+        contenido: postToDuplicate.contenido || '',
+        contenido_bloques: postToDuplicate.contenido_bloques || [],
+        imagen_portada_url: postToDuplicate.imagen_portada_url,
+        autor: postToDuplicate.autor,
+        autor_id: postToDuplicate.autor_id,
         publicado: false, // Duplicados empiezan como borrador
+        tags: postToDuplicate.tags,
         fecha_publicacion: new Date().toISOString(),
         actualizado_en: new Date().toISOString(),
       };
@@ -138,6 +158,8 @@ export default function BlogManager() {
         description: 'No se pudo duplicar el post',
         variant: 'destructive',
       });
+    } finally {
+      setPostToDuplicate(null);
     }
   }
 
@@ -217,7 +239,7 @@ export default function BlogManager() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => handleDuplicate(post)}
+                onClick={() => setPostToDuplicate(post)}
                 className="gap-1 md:gap-2"
                 title="Duplicar post"
               >
@@ -226,7 +248,7 @@ export default function BlogManager() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => handleDelete(post.id)}
+                onClick={() => setPostToDelete(post.id)}
                 className="gap-1 md:gap-2 text-destructive hover:text-destructive"
               >
                 <Trash2 className="h-3 w-3 md:h-4 md:w-4" />
@@ -249,6 +271,42 @@ export default function BlogManager() {
           loadPosts();
         }}
       />
+
+      {/* Dialog de confirmación para eliminar */}
+      <AlertDialog open={postToDelete !== null} onOpenChange={() => setPostToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Eliminar este post?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta acción no se puede deshacer. El post será eliminado permanentemente.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Dialog de confirmación para duplicar */}
+      <AlertDialog open={postToDuplicate !== null} onOpenChange={() => setPostToDuplicate(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Duplicar este post?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Se creará una copia del post como borrador. Podrás editarlo antes de publicarlo.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDuplicate}>
+              Duplicar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

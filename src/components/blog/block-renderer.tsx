@@ -144,30 +144,57 @@ function ImagesGridBlockComponent({ block }: { block: Extract<Block, { type: 'im
   }
 
   return (
-    <div className={cn(
-      'my-8 not-prose grid gap-4',
-      block.data.columns === 2 && 'grid-cols-1 md:grid-cols-2',
-      block.data.columns === 3 && 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
-      block.data.columns === 4 && 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4'
-    )}>
-      {block.data.images.map((image, index) => (
-        <figure key={index} className="space-y-2">
-          <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-muted">
-            <Image
-              src={image.url}
-              alt={image.alt || ''}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            />
-          </div>
-          {image.caption && (
-            <figcaption className="text-sm text-muted-foreground text-center">
-              {image.caption}
-            </figcaption>
-          )}
-        </figure>
-      ))}
+    <div className="my-8 not-prose">
+      {/* Mobile: Scroll horizontal */}
+      <div className="md:hidden overflow-x-auto pb-4 -mx-4 px-4">
+        <div className="flex gap-4" style={{ width: 'max-content' }}>
+          {block.data.images.map((image, index) => (
+            <figure key={index} className="space-y-2" style={{ width: '280px' }}>
+              <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-muted">
+                <Image
+                  src={image.url}
+                  alt={image.alt || ''}
+                  fill
+                  className="object-cover"
+                  sizes="280px"
+                />
+              </div>
+              {image.caption && (
+                <figcaption className="text-sm text-muted-foreground text-center">
+                  {image.caption}
+                </figcaption>
+              )}
+            </figure>
+          ))}
+        </div>
+      </div>
+
+      {/* Desktop: Grid normal */}
+      <div className={cn(
+        'hidden md:grid gap-4',
+        block.data.columns === 2 && 'md:grid-cols-2',
+        block.data.columns === 3 && 'md:grid-cols-2 lg:grid-cols-3',
+        block.data.columns === 4 && 'md:grid-cols-2 lg:grid-cols-4'
+      )}>
+        {block.data.images.map((image, index) => (
+          <figure key={index} className="space-y-2">
+            <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-muted">
+              <Image
+                src={image.url}
+                alt={image.alt || ''}
+                fill
+                className="object-cover"
+                sizes="(max-width: 1200px) 50vw, 33vw"
+              />
+            </div>
+            {image.caption && (
+              <figcaption className="text-sm text-muted-foreground text-center">
+                {image.caption}
+              </figcaption>
+            )}
+          </figure>
+        ))}
+      </div>
     </div>
   );
 }
@@ -222,15 +249,29 @@ function ProgramsGridBlockComponent({ block }: { block: Extract<Block, { type: '
   }
 
   return (
-    <div className={cn(
-      'my-8 not-prose grid gap-4',
-      block.data.columns === 2 && 'grid-cols-1 md:grid-cols-2',
-      block.data.columns === 3 && 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
-      block.data.columns === 4 && 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4'
-    )}>
-      {programs.map((program) => (
-        <ProgramCard key={program.id} program={program} variant="medium" />
-      ))}
+    <div className="my-8 not-prose">
+      {/* Mobile: Scroll horizontal */}
+      <div className="md:hidden overflow-x-auto pb-4 -mx-4 px-4">
+        <div className="flex gap-4" style={{ width: 'max-content' }}>
+          {programs.map((program) => (
+            <div key={program.id} style={{ width: '280px' }}>
+              <ProgramCard program={program} variant="medium" />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Desktop: Grid normal */}
+      <div className={cn(
+        'hidden md:grid gap-4',
+        block.data.columns === 2 && 'md:grid-cols-2',
+        block.data.columns === 3 && 'md:grid-cols-2 lg:grid-cols-3',
+        block.data.columns === 4 && 'md:grid-cols-2 lg:grid-cols-4'
+      )}>
+        {programs.map((program) => (
+          <ProgramCard key={program.id} program={program} variant="medium" />
+        ))}
+      </div>
     </div>
   );
 }
