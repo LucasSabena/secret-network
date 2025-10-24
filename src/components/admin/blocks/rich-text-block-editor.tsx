@@ -58,8 +58,32 @@ export function RichTextBlockEditor({ block, onChange }: RichTextBlockEditorProp
 
   const insertLink = () => {
     if (linkUrl) {
-      execCommand('createLink', linkUrl);
+      // Guardar la selección antes de que se pierda
+      const selection = window.getSelection();
+      if (selection && selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0);
+        const selectedText = range.toString();
+        
+        if (selectedText) {
+          // Crear el enlace manualmente
+          const link = document.createElement('a');
+          link.href = linkUrl;
+          link.textContent = selectedText;
+          link.className = 'text-primary hover:underline';
+          
+          range.deleteContents();
+          range.insertNode(link);
+          
+          // Mover el cursor después del enlace
+          range.setStartAfter(link);
+          range.setEndAfter(link);
+          selection.removeAllRanges();
+          selection.addRange(range);
+        }
+      }
+      
       setLinkUrl('');
+      handleInput();
     }
   };
 

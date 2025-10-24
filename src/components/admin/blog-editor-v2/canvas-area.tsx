@@ -15,6 +15,7 @@ import { Plus } from 'lucide-react';
 import { RichTextBlockEditor } from '../blocks/rich-text-block-editor';
 import { ImageBlockEditor } from '../blocks/image-block-editor';
 import { ProgramCardBlockEditor } from '../blocks/program-card-block-editor';
+import { ProgramsGridBlockEditor } from '../blocks/programs-grid-block-editor';
 import { TabsBlockEditor } from '../blocks/tabs-block-editor';
 import { AccordionBlockEditor } from '../blocks/accordion-block-editor';
 import { AlertBlockEditor } from '../blocks/alert-block-editor';
@@ -150,6 +151,13 @@ function BlockEditorRenderer({
           onChange={onChange as any}
         />
       );
+    case 'programs-grid':
+      return (
+        <ProgramsGridBlockEditor
+          block={block as Extract<Block, { type: 'programs-grid' }>}
+          onChange={onChange as any}
+        />
+      );
     case 'tabs':
       return (
         <TabsBlockEditor
@@ -213,6 +221,12 @@ function BlockPreview({ block }: { block: Block }) {
       return (
         <div className="text-sm text-muted-foreground">
           Programa ID: {block.data.programId || 'No seleccionado'}
+        </div>
+      );
+    case 'programs-grid':
+      return (
+        <div className="text-sm text-muted-foreground">
+          {block.data.programIds.length} programas en {block.data.columns} columnas
         </div>
       );
     case 'tabs':

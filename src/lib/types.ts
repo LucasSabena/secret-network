@@ -51,6 +51,16 @@ export type ProgramCardBlock = {
   };
 };
 
+// Bloque de grid de programas
+export type ProgramsGridBlock = {
+  id: string;
+  type: 'programs-grid';
+  data: {
+    programIds: number[];
+    columns: 2 | 3 | 4;
+  };
+};
+
 // Bloque de tabs
 export type TabsBlock = {
   id: string;
@@ -123,6 +133,7 @@ export type CodeBlock = {
 export type Block =
   | TextBlock
   | ProgramCardBlock
+  | ProgramsGridBlock
   | TabsBlock
   | AccordionBlock
   | AlertBlock

@@ -137,6 +137,69 @@ function ProgramCardBlockComponent({ block }: { block: Extract<Block, { type: 'p
   );
 }
 
+// Componente para renderizar grid de programas
+function ProgramsGridBlockComponent({ block }: { block: Extract<Block, { type: 'programs-grid' }> }) {
+  const [programs, setPrograms] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPrograms = async () => {
+      if (block.data.programIds.length === 0) {
+        setLoading(false);
+        return;
+      }
+
+      const { data } = await supabaseBrowserClient
+        .from('programas')
+        .select('*')
+        .in('id', block.data.programIds);
+      
+      if (data) {
+        // Ordenar según el orden en programIds
+        const ordered = block.data.programIds
+          .map(id => data.find(p => p.id === id))
+          .filter(Boolean);
+        setPrograms(ordered);
+      }
+      setLoading(false);
+    };
+
+    fetchPrograms();
+  }, [block.data.programIds]);
+
+  if (loading) {
+    return (
+      <div className={cn(
+        'my-8 grid gap-4',
+        block.data.columns === 2 && 'grid-cols-1 md:grid-cols-2',
+        block.data.columns === 3 && 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
+        block.data.columns === 4 && 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4'
+      )}>
+        {Array.from({ length: block.data.programIds.length }).map((_, i) => (
+          <div key={i} className="animate-pulse bg-muted h-32 rounded-lg" />
+        ))}
+      </div>
+    );
+  }
+
+  if (programs.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className={cn(
+      'my-8 not-prose grid gap-4',
+      block.data.columns === 2 && 'grid-cols-1 md:grid-cols-2',
+      block.data.columns === 3 && 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
+      block.data.columns === 4 && 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4'
+    )}>
+      {programs.map((program) => (
+        <ProgramCard key={program.id} program={program} variant="medium" />
+      ))}
+    </div>
+  );
+}
+
 // Componente para renderizar tabs
 function TabsBlockComponent({ block }: { block: Extract<Block, { type: 'tabs' }> }) {
   const [activeTab, setActiveTab] = useState(block.data.tabs[0]?.id || '');
@@ -299,6 +362,8 @@ export function BlockRenderer({ blocks }: BlockRendererProps) {
             return <TextBlockComponent key={block.id} block={block} />;
           case 'program-card':
             return <ProgramCardBlockComponent key={block.id} block={block} />;
+          case 'programs-grid':
+            return <ProgramsGridBlockComponent key={block.id} block={block} />;
           case 'tabs':
             return <TabsBlockComponent key={block.id} block={block} />;
           case 'accordion':

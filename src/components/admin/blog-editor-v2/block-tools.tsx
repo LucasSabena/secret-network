@@ -41,6 +41,14 @@ export const BLOCK_TOOLS: BlockToolDefinition[] = [
     category: 'content',
   },
   {
+    id: 'programs-grid',
+    type: 'programs-grid',
+    label: 'Grid Programas',
+    icon: LayoutGrid,
+    description: 'Múltiples programas en columnas',
+    category: 'content',
+  },
+  {
     id: 'tabs',
     type: 'tabs',
     label: 'Pestañas',

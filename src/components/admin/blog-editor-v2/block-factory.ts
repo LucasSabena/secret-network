@@ -35,6 +35,13 @@ export class BlockFactory {
           data: { programId: 0, variant: 'default' },
         };
 
+      case 'programs-grid':
+        return {
+          id,
+          type: 'programs-grid',
+          data: { programIds: [], columns: 3 },
+        };
+
       case 'tabs':
         return {
           id,
