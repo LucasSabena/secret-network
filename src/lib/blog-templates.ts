@@ -68,7 +68,7 @@ export const PREDEFINED_TEMPLATES: BlogTemplate[] = [
     nombre: 'Top 30 Páginas Error 404',
     descripcion: 'Lista de las mejores páginas de error 404 con ejemplos visuales',
     categoria: 'lista',
-    thumbnail: '🚫',
+    thumbnail: 'alert-circle',
     bloques: [
       {
         id: generateBlockId(),

@@ -8,6 +8,7 @@ import {
 } from '@dnd-kit/sortable';
 import { Block } from '@/lib/types';
 import { CanvasBlock } from './canvas-block';
+import { DropZoneIndicator } from './drop-zone-indicator';
 import { cn } from '@/lib/utils';
 import { Plus } from 'lucide-react';
 
@@ -30,6 +31,7 @@ interface CanvasAreaProps {
   onUpdateBlock: (id: string, block: Block) => void;
   onDeleteBlock: (id: string) => void;
   onBlocksChange?: (blocks: Block[]) => void;
+  dropTargetIndex?: number | null;
 }
 
 export function CanvasArea({
@@ -39,6 +41,7 @@ export function CanvasArea({
   onUpdateBlock,
   onDeleteBlock,
   onBlocksChange,
+  dropTargetIndex,
 }: CanvasAreaProps) {
   const { setNodeRef, isOver } = useDroppable({
     id: 'canvas-droppable',
@@ -51,10 +54,10 @@ export function CanvasArea({
       ref={setNodeRef}
       className={cn(
         'h-full overflow-y-auto p-4 md:p-8 transition-colors',
-        isOver && 'bg-primary/5 ring-2 ring-primary ring-inset'
+        isOver && 'bg-primary/5'
       )}
     >
-      <div className="max-w-3xl mx-auto space-y-4 pb-20 md:pb-4">
+      <div className="max-w-3xl mx-auto pb-20 md:pb-4">
         {blocks.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 text-center">
             <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
@@ -70,43 +73,52 @@ export function CanvasArea({
           </div>
         ) : (
           <SortableContext items={blockIds} strategy={verticalListSortingStrategy}>
-            {blocks.map((block, index) => (
-              <CanvasBlock
-                key={block.id}
-                block={block}
-                isSelected={selectedBlockId === block.id}
-                onSelect={() => onSelectBlock(block.id)}
-                onDelete={() => onDeleteBlock(block.id)}
-                onDuplicate={() => {
-                  const newBlock = { ...block, id: `block-${Date.now()}-${Math.random().toString(36).substring(7)}` };
-                  const newBlocks = [...blocks];
-                  newBlocks.splice(index + 1, 0, newBlock);
-                  if (onBlocksChange) onBlocksChange(newBlocks);
-                }}
-                onMoveUp={() => {
-                  if (index > 0) {
-                    const newBlocks = [...blocks];
-                    [newBlocks[index], newBlocks[index - 1]] = [newBlocks[index - 1], newBlocks[index]];
-                    if (onBlocksChange) onBlocksChange(newBlocks);
-                  }
-                }}
-                onMoveDown={() => {
-                  if (index < blocks.length - 1) {
-                    const newBlocks = [...blocks];
-                    [newBlocks[index], newBlocks[index + 1]] = [newBlocks[index + 1], newBlocks[index]];
-                    if (onBlocksChange) onBlocksChange(newBlocks);
-                  }
-                }}
-                canMoveUp={index > 0}
-                canMoveDown={index < blocks.length - 1}
-              >
-                <BlockEditorRenderer
-                  block={block}
-                  onChange={(updatedBlock) => onUpdateBlock(block.id, updatedBlock)}
-                  isSelected={selectedBlockId === block.id}
-                />
-              </CanvasBlock>
-            ))}
+            <div className="space-y-1">
+              {/* Drop zone al inicio */}
+              <DropZoneIndicator id="drop-zone-0" index={0} />
+              
+              {blocks.map((block, index) => (
+                <div key={block.id}>
+                      <CanvasBlock
+                    block={block}
+                    isSelected={selectedBlockId === block.id}
+                    onSelect={() => onSelectBlock(block.id)}
+                    onDelete={() => onDeleteBlock(block.id)}
+                    onDuplicate={() => {
+                      const newBlock = { ...block, id: `block-${Date.now()}-${Math.random().toString(36).substring(7)}` };
+                      const newBlocks = [...blocks];
+                      newBlocks.splice(index + 1, 0, newBlock);
+                      if (onBlocksChange) onBlocksChange(newBlocks);
+                    }}
+                    onMoveUp={() => {
+                      if (index > 0) {
+                        const newBlocks = [...blocks];
+                        [newBlocks[index], newBlocks[index - 1]] = [newBlocks[index - 1], newBlocks[index]];
+                        if (onBlocksChange) onBlocksChange(newBlocks);
+                      }
+                    }}
+                    onMoveDown={() => {
+                      if (index < blocks.length - 1) {
+                        const newBlocks = [...blocks];
+                        [newBlocks[index], newBlocks[index + 1]] = [newBlocks[index + 1], newBlocks[index]];
+                        if (onBlocksChange) onBlocksChange(newBlocks);
+                      }
+                    }}
+                    canMoveUp={index > 0}
+                    canMoveDown={index < blocks.length - 1}
+                  >
+                    <BlockEditorRenderer
+                      block={block}
+                      onChange={(updatedBlock) => onUpdateBlock(block.id, updatedBlock)}
+                      isSelected={selectedBlockId === block.id}
+                    />
+                  </CanvasBlock>
+                  
+                  {/* Drop zone después de cada bloque */}
+                  <DropZoneIndicator id={`drop-zone-${index + 1}`} index={index + 1} />
+                </div>
+              ))}
+            </div>
           </SortableContext>
         )}
       </div>
