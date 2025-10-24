@@ -95,25 +95,28 @@ export function ImagesGridBlockEditor({ block, onChange }: ImagesGridBlockEditor
     }
   };
 
-  // Paste (Ctrl+V)
+  // Paste (Ctrl+V) - Funciona en todo el componente
   useEffect(() => {
     const handlePaste = async (e: ClipboardEvent) => {
-      if (!dropZoneRef.current?.contains(document.activeElement)) return;
-
       const items = e.clipboardData?.items;
       if (!items) return;
 
       for (let i = 0; i < items.length; i++) {
         if (items[i].type.indexOf('image') !== -1) {
           e.preventDefault();
+          e.stopPropagation();
           const file = items[i].getAsFile();
           if (file) await addImage(file);
         }
       }
     };
 
-    document.addEventListener('paste', handlePaste);
-    return () => document.removeEventListener('paste', handlePaste);
+    // Agregar listener al dropZone para capturar paste
+    const dropZone = dropZoneRef.current;
+    if (dropZone) {
+      dropZone.addEventListener('paste', handlePaste as any);
+      return () => dropZone.removeEventListener('paste', handlePaste as any);
+    }
   }, [block.data.images]);
 
   const replaceImage = async (index: number, file: File) => {
@@ -273,6 +276,7 @@ export function ImagesGridBlockEditor({ block, onChange }: ImagesGridBlockEditor
       {/* Drop Zone */}
       <div
         ref={dropZoneRef}
+        tabIndex={0}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}

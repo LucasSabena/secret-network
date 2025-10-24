@@ -106,7 +106,7 @@ export function ResizablePanels({
 
       {/* Panel Derecho */}
       <div
-        style={{ width: `${rightWidth}px` }}
+        style={{ width: `${rightWidth}px`, maxWidth: '100%' }}
         className="shrink-0 border-l bg-muted/30 hidden md:flex flex-col overflow-hidden"
       >
         {rightPanel}

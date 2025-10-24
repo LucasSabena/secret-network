@@ -491,18 +491,18 @@ export function PostMetadataPanel({
             </div>
             
             {scheduledFor && (
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start text-left font-normal h-8 text-xs"
-                  >
-                    <CalendarIcon className="mr-2 h-3 w-3" />
-                    {format(new Date(scheduledFor), 'PPP p', { locale: es })}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <div className="p-3 space-y-3">
+              <div className="space-y-2">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start text-left font-normal h-8 text-xs"
+                    >
+                      <CalendarIcon className="mr-2 h-3 w-3" />
+                      {format(new Date(scheduledFor), 'PPP', { locale: es })}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
                       mode="single"
                       selected={new Date(scheduledFor)}
@@ -516,23 +516,24 @@ export function PostMetadataPanel({
                       locale={es}
                       disabled={(date) => date < new Date()}
                     />
-                    <div className="border-t pt-3">
-                      <Label className="text-xs mb-2 block">Hora</Label>
-                      <Input
-                        type="time"
-                        value={format(new Date(scheduledFor), 'HH:mm')}
-                        onChange={(e) => {
-                          const [hours, minutes] = e.target.value.split(':');
-                          const newDate = new Date(scheduledFor);
-                          newDate.setHours(parseInt(hours), parseInt(minutes));
-                          onScheduledForChange(newDate.toISOString());
-                        }}
-                        className="h-8 text-xs"
-                      />
-                    </div>
-                  </div>
-                </PopoverContent>
-              </Popover>
+                  </PopoverContent>
+                </Popover>
+                
+                <div>
+                  <Label className="text-xs mb-1 block">Hora</Label>
+                  <Input
+                    type="time"
+                    value={format(new Date(scheduledFor), 'HH:mm')}
+                    onChange={(e) => {
+                      const [hours, minutes] = e.target.value.split(':');
+                      const newDate = new Date(scheduledFor);
+                      newDate.setHours(parseInt(hours), parseInt(minutes));
+                      onScheduledForChange(newDate.toISOString());
+                    }}
+                    className="h-8 text-xs"
+                  />
+                </div>
+              </div>
             )}
             
             {scheduledFor && (
