@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Search, AlertCircle } from 'lucide-react';
+import { Search, AlertCircle, CheckCircle } from 'lucide-react';
 
 interface BlogSEOPanelProps {
   metaTitle: string;
@@ -113,12 +113,22 @@ export function BlogSEOPanel({
         <div className="pt-4 border-t">
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium">SEO Score</span>
-            <span className={`text-sm font-bold ${
+            <span className={`text-sm font-bold flex items-center gap-1 ${
               titleValid && descriptionValid && keywords.length >= 5
                 ? 'text-green-600'
                 : 'text-orange-600'
             }`}>
-              {titleValid && descriptionValid && keywords.length >= 5 ? '✓ Bueno' : '⚠ Mejorable'}
+              {titleValid && descriptionValid && keywords.length >= 5 ? (
+                <>
+                  <CheckCircle className="h-4 w-4" />
+                  Bueno
+                </>
+              ) : (
+                <>
+                  <AlertCircle className="h-4 w-4" />
+                  Mejorable
+                </>
+              )}
             </span>
           </div>
         </div>
