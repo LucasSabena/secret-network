@@ -37,11 +37,12 @@ export function EditorHelp() {
               Inicio Rápido
             </h3>
             <ol className="space-y-2 text-sm list-decimal list-inside">
-              <li>Arrastra bloques desde el panel izquierdo al canvas central</li>
+              <li><strong>Desktop:</strong> Arrastra bloques desde el panel izquierdo</li>
+              <li><strong>Mobile:</strong> Toca el botón + flotante para agregar bloques</li>
               <li>Haz clic en un bloque para editarlo</li>
               <li>Usa el ícono de arrastre para reordenar bloques</li>
-              <li>Haz clic en el ícono de basura para eliminar un bloque</li>
-              <li>Cambia a la pestaña "Vista Previa" para ver el resultado</li>
+              <li>Click derecho en un bloque para más opciones</li>
+              <li>Cambia a "Vista Previa" para ver el resultado</li>
             </ol>
           </Card>
 
@@ -49,24 +50,36 @@ export function EditorHelp() {
           <Card className="p-4">
             <h3 className="font-semibold mb-3 flex items-center gap-2">
               <Keyboard className="h-4 w-4 text-primary" />
-              Atajos de Teclado (Próximamente)
+              Atajos de Teclado
             </h3>
             <div className="space-y-2 text-sm">
-              <div className="flex justify-between items-center py-1">
-                <span className="text-muted-foreground">Deshacer</span>
-                <kbd className="px-2 py-1 bg-muted rounded text-xs">Ctrl + Z</kbd>
-              </div>
-              <div className="flex justify-between items-center py-1">
-                <span className="text-muted-foreground">Rehacer</span>
-                <kbd className="px-2 py-1 bg-muted rounded text-xs">Ctrl + Y</kbd>
-              </div>
               <div className="flex justify-between items-center py-1">
                 <span className="text-muted-foreground">Guardar</span>
                 <kbd className="px-2 py-1 bg-muted rounded text-xs">Ctrl + S</kbd>
               </div>
               <div className="flex justify-between items-center py-1">
+                <span className="text-muted-foreground">Copiar bloque</span>
+                <kbd className="px-2 py-1 bg-muted rounded text-xs">Ctrl + C</kbd>
+              </div>
+              <div className="flex justify-between items-center py-1">
+                <span className="text-muted-foreground">Cortar bloque</span>
+                <kbd className="px-2 py-1 bg-muted rounded text-xs">Ctrl + X</kbd>
+              </div>
+              <div className="flex justify-between items-center py-1">
+                <span className="text-muted-foreground">Pegar bloque</span>
+                <kbd className="px-2 py-1 bg-muted rounded text-xs">Ctrl + V</kbd>
+              </div>
+              <div className="flex justify-between items-center py-1">
                 <span className="text-muted-foreground">Duplicar bloque</span>
                 <kbd className="px-2 py-1 bg-muted rounded text-xs">Ctrl + D</kbd>
+              </div>
+              <div className="flex justify-between items-center py-1">
+                <span className="text-muted-foreground">Mover arriba</span>
+                <kbd className="px-2 py-1 bg-muted rounded text-xs">Ctrl + ↑</kbd>
+              </div>
+              <div className="flex justify-between items-center py-1">
+                <span className="text-muted-foreground">Mover abajo</span>
+                <kbd className="px-2 py-1 bg-muted rounded text-xs">Ctrl + ↓</kbd>
               </div>
               <div className="flex justify-between items-center py-1">
                 <span className="text-muted-foreground">Eliminar bloque</span>
@@ -82,12 +95,14 @@ export function EditorHelp() {
               Tips y Trucos
             </h3>
             <ul className="space-y-2 text-sm list-disc list-inside text-muted-foreground">
-              <li>Los bloques de texto soportan HTML básico como &lt;strong&gt;, &lt;em&gt;, &lt;a&gt;</li>
-              <li>Puedes insertar iconos en el texto usando [icon:nombre-icono]</li>
-              <li>Las imágenes se suben automáticamente a Cloudinary</li>
-              <li>Los cambios se guardan solo cuando haces clic en "Guardar" o "Publicar"</li>
-              <li>Usa la vista previa para verificar cómo se verá el post antes de publicar</li>
-              <li>Los borradores no son visibles públicamente hasta que los publiques</li>
+              <li><strong>Auto-save:</strong> Guarda automáticamente cada 30 segundos</li>
+              <li><strong>Reemplazar imágenes:</strong> Hover sobre imagen → Click para reemplazar (no ocupa espacio extra)</li>
+              <li><strong>Editor enriquecido:</strong> Tabs, acordeón y alertas tienen toolbar de formato</li>
+              <li><strong>Duplicar posts:</strong> Click en ícono de copiar para crear variaciones</li>
+              <li><strong>Mobile:</strong> Botón + flotante para agregar bloques</li>
+              <li><strong>Grids:</strong> En mobile se deslizan horizontalmente</li>
+              <li><strong>Vista previa:</strong> Verifica cómo se verá antes de publicar</li>
+              <li><strong>Borradores:</strong> No son visibles públicamente hasta publicar</li>
             </ul>
           </Card>
 
@@ -111,9 +126,21 @@ export function EditorHelp() {
                 </p>
               </div>
               <div>
+                <strong className="text-primary">Grid Imágenes</strong>
+                <p className="text-xs text-muted-foreground">
+                  Múltiples imágenes en 2/3/4 columnas
+                </p>
+              </div>
+              <div>
                 <strong className="text-primary">Programa</strong>
                 <p className="text-xs text-muted-foreground">
-                  Tarjetas de programas del catálogo
+                  Tarjeta de programa del catálogo
+                </p>
+              </div>
+              <div>
+                <strong className="text-primary">Grid Programas</strong>
+                <p className="text-xs text-muted-foreground">
+                  Múltiples programas en columnas
                 </p>
               </div>
               <div>
@@ -131,22 +158,37 @@ export function EditorHelp() {
               <div>
                 <strong className="text-primary">Alerta</strong>
                 <p className="text-xs text-muted-foreground">
-                  Mensajes destacados (info, warning, etc)
+                  Mensajes destacados
                 </p>
               </div>
               <div>
                 <strong className="text-primary">Código</strong>
                 <p className="text-xs text-muted-foreground">
-                  Bloques de código con highlighting
+                  Bloques de código
                 </p>
               </div>
               <div>
                 <strong className="text-primary">Separador</strong>
                 <p className="text-xs text-muted-foreground">
-                  Líneas divisorias entre secciones
+                  Líneas divisorias
                 </p>
               </div>
             </div>
+          </Card>
+
+          {/* Funciones Avanzadas */}
+          <Card className="p-4">
+            <h3 className="font-semibold mb-3 flex items-center gap-2">
+              <Zap className="h-4 w-4 text-primary" />
+              Funciones Avanzadas
+            </h3>
+            <ul className="space-y-2 text-sm list-disc list-inside text-muted-foreground">
+              <li><strong>Menú contextual:</strong> Click derecho en bloque para copiar, duplicar, mover o eliminar</li>
+              <li><strong>Copiar/Pegar:</strong> Copia bloques entre diferentes posts</li>
+              <li><strong>Configuración:</strong> Click en ⚙️ para slug, descripción, autor, portada y tags</li>
+              <li><strong>Estadísticas:</strong> Ve bloques, palabras y tiempo de lectura en tiempo real</li>
+              <li><strong>Publicar/Borrador:</strong> Switch en header para cambiar estado</li>
+            </ul>
           </Card>
         </div>
       </DialogContent>
