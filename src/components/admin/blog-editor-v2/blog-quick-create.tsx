@@ -37,6 +37,7 @@ interface FormData {
   descripcion_corta: string;
   autor_id: number | null;
   tags: string;
+  category_ids: number[];
 }
 
 export function BlogQuickCreate({ open, onClose }: BlogQuickCreateProps) {
@@ -44,6 +45,8 @@ export function BlogQuickCreate({ open, onClose }: BlogQuickCreateProps) {
   const { toast } = useToast();
   const [isCreating, setIsCreating] = useState(false);
   const [autores, setAutores] = useState<Autor[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
   
   const { register, handleSubmit, watch, setValue, reset } = useForm<FormData>({
     defaultValues: {
@@ -51,6 +54,7 @@ export function BlogQuickCreate({ open, onClose }: BlogQuickCreateProps) {
       descripcion_corta: '',
       autor_id: null,
       tags: '',
+      category_ids: [],
     },
   });
 
@@ -59,6 +63,7 @@ export function BlogQuickCreate({ open, onClose }: BlogQuickCreateProps) {
   useEffect(() => {
     if (open) {
       loadAutores();
+      loadCategories();
     }
   }, [open]);
 
@@ -70,6 +75,17 @@ export function BlogQuickCreate({ open, onClose }: BlogQuickCreateProps) {
 
     if (!error && data) {
       setAutores(data);
+    }
+  }
+
+  async function loadCategories() {
+    const { data, error } = await supabaseBrowserClient
+      .from('blog_categories')
+      .select('*')
+      .order('orden', { ascending: true });
+
+    if (!error && data) {
+      setCategories(data);
     }
   }
 
@@ -113,12 +129,25 @@ export function BlogQuickCreate({ open, onClose }: BlogQuickCreateProps) {
 
       if (error) throw error;
 
+      // Insertar relaciones de categorías
+      if (selectedCategories.length > 0) {
+        const categoryRelations = selectedCategories.map(catId => ({
+          post_id: newPost.id,
+          category_id: catId,
+        }));
+
+        await supabaseBrowserClient
+          .from('blog_posts_categories')
+          .insert(categoryRelations);
+      }
+
       toast({
         title: 'Post creado',
         description: 'Ahora puedes empezar a agregar contenido',
       });
 
       reset();
+      setSelectedCategories([]);
       onClose();
       
       // Redirigir al editor completo
@@ -240,6 +269,41 @@ export function BlogQuickCreate({ open, onClose }: BlogQuickCreateProps) {
                 placeholder="diseño, tutorial, recursos"
               />
             </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label>Categorías</Label>
+            <div className="flex flex-wrap gap-2">
+              {categories.map((cat) => (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => {
+                    setSelectedCategories(prev =>
+                      prev.includes(cat.id)
+                        ? prev.filter(id => id !== cat.id)
+                        : [...prev, cat.id]
+                    );
+                  }}
+                  className={`px-3 py-1.5 rounded-full text-sm border transition-colors ${
+                    selectedCategories.includes(cat.id)
+                      ? 'bg-primary text-primary-foreground border-primary'
+                      : 'bg-background hover:bg-muted border-border'
+                  }`}
+                  style={{
+                    borderColor: selectedCategories.includes(cat.id) ? cat.color : undefined,
+                    backgroundColor: selectedCategories.includes(cat.id) ? cat.color : undefined,
+                  }}
+                >
+                  {cat.nombre}
+                </button>
+              ))}
+            </div>
+            {categories.length === 0 && (
+              <p className="text-xs text-muted-foreground">
+                No hay categorías disponibles. Créalas primero en el gestor de categorías.
+              </p>
+            )}
           </div>
 
           <div className="flex gap-3 justify-end pt-4 border-t">
