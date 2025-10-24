@@ -258,7 +258,7 @@ export function EditorHelp() {
               <li><strong>Corrector:</strong> Revisa ortografía y gramática con LanguageTool API</li>
               <li><strong>SEO Score:</strong> Analiza tu contenido y recibe sugerencias de mejora</li>
               <li><strong>Vista Responsive:</strong> Previsualiza en diferentes dispositivos</li>
-              <li><strong>Configuración:</strong> Click en ⚙️ para slug, descripción, autor, portada y tags</li>
+              <li><strong>Configuración:</strong> Click en el ícono de configuración para slug, descripción, autor, portada y tags</li>
               <li><strong>Estadísticas:</strong> Ve bloques, palabras, tiempo de lectura y SEO score en tiempo real</li>
               <li><strong>Publicar/Borrador:</strong> Switch en header para cambiar estado</li>
             </ul>

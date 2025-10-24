@@ -121,7 +121,7 @@ export class BlockFactory {
         return {
           id,
           type: 'callout',
-          data: { icon: '💡', content: '', color: 'blue' },
+          data: { icon: 'lightbulb', content: '', color: 'blue' },
         };
 
       case 'button':

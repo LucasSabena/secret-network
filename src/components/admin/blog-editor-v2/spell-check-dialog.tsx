@@ -86,7 +86,7 @@ export function SpellCheckDialog({ blocks, onApplyCorrection }: SpellCheckDialog
       } else {
         const totalErrors = errors.reduce((sum, be) => sum + be.errors.length, 0);
         toast({
-          title: `⚠️ ${totalErrors} error${totalErrors > 1 ? 'es' : ''} encontrado${totalErrors > 1 ? 's' : ''}`,
+          title: `${totalErrors} error${totalErrors > 1 ? 'es' : ''} encontrado${totalErrors > 1 ? 's' : ''}`,
           description: `En ${errors.length} bloque${errors.length > 1 ? 's' : ''}`,
           variant: 'destructive',
         });

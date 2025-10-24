@@ -341,7 +341,7 @@ export default function BatchIconUpload({ onClose, onSuccess }: BatchIconUploadP
                 Sube múltiples archivos de imagen (SVG, PNG, JPG, WebP)
               </p>
               <p className="text-xs text-muted-foreground mb-4">
-                💡 Nombra los archivos igual que el programa (ej: &quot;Lyssna.svg&quot;) para asignación automática
+                Tip: Nombra los archivos igual que el programa (ej: &quot;Lyssna.svg&quot;) para asignación automática
               </p>
               <label className="cursor-pointer">
                 <Button type="button" variant="outline" asChild>

@@ -15,6 +15,7 @@ import {
   AlertTriangle,
   Settings,
   User,
+  Clipboard,
 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -409,9 +410,10 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
                       });
                     }
                   }}
-                  className="text-xs"
+                  className="text-xs gap-2"
                 >
-                  📋 Pegar desde clipboard ({formatClipboardAge(getFromClipboard()?.timestamp ? Date.now() - getFromClipboard()!.timestamp : 0)})
+                  <Clipboard className="h-3 w-3" />
+                  Pegar desde clipboard ({formatClipboardAge(getFromClipboard()?.timestamp ? Date.now() - getFromClipboard()!.timestamp : 0)})
                 </Button>
               )}
               <TemplateGallery onSelectTemplate={(templateBlocks) => {
@@ -460,9 +462,10 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
                     });
                   }
                 }}
-                className="hidden md:flex"
+                className="hidden md:flex gap-2"
               >
-                💾 Guardar como Template
+                <Save className="h-4 w-4" />
+                Guardar como Template
               </Button>
               <SpellCheckDialog blocks={blocks} onApplyCorrection={(blockId, newContent) => {
                 const block = blocks.find(b => b.id === blockId);
