@@ -664,6 +664,416 @@ export const PREDEFINED_TEMPLATES: BlogTemplate[] = [
       },
     ],
   },
+
+  // Template 7: Caso de Estudio
+  {
+    id: 'caso-de-estudio',
+    nombre: 'Caso de Estudio',
+    descripcion: 'Análisis detallado de un proyecto o implementación real',
+    categoria: 'guia',
+    thumbnail: 'file-check',
+    bloques: [
+      {
+        id: generateBlockId(),
+        type: 'text',
+        data: {
+          format: 'h1',
+          content: 'Caso de Estudio: [Nombre del Proyecto]',
+        },
+      },
+      {
+        id: generateBlockId(),
+        type: 'text',
+        data: {
+          format: 'paragraph',
+          content: 'Análisis completo de cómo [empresa/persona] logró [resultado] usando [herramienta/método].',
+        },
+      },
+      {
+        id: generateBlockId(),
+        type: 'alert',
+        data: {
+          variant: 'default',
+          title: 'Resumen Ejecutivo',
+          description: 'Resultado: [X% mejora]. Tiempo: [X meses]. Inversión: [X]. ROI: [X%]',
+        },
+      },
+      {
+        id: generateBlockId(),
+        type: 'text',
+        data: {
+          format: 'h2',
+          content: 'El Desafío',
+        },
+      },
+      {
+        id: generateBlockId(),
+        type: 'text',
+        data: {
+          format: 'paragraph',
+          content: 'Descripción del problema o desafío que enfrentaba el cliente antes de la solución.',
+        },
+      },
+      {
+        id: generateBlockId(),
+        type: 'text',
+        data: {
+          format: 'h2',
+          content: 'La Solución',
+        },
+      },
+      {
+        id: generateBlockId(),
+        type: 'text',
+        data: {
+          format: 'paragraph',
+          content: 'Explicación detallada de la solución implementada y por qué se eligió este enfoque.',
+        },
+      },
+      {
+        id: generateBlockId(),
+        type: 'tabs',
+        data: {
+          tabs: [
+            {
+              id: generateBlockId(),
+              label: 'Fase 1',
+              content: '<p>Descripción de la primera fase de implementación.</p>',
+            },
+            {
+              id: generateBlockId(),
+              label: 'Fase 2',
+              content: '<p>Descripción de la segunda fase.</p>',
+            },
+            {
+              id: generateBlockId(),
+              label: 'Fase 3',
+              content: '<p>Descripción de la fase final.</p>',
+            },
+          ],
+        },
+      },
+      {
+        id: generateBlockId(),
+        type: 'text',
+        data: {
+          format: 'h2',
+          content: 'Resultados',
+        },
+      },
+      {
+        id: generateBlockId(),
+        type: 'alert',
+        data: {
+          variant: 'success',
+          title: 'Métricas Clave',
+          description: 'Aumento del X% en conversiones. Reducción del X% en costos. Mejora del X% en satisfacción.',
+        },
+      },
+      {
+        id: generateBlockId(),
+        type: 'text',
+        data: {
+          format: 'h2',
+          content: 'Lecciones Aprendidas',
+        },
+      },
+      {
+        id: generateBlockId(),
+        type: 'text',
+        data: {
+          format: 'ul',
+          content: '<li>Lección 1: Descripción</li><li>Lección 2: Descripción</li><li>Lección 3: Descripción</li>',
+        },
+      },
+    ],
+  },
+
+  // Template 8: FAQ (Preguntas Frecuentes)
+  {
+    id: 'faq-preguntas-frecuentes',
+    nombre: 'FAQ - Preguntas Frecuentes',
+    descripcion: 'Lista de preguntas y respuestas comunes',
+    categoria: 'guia',
+    thumbnail: 'lightbulb',
+    bloques: [
+      {
+        id: generateBlockId(),
+        type: 'text',
+        data: {
+          format: 'h1',
+          content: 'Preguntas Frecuentes sobre [Tema]',
+        },
+      },
+      {
+        id: generateBlockId(),
+        type: 'text',
+        data: {
+          format: 'paragraph',
+          content: 'Encuentra respuestas a las preguntas más comunes sobre [tema]. Si no encuentras lo que buscas, contáctanos.',
+        },
+      },
+      {
+        id: generateBlockId(),
+        type: 'accordion',
+        data: {
+          items: [
+            {
+              id: generateBlockId(),
+              title: '¿Qué es [concepto]?',
+              content: '<p>Explicación clara y concisa del concepto.</p>',
+            },
+            {
+              id: generateBlockId(),
+              title: '¿Cómo funciona [proceso]?',
+              content: '<p>Descripción paso a paso del proceso.</p>',
+            },
+            {
+              id: generateBlockId(),
+              title: '¿Cuánto cuesta [servicio/producto]?',
+              content: '<p>Información sobre precios y planes disponibles.</p>',
+            },
+            {
+              id: generateBlockId(),
+              title: '¿Necesito conocimientos previos?',
+              content: '<p>Requisitos y nivel de experiencia necesario.</p>',
+            },
+            {
+              id: generateBlockId(),
+              title: '¿Cuánto tiempo toma [acción]?',
+              content: '<p>Estimación de tiempo y factores que lo afectan.</p>',
+            },
+            {
+              id: generateBlockId(),
+              title: '¿Es compatible con [plataforma]?',
+              content: '<p>Información sobre compatibilidad y requisitos técnicos.</p>',
+            },
+            {
+              id: generateBlockId(),
+              title: '¿Ofrecen soporte técnico?',
+              content: '<p>Detalles sobre el soporte disponible y cómo acceder a él.</p>',
+            },
+            {
+              id: generateBlockId(),
+              title: '¿Puedo cancelar en cualquier momento?',
+              content: '<p>Política de cancelación y reembolsos.</p>',
+            },
+          ],
+        },
+      },
+      {
+        id: generateBlockId(),
+        type: 'alert',
+        data: {
+          variant: 'default',
+          title: '¿No encontraste tu respuesta?',
+          description: 'Contáctanos y estaremos encantados de ayudarte.',
+        },
+      },
+    ],
+  },
+
+  // Template 9: Recursos y Herramientas
+  {
+    id: 'recursos-herramientas',
+    nombre: 'Recursos y Herramientas',
+    descripcion: 'Colección curada de recursos útiles',
+    categoria: 'lista',
+    thumbnail: 'list',
+    bloques: [
+      {
+        id: generateBlockId(),
+        type: 'text',
+        data: {
+          format: 'h1',
+          content: 'Recursos y Herramientas para [Tema]',
+        },
+      },
+      {
+        id: generateBlockId(),
+        type: 'text',
+        data: {
+          format: 'paragraph',
+          content: 'Una colección curada de las mejores herramientas y recursos para [tema]. Actualizado regularmente.',
+        },
+      },
+      {
+        id: generateBlockId(),
+        type: 'text',
+        data: {
+          format: 'h2',
+          content: 'Herramientas Esenciales',
+        },
+      },
+      {
+        id: generateBlockId(),
+        type: 'programs-grid',
+        data: {
+          programIds: [],
+          columns: 3,
+        },
+      },
+      {
+        id: generateBlockId(),
+        type: 'text',
+        data: {
+          format: 'h2',
+          content: 'Recursos de Aprendizaje',
+        },
+      },
+      {
+        id: generateBlockId(),
+        type: 'accordion',
+        data: {
+          items: [
+            {
+              id: generateBlockId(),
+              title: 'Documentación Oficial',
+              content: '<p>Enlaces a la documentación oficial y guías de inicio.</p>',
+            },
+            {
+              id: generateBlockId(),
+              title: 'Tutoriales en Video',
+              content: '<p>Canales de YouTube y cursos recomendados.</p>',
+            },
+            {
+              id: generateBlockId(),
+              title: 'Blogs y Artículos',
+              content: '<p>Los mejores blogs para mantenerse actualizado.</p>',
+            },
+            {
+              id: generateBlockId(),
+              title: 'Comunidades',
+              content: '<p>Foros, Discord, Slack y otras comunidades activas.</p>',
+            },
+          ],
+        },
+      },
+      {
+        id: generateBlockId(),
+        type: 'text',
+        data: {
+          format: 'h2',
+          content: 'Plantillas y Ejemplos',
+        },
+      },
+      {
+        id: generateBlockId(),
+        type: 'text',
+        data: {
+          format: 'paragraph',
+          content: 'Plantillas listas para usar y ejemplos de proyectos reales.',
+        },
+      },
+    ],
+  },
+
+  // Template 10: Changelog / Novedades
+  {
+    id: 'changelog-novedades',
+    nombre: 'Changelog / Novedades',
+    descripcion: 'Anuncio de nuevas funcionalidades y actualizaciones',
+    categoria: 'showcase',
+    thumbnail: 'newspaper',
+    bloques: [
+      {
+        id: generateBlockId(),
+        type: 'text',
+        data: {
+          format: 'h1',
+          content: 'Novedades - [Versión X.X]',
+        },
+      },
+      {
+        id: generateBlockId(),
+        type: 'text',
+        data: {
+          format: 'paragraph',
+          content: 'Estamos emocionados de anunciar las nuevas funcionalidades y mejoras de esta versión.',
+        },
+      },
+      {
+        id: generateBlockId(),
+        type: 'alert',
+        data: {
+          variant: 'success',
+          title: 'Versión X.X ya disponible',
+          description: 'Actualiza ahora para disfrutar de todas las nuevas funcionalidades.',
+        },
+      },
+      {
+        id: generateBlockId(),
+        type: 'text',
+        data: {
+          format: 'h2',
+          content: 'Nuevas Funcionalidades',
+        },
+      },
+      {
+        id: generateBlockId(),
+        type: 'text',
+        data: {
+          format: 'ul',
+          content: '<li><strong>Funcionalidad 1:</strong> Descripción de la nueva funcionalidad</li><li><strong>Funcionalidad 2:</strong> Descripción</li><li><strong>Funcionalidad 3:</strong> Descripción</li>',
+        },
+      },
+      {
+        id: generateBlockId(),
+        type: 'text',
+        data: {
+          format: 'h2',
+          content: 'Mejoras',
+        },
+      },
+      {
+        id: generateBlockId(),
+        type: 'text',
+        data: {
+          format: 'ul',
+          content: '<li>Mejora en el rendimiento del X%</li><li>Interfaz más intuitiva</li><li>Mejor experiencia en mobile</li>',
+        },
+      },
+      {
+        id: generateBlockId(),
+        type: 'text',
+        data: {
+          format: 'h2',
+          content: 'Correcciones',
+        },
+      },
+      {
+        id: generateBlockId(),
+        type: 'text',
+        data: {
+          format: 'ul',
+          content: '<li>Corregido bug en [funcionalidad]</li><li>Solucionado problema con [característica]</li><li>Mejorada estabilidad general</li>',
+        },
+      },
+      {
+        id: generateBlockId(),
+        type: 'separator',
+        data: {
+          style: 'solid',
+        },
+      },
+      {
+        id: generateBlockId(),
+        type: 'text',
+        data: {
+          format: 'h2',
+          content: 'Próximamente',
+        },
+      },
+      {
+        id: generateBlockId(),
+        type: 'text',
+        data: {
+          format: 'paragraph',
+          content: 'Estamos trabajando en nuevas funcionalidades que llegarán pronto...',
+        },
+      },
+    ],
+  },
 ];
 
 // Función para obtener un template por ID
