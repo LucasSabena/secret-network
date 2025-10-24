@@ -217,8 +217,10 @@ export function PostMetadataPanel({
             </div>
           ) : (
             <div className="space-y-2">
-              <div className="flex items-center gap-2 p-2 bg-muted rounded-md min-w-0">
-                <code className="text-xs flex-1 truncate break-all">{slug || 'sin-slug'}</code>
+              <div className="flex items-center gap-2 p-2 bg-muted rounded-md min-w-0 overflow-hidden">
+                <code className="text-xs flex-1 truncate overflow-hidden text-ellipsis whitespace-nowrap">
+                  {slug || 'sin-slug'}
+                </code>
                 <Button
                   size="sm"
                   variant="ghost"
@@ -241,7 +243,7 @@ export function PostMetadataPanel({
             </div>
           )}
           
-          <p className="text-xs text-muted-foreground break-all">
+          <p className="text-xs text-muted-foreground truncate overflow-hidden text-ellipsis">
             URL: /blog/{slug || 'sin-slug'}
           </p>
         </div>
