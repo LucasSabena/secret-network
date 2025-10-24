@@ -1,21 +1,23 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Plus, Search, Edit, Trash2, Loader2, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
 import { BlogPost } from '@/lib/types';
-import BlogForm from './blog-form';
+import { BlogQuickCreate } from './blog-editor-v2/blog-quick-create';
+import { EditorAnnouncement } from './blog-editor-v2/editor-announcement';
 import { supabaseBrowserClient } from '@/lib/supabase-browser';
 
 export default function BlogManager() {
+  const router = useRouter();
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
-  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isQuickCreateOpen, setIsQuickCreateOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 
@@ -84,19 +86,11 @@ export default function BlogManager() {
   }
 
   function handleNew() {
-    setSelectedPost(null);
-    setIsFormOpen(true);
+    setIsQuickCreateOpen(true);
   }
 
   function handleEdit(post: BlogPost) {
-    setSelectedPost(post);
-    setIsFormOpen(true);
-  }
-
-  function handleFormClose() {
-    setIsFormOpen(false);
-    setSelectedPost(null);
-    loadPosts();
+    router.push(`/admin/blog/editor?id=${post.id}`);
   }
 
   if (isLoading) {
@@ -109,6 +103,8 @@ export default function BlogManager() {
 
   return (
     <div className="space-y-6">
+      <EditorAnnouncement />
+      
       <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -189,9 +185,13 @@ export default function BlogManager() {
         </div>
       )}
 
-      {isFormOpen && (
-        <BlogForm post={selectedPost} onClose={handleFormClose} />
-      )}
+      <BlogQuickCreate
+        open={isQuickCreateOpen}
+        onClose={() => {
+          setIsQuickCreateOpen(false);
+          loadPosts();
+        }}
+      />
     </div>
   );
 }
