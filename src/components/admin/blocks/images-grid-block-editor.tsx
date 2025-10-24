@@ -274,15 +274,13 @@ export function ImagesGridBlockEditor({ block, onChange }: ImagesGridBlockEditor
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        tabIndex={0}
         className={`
-          border-2 border-dashed rounded-lg p-6 transition-all
-          ${isDragging ? 'border-pink-500 bg-pink-50 dark:bg-pink-950/20' : 'border-border hover:border-pink-300'}
-          ${uploading ? 'opacity-50 pointer-events-none' : 'cursor-pointer'}
+          border-2 border-dashed rounded-lg transition-all
+          ${isDragging ? 'border-pink-500 bg-pink-50 dark:bg-pink-950/20' : 'border-border'}
+          ${uploading ? 'opacity-50 pointer-events-none' : ''}
         `}
-        onClick={() => !uploading && document.getElementById(`grid-upload-${block.id}`)?.click()}
       >
-        <div className="flex flex-col items-center justify-center gap-2 text-center">
+        <div className="p-6 flex flex-col items-center justify-center gap-3 text-center">
           {uploading ? (
             <>
               <Loader2 className="h-8 w-8 animate-spin text-pink-500" />
@@ -291,15 +289,53 @@ export function ImagesGridBlockEditor({ block, onChange }: ImagesGridBlockEditor
           ) : (
             <>
               <ImagePlus className="h-8 w-8 text-muted-foreground" />
-              <div className="space-y-1">
+              <div className="space-y-2">
                 <p className="text-sm font-medium">
-                  Arrastra imágenes aquí o haz click
+                  Arrastra imágenes aquí
                 </p>
+                <div className="flex gap-2 items-center justify-center">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => document.getElementById(`grid-upload-${block.id}`)?.click()}
+                  >
+                    <Upload className="h-4 w-4 mr-2" />
+                    Seleccionar archivos
+                  </Button>
+                  <span className="text-xs text-muted-foreground">o</span>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={(e) => {
+                      e.currentTarget.focus();
+                    }}
+                    onFocus={(e) => {
+                      const handlePasteOnButton = async (pasteEvent: ClipboardEvent) => {
+                        const items = pasteEvent.clipboardData?.items;
+                        if (!items) return;
+
+                        for (let i = 0; i < items.length; i++) {
+                          if (items[i].type.indexOf('image') !== -1) {
+                            pasteEvent.preventDefault();
+                            const file = items[i].getAsFile();
+                            if (file) await addImage(file);
+                          }
+                        }
+                      };
+
+                      document.addEventListener('paste', handlePasteOnButton);
+                      e.currentTarget.addEventListener('blur', () => {
+                        document.removeEventListener('paste', handlePasteOnButton);
+                      }, { once: true });
+                    }}
+                  >
+                    📋 Click aquí y Ctrl+V
+                  </Button>
+                </div>
                 <p className="text-xs text-muted-foreground">
-                  También puedes pegar con Ctrl+V
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  Puedes subir múltiples imágenes a la vez
+                  Múltiples imágenes a la vez - PNG, JPG, GIF
                 </p>
               </div>
             </>
