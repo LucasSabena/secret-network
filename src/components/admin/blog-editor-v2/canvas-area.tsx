@@ -12,7 +12,7 @@ import { cn } from '@/lib/utils';
 import { Plus } from 'lucide-react';
 
 // Importar los editores de bloques existentes
-import { TextBlockEditor } from '../blocks/text-block-editor';
+import { RichTextBlockEditor } from '../blocks/rich-text-block-editor';
 import { ImageBlockEditor } from '../blocks/image-block-editor';
 import { ProgramCardBlockEditor } from '../blocks/program-card-block-editor';
 import { TabsBlockEditor } from '../blocks/tabs-block-editor';
@@ -131,7 +131,7 @@ function BlockEditorRenderer({
   switch (block.type) {
     case 'text':
       return (
-        <TextBlockEditor
+        <RichTextBlockEditor
           block={block as Extract<Block, { type: 'text' }>}
           onChange={onChange as any}
         />

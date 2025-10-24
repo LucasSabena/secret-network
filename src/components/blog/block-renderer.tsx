@@ -21,7 +21,7 @@ function TextBlockComponent({ block }: { block: Extract<Block, { type: 'text' }>
   const { format, content } = block.data;
   
   const className = {
-    paragraph: 'text-muted-foreground leading-7 [&:not(:first-child)]:mt-6',
+    paragraph: 'text-foreground leading-7 [&:not(:first-child)]:mt-6 whitespace-pre-wrap',
     h1: 'scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl',
     h2: 'scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0',
     h3: 'scroll-m-20 text-2xl font-semibold tracking-tight',
@@ -32,23 +32,46 @@ function TextBlockComponent({ block }: { block: Extract<Block, { type: 'text' }>
     code: 'relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold',
   }[format];
 
-  // Parsear el contenido para convertir [icon:nombre] en iconos reales
-  const contentWithIcons = parseTextWithIcons(content);
-
+  // Para formatos de texto enriquecido, usar dangerouslySetInnerHTML
   if (format === 'paragraph') {
-    return <p className={className}>{contentWithIcons}</p>;
+    return (
+      <div 
+        className={cn(className, 'prose prose-sm dark:prose-invert max-w-none')}
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
+    );
   }
   if (format === 'h1') {
-    return <h1 className={className}>{contentWithIcons}</h1>;
+    return (
+      <h1 
+        className={className}
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
+    );
   }
   if (format === 'h2') {
-    return <h2 className={className}>{contentWithIcons}</h2>;
+    return (
+      <h2 
+        className={className}
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
+    );
   }
   if (format === 'h3') {
-    return <h3 className={className}>{contentWithIcons}</h3>;
+    return (
+      <h3 
+        className={className}
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
+    );
   }
   if (format === 'h4') {
-    return <h4 className={className}>{contentWithIcons}</h4>;
+    return (
+      <h4 
+        className={className}
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
+    );
   }
   if (format === 'ul') {
     return <ul className={className} dangerouslySetInnerHTML={{ __html: content }} />;
@@ -57,7 +80,12 @@ function TextBlockComponent({ block }: { block: Extract<Block, { type: 'text' }>
     return <ol className={className} dangerouslySetInnerHTML={{ __html: content }} />;
   }
   if (format === 'quote') {
-    return <blockquote className={className}>{contentWithIcons}</blockquote>;
+    return (
+      <blockquote 
+        className={className}
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
+    );
   }
   if (format === 'code') {
     return <code className={className}>{content}</code>;
@@ -83,30 +111,28 @@ function ProgramCardBlockComponent({ block }: { block: Extract<Block, { type: 'p
       setLoading(false);
     };
 
-    fetchProgram();
+    if (block.data.programId) {
+      fetchProgram();
+    } else {
+      setLoading(false);
+    }
   }, [block.data.programId]);
 
   if (loading) {
-    return <div className="animate-pulse bg-muted h-32 rounded-lg" />;
+    return <div className="animate-pulse bg-muted h-32 rounded-lg my-8" />;
   }
 
   if (!program) {
-    return null;
+    return (
+      <div className="my-8 p-4 border-2 border-dashed border-muted rounded-lg text-center text-muted-foreground">
+        Selecciona un programa para mostrar
+      </div>
+    );
   }
 
-  // Mapear variant del bloque a variant del ProgramCard
-  const cardVariant = 
-    block.data.variant === 'large' ? 'large' : 
-    block.data.variant === 'small' ? 'small' : 
-    'medium';
-
   return (
-    <div className={cn(
-      "my-8",
-      // Si es small, limitar el ancho máximo (como en la home)
-      block.data.variant === 'small' && "max-w-sm"
-    )}>
-      <ProgramCard program={program} variant={cardVariant} />
+    <div className="my-8 not-prose">
+      <ProgramCard program={program} variant="medium" />
     </div>
   );
 }
