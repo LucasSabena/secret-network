@@ -1,4 +1,6 @@
 // FILE: src/lib/reading-time.ts
+import { Block } from './types';
+
 /**
  * Calcula el tiempo estimado de lectura basado en la cantidad de palabras
  * Promedio: 200-250 palabras por minuto (usamos 225)
@@ -55,4 +57,56 @@ export function formatReadingTime(minutes: number): string {
     return '< 1 min';
   }
   return `${minutes} min`;
+}
+
+/**
+ * Calcula el tiempo de lectura desde bloques estructurados
+ * @param blocks - Array de bloques del post
+ * @param wordsPerMinute - Palabras por minuto (default: 200)
+ * @returns Objeto con minutos, palabras y texto formateado
+ */
+export function calculateReadingTimeFromBlocks(
+  blocks: Block[] | null | undefined,
+  wordsPerMinute: number = 200
+): ReadingTime {
+  if (!blocks || blocks.length === 0) {
+    return {
+      minutes: 1,
+      words: 0,
+      text: '< 1 min',
+    };
+  }
+
+  let totalWords = 0;
+
+  blocks.forEach((block) => {
+    if (block.type === 'text') {
+      const text = block.data.content.replace(/<[^>]*>/g, ''); // Remove HTML
+      totalWords += text.split(/\s+/).filter((word) => word.length > 0).length;
+    } else if (block.type === 'tabs') {
+      block.data.tabs.forEach((tab) => {
+        const text = tab.content.replace(/<[^>]*>/g, '');
+        totalWords += text.split(/\s+/).filter((word) => word.length > 0).length;
+      });
+    } else if (block.type === 'accordion') {
+      block.data.items.forEach((item) => {
+        const text = item.content.replace(/<[^>]*>/g, '');
+        totalWords += text.split(/\s+/).filter((word) => word.length > 0).length;
+      });
+    } else if (block.type === 'alert') {
+      const text = block.data.description.replace(/<[^>]*>/g, '');
+      totalWords += text.split(/\s+/).filter((word) => word.length > 0).length;
+    } else if (block.type === 'code') {
+      // Código cuenta como palabras también
+      totalWords += block.data.code.split(/\s+/).filter((word) => word.length > 0).length;
+    }
+  });
+
+  const minutes = Math.max(1, Math.ceil(totalWords / wordsPerMinute));
+
+  return {
+    minutes,
+    words: totalWords,
+    text: formatReadingTime(minutes),
+  };
 }

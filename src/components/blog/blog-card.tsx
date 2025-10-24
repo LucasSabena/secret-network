@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Calendar, User, ArrowRight, Clock } from "lucide-react";
 import type { BlogPost } from "@/lib/types";
-import { calculateReadingTime } from "@/lib/reading-time";
+import { calculateReadingTime, calculateReadingTimeFromBlocks } from "@/lib/reading-time";
 
 interface BlogCardProps {
   post: BlogPost;
@@ -20,7 +20,10 @@ export function BlogCard({ post }: BlogCardProps) {
     });
   };
 
-  const readingTime = calculateReadingTime(post.contenido);
+  // Usar bloques si existen, sino usar contenido legacy
+  const readingTime = post.contenido_bloques && post.contenido_bloques.length > 0
+    ? calculateReadingTimeFromBlocks(post.contenido_bloques)
+    : calculateReadingTime(post.contenido);
 
   return (
     <Link href={`/blog/${post.slug}`} className="block h-full" prefetch={false}>

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Calendar, User, ArrowLeft, Clock } from "lucide-react";
 import Link from "next/link";
 import type { BlogPost } from "@/lib/types";
-import { calculateReadingTime } from "@/lib/reading-time";
+import { calculateReadingTime, calculateReadingTimeFromBlocks } from "@/lib/reading-time";
 
 interface BlogPostHeaderProps {
   post: BlogPost;
@@ -19,7 +19,10 @@ export function BlogPostHeader({ post }: BlogPostHeaderProps) {
     });
   };
 
-  const readingTime = calculateReadingTime(post.contenido);
+  // Usar bloques si existen, sino usar contenido legacy
+  const readingTime = post.contenido_bloques && post.contenido_bloques.length > 0
+    ? calculateReadingTimeFromBlocks(post.contenido_bloques)
+    : calculateReadingTime(post.contenido);
 
   return (
     <header className="mb-8">
