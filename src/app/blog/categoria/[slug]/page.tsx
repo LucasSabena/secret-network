@@ -1,4 +1,5 @@
 // FILE: src/app/blog/categoria/[slug]/page.tsx
+// Next.js 15 compatible - params as Promise
 import { createClient } from '@/lib/supabase';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
