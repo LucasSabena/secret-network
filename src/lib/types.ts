@@ -56,6 +56,7 @@ export type ProgramCardBlock = {
     programId: number;
     variant?: 'small' | 'default' | 'large';
   };
+  style?: BlockStyle;
 };
 
 // Bloque de grid de programas
@@ -66,6 +67,7 @@ export type ProgramsGridBlock = {
     programIds: number[];
     columns: 2 | 3 | 4;
   };
+  style?: BlockStyle;
 };
 
 // Bloque de grid de imágenes
@@ -80,6 +82,7 @@ export type ImagesGridBlock = {
     }>;
     columns: 2 | 3 | 4;
   };
+  style?: BlockStyle;
 };
 
 // Bloque de tabs
@@ -93,6 +96,7 @@ export type TabsBlock = {
       content: string; // HTML o markdown
     }>;
   };
+  style?: BlockStyle;
 };
 
 // Bloque de accordion
@@ -106,6 +110,7 @@ export type AccordionBlock = {
       content: string; // HTML o markdown
     }>;
   };
+  style?: BlockStyle;
 };
 
 // Bloque de alerta
@@ -127,6 +132,7 @@ export type SeparatorBlock = {
   data: {
     style: 'solid' | 'dashed' | 'dotted';
   };
+  style?: BlockStyle;
 };
 
 // Bloque de imagen
@@ -150,6 +156,7 @@ export type CodeBlock = {
     language: string;
     code: string;
   };
+  style?: BlockStyle;
 };
 
 // Unión de todos los tipos de bloques
