@@ -313,7 +313,15 @@ export default function BlogManager() {
             onClick={() => router.push('/admin/templates')}
           >
             <FileText className="h-4 w-4" />
-            Gestionar Templates
+            Templates
+          </Button>
+          <Button 
+            variant="outline" 
+            className="gap-2"
+            onClick={() => router.push('/admin/blog-categorias')}
+          >
+            <FileText className="h-4 w-4" />
+            Categorías
           </Button>
         </div>
         </div>

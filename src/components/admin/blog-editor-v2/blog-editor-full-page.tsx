@@ -43,7 +43,6 @@ import { DragDropEditor } from './drag-drop-editor';
 import { EditorHelp } from './editor-help';
 import { EditorStats } from './editor-stats';
 import { EditorOnboarding } from './editor-onboarding';
-import { BlogPreviewButton } from '../blog-preview-button';
 import { TemplateGallery } from './template-gallery';
 import { SpellCheckDialog } from './spell-check-dialog';
 import { ResponsivePreview } from './responsive-preview';
@@ -468,18 +467,7 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
                 <Save className="h-4 w-4" />
                 Guardar como Template
               </Button>
-              {post && (
-                <BlogPreviewButton
-                  postId={post.id}
-                  postData={{
-                    titulo,
-                    slug: titulo.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
-                    descripcion_corta,
-                    contenido_bloques: blocks,
-                    imagen_portada_url: imageFile ? URL.createObjectURL(imageFile) : post?.imagen_portada_url || undefined,
-                  }}
-                />
-              )}
+
               <SpellCheckDialog blocks={blocks} onApplyCorrection={(blockId, newContent) => {
                 const block = blocks.find(b => b.id === blockId);
                 if (block && block.type === 'text') {
