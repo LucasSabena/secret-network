@@ -42,8 +42,11 @@ export type TextBlock = {
   id: string;
   type: 'text';
   data: {
-    format: 'paragraph' | 'h1' | 'h2' | 'h3' | 'h4' | 'ul' | 'ol' | 'quote' | 'code';
+    format: 'paragraph' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'ul' | 'ol' | 'quote' | 'code';
     content: string; // HTML simple o texto
+    textColor?: string;
+    backgroundColor?: string;
+    fontSize?: 'sm' | 'base' | 'lg' | 'xl' | '2xl';
   };
   style?: BlockStyle;
 };
@@ -94,7 +97,10 @@ export type TabsBlock = {
       id: string;
       label: string;
       content: string; // HTML o markdown
+      icon?: string;
     }>;
+    orientation?: 'horizontal' | 'vertical';
+    defaultTab?: number;
   };
   style?: BlockStyle;
 };
@@ -108,7 +114,10 @@ export type AccordionBlock = {
       id: string;
       title: string;
       content: string; // HTML o markdown
+      icon?: string;
     }>;
+    allowMultiple?: boolean;
+    defaultOpen?: boolean;
   };
   style?: BlockStyle;
 };
@@ -144,6 +153,10 @@ export type ImageBlock = {
     alt?: string;
     caption?: string;
     width?: number;
+    lightbox?: boolean;
+    borderRadius?: number;
+    shadow?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
+    aspectRatio?: 'auto' | '16/9' | '4/3' | '1/1' | '21/9';
   };
   style?: BlockStyle;
 };
@@ -155,6 +168,11 @@ export type CodeBlock = {
   data: {
     language: string;
     code: string;
+    showLineNumbers?: boolean;
+    highlightLines?: number[];
+    filename?: string;
+    theme?: 'dark' | 'light' | 'auto';
+    copyButton?: boolean;
   };
   style?: BlockStyle;
 };
@@ -358,6 +376,8 @@ export type BlogPost = {
   fecha_publicacion: string;
   actualizado_en: string;
   publicado: boolean;
+  status?: 'draft' | 'scheduled' | 'published' | 'archived';
+  scheduled_for?: string | null;
   tags: string[] | null;
   categories?: number[]; // IDs de categorías
 };

@@ -7,18 +7,19 @@ import { ChevronRight } from 'lucide-react';
 import { BlogCategoryBadge } from '@/components/blog/blog-category-badge';
 
 interface CategoryPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
-  const supabase = createClient();
+  const { slug } = await params;
+  const supabase = await createClient();
   
   const { data: category } = await supabase
     .from('blog_categories')
     .select('*')
-    .eq('slug', params.slug)
+    .eq('slug', slug)
     .single();
 
   if (!category) {
@@ -34,13 +35,14 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
 }
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
-  const supabase = createClient();
+  const { slug } = await params;
+  const supabase = await createClient();
 
   // Obtener categoría
   const { data: category } = await supabase
     .from('blog_categories')
     .select('*')
-    .eq('slug', params.slug)
+    .eq('slug', slug)
     .single();
 
   if (!category) {
@@ -53,7 +55,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     .select('post_id')
     .eq('category_id', category.id);
 
-  const postIds = postCategories?.map(pc => pc.post_id) || [];
+  const postIds = postCategories?.map((pc: any) => pc.post_id) || [];
 
   const { data: posts } = await supabase
     .from('blog_posts')
@@ -112,7 +114,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl">
-            {posts.map((post) => (
+            {posts.map((post: any) => (
               <Link
                 key={post.id}
                 href={`/blog/${post.slug}`}

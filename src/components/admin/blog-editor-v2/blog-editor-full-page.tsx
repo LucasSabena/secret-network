@@ -53,6 +53,7 @@ import { validateImageFile } from '@/lib/cloudinary-config';
 import { ImageManager } from '@/lib/image-manager';
 import { hasClipboardData, getFromClipboard, formatClipboardAge, cloneBlocksWithNewIds } from '@/lib/clipboard-manager';
 import { BlogCategorySelector } from '../blog-category-selector';
+import { BlogSchedulePicker } from '../blog-schedule-picker';
 
 interface BlogEditorFullPageProps {
   post: BlogPost | null;
@@ -90,6 +91,7 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [showClipboardIndicator, setShowClipboardIndicator] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<number[]>(post?.categories || []);
+  const [scheduledFor, setScheduledFor] = useState<string | null>(post?.scheduled_for || null);
   const { toast } = useToast();
 
   // Verificar si hay datos en el clipboard
@@ -277,6 +279,14 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
         ? data.tags.split(',').map((tag) => tag.trim())
         : [];
 
+      // Calcular status basado en publicado y scheduled_for
+      let status = 'draft';
+      if (data.publicado) {
+        status = 'published';
+      } else if (scheduledFor && new Date(scheduledFor) > new Date()) {
+        status = 'scheduled';
+      }
+
       const postData = {
         titulo: data.titulo,
         slug,
@@ -288,6 +298,8 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
         autor: data.autor || null,
         autor_id: data.autor_id || null,
         publicado: data.publicado,
+        status,
+        scheduled_for: scheduledFor,
         tags: tagsArray.length > 0 ? tagsArray : null,
         fecha_publicacion: post?.fecha_publicacion || new Date().toISOString(),
         actualizado_en: new Date().toISOString(),
@@ -550,6 +562,11 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
                     <BlogCategorySelector
                       selectedCategories={selectedCategories}
                       onChange={setSelectedCategories}
+                    />
+
+                    <BlogSchedulePicker
+                      scheduledFor={scheduledFor}
+                      onChange={setScheduledFor}
                     />
 
                     <div className="space-y-3">

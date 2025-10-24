@@ -51,6 +51,8 @@ function TextBlockComponent({ block }: { block: Extract<Block, { type: 'text' }>
     h2: 'scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0',
     h3: 'scroll-m-20 text-2xl font-semibold tracking-tight',
     h4: 'scroll-m-20 text-xl font-semibold tracking-tight',
+    h5: 'scroll-m-20 text-lg font-semibold tracking-tight',
+    h6: 'scroll-m-20 text-base font-semibold tracking-tight',
     ul: 'my-6 ml-6 list-disc [&>li]:mt-2',
     ol: 'my-6 ml-6 list-decimal [&>li]:mt-2',
     quote: 'mt-6 border-l-2 border-primary pl-6 italic',
@@ -93,6 +95,22 @@ function TextBlockComponent({ block }: { block: Extract<Block, { type: 'text' }>
   if (format === 'h4') {
     return (
       <h4 
+        className={cn(className, styleClasses)}
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
+    );
+  }
+  if (format === 'h5') {
+    return (
+      <h5 
+        className={cn(className, styleClasses)}
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
+    );
+  }
+  if (format === 'h6') {
+    return (
+      <h6 
         className={cn(className, styleClasses)}
         dangerouslySetInnerHTML={{ __html: content }}
       />

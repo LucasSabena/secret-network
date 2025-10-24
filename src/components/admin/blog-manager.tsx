@@ -23,6 +23,8 @@ import { EditorAnnouncement } from './blog-editor-v2/editor-announcement';
 import { TemplateGallery } from './blog-editor-v2/template-gallery';
 import { supabaseBrowserClient } from '@/lib/supabase-browser';
 import { BlogCategoryBadge } from '@/components/blog/blog-category-badge';
+import { BlogStatusBadge } from './blog-status-badge';
+import { BlogSortDropdown } from './blog-sort-dropdown';
 
 export default function BlogManager() {
   const router = useRouter();
@@ -31,6 +33,7 @@ export default function BlogManager() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
+  const [sortBy, setSortBy] = useState<string>('date-desc');
   const [categories, setCategories] = useState<any[]>([]);
   const [isQuickCreateOpen, setIsQuickCreateOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -110,8 +113,24 @@ export default function BlogManager() {
       );
     }
     
+    // Ordenar
+    filtered = [...filtered].sort((a, b) => {
+      switch (sortBy) {
+        case 'date-desc':
+          return new Date(b.fecha_publicacion).getTime() - new Date(a.fecha_publicacion).getTime();
+        case 'date-asc':
+          return new Date(a.fecha_publicacion).getTime() - new Date(b.fecha_publicacion).getTime();
+        case 'title-asc':
+          return a.titulo.localeCompare(b.titulo);
+        case 'title-desc':
+          return b.titulo.localeCompare(a.titulo);
+        default:
+          return 0;
+      }
+    });
+    
     setFilteredPosts(filtered);
-  }, [searchTerm, selectedStatus, selectedCategory, posts]);
+  }, [searchTerm, selectedStatus, selectedCategory, sortBy, posts]);
 
   async function loadCategories() {
     const { data } = await supabaseBrowserClient
@@ -346,15 +365,10 @@ export default function BlogManager() {
                   {new Date(post.fecha_publicacion).toLocaleDateString('es-ES')}
                 </p>
                 <div className="flex items-center gap-2 mt-1 flex-wrap">
-                  {post.publicado ? (
-                    <span className="text-xs bg-green-500/10 text-green-500 px-2 py-0.5 rounded">
-                      Publicado
-                    </span>
-                  ) : (
-                    <span className="text-xs bg-yellow-500/10 text-yellow-500 px-2 py-0.5 rounded">
-                      Borrador
-                    </span>
-                  )}
+                  <BlogStatusBadge 
+                    status={post.status || (post.publicado ? 'published' : 'draft')} 
+                    scheduledFor={post.scheduled_for}
+                  />
                   {post.categories && post.categories.length > 0 && (
                     <>
                       {categories
