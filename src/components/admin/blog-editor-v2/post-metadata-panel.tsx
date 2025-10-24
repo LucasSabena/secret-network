@@ -460,7 +460,7 @@ export function PostMetadataPanel({
                   )}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
+              <PopoverContent className="w-fit p-3" align="start" side="left">
                 <Calendar
                   mode="single"
                   selected={fechaPublicacion}
@@ -502,7 +502,7 @@ export function PostMetadataPanel({
                       {format(new Date(scheduledFor), 'PPP', { locale: es })}
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
+                  <PopoverContent className="w-fit p-3" align="start" side="left">
                     <Calendar
                       mode="single"
                       selected={new Date(scheduledFor)}
