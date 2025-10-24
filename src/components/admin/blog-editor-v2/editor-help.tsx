@@ -11,7 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { HelpCircle, Keyboard, Lightbulb, Zap } from 'lucide-react';
+import { HelpCircle, Keyboard, Lightbulb, Zap, Package } from 'lucide-react';
 
 export function EditorHelp() {
   return (
@@ -77,7 +77,10 @@ export function EditorHelp() {
 
           {/* Tips */}
           <Card className="p-4">
-            <h3 className="font-semibold mb-3">💡 Tips y Trucos</h3>
+            <h3 className="font-semibold mb-3 flex items-center gap-2">
+              <Lightbulb className="h-4 w-4 text-primary" />
+              Tips y Trucos
+            </h3>
             <ul className="space-y-2 text-sm list-disc list-inside text-muted-foreground">
               <li>Los bloques de texto soportan HTML básico como &lt;strong&gt;, &lt;em&gt;, &lt;a&gt;</li>
               <li>Puedes insertar iconos en el texto usando [icon:nombre-icono]</li>
@@ -90,7 +93,10 @@ export function EditorHelp() {
 
           {/* Tipos de Bloques */}
           <Card className="p-4">
-            <h3 className="font-semibold mb-3">📦 Tipos de Bloques</h3>
+            <h3 className="font-semibold mb-3 flex items-center gap-2">
+              <Package className="h-4 w-4 text-primary" />
+              Tipos de Bloques
+            </h3>
             <div className="grid grid-cols-2 gap-3 text-sm">
               <div>
                 <strong className="text-primary">Texto</strong>

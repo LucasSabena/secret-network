@@ -33,12 +33,13 @@ export function EditorAnnouncement() {
         </div>
         <div className="flex-1 min-w-0">
           <h3 className="font-semibold mb-1 flex items-center gap-2">
-            ¡Nuevo Editor Drag-and-Drop! 🎉
+            <Sparkles className="h-4 w-4 text-primary" />
+            ¡Nuevo Editor Drag-and-Drop!
           </h3>
           <p className="text-sm text-muted-foreground mb-3">
             Hemos creado un editor completamente nuevo para el blog. Es más
             intuitivo, visual y fácil de usar. Pruébalo haciendo clic en el
-            botón "🎨 Nuevo Editor" arriba.
+            botón de Nuevo Editor arriba.
           </p>
           <div className="flex gap-2">
             <Button size="sm" variant="default" onClick={handleDismiss}>

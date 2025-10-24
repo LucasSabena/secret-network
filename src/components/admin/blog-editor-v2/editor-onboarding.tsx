@@ -10,46 +10,46 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { ArrowRight, ArrowLeft, Check, Sparkles } from 'lucide-react';
+import { ArrowRight, ArrowLeft, Check, Sparkles, Package, Edit, Settings, Move, Rocket } from 'lucide-react';
 
 const ONBOARDING_KEY = 'blog-editor-v2-onboarding-completed';
 
 const STEPS = [
   {
-    title: '¡Bienvenido al Nuevo Editor! 🎉',
+    title: '¡Bienvenido al Nuevo Editor!',
     description:
       'Este es un editor drag-and-drop completamente nuevo, diseñado para hacer la creación de posts más intuitiva y visual.',
-    image: '🎨',
+    icon: Sparkles,
   },
   {
     title: 'Panel de Bloques',
     description:
       'A la izquierda encontrarás todos los bloques disponibles: texto, imágenes, programas, pestañas, acordeones y más. Simplemente arrástralos al canvas.',
-    image: '📦',
+    icon: Package,
   },
   {
     title: 'Canvas Central',
     description:
       'El área central es tu canvas de trabajo. Aquí construyes tu post arrastrando bloques. Haz clic en cualquier bloque para editarlo.',
-    image: '✏️',
+    icon: Edit,
   },
   {
     title: 'Panel de Propiedades',
     description:
       'A la derecha verás información sobre el bloque seleccionado. También encontrarás tips y ayuda contextual.',
-    image: '⚙️',
+    icon: Settings,
   },
   {
     title: 'Reordenar y Eliminar',
     description:
       'Usa el ícono de arrastre para reordenar bloques. El ícono de basura elimina el bloque. Todo es visual e intuitivo.',
-    image: '🔄',
+    icon: Move,
   },
   {
     title: '¡Listo para Empezar!',
     description:
       'Ya estás listo para crear contenido increíble. Recuerda: puedes ver la ayuda en cualquier momento haciendo clic en el ícono ? en la esquina superior.',
-    image: '🚀',
+    icon: Rocket,
   },
 ];
 
@@ -90,6 +90,7 @@ export function EditorOnboarding() {
 
   const step = STEPS[currentStep];
   const isLastStep = currentStep === STEPS.length - 1;
+  const StepIcon = step.icon;
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -116,7 +117,11 @@ export function EditorOnboarding() {
 
           {/* Contenido del paso */}
           <Card className="p-8 text-center">
-            <div className="text-6xl mb-4">{step.image}</div>
+            <div className="flex justify-center mb-4">
+              <div className="p-4 rounded-full bg-primary/10">
+                <StepIcon className="h-12 w-12 text-primary" />
+              </div>
+            </div>
             <h3 className="text-xl font-semibold mb-3">{step.title}</h3>
             <p className="text-muted-foreground max-w-md mx-auto">
               {step.description}

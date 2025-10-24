@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { X, Upload, Loader2, Image as ImageIcon, Search, FolderTree, Tag, Monitor, DollarSign, Repeat } from 'lucide-react';
+import { X, Upload, Loader2, Image as ImageIcon, Search, FolderTree, Tag, Monitor, DollarSign, Repeat, Lightbulb } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -1206,8 +1206,9 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
             {/* Captura con Drag & Drop y Paste */}
             <div className="space-y-2">
               <Label>Captura de Pantalla</Label>
-              <p className="text-xs text-muted-foreground mb-2">
-                💡 Tip: Puedes pegar una imagen directamente con Ctrl+V en cualquier lugar del formulario
+              <p className="text-xs text-muted-foreground mb-2 flex items-center gap-1">
+                <Lightbulb className="h-3 w-3" />
+                Tip: Puedes pegar una imagen directamente con Ctrl+V en cualquier lugar del formulario
               </p>
               <div
                 onDragOver={(e) => {

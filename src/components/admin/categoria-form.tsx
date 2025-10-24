@@ -175,7 +175,7 @@ export default function CategoriaForm({
               <Input
                 id="icono"
                 {...register('icono')}
-                placeholder="🎨"
+                placeholder="Ej: palette"
                 maxLength={10}
               />
             </div>
