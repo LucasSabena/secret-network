@@ -3,13 +3,11 @@
 
 import { Block } from '@/lib/types';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Info, AlertTriangle, CheckCircle2, XCircle } from 'lucide-react';
-import { IconSelector } from './icon-selector';
-import { useRef } from 'react';
+import { InlineRichEditor } from './inline-rich-editor';
 
 interface AlertBlockEditorProps {
   block: Extract<Block, { type: 'alert' }>;
@@ -17,8 +15,6 @@ interface AlertBlockEditorProps {
 }
 
 export function AlertBlockEditor({ block, onChange }: AlertBlockEditorProps) {
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-
   const variantIcons = {
     default: Info,
     destructive: XCircle,
@@ -27,27 +23,6 @@ export function AlertBlockEditor({ block, onChange }: AlertBlockEditorProps) {
   };
 
   const Icon = variantIcons[block.data.variant];
-
-  const insertIcon = (iconName: string) => {
-    const textarea = textareaRef.current;
-    if (!textarea) return;
-
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const text = block.data.description;
-    const before = text.substring(0, start);
-    const after = text.substring(end);
-    const newText = before + `[icon:${iconName}]` + after;
-
-    onChange({ ...block, data: { ...block.data, description: newText } });
-
-    // Restaurar foco y posición del cursor
-    setTimeout(() => {
-      textarea.focus();
-      const newPos = start + `[icon:${iconName}]`.length;
-      textarea.setSelectionRange(newPos, newPos);
-    }, 0);
-  };
 
   return (
     <div className="space-y-4">
@@ -84,22 +59,15 @@ export function AlertBlockEditor({ block, onChange }: AlertBlockEditorProps) {
         </div>
 
         <div>
-          <div className="flex items-center justify-between mb-2">
-            <Label className="text-sm">Descripción:</Label>
-            <IconSelector onSelect={(iconName: string) => insertIcon(iconName)} />
-          </div>
-          <Textarea
-            ref={textareaRef}
+          <Label className="text-sm mb-2 block">Descripción:</Label>
+          <InlineRichEditor
             value={block.data.description}
-            onChange={(e) =>
-              onChange({ ...block, data: { ...block.data, description: e.target.value } })
+            onChange={(value) =>
+              onChange({ ...block, data: { ...block.data, description: value } })
             }
-            placeholder="Contenido de la alerta. Puedes usar [icon:nombre] para insertar iconos."
-            className="min-h-[80px]"
+            placeholder="Contenido de la alerta..."
+            minHeight="100px"
           />
-          <p className="text-xs text-muted-foreground mt-1">
-            Usa [icon:nombre] para insertar iconos inline (ej: [icon:heart])
-          </p>
         </div>
       </div>
 

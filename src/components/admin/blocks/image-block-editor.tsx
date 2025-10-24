@@ -17,30 +17,19 @@ interface ImageBlockEditorProps {
 export function ImageBlockEditor({ block, onChange }: ImageBlockEditorProps) {
   const [uploading, setUploading] = useState(false);
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, replace: boolean = false) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     setUploading(true);
     try {
-      // TODO: Implementar upload a Cloudinary
-      // Por ahora, usar URL directa
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || '');
-
-      const res = await fetch(
-        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
-        {
-          method: 'POST',
-          body: formData,
-        }
-      );
-
-      const data = await res.json();
-      onChange({ ...block, data: { ...block.data, url: data.secure_url } });
+      const { uploadToCloudinary } = await import('@/lib/cloudinary-upload');
+      const existingUrl = replace ? block.data.url : undefined;
+      const url = await uploadToCloudinary(file, 'blog/images', existingUrl);
+      onChange({ ...block, data: { ...block.data, url } });
     } catch (error) {
       console.error('Error uploading image:', error);
+      alert('Error al subir la imagen');
     } finally {
       setUploading(false);
     }
@@ -101,13 +90,27 @@ export function ImageBlockEditor({ block, onChange }: ImageBlockEditorProps) {
       {block.data.url && (
         <div>
           <Label className="text-xs text-muted-foreground mb-2 block">Vista previa:</Label>
-          <div className="relative w-full h-48 rounded-lg overflow-hidden bg-muted">
+          <div className="relative w-full h-48 rounded-lg overflow-hidden bg-muted group">
             <Image
               src={block.data.url}
               alt={block.data.alt || ''}
               fill
               className="object-contain"
             />
+            <label className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer flex items-center justify-center">
+              <div className="text-white text-center">
+                <Upload className="h-8 w-8 mx-auto mb-2" />
+                <span className="text-sm">Reemplazar imagen</span>
+              </div>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleFileUpload(e, true)}
+                className="hidden"
+                disabled={uploading}
+                aria-label="Reemplazar imagen"
+              />
+            </label>
           </div>
           {block.data.caption && (
             <p className="text-sm text-center text-muted-foreground mt-2">{block.data.caption}</p>

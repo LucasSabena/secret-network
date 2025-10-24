@@ -54,6 +54,15 @@ interface BlogEditorFullPageProps {
   onClose: () => void;
 }
 
+function formatTimeAgo(date: Date): string {
+  const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
+  if (seconds < 60) return 'hace un momento';
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `hace ${minutes} min`;
+  const hours = Math.floor(minutes / 60);
+  return `hace ${hours} h`;
+}
+
 interface FormData {
   titulo: string;
   slug: string;
@@ -71,6 +80,8 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
   const [activeTab, setActiveTab] = useState<'edit' | 'preview'>('edit');
   const [autores, setAutores] = useState<Autor[]>([]);
   const [selectedAutorNombre, setSelectedAutorNombre] = useState<string>('');
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const { toast } = useToast();
   
   const { register, handleSubmit, watch, setValue } = useForm<FormData>({
@@ -88,6 +99,48 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
   const titulo = watch('titulo');
   const descripcion_corta = watch('descripcion_corta');
   const autor_id = watch('autor_id');
+
+  // Detectar cambios
+  useEffect(() => {
+    setHasUnsavedChanges(true);
+  }, [blocks, titulo, descripcion_corta, autor_id, imageFile]);
+
+  // Auto-save cada 30 segundos
+  useEffect(() => {
+    if (!hasUnsavedChanges || !post) return;
+
+    const interval = setInterval(() => {
+      handleAutoSave();
+    }, 30000); // 30 segundos
+
+    return () => clearInterval(interval);
+  }, [hasUnsavedChanges, blocks, titulo, post]);
+
+  // Advertir antes de salir con cambios sin guardar
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (hasUnsavedChanges) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [hasUnsavedChanges]);
+
+  // Ctrl+S para guardar
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.key === 's') {
+        e.preventDefault();
+        handleSubmit(onSubmit)();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   useEffect(() => {
     const fetchAutores = async () => {
@@ -119,6 +172,31 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
     }
   }, [autor_id, autores, setValue]);
 
+  async function handleAutoSave() {
+    if (!post || !titulo) return;
+
+    try {
+      const supabase = supabaseBrowserClient;
+
+      const postData = {
+        contenido_bloques: blocks,
+        actualizado_en: new Date().toISOString(),
+      };
+
+      const { error } = await supabase
+        .from('blog_posts')
+        .update(postData)
+        .eq('id', post.id);
+
+      if (!error) {
+        setHasUnsavedChanges(false);
+        setLastSaved(new Date());
+      }
+    } catch (error) {
+      console.error('Error auto-saving:', error);
+    }
+  }
+
   async function onSubmit(data: FormData) {
     try {
       setIsSaving(true);
@@ -131,7 +209,8 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
         if (!validation.valid) {
           throw new Error(validation.error);
         }
-        imagenUrl = await uploadToCloudinary(imageFile, 'blog');
+        const existingUrl = post?.imagen_portada_url || undefined;
+        imagenUrl = await uploadToCloudinary(imageFile, 'blog', existingUrl);
       }
 
       const slug =
@@ -170,6 +249,9 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
 
         if (error) throw error;
 
+        setHasUnsavedChanges(false);
+        setLastSaved(new Date());
+
         toast({
           title: 'Guardado',
           description: 'Los cambios se guardaron correctamente',
@@ -178,6 +260,9 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
         const { error } = await supabase.from('blog_posts').insert([postData]);
 
         if (error) throw error;
+
+        setHasUnsavedChanges(false);
+        setLastSaved(new Date());
 
         toast({
           title: 'Guardado',
@@ -222,6 +307,17 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
             </div>
 
             <div className="flex items-center gap-2">
+              {hasUnsavedChanges && (
+                <span className="text-yellow-600 text-sm flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-yellow-600 animate-pulse" />
+                  Sin guardar
+                </span>
+              )}
+              {lastSaved && !hasUnsavedChanges && (
+                <span className="text-muted-foreground text-xs">
+                  Guardado {formatTimeAgo(lastSaved)}
+                </span>
+              )}
               <EditorHelp />
               
               <Sheet>
@@ -312,23 +408,38 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
                     <div className="space-y-3">
                       <Label>Imagen de Portada</Label>
                       {(post?.imagen_portada_url || imageFile) && (
-                        <img
-                          src={
-                            imageFile
-                              ? URL.createObjectURL(imageFile)
-                              : post?.imagen_portada_url || ''
-                          }
-                          alt="Portada"
-                          className="w-full h-32 rounded object-cover"
-                        />
+                        <div className="relative group">
+                          <img
+                            src={
+                              imageFile
+                                ? URL.createObjectURL(imageFile)
+                                : post?.imagen_portada_url || ''
+                            }
+                            alt="Portada"
+                            className="w-full h-32 rounded object-cover"
+                          />
+                          <label className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer flex items-center justify-center rounded">
+                            <div className="text-white text-center">
+                              <Upload className="h-6 w-6 mx-auto mb-1" />
+                              <span className="text-xs">Reemplazar</span>
+                            </div>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              onChange={(e) => setImageFile(e.target.files?.[0] || null)}
+                              className="hidden"
+                              aria-label="Reemplazar imagen de portada"
+                            />
+                          </label>
+                        </div>
                       )}
                       <label className="cursor-pointer">
                         <div className="flex items-center gap-2 px-4 py-3 border-2 border-dashed rounded-lg hover:bg-accent transition-colors">
                           <Upload className="h-4 w-4" />
                           <span className="text-sm">
                             {imageFile || post?.imagen_portada_url
-                              ? 'Cambiar'
-                              : 'Subir'}
+                              ? 'Cambiar imagen'
+                              : 'Subir imagen'}
                           </span>
                         </div>
                         <input
@@ -336,6 +447,7 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
                           accept="image/*"
                           onChange={(e) => setImageFile(e.target.files?.[0] || null)}
                           className="hidden"
+                          aria-label="Subir imagen de portada"
                         />
                       </label>
                     </div>

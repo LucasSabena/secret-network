@@ -3,12 +3,10 @@
 
 import { Block } from '@/lib/types';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Plus, Trash2 } from 'lucide-react';
-import { IconSelector } from './icon-selector';
-import { useRef } from 'react';
+import { InlineRichEditor } from './inline-rich-editor';
 
 interface TabsBlockEditorProps {
   block: Extract<Block, { type: 'tabs' }>;
@@ -17,7 +15,6 @@ interface TabsBlockEditorProps {
 
 export function TabsBlockEditor({ block, onChange }: TabsBlockEditorProps) {
   const generateId = () => `tab-${Date.now()}-${Math.random().toString(36).substring(7)}`;
-  const contentRefs = useRef<{ [key: string]: HTMLTextAreaElement | null }>({});
 
   const addTab = () => {
     onChange({
@@ -45,30 +42,6 @@ export function TabsBlockEditor({ block, onChange }: TabsBlockEditorProps) {
         tabs: block.data.tabs.map((tab) => (tab.id === id ? { ...tab, [field]: value } : tab)),
       },
     });
-  };
-
-  const insertIcon = (tabId: string, iconName: string) => {
-    const textarea = contentRefs.current[tabId];
-    if (!textarea) return;
-
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const tab = block.data.tabs.find(t => t.id === tabId);
-    if (!tab) return;
-
-    const text = tab.content;
-    const before = text.substring(0, start);
-    const after = text.substring(end);
-    const newText = before + `[icon:${iconName}]` + after;
-
-    updateTab(tabId, 'content', newText);
-
-    // Restaurar foco y posición del cursor
-    setTimeout(() => {
-      textarea.focus();
-      const newPos = start + `[icon:${iconName}]`.length;
-      textarea.setSelectionRange(newPos, newPos);
-    }, 0);
   };
 
   return (
@@ -108,20 +81,13 @@ export function TabsBlockEditor({ block, onChange }: TabsBlockEditorProps) {
             </div>
 
             <div>
-              <div className="flex items-center justify-between mb-1">
-                <Label className="text-xs">Contenido:</Label>
-                <IconSelector onSelect={(iconName: string) => insertIcon(tab.id, iconName)} />
-              </div>
-              <Textarea
-                ref={(el) => { contentRefs.current[tab.id] = el; }}
+              <Label className="text-xs mb-1 block">Contenido:</Label>
+              <InlineRichEditor
                 value={tab.content}
-                onChange={(e) => updateTab(tab.id, 'content', e.target.value)}
-                placeholder="Contenido de la pestaña. Puedes usar [icon:nombre] para insertar iconos."
-                className="min-h-[100px] font-mono text-sm"
+                onChange={(value) => updateTab(tab.id, 'content', value)}
+                placeholder="Contenido de la pestaña..."
+                minHeight="120px"
               />
-              <p className="text-xs text-muted-foreground mt-1">
-                Usa [icon:nombre] para insertar iconos inline (ej: [icon:heart])
-              </p>
             </div>
           </div>
         ))}

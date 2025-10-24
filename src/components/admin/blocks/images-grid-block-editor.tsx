@@ -51,6 +51,34 @@ export function ImagesGridBlockEditor({ block, onChange }: ImagesGridBlockEditor
     }
   };
 
+  const replaceImage = async (index: number, file: File) => {
+    try {
+      setUploading(true);
+      const validation = validateImageFile(file);
+      if (!validation.valid) {
+        throw new Error(validation.error);
+      }
+
+      const existingUrl = block.data.images[index].url;
+      const url = await uploadToCloudinary(file, 'blog/gallery', existingUrl);
+      
+      onChange({
+        ...block,
+        data: {
+          ...block.data,
+          images: block.data.images.map((img, i) =>
+            i === index ? { ...img, url } : img
+          ),
+        },
+      });
+    } catch (error) {
+      console.error('Error replacing image:', error);
+      alert('Error al reemplazar la imagen');
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const removeImage = (index: number) => {
     onChange({
       ...block,
@@ -125,11 +153,27 @@ export function ImagesGridBlockEditor({ block, onChange }: ImagesGridBlockEditor
           {block.data.images.map((image, index) => (
             <Card key={index} className="p-3 space-y-2">
               <div className="flex items-start gap-3">
-                <img
-                  src={image.url}
-                  alt={image.alt || ''}
-                  className="w-20 h-20 rounded object-cover"
-                />
+                <div className="relative group">
+                  <img
+                    src={image.url}
+                    alt={image.alt || ''}
+                    className="w-20 h-20 rounded object-cover"
+                  />
+                  <label className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer flex items-center justify-center rounded">
+                    <Upload className="h-5 w-5 text-white" />
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) replaceImage(index, file);
+                        e.target.value = '';
+                      }}
+                      className="hidden"
+                      disabled={uploading}
+                    />
+                  </label>
+                </div>
                 <div className="flex-1 space-y-2">
                   <Input
                     placeholder="Texto alternativo (alt)"

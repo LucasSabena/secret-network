@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Plus, Search, Edit, Trash2, Loader2, Eye } from 'lucide-react';
+import { Plus, Search, Edit, Trash2, Loader2, Eye, Copy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
@@ -93,6 +93,54 @@ export default function BlogManager() {
     router.push(`/admin/blog/editor?id=${post.id}`);
   }
 
+  async function handleDuplicate(post: BlogPost) {
+    if (!confirm('¿Duplicar este post?')) return;
+
+    try {
+      const supabase = supabaseBrowserClient;
+      
+      // Crear slug único
+      const baseSlug = post.slug;
+      const timestamp = Date.now();
+      const newSlug = `${baseSlug}-copia-${timestamp}`;
+
+      const newPost = {
+        ...post,
+        id: undefined, // Dejar que Supabase genere nuevo ID
+        titulo: `${post.titulo} (Copia)`,
+        slug: newSlug,
+        publicado: false, // Duplicados empiezan como borrador
+        fecha_publicacion: new Date().toISOString(),
+        actualizado_en: new Date().toISOString(),
+      };
+
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .insert([newPost])
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      toast({
+        title: 'Éxito',
+        description: 'Post duplicado correctamente',
+      });
+
+      loadPosts();
+      
+      // Abrir el post duplicado
+      router.push(`/admin/blog/editor?id=${data.id}`);
+    } catch (error) {
+      console.error('Error duplicating post:', error);
+      toast({
+        title: 'Error',
+        description: 'No se pudo duplicar el post',
+        variant: 'destructive',
+      });
+    }
+  }
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -165,6 +213,15 @@ export default function BlogManager() {
               >
                 <Edit className="h-4 w-4" />
                 Editar
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleDuplicate(post)}
+                className="gap-2"
+                title="Duplicar post"
+              >
+                <Copy className="h-4 w-4" />
               </Button>
               <Button
                 variant="outline"

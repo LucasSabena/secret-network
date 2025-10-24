@@ -6,11 +6,22 @@ import {
   validateImageFile,
 } from './cloudinary-config';
 
+// Helper function to extract public_id from Cloudinary URL
+export function extractPublicIdFromUrl(url: string): string | null {
+  try {
+    // URL format: https://res.cloudinary.com/{cloud_name}/image/upload/v{version}/{folder}/{public_id}.{format}
+    const match = url.match(/\/upload\/(?:v\d+\/)?(.+)\.\w+$/);
+    return match ? match[1] : null;
+  } catch {
+    return null;
+  }
+}
+
 // Helper function to upload images to Cloudinary
 export async function uploadToCloudinary(
   file: File,
   folder: string = 'programas',
-  publicId?: string // ID único para sobrescribir la imagen anterior
+  existingUrl?: string // URL de la imagen existente para reemplazar
 ): Promise<string> {
   // Validate configuration
   if (!validateCloudinaryConfig()) {
@@ -28,11 +39,14 @@ export async function uploadToCloudinary(
   formData.append('upload_preset', cloudinaryConfig.uploadPreset);
   formData.append('folder', folder);
   
-  // Si se proporciona un public_id, Cloudinary sobrescribirá la imagen anterior
-  if (publicId) {
-    formData.append('public_id', publicId);
-    // Nota: invalidate no está permitido en unsigned uploads
-    // Para invalidar cache, necesitas usar signed uploads o API backend
+  // Si hay una URL existente, extraer el public_id y reemplazar
+  if (existingUrl) {
+    const publicId = extractPublicIdFromUrl(existingUrl);
+    if (publicId) {
+      formData.append('public_id', publicId);
+      formData.append('overwrite', 'true');
+      formData.append('invalidate', 'true'); // Invalida cache de CDN
+    }
   }
 
   const cloudName = cloudinaryConfig.cloudName;
