@@ -14,12 +14,44 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { FileText, Sparkles } from 'lucide-react';
+import { 
+  FileText, 
+  Sparkles, 
+  AlertCircle, 
+  Palette, 
+  BookOpen, 
+  Scale, 
+  FileCheck, 
+  Star,
+  List,
+  GraduationCap,
+  BarChart3,
+  Newspaper,
+  Lightbulb,
+  Code
+} from 'lucide-react';
 import { PREDEFINED_TEMPLATES, cloneTemplate, BlogTemplate } from '@/lib/blog-templates';
 import { Block } from '@/lib/types';
 
+// Mapeo de iconos para cada template
+const TEMPLATE_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  'alert-circle': AlertCircle,
+  'palette': Palette,
+  'book-open': BookOpen,
+  'scale': Scale,
+  'file-check': FileCheck,
+  'star': Star,
+  'list': List,
+  'graduation-cap': GraduationCap,
+  'bar-chart': BarChart3,
+  'newspaper': Newspaper,
+  'lightbulb': Lightbulb,
+  'code': Code,
+};
+
 interface TemplateGalleryProps {
   onSelectTemplate: (blocks: Block[]) => void;
+  children?: React.ReactNode;
 }
 
 const CATEGORY_LABELS = {
@@ -41,11 +73,15 @@ const CATEGORY_COLORS = {
 };
 
 function TemplateCard({ template, onSelect }: { template: BlogTemplate; onSelect: () => void }) {
+  const Icon = TEMPLATE_ICONS[template.thumbnail] || FileText;
+  
   return (
     <Card className="cursor-pointer hover:shadow-lg transition-all hover:scale-[1.02] group">
       <CardHeader>
         <div className="flex items-start justify-between gap-2">
-          <div className="text-4xl mb-2">{template.thumbnail}</div>
+          <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-2">
+            <Icon className="h-6 w-6 text-primary" />
+          </div>
           <Badge className={CATEGORY_COLORS[template.categoria]}>
             {CATEGORY_LABELS[template.categoria]}
           </Badge>
@@ -70,7 +106,7 @@ function TemplateCard({ template, onSelect }: { template: BlogTemplate; onSelect
   );
 }
 
-export function TemplateGallery({ onSelectTemplate }: TemplateGalleryProps) {
+export function TemplateGallery({ onSelectTemplate, children }: TemplateGalleryProps) {
   const [open, setOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<'all' | BlogTemplate['categoria']>('all');
 
@@ -87,10 +123,12 @@ export function TemplateGallery({ onSelectTemplate }: TemplateGalleryProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="gap-2">
-          <FileText className="h-4 w-4" />
-          Plantillas
-        </Button>
+        {children || (
+          <Button variant="outline" className="gap-2">
+            <FileText className="h-4 w-4" />
+            Plantillas
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="max-w-5xl max-h-[90vh] overflow-hidden flex flex-col">
         <DialogHeader>

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Plus, Search, Edit, Trash2, Loader2, Eye, Copy } from 'lucide-react';
+import { Plus, Search, Edit, Trash2, Loader2, Copy, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
@@ -17,9 +17,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { BlogPost } from '@/lib/types';
+import { BlogPost, Block } from '@/lib/types';
 import { BlogQuickCreate } from './blog-editor-v2/blog-quick-create';
 import { EditorAnnouncement } from './blog-editor-v2/editor-announcement';
+import { TemplateGallery } from './blog-editor-v2/template-gallery';
 import { supabaseBrowserClient } from '@/lib/supabase-browser';
 
 export default function BlogManager() {
@@ -31,7 +32,49 @@ export default function BlogManager() {
   const [isLoading, setIsLoading] = useState(true);
   const [postToDelete, setPostToDelete] = useState<number | null>(null);
   const [postToDuplicate, setPostToDuplicate] = useState<BlogPost | null>(null);
+  const [templateBlocks, setTemplateBlocks] = useState<Block[] | null>(null);
   const { toast } = useToast();
+
+  // Cuando se selecciona un template, crear un post con esos bloques
+  const handleTemplateSelect = async (blocks: Block[]) => {
+    try {
+      const supabase = supabaseBrowserClient;
+      
+      const newPost = {
+        titulo: 'Nuevo Post desde Template',
+        slug: `nuevo-post-${Date.now()}`,
+        descripcion_corta: '',
+        contenido: '',
+        contenido_bloques: blocks,
+        publicado: false,
+        fecha_publicacion: new Date().toISOString(),
+        actualizado_en: new Date().toISOString(),
+      };
+
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .insert([newPost])
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      toast({
+        title: 'Post creado',
+        description: 'Post creado desde template. Ahora puedes editarlo.',
+      });
+
+      // Redirigir al editor
+      router.push(`/admin/blog/editor?id=${data.id}`);
+    } catch (error) {
+      console.error('Error creating post from template:', error);
+      toast({
+        title: 'Error',
+        description: 'No se pudo crear el post desde el template',
+        variant: 'destructive',
+      });
+    }
+  };
 
   useEffect(() => {
     loadPosts();
@@ -185,10 +228,18 @@ export default function BlogManager() {
             className="pl-10"
           />
         </div>
-        <Button onClick={handleNew} className="gap-2 bg-pink-500 hover:bg-pink-600">
-          <Plus className="h-4 w-4" />
-          Nuevo Post
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={handleNew} className="gap-2 bg-pink-500 hover:bg-pink-600">
+            <Plus className="h-4 w-4" />
+            Nuevo Post
+          </Button>
+          <TemplateGallery onSelectTemplate={handleTemplateSelect}>
+            <Button variant="outline" className="gap-2">
+              <FileText className="h-4 w-4" />
+              Desde Template
+            </Button>
+          </TemplateGallery>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
