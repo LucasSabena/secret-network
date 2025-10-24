@@ -47,7 +47,7 @@ export default function AltTextManager() {
       // Cargar imágenes de programas (captura_url es el campo correcto)
       const { data: programs, error: programsError } = await supabase
         .from('programas')
-        .select('id, nombre, captura_url')
+        .select('id, nombre, captura_url, imagen_alt')
         .not('captura_url', 'is', null);
 
       if (programsError) {
@@ -73,7 +73,7 @@ export default function AltTextManager() {
         allImages.push({
           id: program.id,
           url: program.captura_url!,
-          alt: null, // Los programas no tienen campo alt aún
+          alt: program.imagen_alt || null,
           source: 'program',
           sourceId: program.id,
           sourceName: program.nombre,
@@ -107,14 +107,13 @@ export default function AltTextManager() {
 
         if (error) throw error;
       } else {
-        // Para programas, por ahora solo mostramos mensaje
-        toast({
-          title: 'Información',
-          description: 'Los programas aún no tienen campo de alt text en la base de datos',
-          variant: 'default',
-        });
-        setSaving(null);
-        return;
+        // Guardar en programas
+        const { error } = await supabase
+          .from('programas')
+          .update({ imagen_alt: newAlt })
+          .eq('id', image.sourceId);
+
+        if (error) throw error;
       }
 
       toast({
