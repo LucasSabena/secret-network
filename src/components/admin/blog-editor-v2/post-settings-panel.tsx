@@ -141,8 +141,8 @@ export function PostSettingsPanel({
             </div>
           ) : (
             <div className="space-y-2">
-              <div className="flex items-center gap-2 p-2 bg-muted rounded-md overflow-hidden">
-                <code className="text-xs flex-1 truncate min-w-0">{slug || 'sin-slug'}</code>
+              <div className="flex items-center gap-2 p-2 bg-muted rounded-md">
+                <code className="text-xs flex-1 break-all overflow-hidden">{slug || 'sin-slug'}</code>
                 <Button
                   size="sm"
                   variant="ghost"
@@ -164,7 +164,7 @@ export function PostSettingsPanel({
             </div>
           )}
           
-          <p className="text-xs text-muted-foreground truncate">
+          <p className="text-xs text-muted-foreground break-all">
             URL final: /blog/{slug || 'sin-slug'}
           </p>
         </div>

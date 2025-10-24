@@ -89,9 +89,12 @@ export function ImageBlockEditor({ block, onChange }: ImageBlockEditorProps) {
     if (file) await uploadFile(file);
   };
 
-  // Paste (Ctrl+V) - Funciona en todo el componente
+  // Paste (Ctrl+V) - Captura paste en todo el documento cuando el bloque está visible
   useEffect(() => {
     const handlePaste = async (e: ClipboardEvent) => {
+      // Solo procesar si el dropZone existe y está visible
+      if (!dropZoneRef.current) return;
+      
       const items = e.clipboardData?.items;
       if (!items) return;
 
@@ -100,19 +103,18 @@ export function ImageBlockEditor({ block, onChange }: ImageBlockEditorProps) {
           e.preventDefault();
           e.stopPropagation();
           const file = items[i].getAsFile();
-          if (file) await uploadFile(file);
+          if (file) {
+            await uploadFile(file);
+          }
           return;
         }
       }
     };
 
-    // Agregar listener al dropZone para capturar paste
-    const dropZone = dropZoneRef.current;
-    if (dropZone) {
-      dropZone.addEventListener('paste', handlePaste as any);
-      return () => dropZone.removeEventListener('paste', handlePaste as any);
-    }
-  }, [block.data.url]);
+    // Escuchar paste en todo el documento
+    document.addEventListener('paste', handlePaste);
+    return () => document.removeEventListener('paste', handlePaste);
+  }, []);
 
   return (
     <div className="space-y-4">

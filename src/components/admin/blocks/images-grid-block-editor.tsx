@@ -95,9 +95,12 @@ export function ImagesGridBlockEditor({ block, onChange }: ImagesGridBlockEditor
     }
   };
 
-  // Paste (Ctrl+V) - Funciona en todo el componente
+  // Paste (Ctrl+V) - Captura paste en todo el documento cuando el bloque está visible
   useEffect(() => {
     const handlePaste = async (e: ClipboardEvent) => {
+      // Solo procesar si el dropZone existe y está visible
+      if (!dropZoneRef.current) return;
+      
       const items = e.clipboardData?.items;
       if (!items) return;
 
@@ -106,18 +109,17 @@ export function ImagesGridBlockEditor({ block, onChange }: ImagesGridBlockEditor
           e.preventDefault();
           e.stopPropagation();
           const file = items[i].getAsFile();
-          if (file) await addImage(file);
+          if (file) {
+            await addImage(file);
+          }
         }
       }
     };
 
-    // Agregar listener al dropZone para capturar paste
-    const dropZone = dropZoneRef.current;
-    if (dropZone) {
-      dropZone.addEventListener('paste', handlePaste as any);
-      return () => dropZone.removeEventListener('paste', handlePaste as any);
-    }
-  }, [block.data.images]);
+    // Escuchar paste en todo el documento
+    document.addEventListener('paste', handlePaste);
+    return () => document.removeEventListener('paste', handlePaste);
+  }, []);
 
   const replaceImage = async (index: number, file: File) => {
     try {
