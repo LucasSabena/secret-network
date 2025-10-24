@@ -6,7 +6,7 @@ import { notFound } from "next/navigation";
 import { BlogContent } from "@/components/blog/blog-content";
 import { BlogPostHeader } from "@/components/blog/blog-post-header";
 import { RelatedPosts } from "@/components/blog/related-posts";
-import BlogShareButtons from "@/components/blog/blog-share-buttons";
+import { BlogShareButtons } from "@/components/blog/blog-share-buttons";
 import { ReadingProgressBar } from "@/components/blog/reading-progress-bar";
 import { JsonLdArticle } from "@/components/seo/json-ld-article";
 import { JsonLdBreadcrumb } from "@/components/seo/json-ld-breadcrumb";
@@ -116,6 +116,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         {/* Botones de Compartir */}
         <div className="mt-12 pt-8 border-t border-border">
           <BlogShareButtons 
+            postId={post.id}
             title={post.titulo}
             url={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://secretnetwork.co'}/blog/${post.slug}`}
           />
