@@ -169,32 +169,32 @@ export default function BlogManager() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {filteredPosts.map((post) => (
-          <Card key={post.id} className="p-4 space-y-3">
-            <div className="flex items-start gap-3">
+          <Card key={post.id} className="p-3 md:p-4 space-y-3">
+            <div className="flex items-start gap-2 md:gap-3">
               {post.imagen_portada_url && (
                 <img
                   src={post.imagen_portada_url}
                   alt={post.titulo}
-                  className="w-24 h-16 rounded object-cover"
+                  className="w-20 h-14 md:w-24 md:h-16 rounded object-cover shrink-0"
                 />
               )}
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <h3 className="font-semibold line-clamp-2 flex-1">{post.titulo}</h3>
+                <div className="flex items-start gap-2">
+                  <h3 className="font-semibold line-clamp-2 flex-1 text-sm md:text-base">{post.titulo}</h3>
                   <span className="text-xs text-muted-foreground shrink-0">#{post.id}</span>
                 </div>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-xs md:text-sm text-muted-foreground">
                   {new Date(post.fecha_publicacion).toLocaleDateString('es-ES')}
                 </p>
                 <div className="flex items-center gap-2 mt-1">
                   {post.publicado ? (
-                    <span className="text-xs bg-green-500/10 text-green-500 px-2 py-1 rounded">
+                    <span className="text-xs bg-green-500/10 text-green-500 px-2 py-0.5 rounded">
                       Publicado
                     </span>
                   ) : (
-                    <span className="text-xs bg-yellow-500/10 text-yellow-500 px-2 py-1 rounded">
+                    <span className="text-xs bg-yellow-500/10 text-yellow-500 px-2 py-0.5 rounded">
                       Borrador
                     </span>
                   )}
@@ -202,34 +202,34 @@ export default function BlogManager() {
               </div>
             </div>
             {post.descripcion_corta && (
-              <p className="text-sm line-clamp-2">{post.descripcion_corta}</p>
+              <p className="text-xs md:text-sm line-clamp-2">{post.descripcion_corta}</p>
             )}
             <div className="flex gap-2 pt-2">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => handleEdit(post)}
-                className="flex-1 gap-2"
+                className="flex-1 gap-1 md:gap-2 text-xs md:text-sm"
               >
-                <Edit className="h-4 w-4" />
-                Editar
+                <Edit className="h-3 w-3 md:h-4 md:w-4" />
+                <span className="hidden sm:inline">Editar</span>
               </Button>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => handleDuplicate(post)}
-                className="gap-2"
+                className="gap-1 md:gap-2"
                 title="Duplicar post"
               >
-                <Copy className="h-4 w-4" />
+                <Copy className="h-3 w-3 md:h-4 md:w-4" />
               </Button>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => handleDelete(post.id)}
-                className="gap-2 text-destructive hover:text-destructive"
+                className="gap-1 md:gap-2 text-destructive hover:text-destructive"
               >
-                <Trash2 className="h-4 w-4" />
+                <Trash2 className="h-3 w-3 md:h-4 md:w-4" />
               </Button>
             </div>
           </Card>

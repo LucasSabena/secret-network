@@ -50,11 +50,11 @@ export function CanvasArea({
     <div
       ref={setNodeRef}
       className={cn(
-        'h-full overflow-y-auto p-8 transition-colors',
+        'h-full overflow-y-auto p-4 md:p-8 transition-colors',
         isOver && 'bg-primary/5 ring-2 ring-primary ring-inset'
       )}
     >
-      <div className="max-w-3xl mx-auto space-y-4">
+      <div className="max-w-3xl mx-auto space-y-4 pb-20 md:pb-4">
         {blocks.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 text-center">
             <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">

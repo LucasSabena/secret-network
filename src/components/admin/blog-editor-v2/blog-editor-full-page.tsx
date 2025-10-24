@@ -287,8 +287,8 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
       <div className="h-screen flex flex-col bg-background">
         {/* Header */}
         <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-          <div className="flex items-center justify-between px-6 py-3">
-            <div className="flex items-center gap-4">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between px-4 md:px-6 py-3 gap-3">
+            <div className="flex items-center gap-2 md:gap-4 w-full md:w-auto">
               <Button
                 variant="ghost"
                 size="icon"
@@ -301,12 +301,12 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
                 <Input
                   {...register('titulo', { required: true })}
                   placeholder="Título del post..."
-                  className="text-lg font-semibold border-0 focus-visible:ring-0 px-0"
+                  className="text-base md:text-lg font-semibold border-0 focus-visible:ring-0 px-0"
                 />
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 w-full md:w-auto justify-between md:justify-end">
               {hasUnsavedChanges && (
                 <span className="text-yellow-600 text-sm flex items-center gap-1">
                   <span className="w-2 h-2 rounded-full bg-yellow-600 animate-pulse" />
@@ -506,7 +506,7 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
           </div>
 
           {/* Stats bar */}
-          <div className="px-6 pb-3">
+          <div className="px-4 md:px-6 pb-3 overflow-x-auto">
             <EditorStats blocks={blocks} title={titulo} />
           </div>
 
@@ -514,16 +514,16 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
           <Tabs
             value={activeTab}
             onValueChange={(v) => setActiveTab(v as 'edit' | 'preview')}
-            className="px-6"
+            className="px-4 md:px-6"
           >
             <TabsList className="grid w-full max-w-md grid-cols-2">
-              <TabsTrigger value="edit" className="gap-2">
-                <Edit className="h-4 w-4" />
-                Editor
+              <TabsTrigger value="edit" className="gap-2 text-xs md:text-sm">
+                <Edit className="h-3 w-3 md:h-4 md:w-4" />
+                <span className="hidden sm:inline">Editor</span>
               </TabsTrigger>
-              <TabsTrigger value="preview" className="gap-2">
-                <Eye className="h-4 w-4" />
-                Vista Previa
+              <TabsTrigger value="preview" className="gap-2 text-xs md:text-sm">
+                <Eye className="h-3 w-3 md:h-4 md:w-4" />
+                <span className="hidden sm:inline">Vista Previa</span>
               </TabsTrigger>
             </TabsList>
           </Tabs>
@@ -536,8 +536,8 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
               <DragDropEditor blocks={blocks} onChange={setBlocks} />
             </TabsContent>
 
-            <TabsContent value="preview" className="h-full m-0 overflow-y-auto p-8">
-              <Card className="p-8 max-w-4xl mx-auto">
+            <TabsContent value="preview" className="h-full m-0 overflow-y-auto p-4 md:p-8">
+              <Card className="p-4 md:p-8 max-w-4xl mx-auto">
                 {(imageFile || post?.imagen_portada_url) && (
                   <img
                     src={

@@ -19,11 +19,64 @@ import { CanvasArea } from './canvas-area';
 import { SidebarProperties } from './sidebar-properties';
 import { BlockFactory } from './block-factory';
 import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Plus } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { BLOCK_TOOLS } from './block-tools';
 
 interface DragDropEditorProps {
   blocks: Block[];
   onChange: (blocks: Block[]) => void;
+}
+
+// Componente para el menú móvil de bloques
+function MobileBlocksMenu({ blocks, onChange }: { blocks: Block[]; onChange: (blocks: Block[]) => void }) {
+  const [open, setOpen] = useState(false);
+
+  const handleAddBlock = (type: Block['type']) => {
+    const newBlock = BlockFactory.createBlock(type);
+    onChange([...blocks, newBlock]);
+    setOpen(false);
+  };
+
+  return (
+    <div className="md:hidden fixed bottom-6 right-6 z-50">
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetTrigger asChild>
+          <Button
+            size="lg"
+            className="h-14 w-14 rounded-full shadow-lg"
+          >
+            <Plus className="h-6 w-6" />
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="bottom" className="h-[80vh]">
+          <SheetHeader>
+            <SheetTitle>Agregar Bloque</SheetTitle>
+          </SheetHeader>
+          <div className="grid grid-cols-2 gap-3 mt-6 overflow-y-auto max-h-[calc(80vh-100px)]">
+            {BLOCK_TOOLS.map((tool) => {
+              const Icon = tool.icon;
+              return (
+                <button
+                  key={tool.id}
+                  onClick={() => handleAddBlock(tool.type)}
+                  className="flex flex-col items-center gap-2 p-4 rounded-lg border-2 border-dashed hover:border-primary hover:bg-accent transition-colors"
+                >
+                  <Icon className="h-8 w-8 text-primary" />
+                  <div className="text-center">
+                    <p className="font-medium text-sm">{tool.label}</p>
+                    <p className="text-xs text-muted-foreground">{tool.description}</p>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </SheetContent>
+      </Sheet>
+    </div>
+  );
 }
 
 export function DragDropEditor({ blocks, onChange }: DragDropEditorProps) {
@@ -226,14 +279,14 @@ export function DragDropEditor({ blocks, onChange }: DragDropEditorProps) {
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <div className="flex h-full gap-4">
-        {/* Sidebar izquierdo: Herramientas */}
-        <div className="w-64 shrink-0 border-r bg-muted/30">
+      <div className="flex flex-col md:flex-row h-full gap-0 md:gap-4 relative">
+        {/* Sidebar izquierdo: Herramientas - Hidden en mobile */}
+        <div className="hidden md:block w-64 shrink-0 border-r bg-muted/30">
           <SidebarTools />
         </div>
 
         {/* Canvas central */}
-        <div className="flex-1 bg-background">
+        <div className="flex-1 bg-background overflow-auto">
           <CanvasArea
             blocks={blocks}
             selectedBlockId={selectedBlockId}
@@ -244,10 +297,13 @@ export function DragDropEditor({ blocks, onChange }: DragDropEditorProps) {
           />
         </div>
 
-        {/* Sidebar derecho: Propiedades */}
-        <div className="w-72 shrink-0 border-l bg-muted/30">
+        {/* Sidebar derecho: Propiedades - Hidden en mobile */}
+        <div className="hidden md:block w-72 shrink-0 border-l bg-muted/30">
           <SidebarProperties selectedBlock={selectedBlock} />
         </div>
+
+        {/* Botón flotante en mobile para agregar bloques */}
+        <MobileBlocksMenu blocks={blocks} onChange={onChange} />
       </div>
 
       {/* Overlay para el drag */}

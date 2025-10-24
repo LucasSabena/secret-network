@@ -137,18 +137,18 @@ export function BlogQuickCreate({ open, onClose }: BlogQuickCreateProps) {
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 text-2xl">
-            <Sparkles className="h-6 w-6 text-primary" />
+          <DialogTitle className="flex items-center gap-2 text-xl md:text-2xl">
+            <Sparkles className="h-5 w-5 md:h-6 md:w-6 text-primary" />
             Crear Nuevo Post
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-sm">
             Configura la información básica. Luego podrás agregar el contenido en el editor completo.
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 md:space-y-6">
           <div className="space-y-2">
             <Label htmlFor="titulo">Título del Post *</Label>
             <Input
@@ -177,7 +177,7 @@ export function BlogQuickCreate({ open, onClose }: BlogQuickCreateProps) {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="autor_id">Autor</Label>
               <Select
