@@ -3,8 +3,9 @@
 import { Metadata } from "next";
 import { createClient } from "@/lib/supabase";
 import { BlogPost } from "@/lib/types";
-import { BlogHero } from "@/components/blog/blog-hero";
-import { BlogGrid } from "@/components/blog/blog-grid";
+import { BlogHeroImproved } from "@/components/blog/blog-hero-improved";
+import { BlogGridImproved } from "@/components/blog/blog-grid-improved";
+import { BlogCategoryFilter } from "@/components/blog/blog-category-filter";
 
 export const revalidate = 3600; // 1 hora
 
@@ -16,27 +17,56 @@ export const metadata: Metadata = {
 export default async function BlogPage() {
   const supabase = await createClient();
   
-  // Traer solo posts publicados, ordenados por fecha
+  // Traer posts publicados con sus categorías
   const { data: posts } = await supabase
     .from('blog_posts')
     .select('*')
     .eq('publicado', true)
     .order('fecha_publicacion', { ascending: false });
 
+  // Traer categorías
+  const { data: categories } = await supabase
+    .from('blog_categories')
+    .select('*')
+    .order('orden', { ascending: true });
+
+  // Obtener relaciones post-categoría
+  const { data: postCategories } = await supabase
+    .from('blog_posts_categories')
+    .select('post_id, category_id');
+
+  // Mapear categorías a posts
+  const postsWithCategories = posts?.map(post => ({
+    ...post,
+    categories: postCategories
+      ?.filter(pc => pc.post_id === post.id)
+      .map(pc => categories?.find(c => c.id === pc.category_id))
+      .filter(Boolean) || []
+  })) || [];
+
   const totalPosts = posts?.length || 0;
 
   return (
-    <div className="container mx-auto px-4 py-24">
-      <BlogHero totalPosts={totalPosts} />
-      {posts && posts.length > 0 ? (
-        <BlogGrid posts={posts as BlogPost[]} />
-      ) : (
-        <div className="text-center py-12">
-          <p className="text-muted-foreground">
-            No hay posts publicados todavía. ¡Volvé pronto!
-          </p>
-        </div>
-      )}
+    <div className="min-h-screen bg-background">
+      {/* Hero Section */}
+      <BlogHeroImproved totalPosts={totalPosts} />
+
+      {/* Main Content */}
+      <div className="container mx-auto px-4 py-12">
+        {/* Filtros de Categorías */}
+        <BlogCategoryFilter categories={categories || []} />
+
+        {/* Grid de Posts */}
+        {postsWithCategories && postsWithCategories.length > 0 ? (
+          <BlogGridImproved posts={postsWithCategories as any[]} />
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">
+              No hay posts publicados todavía. ¡Volvé pronto!
+            </p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

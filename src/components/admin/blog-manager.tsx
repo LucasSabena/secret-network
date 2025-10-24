@@ -24,7 +24,7 @@ import { TemplateGallery } from './blog-editor-v2/template-gallery';
 import { supabaseBrowserClient } from '@/lib/supabase-browser';
 import { BlogCategoryBadge } from '@/components/blog/blog-category-badge';
 import { BlogStatusBadge } from './blog-status-badge';
-import { BlogSortDropdown } from './blog-sort-dropdown';
+import { BlogPostStats } from './blog-post-stats';
 
 export default function BlogManager() {
   const router = useRouter();
@@ -390,6 +390,10 @@ export default function BlogManager() {
             {post.descripcion_corta && (
               <p className="text-xs md:text-sm line-clamp-2">{post.descripcion_corta}</p>
             )}
+            
+            {/* Estadísticas del post */}
+            <BlogPostStats postId={post.id} />
+            
             <div className="flex gap-2 pt-2">
               <Button
                 variant="outline"
