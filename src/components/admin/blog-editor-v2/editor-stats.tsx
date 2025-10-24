@@ -42,7 +42,7 @@ export function EditorStats({ blocks, title, description = '' }: EditorStatsProp
 
   return (
     <>
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+      <div className="space-y-2">
         <StatCard
           icon={FileText}
           label="Bloques"

@@ -175,9 +175,9 @@ export function PostMetadataPanel({
             value={titulo}
             onChange={(e) => onTituloChange(e.target.value)}
             placeholder="Título del post..."
-            className="text-sm font-semibold"
+            className="text-sm font-semibold w-full"
           />
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-muted-foreground break-words">
             {titulo.length} caracteres
           </p>
         </div>
@@ -195,7 +195,7 @@ export function PostMetadataPanel({
                 value={tempSlug}
                 onChange={(e) => setTempSlug(e.target.value)}
                 placeholder="mi-post-ejemplo"
-                className="text-sm"
+                className="text-sm w-full"
               />
               <div className="flex gap-2">
                 <Button
@@ -217,13 +217,13 @@ export function PostMetadataPanel({
             </div>
           ) : (
             <div className="space-y-2">
-              <div className="flex items-center gap-2 p-2 bg-muted rounded-md">
-                <code className="text-xs flex-1 truncate">{slug || 'sin-slug'}</code>
+              <div className="flex items-center gap-2 p-2 bg-muted rounded-md min-w-0">
+                <code className="text-xs flex-1 truncate break-all">{slug || 'sin-slug'}</code>
                 <Button
                   size="sm"
                   variant="ghost"
                   onClick={() => setEditingSlug(true)}
-                  className="h-6 px-2 text-xs"
+                  className="h-6 px-2 text-xs shrink-0"
                 >
                   Editar
                 </Button>
@@ -241,7 +241,7 @@ export function PostMetadataPanel({
             </div>
           )}
           
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-muted-foreground break-all">
             URL: /blog/{slug || 'sin-slug'}
           </p>
         </div>

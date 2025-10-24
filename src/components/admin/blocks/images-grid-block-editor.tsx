@@ -12,11 +12,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Plus, X, Columns2, Columns3, Columns4, Upload, Loader2 } from 'lucide-react';
-import { useState } from 'react';
+import { Plus, X, Columns2, Columns3, Columns4, Upload, Loader2, ImagePlus } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { uploadToCloudinary } from '@/lib/cloudinary-upload';
 import { validateImageFile } from '@/lib/cloudinary-config';
+import { useToast } from '@/components/ui/use-toast';
 
 interface ImagesGridBlockEditorProps {
   block: Extract<Block, { type: 'images-grid' }>;
@@ -25,13 +26,21 @@ interface ImagesGridBlockEditorProps {
 
 export function ImagesGridBlockEditor({ block, onChange }: ImagesGridBlockEditorProps) {
   const [uploading, setUploading] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const dropZoneRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
 
   const addImage = async (file: File) => {
     try {
       setUploading(true);
       const validation = validateImageFile(file);
       if (!validation.valid) {
-        throw new Error(validation.error);
+        toast({
+          title: 'Error',
+          description: validation.error,
+          variant: 'destructive',
+        });
+        return;
       }
 
       const url = await uploadToCloudinary(file, 'blog/gallery');
@@ -43,13 +52,69 @@ export function ImagesGridBlockEditor({ block, onChange }: ImagesGridBlockEditor
           images: [...block.data.images, { url, alt: '', caption: '' }],
         },
       });
+
+      toast({
+        title: 'Imagen agregada',
+        description: 'La imagen se subió correctamente',
+      });
     } catch (error) {
       console.error('Error uploading image:', error);
-      alert('Error al subir la imagen');
+      toast({
+        title: 'Error',
+        description: 'Error al subir la imagen',
+        variant: 'destructive',
+      });
     } finally {
       setUploading(false);
     }
   };
+
+  // Drag & Drop
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const files = Array.from(e.dataTransfer.files);
+    for (const file of files) {
+      if (file.type.startsWith('image/')) {
+        await addImage(file);
+      }
+    }
+  };
+
+  // Paste (Ctrl+V)
+  useEffect(() => {
+    const handlePaste = async (e: ClipboardEvent) => {
+      if (!dropZoneRef.current?.contains(document.activeElement)) return;
+
+      const items = e.clipboardData?.items;
+      if (!items) return;
+
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf('image') !== -1) {
+          e.preventDefault();
+          const file = items[i].getAsFile();
+          if (file) await addImage(file);
+        }
+      }
+    };
+
+    document.addEventListener('paste', handlePaste);
+    return () => document.removeEventListener('paste', handlePaste);
+  }, [block.data.images]);
 
   const replaceImage = async (index: number, file: File) => {
     try {
@@ -203,8 +268,59 @@ export function ImagesGridBlockEditor({ block, onChange }: ImagesGridBlockEditor
         </div>
       )}
 
-      {/* Subir imagen */}
-      <div>
+      {/* Drop Zone */}
+      <div
+        ref={dropZoneRef}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+        tabIndex={0}
+        className={`
+          border-2 border-dashed rounded-lg p-6 transition-all
+          ${isDragging ? 'border-pink-500 bg-pink-50 dark:bg-pink-950/20' : 'border-border hover:border-pink-300'}
+          ${uploading ? 'opacity-50 pointer-events-none' : 'cursor-pointer'}
+        `}
+        onClick={() => !uploading && document.getElementById(`grid-upload-${block.id}`)?.click()}
+      >
+        <div className="flex flex-col items-center justify-center gap-2 text-center">
+          {uploading ? (
+            <>
+              <Loader2 className="h-8 w-8 animate-spin text-pink-500" />
+              <p className="text-sm text-muted-foreground">Subiendo imágenes...</p>
+            </>
+          ) : (
+            <>
+              <ImagePlus className="h-8 w-8 text-muted-foreground" />
+              <div className="space-y-1">
+                <p className="text-sm font-medium">
+                  Arrastra imágenes aquí o haz click
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  También puedes pegar con Ctrl+V
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Puedes subir múltiples imágenes a la vez
+                </p>
+              </div>
+            </>
+          )}
+        </div>
+        <input
+          id={`grid-upload-${block.id}`}
+          type="file"
+          accept="image/*"
+          multiple
+          className="hidden"
+          onChange={(e) => {
+            const files = Array.from(e.target.files || []);
+            files.forEach(file => addImage(file));
+            e.target.value = '';
+          }}
+        />
+      </div>
+
+      {/* Subir imagen (legacy - mantener por compatibilidad) */}
+      <div className="hidden">
         <label className="cursor-pointer">
           <div className="flex items-center gap-2 px-4 py-3 border-2 border-dashed rounded-lg hover:bg-accent hover:border-primary transition-colors">
             {uploading ? (

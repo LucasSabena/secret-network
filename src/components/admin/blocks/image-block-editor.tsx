@@ -5,9 +5,10 @@ import { Block } from '@/lib/types';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { useState } from 'react';
-import { Upload, Loader2 } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { Upload, Loader2, ImagePlus } from 'lucide-react';
 import Image from 'next/image';
+import { useToast } from '@/components/ui/use-toast';
 
 interface ImageBlockEditorProps {
   block: Extract<Block, { type: 'image' }>;
@@ -16,52 +17,158 @@ interface ImageBlockEditorProps {
 
 export function ImageBlockEditor({ block, onChange }: ImageBlockEditorProps) {
   const [uploading, setUploading] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const dropZoneRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, replace: boolean = false) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const uploadFile = async (file: File) => {
+    if (!file.type.startsWith('image/')) {
+      toast({
+        title: 'Error',
+        description: 'Solo se permiten imágenes',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast({
+        title: 'Error',
+        description: 'La imagen debe ser menor a 5MB',
+        variant: 'destructive',
+      });
+      return;
+    }
 
     setUploading(true);
     try {
       const { uploadToCloudinary } = await import('@/lib/cloudinary-upload');
-      const existingUrl = replace ? block.data.url : undefined;
+      const existingUrl = block.data.url || undefined;
       const url = await uploadToCloudinary(file, 'blog/images', existingUrl);
       onChange({ ...block, data: { ...block.data, url } });
+      toast({
+        title: 'Imagen subida',
+        description: 'La imagen se subió correctamente',
+      });
     } catch (error) {
       console.error('Error uploading image:', error);
-      alert('Error al subir la imagen');
+      toast({
+        title: 'Error',
+        description: 'Error al subir la imagen',
+        variant: 'destructive',
+      });
     } finally {
       setUploading(false);
     }
   };
 
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) await uploadFile(file);
+  };
+
+  // Drag & Drop
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const file = e.dataTransfer.files[0];
+    if (file) await uploadFile(file);
+  };
+
+  // Paste (Ctrl+V)
+  useEffect(() => {
+    const handlePaste = async (e: ClipboardEvent) => {
+      // Solo procesar si este bloque está en foco
+      if (!dropZoneRef.current?.contains(document.activeElement)) return;
+
+      const items = e.clipboardData?.items;
+      if (!items) return;
+
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf('image') !== -1) {
+          e.preventDefault();
+          const file = items[i].getAsFile();
+          if (file) await uploadFile(file);
+          return;
+        }
+      }
+    };
+
+    document.addEventListener('paste', handlePaste);
+    return () => document.removeEventListener('paste', handlePaste);
+  }, [block.data.url]);
+
   return (
     <div className="space-y-4">
-      <div>
-        <Label className="text-sm mb-2 block">URL de la imagen:</Label>
-        <div className="flex gap-2">
-          <Input
-            value={block.data.url}
-            onChange={(e) =>
-              onChange({ ...block, data: { ...block.data, url: e.target.value } })
-            }
-            placeholder="https://..."
-          />
-          <Button
-            onClick={() => document.getElementById(`file-upload-${block.id}`)?.click()}
-            disabled={uploading}
-            variant="outline"
-          >
-            {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
-          </Button>
-          <input
-            id={`file-upload-${block.id}`}
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={handleFileUpload}
-          />
+      {/* Drop Zone */}
+      <div
+        ref={dropZoneRef}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+        tabIndex={0}
+        className={`
+          relative border-2 border-dashed rounded-lg p-6 transition-all
+          ${isDragging ? 'border-pink-500 bg-pink-50 dark:bg-pink-950/20' : 'border-border hover:border-pink-300'}
+          ${uploading ? 'opacity-50 pointer-events-none' : 'cursor-pointer'}
+        `}
+        onClick={() => !uploading && document.getElementById(`file-upload-${block.id}`)?.click()}
+      >
+        <div className="flex flex-col items-center justify-center gap-2 text-center">
+          {uploading ? (
+            <>
+              <Loader2 className="h-8 w-8 animate-spin text-pink-500" />
+              <p className="text-sm text-muted-foreground">Subiendo imagen...</p>
+            </>
+          ) : (
+            <>
+              <ImagePlus className="h-8 w-8 text-muted-foreground" />
+              <div className="space-y-1">
+                <p className="text-sm font-medium">
+                  Arrastra una imagen aquí o haz click
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  También puedes pegar con Ctrl+V
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  PNG, JPG, GIF hasta 5MB
+                </p>
+              </div>
+            </>
+          )}
         </div>
+        <input
+          id={`file-upload-${block.id}`}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleFileUpload}
+        />
+      </div>
+
+      <div>
+        <Label className="text-sm mb-2 block">O ingresa una URL:</Label>
+        <Input
+          value={block.data.url}
+          onChange={(e) =>
+            onChange({ ...block, data: { ...block.data, url: e.target.value } })
+          }
+          placeholder="https://..."
+        />
       </div>
 
       <div>
@@ -105,7 +212,7 @@ export function ImageBlockEditor({ block, onChange }: ImageBlockEditorProps) {
               <input
                 type="file"
                 accept="image/*"
-                onChange={(e) => handleFileUpload(e, true)}
+                onChange={handleFileUpload}
                 className="hidden"
                 disabled={uploading}
                 aria-label="Reemplazar imagen"
