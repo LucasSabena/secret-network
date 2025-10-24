@@ -11,7 +11,19 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { HelpCircle, Keyboard, Lightbulb, Zap, Package } from 'lucide-react';
+import { 
+  HelpCircle, 
+  Keyboard, 
+  Lightbulb, 
+  Zap, 
+  Package, 
+  Undo2, 
+  Redo2, 
+  FileText, 
+  SpellCheck,
+  Monitor,
+  BarChart3
+} from 'lucide-react';
 
 export function EditorHelp() {
   return (
@@ -58,6 +70,20 @@ export function EditorHelp() {
                 <kbd className="px-2 py-1 bg-muted rounded text-xs">Ctrl + S</kbd>
               </div>
               <div className="flex justify-between items-center py-1">
+                <span className="text-muted-foreground flex items-center gap-2">
+                  <Undo2 className="h-3 w-3" />
+                  Deshacer
+                </span>
+                <kbd className="px-2 py-1 bg-muted rounded text-xs">Ctrl + Z</kbd>
+              </div>
+              <div className="flex justify-between items-center py-1">
+                <span className="text-muted-foreground flex items-center gap-2">
+                  <Redo2 className="h-3 w-3" />
+                  Rehacer
+                </span>
+                <kbd className="px-2 py-1 bg-muted rounded text-xs">Ctrl + Y</kbd>
+              </div>
+              <div className="flex justify-between items-center py-1">
                 <span className="text-muted-foreground">Copiar bloque</span>
                 <kbd className="px-2 py-1 bg-muted rounded text-xs">Ctrl + C</kbd>
               </div>
@@ -88,6 +114,46 @@ export function EditorHelp() {
             </div>
           </Card>
 
+          {/* Nuevas Funcionalidades */}
+          <Card className="p-4 bg-primary/5 border-primary/20">
+            <h3 className="font-semibold mb-3 flex items-center gap-2">
+              <Zap className="h-4 w-4 text-primary" />
+              Nuevas Funcionalidades V4
+            </h3>
+            <div className="space-y-3 text-sm">
+              <div className="flex items-start gap-2">
+                <FileText className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                <div>
+                  <strong>Plantillas:</strong> Crea posts rápidamente con templates predefinidos. Click en "Plantillas" o "Desde Template" en el listado.
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <SpellCheck className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                <div>
+                  <strong>Corrector Ortográfico:</strong> Revisa errores ortográficos y gramaticales. Click en "Ortografía" en el header.
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <Undo2 className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                <div>
+                  <strong>Deshacer/Rehacer:</strong> Deshace cambios con Ctrl+Z y rehace con Ctrl+Y. Botones disponibles en el canvas.
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <Monitor className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                <div>
+                  <strong>Vista Responsive:</strong> Previsualiza en Desktop, Tablet y Mobile. Botones en la vista previa.
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <BarChart3 className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                <div>
+                  <strong>Estadísticas Avanzadas:</strong> SEO Score, legibilidad y palabras clave. Click en "SEO Score" para ver detalles.
+                </div>
+              </div>
+            </div>
+          </Card>
+
           {/* Tips */}
           <Card className="p-4">
             <h3 className="font-semibold mb-3 flex items-center gap-2">
@@ -96,7 +162,9 @@ export function EditorHelp() {
             </h3>
             <ul className="space-y-2 text-sm list-disc list-inside text-muted-foreground">
               <li><strong>Auto-save:</strong> Guarda automáticamente cada 30 segundos</li>
-              <li><strong>Reemplazar imágenes:</strong> Hover sobre imagen → Click para reemplazar (no ocupa espacio extra)</li>
+              <li><strong>Drop zones:</strong> Arrastra bloques entre otros bloques para insertar en posición específica</li>
+              <li><strong>Clipboard persistente:</strong> Copia bloques y pégalos en otros posts (persiste entre sesiones)</li>
+              <li><strong>Reemplazar imágenes:</strong> Hover sobre imagen y click para reemplazar</li>
               <li><strong>Editor enriquecido:</strong> Tabs, acordeón y alertas tienen toolbar de formato</li>
               <li><strong>Duplicar posts:</strong> Click en ícono de copiar para crear variaciones</li>
               <li><strong>Mobile:</strong> Botón + flotante para agregar bloques</li>
@@ -183,10 +251,15 @@ export function EditorHelp() {
               Funciones Avanzadas
             </h3>
             <ul className="space-y-2 text-sm list-disc list-inside text-muted-foreground">
-              <li><strong>Menú contextual:</strong> Click derecho en bloque para copiar, duplicar, mover o eliminar</li>
-              <li><strong>Copiar/Pegar:</strong> Copia bloques entre diferentes posts</li>
+              <li><strong>Menú contextual:</strong> Click derecho en bloque para más opciones (copiar, duplicar, mover, eliminar, estilos)</li>
+              <li><strong>Copiar/Pegar:</strong> Copia bloques entre diferentes posts (persiste en localStorage)</li>
+              <li><strong>Historial:</strong> Deshacer/Rehacer cambios con Ctrl+Z/Ctrl+Y o botones en canvas</li>
+              <li><strong>Plantillas:</strong> Usa templates predefinidos para crear posts más rápido</li>
+              <li><strong>Corrector:</strong> Revisa ortografía y gramática con LanguageTool API</li>
+              <li><strong>SEO Score:</strong> Analiza tu contenido y recibe sugerencias de mejora</li>
+              <li><strong>Vista Responsive:</strong> Previsualiza en diferentes dispositivos</li>
               <li><strong>Configuración:</strong> Click en ⚙️ para slug, descripción, autor, portada y tags</li>
-              <li><strong>Estadísticas:</strong> Ve bloques, palabras y tiempo de lectura en tiempo real</li>
+              <li><strong>Estadísticas:</strong> Ve bloques, palabras, tiempo de lectura y SEO score en tiempo real</li>
               <li><strong>Publicar/Borrador:</strong> Switch en header para cambiar estado</li>
             </ul>
           </Card>
