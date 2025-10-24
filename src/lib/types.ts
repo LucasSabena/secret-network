@@ -165,6 +165,7 @@ export type BlogPost = {
   contenido: string; // Mantener por compatibilidad (legacy)
   contenido_bloques?: Block[]; // Nuevo sistema de bloques
   imagen_portada_url: string | null;
+  imagen_portada_alt: string | null; // Alt text para SEO
   autor: string | null;
   autor_id: number | null; // Nueva relación con tabla autores
   fecha_publicacion: string;

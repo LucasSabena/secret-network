@@ -71,6 +71,7 @@ interface FormData {
   autor_id: number | null;
   publicado: boolean;
   tags: string;
+  imagen_portada_alt: string;
 }
 
 export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
@@ -93,6 +94,7 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
       autor_id: post?.autor_id || null,
       publicado: post?.publicado || false,
       tags: post?.tags?.join(', ') || '',
+      imagen_portada_alt: post?.imagen_portada_alt || '',
     },
   });
 
@@ -233,6 +235,7 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
         contenido: '',
         contenido_bloques: blocks,
         imagen_portada_url: imagenUrl || null,
+        imagen_portada_alt: data.imagen_portada_alt || null,
         autor: data.autor || null,
         autor_id: data.autor_id || null,
         publicado: data.publicado,
@@ -326,11 +329,11 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
                     <Settings className="h-4 w-4" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent>
-                  <SheetHeader>
+                <SheetContent className="overflow-y-auto">
+                  <SheetHeader className="pb-4">
                     <SheetTitle>Configuración del Post</SheetTitle>
                   </SheetHeader>
-                  <div className="space-y-6 mt-6">
+                  <div className="space-y-6 mt-6 px-1">
                     <div className="space-y-2">
                       <Label htmlFor="slug">Slug (URL)</Label>
                       <Input
@@ -450,6 +453,21 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
                           aria-label="Subir imagen de portada"
                         />
                       </label>
+                      
+                      {/* Alt text para imagen de portada */}
+                      {(post?.imagen_portada_url || imageFile) && (
+                        <div className="space-y-2">
+                          <Label htmlFor="imagen_portada_alt">Texto Alternativo (Alt)</Label>
+                          <Input
+                            id="imagen_portada_alt"
+                            {...register('imagen_portada_alt')}
+                            placeholder="Descripción de la imagen para SEO"
+                          />
+                          <p className="text-xs text-muted-foreground">
+                            Describe la imagen para mejorar el SEO y accesibilidad
+                          </p>
+                        </div>
+                      )}
                     </div>
 
                     <div className="space-y-2">

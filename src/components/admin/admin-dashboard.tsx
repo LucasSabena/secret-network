@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Package, FileText, FolderTree, Link2, Monitor, DollarSign, Users } from 'lucide-react';
+import { Package, FileText, FolderTree, Link2, Monitor, DollarSign, Users, Image } from 'lucide-react';
 import ProgramasManager from './programas-manager';
 import BlogManager from './blog-manager';
 import CategoriasManager from './categorias-manager';
@@ -10,6 +10,7 @@ import AlternativasManagerNew from './alternativas-manager-new';
 import PlataformasManager from './plataformas-manager';
 import ModelosDePrecioManager from './modelos-de-precio-manager';
 import AutoresManager from './autores-manager';
+import AltTextManager from './alt-text-manager';
 import AdminHeader from './admin-header';
 
 export default function AdminDashboard() {
@@ -32,7 +33,7 @@ export default function AdminDashboard() {
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           {/* Tabs responsive: grid en desktop, scroll horizontal en mobile */}
           <div className="overflow-x-auto pb-2 -mx-4 px-4">
-            <TabsList className="inline-flex lg:grid w-full lg:grid-cols-7 lg:w-[1100px] min-w-max">
+            <TabsList className="inline-flex lg:grid w-full lg:grid-cols-8 lg:w-[1200px] min-w-max">
               <TabsTrigger value="programas" className="flex items-center gap-2 whitespace-nowrap">
                 <Package className="h-4 w-4" />
                 <span className="hidden sm:inline">Programas</span>
@@ -41,6 +42,10 @@ export default function AdminDashboard() {
               <TabsTrigger value="blogs" className="flex items-center gap-2 whitespace-nowrap">
                 <FileText className="h-4 w-4" />
                 <span>Blogs</span>
+              </TabsTrigger>
+              <TabsTrigger value="alt-text" className="flex items-center gap-2 whitespace-nowrap">
+                <Image className="h-4 w-4" />
+                <span>Alt Text</span>
               </TabsTrigger>
               <TabsTrigger value="autores" className="flex items-center gap-2 whitespace-nowrap">
                 <Users className="h-4 w-4" />
@@ -74,6 +79,10 @@ export default function AdminDashboard() {
 
           <TabsContent value="blogs" className="mt-6">
             <BlogManager />
+          </TabsContent>
+
+          <TabsContent value="alt-text" className="mt-6">
+            <AltTextManager />
           </TabsContent>
 
           <TabsContent value="autores" className="mt-6">
