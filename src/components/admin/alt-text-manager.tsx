@@ -35,16 +35,24 @@ export default function AltTextManager() {
       const supabase = supabaseBrowserClient;
 
       // Cargar imágenes de posts de blog
-      const { data: blogPosts } = await supabase
+      const { data: blogPosts, error: blogError } = await supabase
         .from('blog_posts')
         .select('id, titulo, imagen_portada_url, imagen_portada_alt')
         .not('imagen_portada_url', 'is', null);
 
-      // Cargar imágenes de programas
-      const { data: programs } = await supabase
+      if (blogError) {
+        console.error('Error loading blog posts:', blogError);
+      }
+
+      // Cargar imágenes de programas (captura_url es el campo correcto)
+      const { data: programs, error: programsError } = await supabase
         .from('programas')
-        .select('id, nombre, imagen_url, imagen_alt')
-        .not('imagen_url', 'is', null);
+        .select('id, nombre, captura_url')
+        .not('captura_url', 'is', null);
+
+      if (programsError) {
+        console.error('Error loading programs:', programsError);
+      }
 
       const allImages: ImageWithAlt[] = [];
 
@@ -53,7 +61,7 @@ export default function AltTextManager() {
         allImages.push({
           id: post.id,
           url: post.imagen_portada_url!,
-          alt: post.imagen_portada_alt,
+          alt: post.imagen_portada_alt || null,
           source: 'blog_post',
           sourceId: post.id,
           sourceName: post.titulo,
@@ -64,14 +72,15 @@ export default function AltTextManager() {
       programs?.forEach((program) => {
         allImages.push({
           id: program.id,
-          url: program.imagen_url!,
-          alt: program.imagen_alt,
+          url: program.captura_url!,
+          alt: null, // Los programas no tienen campo alt aún
           source: 'program',
           sourceId: program.id,
           sourceName: program.nombre,
         });
       });
 
+      console.log('Loaded images:', allImages.length);
       setImages(allImages);
     } catch (error) {
       console.error('Error loading images:', error);
@@ -98,12 +107,14 @@ export default function AltTextManager() {
 
         if (error) throw error;
       } else {
-        const { error } = await supabase
-          .from('programas')
-          .update({ imagen_alt: newAlt })
-          .eq('id', image.sourceId);
-
-        if (error) throw error;
+        // Para programas, por ahora solo mostramos mensaje
+        toast({
+          title: 'Información',
+          description: 'Los programas aún no tienen campo de alt text en la base de datos',
+          variant: 'default',
+        });
+        setSaving(null);
+        return;
       }
 
       toast({
@@ -113,7 +124,7 @@ export default function AltTextManager() {
 
       // Actualizar estado local
       setImages(images.map(img => 
-        img.id === image.id ? { ...img, alt: newAlt } : img
+        img.id === image.id && img.source === image.source ? { ...img, alt: newAlt } : img
       ));
     } catch (error) {
       console.error('Error saving alt text:', error);
