@@ -49,6 +49,14 @@ export const BLOCK_TOOLS: BlockToolDefinition[] = [
     category: 'content',
   },
   {
+    id: 'images-grid',
+    type: 'images-grid',
+    label: 'Grid Imágenes',
+    icon: ImageIcon,
+    description: 'Múltiples imágenes en columnas',
+    category: 'media',
+  },
+  {
     id: 'tabs',
     type: 'tabs',
     label: 'Pestañas',

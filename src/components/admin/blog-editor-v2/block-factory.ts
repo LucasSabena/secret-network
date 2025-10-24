@@ -42,6 +42,13 @@ export class BlockFactory {
           data: { programIds: [], columns: 3 },
         };
 
+      case 'images-grid':
+        return {
+          id,
+          type: 'images-grid',
+          data: { images: [], columns: 3 },
+        };
+
       case 'tabs':
         return {
           id,

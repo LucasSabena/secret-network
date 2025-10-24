@@ -16,6 +16,7 @@ import { RichTextBlockEditor } from '../blocks/rich-text-block-editor';
 import { ImageBlockEditor } from '../blocks/image-block-editor';
 import { ProgramCardBlockEditor } from '../blocks/program-card-block-editor';
 import { ProgramsGridBlockEditor } from '../blocks/programs-grid-block-editor';
+import { ImagesGridBlockEditor } from '../blocks/images-grid-block-editor';
 import { TabsBlockEditor } from '../blocks/tabs-block-editor';
 import { AccordionBlockEditor } from '../blocks/accordion-block-editor';
 import { AlertBlockEditor } from '../blocks/alert-block-editor';
@@ -158,6 +159,13 @@ function BlockEditorRenderer({
           onChange={onChange as any}
         />
       );
+    case 'images-grid':
+      return (
+        <ImagesGridBlockEditor
+          block={block as Extract<Block, { type: 'images-grid' }>}
+          onChange={onChange as any}
+        />
+      );
     case 'tabs':
       return (
         <TabsBlockEditor
@@ -227,6 +235,12 @@ function BlockPreview({ block }: { block: Block }) {
       return (
         <div className="text-sm text-muted-foreground">
           {block.data.programIds.length} programas en {block.data.columns} columnas
+        </div>
+      );
+    case 'images-grid':
+      return (
+        <div className="text-sm text-muted-foreground">
+          {block.data.images.length} imágenes en {block.data.columns} columnas
         </div>
       );
     case 'tabs':

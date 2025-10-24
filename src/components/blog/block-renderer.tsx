@@ -137,6 +137,41 @@ function ProgramCardBlockComponent({ block }: { block: Extract<Block, { type: 'p
   );
 }
 
+// Componente para renderizar grid de imágenes
+function ImagesGridBlockComponent({ block }: { block: Extract<Block, { type: 'images-grid' }> }) {
+  if (block.data.images.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className={cn(
+      'my-8 not-prose grid gap-4',
+      block.data.columns === 2 && 'grid-cols-1 md:grid-cols-2',
+      block.data.columns === 3 && 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
+      block.data.columns === 4 && 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4'
+    )}>
+      {block.data.images.map((image, index) => (
+        <figure key={index} className="space-y-2">
+          <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-muted">
+            <Image
+              src={image.url}
+              alt={image.alt || ''}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+          </div>
+          {image.caption && (
+            <figcaption className="text-sm text-muted-foreground text-center">
+              {image.caption}
+            </figcaption>
+          )}
+        </figure>
+      ))}
+    </div>
+  );
+}
+
 // Componente para renderizar grid de programas
 function ProgramsGridBlockComponent({ block }: { block: Extract<Block, { type: 'programs-grid' }> }) {
   const [programs, setPrograms] = useState<any[]>([]);
@@ -365,6 +400,8 @@ export function BlockRenderer({ blocks }: BlockRendererProps) {
               return <ProgramCardBlockComponent key={block.id} block={block} />;
             case 'programs-grid':
               return <ProgramsGridBlockComponent key={block.id} block={block} />;
+            case 'images-grid':
+              return <ImagesGridBlockComponent key={block.id} block={block} />;
             case 'tabs':
               return <TabsBlockComponent key={block.id} block={block} />;
             case 'accordion':

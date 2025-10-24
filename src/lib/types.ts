@@ -61,6 +61,20 @@ export type ProgramsGridBlock = {
   };
 };
 
+// Bloque de grid de imágenes
+export type ImagesGridBlock = {
+  id: string;
+  type: 'images-grid';
+  data: {
+    images: Array<{
+      url: string;
+      alt: string;
+      caption: string;
+    }>;
+    columns: 2 | 3 | 4;
+  };
+};
+
 // Bloque de tabs
 export type TabsBlock = {
   id: string;
@@ -134,6 +148,7 @@ export type Block =
   | TextBlock
   | ProgramCardBlock
   | ProgramsGridBlock
+  | ImagesGridBlock
   | TabsBlock
   | AccordionBlock
   | AlertBlock
