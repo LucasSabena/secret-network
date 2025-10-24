@@ -27,6 +27,7 @@ import { Programa, Categoria, Plataforma, ModeloDePrecio } from '@/lib/types';
 import ProgramaForm from './programa-form';
 import BatchIconUpload from './batch-icon-upload';
 import { supabaseBrowserClient } from '@/lib/supabase-browser';
+import { addUTMParams } from '@/lib/utm-tracker';
 
 export default function ProgramasManager() {
   const [programas, setProgramas] = useState<Programa[]>([]);
@@ -772,7 +773,7 @@ export default function ProgramasManager() {
               {programa.web_oficial_url && (
                 <div className="flex items-center gap-2 pt-2 border-t">
                   <a
-                    href={programa.web_oficial_url.startsWith('http') ? programa.web_oficial_url : `https://${programa.web_oficial_url}`}
+                    href={addUTMParams(programa.web_oficial_url.startsWith('http') ? programa.web_oficial_url : `https://${programa.web_oficial_url}`)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex-1 flex items-center gap-2 px-3 py-2 text-sm rounded-md border hover:bg-accent transition-colors"

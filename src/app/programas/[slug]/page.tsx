@@ -28,6 +28,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { addUTMParams } from "@/lib/utm-tracker";
 
 /**
  * Strip HTML tags from a string
@@ -357,7 +358,7 @@ export default async function ProgramPage({ params }: ProgramPageProps) {
               <div className="flex flex-wrap gap-3">
                 {programaCompleto.web_oficial_url && (
                   <a
-                    href={ensureProtocol(programaCompleto.web_oficial_url)}
+                    href={addUTMParams(ensureProtocol(programaCompleto.web_oficial_url))}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 font-semibold text-primary-foreground transition-colors hover:bg-primary/90"

@@ -19,6 +19,7 @@ import { JsonLdOrganization } from "@/components/seo/json-ld-organization";
 import { JsonLdWebsite } from "@/components/seo/json-ld-website";
 import { Toaster } from "@/components/ui/toaster";
 import { Analytics } from "@vercel/analytics/next";
+import { SmoothScrollWrapper } from "@/components/layout/smooth-scroll-wrapper";
 
 const fontSpaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -132,14 +133,16 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <ReactQueryProvider>
-            <div className="flex min-h-screen flex-col">
-              <Navbar />
-              <main className="flex-1">
-                {children}
-              </main>
-              <Footer />
-            </div>
-            <Toaster />
+            <SmoothScrollWrapper>
+              <div className="flex min-h-screen flex-col">
+                <Navbar />
+                <main className="flex-1">
+                  {children}
+                </main>
+                <Footer />
+              </div>
+              <Toaster />
+            </SmoothScrollWrapper>
           </ReactQueryProvider>
         </ThemeProvider>
 

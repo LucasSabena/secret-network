@@ -359,6 +359,19 @@ export type BlogPost = {
   actualizado_en: string;
   publicado: boolean;
   tags: string[] | null;
+  categories?: number[]; // IDs de categorías
+};
+
+// Tipo para categorías del blog
+export type BlogCategory = {
+  id: number;
+  nombre: string;
+  slug: string;
+  descripcion: string | null;
+  color: string;
+  icono: string;
+  orden: number;
+  created_at: string;
 };
 
 // Tipo para autores del blog

@@ -306,3 +306,23 @@
   border-top: 2px solid hsl(var(--border));
   margin: 2rem 0;
 }
+
+/* ============================================
+   SMOOTH SCROLL
+   ============================================ */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem; /* Espacio para el navbar fijo */
+}
+
+/* Desactivar smooth scroll en rutas admin (se maneja con JS) */
+html.admin-route {
+  scroll-behavior: auto;
+}
+
+/* Mejorar el scroll en navegadores webkit */
+@supports (scroll-behavior: smooth) {
+  html:not(.admin-route) {
+    scroll-behavior: smooth;
+  }
+}

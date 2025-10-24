@@ -52,6 +52,7 @@ import { uploadToCloudinary } from '@/lib/cloudinary-upload';
 import { validateImageFile } from '@/lib/cloudinary-config';
 import { ImageManager } from '@/lib/image-manager';
 import { hasClipboardData, getFromClipboard, formatClipboardAge, cloneBlocksWithNewIds } from '@/lib/clipboard-manager';
+import { BlogCategorySelector } from '../blog-category-selector';
 
 interface BlogEditorFullPageProps {
   post: BlogPost | null;
@@ -88,6 +89,7 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [showClipboardIndicator, setShowClipboardIndicator] = useState(false);
+  const [selectedCategories, setSelectedCategories] = useState<number[]>(post?.categories || []);
   const { toast } = useToast();
 
   // Verificar si hay datos en el clipboard
@@ -171,7 +173,22 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
         }
       }
     };
+    
+    const fetchCategories = async () => {
+      if (post?.id) {
+        const { data } = await supabaseBrowserClient
+          .from('blog_posts_categories')
+          .select('category_id')
+          .eq('post_id', post.id);
+        
+        if (data) {
+          setSelectedCategories(data.map(d => d.category_id));
+        }
+      }
+    };
+    
     fetchAutores();
+    fetchCategories();
   }, [post]);
 
   useEffect(() => {
@@ -206,6 +223,28 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
       }
     } catch (error) {
       console.error('Error auto-saving:', error);
+    }
+  }
+
+  async function updatePostCategories(postId: number, categoryIds: number[]) {
+    const supabase = supabaseBrowserClient;
+    
+    // Eliminar categorías existentes
+    await supabase
+      .from('blog_posts_categories')
+      .delete()
+      .eq('post_id', postId);
+    
+    // Insertar nuevas categorías
+    if (categoryIds.length > 0) {
+      const relations = categoryIds.map(catId => ({
+        post_id: postId,
+        category_id: catId,
+      }));
+      
+      await supabase
+        .from('blog_posts_categories')
+        .insert(relations);
     }
   }
 
@@ -262,6 +301,9 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
 
         if (error) throw error;
 
+        // Actualizar categorías
+        await updatePostCategories(post.id, selectedCategories);
+
         setHasUnsavedChanges(false);
         setLastSaved(new Date());
 
@@ -270,9 +312,18 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
           description: 'Los cambios se guardaron correctamente',
         });
       } else {
-        const { error } = await supabase.from('blog_posts').insert([postData]);
+        const { data: newPost, error } = await supabase
+          .from('blog_posts')
+          .insert([postData])
+          .select()
+          .single();
 
         if (error) throw error;
+
+        // Guardar categorías del nuevo post
+        if (newPost) {
+          await updatePostCategories(newPost.id, selectedCategories);
+        }
 
         setHasUnsavedChanges(false);
         setLastSaved(new Date());
@@ -495,6 +546,11 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
                         </SelectContent>
                       </Select>
                     </div>
+
+                    <BlogCategorySelector
+                      selectedCategories={selectedCategories}
+                      onChange={setSelectedCategories}
+                    />
 
                     <div className="space-y-3">
                       <Label>Imagen de Portada</Label>

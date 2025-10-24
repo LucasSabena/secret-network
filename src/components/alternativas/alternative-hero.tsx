@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ExternalLink, GitBranch } from "lucide-react";
 import type { Programa } from "@/lib/types";
+import { addUTMParams } from "@/lib/utm-tracker";
 
 interface AlternativeHeroProps {
   program: Programa;
@@ -59,7 +60,7 @@ export function AlternativeHero({ program }: AlternativeHeroProps) {
           <div className="flex flex-wrap gap-4">
             {program.web_oficial_url && (
               <Link
-                href={program.web_oficial_url}
+                href={addUTMParams(program.web_oficial_url)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors"

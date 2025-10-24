@@ -17,6 +17,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { programEvents } from "@/components/analytics/analytics-events";
 import { optimizeImageUrl } from "@/lib/image-optimizer";
+import { addUTMParams } from "@/lib/utm-tracker";
 
 function stripHtml(html: string | null | undefined): string {
   if (!html) return '';
@@ -44,7 +45,8 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
     e.stopPropagation();
     programEvents.visitWebsite(program.nombre);
     if (program.web_oficial_url) {
-      window.open(program.web_oficial_url, '_blank', 'noopener,noreferrer');
+      const urlWithUtm = addUTMParams(program.web_oficial_url);
+      window.open(urlWithUtm, '_blank', 'noopener,noreferrer');
     }
   };
 
