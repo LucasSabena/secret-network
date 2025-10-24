@@ -31,6 +31,12 @@ export type Categoria = {
 // SISTEMA DE BLOQUES PARA BLOG
 // ========================================
 
+// Estilos comunes para bloques
+export type BlockStyle = {
+  alignment?: 'left' | 'center' | 'right';
+  width?: 'full' | 'content';
+};
+
 // Bloque de texto (párrafo, headings, listas, etc.)
 export type TextBlock = {
   id: string;
@@ -39,6 +45,7 @@ export type TextBlock = {
     format: 'paragraph' | 'h1' | 'h2' | 'h3' | 'h4' | 'ul' | 'ol' | 'quote' | 'code';
     content: string; // HTML simple o texto
   };
+  style?: BlockStyle;
 };
 
 // Bloque de tarjeta de programa
@@ -110,6 +117,7 @@ export type AlertBlock = {
     title?: string;
     description: string;
   };
+  style?: BlockStyle;
 };
 
 // Bloque de separador
@@ -131,6 +139,7 @@ export type ImageBlock = {
     caption?: string;
     width?: number;
   };
+  style?: BlockStyle;
 };
 
 // Bloque de código

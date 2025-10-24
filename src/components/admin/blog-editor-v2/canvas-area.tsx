@@ -84,6 +84,7 @@ export function CanvasArea({
                     isSelected={selectedBlockId === block.id}
                     onSelect={() => onSelectBlock(block.id)}
                     onDelete={() => onDeleteBlock(block.id)}
+                    onUpdateBlock={(updatedBlock) => onUpdateBlock(block.id, updatedBlock)}
                     onDuplicate={() => {
                       const newBlock = { ...block, id: `block-${Date.now()}-${Math.random().toString(36).substring(7)}` };
                       const newBlocks = [...blocks];

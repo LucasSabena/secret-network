@@ -20,6 +20,7 @@ interface CanvasBlockProps {
   onDuplicate: () => void;
   onMoveUp: () => void;
   onMoveDown: () => void;
+  onUpdateBlock?: (block: Block) => void;
   canMoveUp: boolean;
   canMoveDown: boolean;
   children: React.ReactNode;
@@ -33,6 +34,7 @@ export function CanvasBlock({
   onDuplicate,
   onMoveUp,
   onMoveDown,
+  onUpdateBlock,
   canMoveUp,
   canMoveDown,
   children,
@@ -66,6 +68,30 @@ export function CanvasBlock({
     onDelete();
   };
 
+  const handleChangeAlignment = (alignment: 'left' | 'center' | 'right') => {
+    if (onUpdateBlock) {
+      onUpdateBlock({
+        ...block,
+        style: {
+          ...block.style,
+          alignment,
+        },
+      });
+    }
+  };
+
+  const handleChangeWidth = (width: 'full' | 'content') => {
+    if (onUpdateBlock) {
+      onUpdateBlock({
+        ...block,
+        style: {
+          ...block.style,
+          width,
+        },
+      });
+    }
+  };
+
   return (
     <BlockContextMenu
       block={block}
@@ -75,6 +101,8 @@ export function CanvasBlock({
       onMoveDown={onMoveDown}
       onCopy={handleCopy}
       onCut={handleCut}
+      onChangeAlignment={handleChangeAlignment}
+      onChangeWidth={handleChangeWidth}
       canMoveUp={canMoveUp}
       canMoveDown={canMoveDown}
     >

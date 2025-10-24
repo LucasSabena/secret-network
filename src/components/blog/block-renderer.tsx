@@ -1,7 +1,7 @@
 // FILE: src/components/blog/block-renderer.tsx
 'use client';
 
-import { Block } from '@/lib/types';
+import { Block, BlockStyle } from '@/lib/types';
 import { ProgramCard } from '@/components/shared/program-card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Separator } from '@/components/ui/separator';
@@ -12,6 +12,30 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { supabaseBrowserClient } from '@/lib/supabase-browser';
 
+// Helper para aplicar estilos de bloque
+function getBlockStyleClasses(style?: BlockStyle): string {
+  if (!style) return '';
+  
+  const classes: string[] = [];
+  
+  if (style.alignment) {
+    classes.push({
+      left: 'text-left',
+      center: 'text-center mx-auto',
+      right: 'text-right ml-auto',
+    }[style.alignment]);
+  }
+  
+  if (style.width) {
+    classes.push({
+      full: 'w-full',
+      content: 'max-w-3xl mx-auto',
+    }[style.width]);
+  }
+  
+  return classes.join(' ');
+}
+
 interface BlockRendererProps {
   blocks: Block[];
 }
@@ -19,6 +43,7 @@ interface BlockRendererProps {
 // Componente para renderizar un bloque de texto
 function TextBlockComponent({ block }: { block: Extract<Block, { type: 'text' }> }) {
   const { format, content } = block.data;
+  const styleClasses = getBlockStyleClasses(block.style);
   
   const className = {
     paragraph: 'text-foreground leading-7 [&:not(:first-child)]:mt-6 whitespace-pre-wrap',
@@ -36,7 +61,7 @@ function TextBlockComponent({ block }: { block: Extract<Block, { type: 'text' }>
   if (format === 'paragraph') {
     return (
       <div 
-        className={cn(className, 'prose prose-sm dark:prose-invert max-w-none')}
+        className={cn(className, styleClasses, 'prose prose-sm dark:prose-invert max-w-none')}
         dangerouslySetInnerHTML={{ __html: content }}
       />
     );
@@ -44,7 +69,7 @@ function TextBlockComponent({ block }: { block: Extract<Block, { type: 'text' }>
   if (format === 'h1') {
     return (
       <h1 
-        className={className}
+        className={cn(className, styleClasses)}
         dangerouslySetInnerHTML={{ __html: content }}
       />
     );
@@ -52,7 +77,7 @@ function TextBlockComponent({ block }: { block: Extract<Block, { type: 'text' }>
   if (format === 'h2') {
     return (
       <h2 
-        className={className}
+        className={cn(className, styleClasses)}
         dangerouslySetInnerHTML={{ __html: content }}
       />
     );
@@ -60,7 +85,7 @@ function TextBlockComponent({ block }: { block: Extract<Block, { type: 'text' }>
   if (format === 'h3') {
     return (
       <h3 
-        className={className}
+        className={cn(className, styleClasses)}
         dangerouslySetInnerHTML={{ __html: content }}
       />
     );
@@ -68,7 +93,7 @@ function TextBlockComponent({ block }: { block: Extract<Block, { type: 'text' }>
   if (format === 'h4') {
     return (
       <h4 
-        className={className}
+        className={cn(className, styleClasses)}
         dangerouslySetInnerHTML={{ __html: content }}
       />
     );
