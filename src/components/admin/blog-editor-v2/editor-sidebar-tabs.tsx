@@ -1,11 +1,18 @@
 'use client';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Layers, Settings, BarChart3 } from 'lucide-react';
+import { Layers, FileText, Search, BarChart3 } from 'lucide-react';
 import { BlocksOutlinePanel } from './blocks-outline-panel';
-import { PostSettingsPanel } from './post-settings-panel';
+import { PostMetadataPanel } from './post-metadata-panel';
+import { SEOPanel } from './seo-panel';
 import { EditorStats } from './editor-stats';
 import { Block } from '@/lib/types';
+
+interface Autor {
+  id: number;
+  nombre: string;
+  avatar_url?: string | null;
+}
 
 interface EditorSidebarTabsProps {
   // Blocks tab
@@ -16,19 +23,32 @@ interface EditorSidebarTabsProps {
   onDuplicateBlocks: (blockIds: string[]) => void;
   onReorderBlocks: (blockIds: string[], targetIndex: number) => void;
   
-  // Settings tab
+  // Metadata tab
   titulo: string;
   slug: string;
   descripcionCorta: string;
-  tags: string[];
+  autorId: number | null;
+  autores: Autor[];
   publicado: boolean;
   fechaPublicacion: Date;
-  autor: string;
+  scheduledFor: string | null;
+  tags: string[];
+  categories: number[];
+  imagenPortadaUrl?: string;
+  imagenPortadaAlt?: string;
+  imageFile: File | null;
+  
+  onTituloChange: (titulo: string) => void;
   onSlugChange: (slug: string) => void;
   onDescripcionChange: (desc: string) => void;
-  onTagsChange: (tags: string[]) => void;
+  onAutorChange: (autorId: number | null) => void;
   onPublicadoChange: (publicado: boolean) => void;
   onFechaChange: (fecha: Date) => void;
+  onScheduledForChange: (date: string | null) => void;
+  onTagsChange: (tags: string[]) => void;
+  onCategoriesChange: (categories: number[]) => void;
+  onImageFileChange: (file: File | null) => void;
+  onImagenAltChange: (alt: string) => void;
 }
 
 export function EditorSidebarTabs({
@@ -41,32 +61,77 @@ export function EditorSidebarTabs({
   titulo,
   slug,
   descripcionCorta,
-  tags,
+  autorId,
+  autores,
   publicado,
   fechaPublicacion,
-  autor,
+  scheduledFor,
+  tags,
+  categories,
+  imagenPortadaUrl,
+  imagenPortadaAlt,
+  imageFile,
+  onTituloChange,
   onSlugChange,
   onDescripcionChange,
-  onTagsChange,
+  onAutorChange,
   onPublicadoChange,
   onFechaChange,
+  onScheduledForChange,
+  onTagsChange,
+  onCategoriesChange,
+  onImageFileChange,
+  onImagenAltChange,
 }: EditorSidebarTabsProps) {
   return (
-    <Tabs defaultValue="blocks" className="h-full flex flex-col">
-      <TabsList className="grid w-full grid-cols-3 shrink-0">
-        <TabsTrigger value="blocks" className="gap-2 text-xs">
+    <Tabs defaultValue="metadata" className="h-full flex flex-col">
+      <TabsList className="grid w-full grid-cols-4 shrink-0">
+        <TabsTrigger value="metadata" className="gap-1 text-xs px-2">
+          <FileText className="h-3.5 w-3.5" />
+          <span className="hidden lg:inline">Info</span>
+        </TabsTrigger>
+        <TabsTrigger value="blocks" className="gap-1 text-xs px-2">
           <Layers className="h-3.5 w-3.5" />
-          <span className="hidden sm:inline">Bloques</span>
+          <span className="hidden lg:inline">Bloques</span>
         </TabsTrigger>
-        <TabsTrigger value="settings" className="gap-2 text-xs">
-          <Settings className="h-3.5 w-3.5" />
-          <span className="hidden sm:inline">Config</span>
+        <TabsTrigger value="seo" className="gap-1 text-xs px-2">
+          <Search className="h-3.5 w-3.5" />
+          <span className="hidden lg:inline">SEO</span>
         </TabsTrigger>
-        <TabsTrigger value="stats" className="gap-2 text-xs">
+        <TabsTrigger value="stats" className="gap-1 text-xs px-2">
           <BarChart3 className="h-3.5 w-3.5" />
-          <span className="hidden sm:inline">Stats</span>
+          <span className="hidden lg:inline">Stats</span>
         </TabsTrigger>
       </TabsList>
+
+      <TabsContent value="metadata" className="flex-1 m-0 overflow-hidden">
+        <PostMetadataPanel
+          titulo={titulo}
+          slug={slug}
+          descripcionCorta={descripcionCorta}
+          autorId={autorId}
+          autores={autores}
+          publicado={publicado}
+          fechaPublicacion={fechaPublicacion}
+          scheduledFor={scheduledFor}
+          tags={tags}
+          categories={categories}
+          imagenPortadaUrl={imagenPortadaUrl}
+          imagenPortadaAlt={imagenPortadaAlt}
+          imageFile={imageFile}
+          onTituloChange={onTituloChange}
+          onSlugChange={onSlugChange}
+          onDescripcionChange={onDescripcionChange}
+          onAutorChange={onAutorChange}
+          onPublicadoChange={onPublicadoChange}
+          onFechaChange={onFechaChange}
+          onScheduledForChange={onScheduledForChange}
+          onTagsChange={onTagsChange}
+          onCategoriesChange={onCategoriesChange}
+          onImageFileChange={onImageFileChange}
+          onImagenAltChange={onImagenAltChange}
+        />
+      </TabsContent>
 
       <TabsContent value="blocks" className="flex-1 m-0 overflow-hidden">
         <BlocksOutlinePanel
@@ -79,20 +144,13 @@ export function EditorSidebarTabs({
         />
       </TabsContent>
 
-      <TabsContent value="settings" className="flex-1 m-0 overflow-hidden">
-        <PostSettingsPanel
+      <TabsContent value="seo" className="flex-1 m-0 overflow-hidden">
+        <SEOPanel
+          blocks={blocks}
           titulo={titulo}
+          descripcion={descripcionCorta}
           slug={slug}
-          descripcionCorta={descripcionCorta}
-          tags={tags}
-          publicado={publicado}
-          fechaPublicacion={fechaPublicacion}
-          autor={autor}
-          onSlugChange={onSlugChange}
-          onDescripcionChange={onDescripcionChange}
-          onTagsChange={onTagsChange}
-          onPublicadoChange={onPublicadoChange}
-          onFechaChange={onFechaChange}
+          imagenPortada={imagenPortadaUrl || (imageFile ? URL.createObjectURL(imageFile) : undefined)}
         />
       </TabsContent>
 

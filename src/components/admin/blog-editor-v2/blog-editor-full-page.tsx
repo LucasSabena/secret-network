@@ -417,8 +417,8 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
       <div className="h-screen flex flex-col bg-background">
         {/* Header */}
         <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between px-4 md:px-6 py-3 gap-3">
-            <div className="flex items-center gap-2 md:gap-4 w-full md:w-auto">
+          <div className="flex items-center justify-between px-4 md:px-6 py-3 gap-3">
+            <div className="flex items-center gap-2">
               <Button
                 variant="ghost"
                 size="icon"
@@ -427,13 +427,9 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
               >
                 <ArrowLeft className="h-5 w-5" />
               </Button>
-              <div className="flex-1 min-w-0">
-                <Input
-                  {...register('titulo', { required: true })}
-                  placeholder="Título del post..."
-                  className="text-base md:text-lg font-semibold border-0 focus-visible:ring-0 px-0"
-                />
-              </div>
+              <h2 className="text-lg font-semibold truncate max-w-md">
+                {titulo || 'Nuevo Post'}
+              </h2>
             </div>
 
             <div className="flex items-center gap-2 w-full md:w-auto justify-between md:justify-end">
@@ -530,239 +526,26 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
                 }
               }} />
               <EditorHelp />
-              
-              <Sheet>
-                <SheetTrigger asChild>
-                  <Button variant="outline" size="icon">
-                    <Settings className="h-4 w-4" />
-                  </Button>
-                </SheetTrigger>
-                <SheetContent className="overflow-y-auto">
-                  <SheetHeader className="pb-4">
-                    <SheetTitle>Configuración del Post</SheetTitle>
-                  </SheetHeader>
-                  <div className="space-y-6 mt-6 px-1">
-                    <div className="space-y-2">
-                      <Label htmlFor="slug">Slug (URL)</Label>
-                      <Input
-                        id="slug"
-                        {...register('slug')}
-                        placeholder="se-genera-automaticamente"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="descripcion_corta">Descripción Corta</Label>
-                      <Textarea
-                        id="descripcion_corta"
-                        {...register('descripcion_corta')}
-                        placeholder="Resumen breve..."
-                        rows={3}
-                        maxLength={300}
-                      />
-                      <p className="text-xs text-muted-foreground">
-                        {watch('descripcion_corta')?.length || 0}/300
-                      </p>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="autor_id">Autor</Label>
-                      <Select
-                        value={autor_id?.toString() || ''}
-                        onValueChange={(value) =>
-                          setValue('autor_id', value ? parseInt(value) : null)
-                        }
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Seleccionar">
-                            {autor_id && (
-                              <div className="flex items-center gap-2">
-                                {autores.find((a) => a.id === autor_id)
-                                  ?.avatar_url ? (
-                                  <img
-                                    src={
-                                      autores.find((a) => a.id === autor_id)
-                                        ?.avatar_url || ''
-                                    }
-                                    alt=""
-                                    className="w-5 h-5 rounded-full"
-                                  />
-                                ) : (
-                                  <User className="w-4 h-4" />
-                                )}
-                                <span>{selectedAutorNombre}</span>
-                              </div>
-                            )}
-                          </SelectValue>
-                        </SelectTrigger>
-                        <SelectContent>
-                          {autores.map((autor) => (
-                            <SelectItem key={autor.id} value={autor.id.toString()}>
-                              <div className="flex items-center gap-2">
-                                {autor.avatar_url ? (
-                                  <img
-                                    src={autor.avatar_url}
-                                    alt={autor.nombre}
-                                    className="w-5 h-5 rounded-full"
-                                  />
-                                ) : (
-                                  <User className="w-4 h-4" />
-                                )}
-                                <span>{autor.nombre}</span>
-                              </div>
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <BlogCategorySelector
-                      selectedCategories={selectedCategories}
-                      onChange={setSelectedCategories}
-                    />
-
-                    <BlogSchedulePicker
-                      scheduledFor={scheduledFor}
-                      onChange={setScheduledFor}
-                    />
-
-                    <div className="space-y-3">
-                      <Label>Imagen de Portada</Label>
-                      {(post?.imagen_portada_url || imageFile) && (
-                        <div className="relative group">
-                          <img
-                            src={
-                              imageFile
-                                ? URL.createObjectURL(imageFile)
-                                : post?.imagen_portada_url || ''
-                            }
-                            alt="Portada"
-                            className="w-full h-32 rounded object-cover"
-                          />
-                          <label className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer flex items-center justify-center rounded">
-                            <div className="text-white text-center">
-                              <Upload className="h-6 w-6 mx-auto mb-1" />
-                              <span className="text-xs">Reemplazar</span>
-                            </div>
-                            <input
-                              type="file"
-                              accept="image/*"
-                              onChange={(e) => setImageFile(e.target.files?.[0] || null)}
-                              className="hidden"
-                              aria-label="Reemplazar imagen de portada"
-                            />
-                          </label>
-                        </div>
-                      )}
-                      <label className="cursor-pointer">
-                        <div className="flex items-center gap-2 px-4 py-3 border-2 border-dashed rounded-lg hover:bg-accent transition-colors">
-                          <Upload className="h-4 w-4" />
-                          <span className="text-sm">
-                            {imageFile || post?.imagen_portada_url
-                              ? 'Cambiar imagen'
-                              : 'Subir imagen'}
-                          </span>
-                        </div>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => setImageFile(e.target.files?.[0] || null)}
-                          className="hidden"
-                          aria-label="Subir imagen de portada"
-                        />
-                      </label>
-                      
-                      {/* Alt text para imagen de portada */}
-                      {(post?.imagen_portada_url || imageFile) && (
-                        <div className="space-y-2">
-                          <Label htmlFor="imagen_portada_alt">Texto Alternativo (Alt)</Label>
-                          <Input
-                            id="imagen_portada_alt"
-                            {...register('imagen_portada_alt')}
-                            placeholder="Descripción de la imagen para SEO"
-                          />
-                          <p className="text-xs text-muted-foreground">
-                            Describe la imagen para mejorar el SEO y accesibilidad
-                          </p>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="tags">Tags</Label>
-                      <Input
-                        id="tags"
-                        {...register('tags')}
-                        placeholder="diseño, tutorial, recursos"
-                      />
-                    </div>
-                  </div>
-                </SheetContent>
-              </Sheet>
-
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border">
-                <Switch
-                  id="publicado"
-                  checked={watch('publicado')}
-                  onCheckedChange={(checked) => setValue('publicado', checked)}
-                />
-                <Label htmlFor="publicado" className="cursor-pointer text-sm">
-                  {watch('publicado') ? (
-                    <span className="flex items-center gap-1.5 text-green-600">
-                      <CheckCircle className="w-3.5 h-3.5" />
-                      Publicado
-                    </span>
-                  ) : (
-                    <span className="flex items-center gap-1.5 text-yellow-600">
-                      <AlertTriangle className="w-3.5 h-3.5" />
-                      Borrador
-                    </span>
-                  )}
-                </Label>
-              </div>
 
               <Button
                 onClick={handleSubmit(onSubmit)}
                 disabled={isSaving}
-                className="bg-gradient-to-r from-primary to-primary/80"
+                className="gap-2"
               >
                 {isSaving ? (
                   <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <Loader2 className="h-4 w-4 animate-spin" />
                     Guardando...
                   </>
                 ) : (
                   <>
-                    <Save className="mr-2 h-4 w-4" />
+                    <Save className="h-4 w-4" />
                     Guardar
                   </>
                 )}
               </Button>
             </div>
           </div>
-
-          {/* Stats bar */}
-          <div className="px-4 md:px-6 pb-3 overflow-x-auto">
-            <EditorStats blocks={blocks} title={titulo} description={descripcion_corta} />
-          </div>
-
-          {/* Tabs */}
-          <Tabs
-            value={activeTab}
-            onValueChange={(v) => setActiveTab(v as 'edit' | 'preview')}
-            className="px-4 md:px-6"
-          >
-            <TabsList className="grid w-full max-w-md grid-cols-2">
-              <TabsTrigger value="edit" className="gap-2 text-xs md:text-sm">
-                <Edit className="h-3 w-3 md:h-4 md:w-4" />
-                <span className="hidden sm:inline">Editor</span>
-              </TabsTrigger>
-              <TabsTrigger value="preview" className="gap-2 text-xs md:text-sm">
-                <Eye className="h-3 w-3 md:h-4 md:w-4" />
-                <span className="hidden sm:inline">Vista Previa</span>
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
         </header>
 
         {/* Content */}
@@ -780,10 +563,20 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
                   titulo,
                   slug,
                   descripcionCorta: descripcion_corta,
-                  tags: tags ? tags.split(',').map(t => t.trim()).filter(Boolean) : [],
+                  autorId: autor_id,
+                  autores,
                   publicado,
                   fechaPublicacion: new Date(post?.fecha_publicacion || Date.now()),
-                  autor: selectedAutorNombre,
+                  scheduledFor,
+                  tags: tags ? tags.split(',').map(t => t.trim()).filter(Boolean) : [],
+                  categories: selectedCategories,
+                  imagenPortadaUrl: post?.imagen_portada_url || undefined,
+                  imagenPortadaAlt: watch('imagen_portada_alt'),
+                  imageFile,
+                  onTituloChange: (newTitulo) => {
+                    setValue('titulo', newTitulo);
+                    setHasUnsavedChanges(true);
+                  },
                   onSlugChange: (newSlug) => {
                     setValue('slug', newSlug);
                     setHasUnsavedChanges(true);
@@ -792,8 +585,8 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
                     setValue('descripcion_corta', desc);
                     setHasUnsavedChanges(true);
                   },
-                  onTagsChange: (newTags) => {
-                    setValue('tags', newTags.join(', '));
+                  onAutorChange: (newAutorId) => {
+                    setValue('autor_id', newAutorId);
                     setHasUnsavedChanges(true);
                   },
                   onPublicadoChange: (pub) => {
@@ -802,6 +595,26 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
                   },
                   onFechaChange: (fecha) => {
                     // Actualizar fecha de publicación
+                    setHasUnsavedChanges(true);
+                  },
+                  onScheduledForChange: (date) => {
+                    setScheduledFor(date);
+                    setHasUnsavedChanges(true);
+                  },
+                  onTagsChange: (newTags) => {
+                    setValue('tags', newTags.join(', '));
+                    setHasUnsavedChanges(true);
+                  },
+                  onCategoriesChange: (cats) => {
+                    setSelectedCategories(cats);
+                    setHasUnsavedChanges(true);
+                  },
+                  onImageFileChange: (file) => {
+                    setImageFile(file);
+                    setHasUnsavedChanges(true);
+                  },
+                  onImagenAltChange: (alt) => {
+                    setValue('imagen_portada_alt', alt);
                     setHasUnsavedChanges(true);
                   },
                 }}

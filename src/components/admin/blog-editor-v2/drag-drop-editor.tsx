@@ -28,19 +28,37 @@ import { BLOCK_TOOLS } from './block-tools';
 import { useHistory } from '@/lib/use-history';
 import { useToast } from '@/components/ui/use-toast';
 
+interface Autor {
+  id: number;
+  nombre: string;
+  avatar_url?: string | null;
+}
+
 interface PostSettings {
   titulo: string;
   slug: string;
   descripcionCorta: string;
-  tags: string[];
+  autorId: number | null;
+  autores: Autor[];
   publicado: boolean;
   fechaPublicacion: Date;
-  autor: string;
+  scheduledFor: string | null;
+  tags: string[];
+  categories: number[];
+  imagenPortadaUrl?: string;
+  imagenPortadaAlt?: string;
+  imageFile: File | null;
+  onTituloChange: (titulo: string) => void;
   onSlugChange: (slug: string) => void;
   onDescripcionChange: (desc: string) => void;
-  onTagsChange: (tags: string[]) => void;
+  onAutorChange: (autorId: number | null) => void;
   onPublicadoChange: (publicado: boolean) => void;
   onFechaChange: (fecha: Date) => void;
+  onScheduledForChange: (date: string | null) => void;
+  onTagsChange: (tags: string[]) => void;
+  onCategoriesChange: (categories: number[]) => void;
+  onImageFileChange: (file: File | null) => void;
+  onImagenAltChange: (alt: string) => void;
 }
 
 interface DragDropEditorProps {
@@ -461,15 +479,27 @@ export function DragDropEditor({ blocks, onChange, postSettings }: DragDropEdito
               titulo={postSettings.titulo}
               slug={postSettings.slug}
               descripcionCorta={postSettings.descripcionCorta}
-              tags={postSettings.tags}
+              autorId={postSettings.autorId}
+              autores={postSettings.autores}
               publicado={postSettings.publicado}
               fechaPublicacion={postSettings.fechaPublicacion}
-              autor={postSettings.autor}
+              scheduledFor={postSettings.scheduledFor}
+              tags={postSettings.tags}
+              categories={postSettings.categories}
+              imagenPortadaUrl={postSettings.imagenPortadaUrl}
+              imagenPortadaAlt={postSettings.imagenPortadaAlt}
+              imageFile={postSettings.imageFile}
+              onTituloChange={postSettings.onTituloChange}
               onSlugChange={postSettings.onSlugChange}
               onDescripcionChange={postSettings.onDescripcionChange}
-              onTagsChange={postSettings.onTagsChange}
+              onAutorChange={postSettings.onAutorChange}
               onPublicadoChange={postSettings.onPublicadoChange}
               onFechaChange={postSettings.onFechaChange}
+              onScheduledForChange={postSettings.onScheduledForChange}
+              onTagsChange={postSettings.onTagsChange}
+              onCategoriesChange={postSettings.onCategoriesChange}
+              onImageFileChange={postSettings.onImageFileChange}
+              onImagenAltChange={postSettings.onImagenAltChange}
             />
           ) : (
             <SidebarProperties selectedBlock={selectedBlock} />
