@@ -239,6 +239,14 @@ export default function BlogManager() {
               Desde Template
             </Button>
           </TemplateGallery>
+          <Button 
+            variant="outline" 
+            className="gap-2"
+            onClick={() => router.push('/admin/templates')}
+          >
+            <FileText className="h-4 w-4" />
+            Gestionar Templates
+          </Button>
         </div>
       </div>
 
