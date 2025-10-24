@@ -357,27 +357,37 @@ export function BlockRenderer({ blocks }: BlockRendererProps) {
   return (
     <div className="space-y-6">
       {blocks.map((block) => {
-        switch (block.type) {
-          case 'text':
-            return <TextBlockComponent key={block.id} block={block} />;
-          case 'program-card':
-            return <ProgramCardBlockComponent key={block.id} block={block} />;
-          case 'programs-grid':
-            return <ProgramsGridBlockComponent key={block.id} block={block} />;
-          case 'tabs':
-            return <TabsBlockComponent key={block.id} block={block} />;
-          case 'accordion':
-            return <AccordionBlockComponent key={block.id} block={block} />;
-          case 'alert':
-            return <AlertBlockComponent key={block.id} block={block} />;
-          case 'separator':
-            return <SeparatorBlockComponent key={block.id} block={block} />;
-          case 'image':
-            return <ImageBlockComponent key={block.id} block={block} />;
-          case 'code':
-            return <CodeBlockComponent key={block.id} block={block} />;
-          default:
-            return null;
+        try {
+          switch (block.type) {
+            case 'text':
+              return <TextBlockComponent key={block.id} block={block} />;
+            case 'program-card':
+              return <ProgramCardBlockComponent key={block.id} block={block} />;
+            case 'programs-grid':
+              return <ProgramsGridBlockComponent key={block.id} block={block} />;
+            case 'tabs':
+              return <TabsBlockComponent key={block.id} block={block} />;
+            case 'accordion':
+              return <AccordionBlockComponent key={block.id} block={block} />;
+            case 'alert':
+              return <AlertBlockComponent key={block.id} block={block} />;
+            case 'separator':
+              return <SeparatorBlockComponent key={block.id} block={block} />;
+            case 'image':
+              return <ImageBlockComponent key={block.id} block={block} />;
+            case 'code':
+              return <CodeBlockComponent key={block.id} block={block} />;
+            default:
+              console.warn('Unknown block type:', (block as any).type);
+              return null;
+          }
+        } catch (error) {
+          console.error('Error rendering block:', (block as any).type, error);
+          return (
+            <div key={block.id} className="p-4 border-2 border-destructive rounded-lg text-destructive">
+              Error al renderizar bloque de tipo: {(block as any).type}
+            </div>
+          );
         }
       })}
     </div>
