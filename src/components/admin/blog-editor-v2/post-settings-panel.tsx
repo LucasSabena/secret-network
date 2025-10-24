@@ -16,7 +16,6 @@ import {
   User,
   Eye,
   EyeOff,
-  Clock,
   Hash,
 } from 'lucide-react';
 import { format } from 'date-fns';
@@ -142,13 +141,13 @@ export function PostSettingsPanel({
             </div>
           ) : (
             <div className="space-y-2">
-              <div className="flex items-center gap-2 p-2 bg-muted rounded-md">
-                <code className="text-xs flex-1 truncate">{slug || 'sin-slug'}</code>
+              <div className="flex items-center gap-2 p-2 bg-muted rounded-md overflow-hidden">
+                <code className="text-xs flex-1 truncate min-w-0">{slug || 'sin-slug'}</code>
                 <Button
                   size="sm"
                   variant="ghost"
                   onClick={() => setEditingSlug(true)}
-                  className="h-6 px-2 text-xs"
+                  className="h-6 px-2 text-xs shrink-0"
                 >
                   Editar
                 </Button>
@@ -165,7 +164,7 @@ export function PostSettingsPanel({
             </div>
           )}
           
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-muted-foreground truncate">
             URL final: /blog/{slug || 'sin-slug'}
           </p>
         </div>

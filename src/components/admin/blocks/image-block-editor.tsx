@@ -179,7 +179,8 @@ export function ImageBlockEditor({ block, onChange }: ImageBlockEditorProps) {
                       }, { once: true });
                     }}
                   >
-                    📋 Click aquí y Ctrl+V
+                    <ImagePlus className="h-4 w-4 mr-2" />
+                    Pegar imagen (Ctrl+V)
                   </Button>
                 </div>
                 <p className="text-xs text-muted-foreground">
@@ -195,6 +196,8 @@ export function ImageBlockEditor({ block, onChange }: ImageBlockEditorProps) {
           accept="image/*"
           className="hidden"
           onChange={handleFileUpload}
+          aria-label="Subir imagen"
+          title="Subir imagen"
         />
       </div>
 
@@ -254,6 +257,7 @@ export function ImageBlockEditor({ block, onChange }: ImageBlockEditorProps) {
                 className="hidden"
                 disabled={uploading}
                 aria-label="Reemplazar imagen"
+                title="Reemplazar imagen"
               />
             </label>
           </div>

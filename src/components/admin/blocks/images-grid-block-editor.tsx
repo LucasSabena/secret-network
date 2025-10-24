@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Plus, X, Columns2, Columns3, Columns4, Upload, Loader2, ImagePlus } from 'lucide-react';
+import { X, Columns2, Columns3, Columns4, Upload, Loader2, ImagePlus } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { uploadToCloudinary } from '@/lib/cloudinary-upload';
@@ -236,6 +236,8 @@ export function ImagesGridBlockEditor({ block, onChange }: ImagesGridBlockEditor
                       }}
                       className="hidden"
                       disabled={uploading}
+                      aria-label="Reemplazar imagen"
+                      title="Reemplazar imagen"
                     />
                   </label>
                 </div>
@@ -331,7 +333,8 @@ export function ImagesGridBlockEditor({ block, onChange }: ImagesGridBlockEditor
                       }, { once: true });
                     }}
                   >
-                    📋 Click aquí y Ctrl+V
+                    <ImagePlus className="h-4 w-4 mr-2" />
+                    Pegar imagen (Ctrl+V)
                   </Button>
                 </div>
                 <p className="text-xs text-muted-foreground">
@@ -352,6 +355,8 @@ export function ImagesGridBlockEditor({ block, onChange }: ImagesGridBlockEditor
             files.forEach(file => addImage(file));
             e.target.value = '';
           }}
+          aria-label="Subir imágenes"
+          title="Subir imágenes"
         />
       </div>
 

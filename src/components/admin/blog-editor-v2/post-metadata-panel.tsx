@@ -28,7 +28,6 @@ import { es } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { BlogCategorySelector } from '../blog-category-selector';
-import { BlogSchedulePicker } from '../blog-schedule-picker';
 
 interface Autor {
   id: number;
@@ -217,8 +216,8 @@ export function PostMetadataPanel({
             </div>
           ) : (
             <div className="space-y-2">
-              <div className="flex items-center gap-2 p-2 bg-muted rounded-md min-w-0 overflow-hidden">
-                <code className="text-xs flex-1 truncate overflow-hidden text-ellipsis whitespace-nowrap">
+              <div className="flex items-center gap-2 p-2 bg-muted rounded-md overflow-hidden">
+                <code className="text-xs flex-1 truncate min-w-0">
                   {slug || 'sin-slug'}
                 </code>
                 <Button
@@ -243,7 +242,7 @@ export function PostMetadataPanel({
             </div>
           )}
           
-          <p className="text-xs text-muted-foreground truncate overflow-hidden text-ellipsis">
+          <p className="text-xs text-muted-foreground truncate">
             URL: /blog/{slug || 'sin-slug'}
           </p>
         </div>
@@ -304,6 +303,8 @@ export function PostMetadataPanel({
               accept="image/*"
               onChange={handleImageChange}
               className="hidden"
+              aria-label="Subir imagen de portada"
+              title="Subir imagen de portada"
             />
           </div>
           
@@ -472,11 +473,73 @@ export function PostMetadataPanel({
 
           {/* Programar publicación */}
           <div className="space-y-2">
-            <Label className="text-xs">Programar Publicación</Label>
-            <BlogSchedulePicker
-              scheduledFor={scheduledFor}
-              onChange={onScheduledForChange}
-            />
+            <div className="flex items-center justify-between">
+              <Label className="text-xs">Programar Publicación</Label>
+              <Switch
+                checked={!!scheduledFor}
+                onCheckedChange={(checked) => {
+                  if (!checked) {
+                    onScheduledForChange(null);
+                  } else {
+                    const tomorrow = new Date();
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+                    tomorrow.setHours(9, 0, 0, 0);
+                    onScheduledForChange(tomorrow.toISOString());
+                  }
+                }}
+              />
+            </div>
+            
+            {scheduledFor && (
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start text-left font-normal h-8 text-xs"
+                  >
+                    <CalendarIcon className="mr-2 h-3 w-3" />
+                    {format(new Date(scheduledFor), 'PPP p', { locale: es })}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <div className="p-3 space-y-3">
+                    <Calendar
+                      mode="single"
+                      selected={new Date(scheduledFor)}
+                      onSelect={(date: Date | undefined) => {
+                        if (date) {
+                          const currentDate = new Date(scheduledFor);
+                          date.setHours(currentDate.getHours(), currentDate.getMinutes());
+                          onScheduledForChange(date.toISOString());
+                        }
+                      }}
+                      locale={es}
+                      disabled={(date) => date < new Date()}
+                    />
+                    <div className="border-t pt-3">
+                      <Label className="text-xs mb-2 block">Hora</Label>
+                      <Input
+                        type="time"
+                        value={format(new Date(scheduledFor), 'HH:mm')}
+                        onChange={(e) => {
+                          const [hours, minutes] = e.target.value.split(':');
+                          const newDate = new Date(scheduledFor);
+                          newDate.setHours(parseInt(hours), parseInt(minutes));
+                          onScheduledForChange(newDate.toISOString());
+                        }}
+                        className="h-8 text-xs"
+                      />
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            )}
+            
+            {scheduledFor && (
+              <p className="text-xs text-muted-foreground">
+                El post se publicará automáticamente en la fecha seleccionada
+              </p>
+            )}
           </div>
         </div>
       </div>

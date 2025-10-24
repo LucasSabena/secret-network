@@ -6,8 +6,6 @@ import {
     GripVertical,
     Trash2,
     Copy,
-    Eye,
-    EyeOff,
     ChevronDown,
     ChevronRight,
     Type,
@@ -244,7 +242,7 @@ export function BlocksOutlinePanel({
                                         />
 
                                         {/* Drag handle */}
-                                        <button className="mt-1 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <button type="button" className="mt-1 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity" aria-label="Arrastrar bloque">
                                             <GripVertical className="h-4 w-4 text-muted-foreground" />
                                         </button>
 
@@ -272,6 +270,7 @@ export function BlocksOutlinePanel({
 
                                         {/* Toggle collapse */}
                                         <button
+                                            type="button"
                                             onClick={() => toggleCollapse(block.id)}
                                             className="mt-1 opacity-0 group-hover:opacity-100 transition-opacity"
                                             title={isCollapsed ? 'Expandir' : 'Colapsar'}
