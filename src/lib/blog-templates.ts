@@ -20,7 +20,7 @@ function generateBlockId(): string {
 // Helper para crear múltiples items de lista
 function createListItems(count: number, itemName: string): Block[] {
   const blocks: Block[] = [];
-  
+
   for (let i = 1; i <= count; i++) {
     blocks.push(
       {
@@ -57,7 +57,7 @@ function createListItems(count: number, itemName: string): Block[] {
       }
     );
   }
-  
+
   return blocks;
 }
 
@@ -91,7 +91,7 @@ export const PREDEFINED_TEMPLATES: BlogTemplate[] = [
         type: 'alert',
         data: {
           variant: 'default',
-          title: '💡 Tip',
+          title: 'Tip',
           description: 'Una buena página 404 debe ser útil, mantener al usuario en tu sitio y reflejar la personalidad de tu marca.',
         },
       },
@@ -121,7 +121,7 @@ export const PREDEFINED_TEMPLATES: BlogTemplate[] = [
     nombre: 'Top 20 Hero Sections Animadas',
     descripcion: 'Colección de las mejores hero sections con animaciones',
     categoria: 'showcase',
-    thumbnail: '🎨',
+    thumbnail: 'palette',
     bloques: [
       {
         id: generateBlockId(),
@@ -144,7 +144,7 @@ export const PREDEFINED_TEMPLATES: BlogTemplate[] = [
         type: 'alert',
         data: {
           variant: 'warning',
-          title: '⚠️ Importante',
+          title: 'Importante',
           description: 'Las animaciones deben mejorar la experiencia, no distraer. Asegúrate de que sean sutiles y no afecten el rendimiento.',
         },
       },
@@ -197,7 +197,7 @@ export const PREDEFINED_TEMPLATES: BlogTemplate[] = [
         type: 'alert',
         data: {
           variant: 'default',
-          title: '📋 Requisitos Previos',
+          title: 'Requisitos Previos',
           description: 'Antes de empezar, asegúrate de tener: Node.js instalado, conocimientos básicos de JavaScript, y un editor de código.',
         },
       },
@@ -270,7 +270,7 @@ export const PREDEFINED_TEMPLATES: BlogTemplate[] = [
         type: 'alert',
         data: {
           variant: 'success',
-          title: '✅ Tip Pro',
+          title: 'Tip Pro',
           description: 'Recuerda siempre probar tu código antes de continuar al siguiente paso.',
         },
       },
@@ -299,7 +299,7 @@ export const PREDEFINED_TEMPLATES: BlogTemplate[] = [
     nombre: 'Comparativa de Herramientas',
     descripcion: 'Comparación detallada entre diferentes herramientas',
     categoria: 'comparativa',
-    thumbnail: '⚖️',
+    thumbnail: 'scale',
     bloques: [
       {
         id: generateBlockId(),
@@ -345,12 +345,12 @@ export const PREDEFINED_TEMPLATES: BlogTemplate[] = [
             },
             {
               id: generateBlockId(),
-              title: '⚡ Rendimiento',
+              title: 'Rendimiento',
               content: 'Comparación de velocidad y eficiencia entre las tres herramientas.',
             },
             {
               id: generateBlockId(),
-              title: '🎨 Facilidad de Uso',
+              title: 'Facilidad de Uso',
               content: 'Análisis de la curva de aprendizaje y experiencia de usuario.',
             },
             {
@@ -476,7 +476,7 @@ export const PREDEFINED_TEMPLATES: BlogTemplate[] = [
         type: 'alert',
         data: {
           variant: 'default',
-          title: '💡 Sabías que...',
+          title: 'Sabías que...',
           description: 'Dato interesante relacionado con el tema.',
         },
       },
@@ -574,7 +574,7 @@ export const PREDEFINED_TEMPLATES: BlogTemplate[] = [
         type: 'text',
         data: {
           format: 'h2',
-          content: '✅ Pros',
+          content: 'Pros',
         },
       },
       {
@@ -590,7 +590,7 @@ export const PREDEFINED_TEMPLATES: BlogTemplate[] = [
         type: 'text',
         data: {
           format: 'h2',
-          content: '❌ Contras',
+          content: 'Contras',
         },
       },
       {
@@ -658,7 +658,7 @@ export const PREDEFINED_TEMPLATES: BlogTemplate[] = [
         type: 'alert',
         data: {
           variant: 'default',
-          title: '🎯 ¿Para quién es?',
+          title: '¿Para quién es?',
           description: 'Ideal para: [tipo de usuario]. No recomendado para: [otro tipo de usuario].',
         },
       },

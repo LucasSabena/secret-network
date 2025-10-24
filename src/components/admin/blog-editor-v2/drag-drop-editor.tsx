@@ -18,6 +18,7 @@ import { Block } from '@/lib/types';
 import { SidebarTools } from './sidebar-tools';
 import { CanvasArea } from './canvas-area';
 import { SidebarProperties } from './sidebar-properties';
+import { EditorSidebarTabs } from './editor-sidebar-tabs';
 import { BlockFactory } from './block-factory';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -27,9 +28,25 @@ import { BLOCK_TOOLS } from './block-tools';
 import { useHistory } from '@/lib/use-history';
 import { useToast } from '@/components/ui/use-toast';
 
+interface PostSettings {
+  titulo: string;
+  slug: string;
+  descripcionCorta: string;
+  tags: string[];
+  publicado: boolean;
+  fechaPublicacion: Date;
+  autor: string;
+  onSlugChange: (slug: string) => void;
+  onDescripcionChange: (desc: string) => void;
+  onTagsChange: (tags: string[]) => void;
+  onPublicadoChange: (publicado: boolean) => void;
+  onFechaChange: (fecha: Date) => void;
+}
+
 interface DragDropEditorProps {
   blocks: Block[];
   onChange: (blocks: Block[]) => void;
+  postSettings?: PostSettings;
 }
 
 // Componente para el menú móvil de bloques
@@ -81,7 +98,7 @@ function MobileBlocksMenu({ blocks, onChange }: { blocks: Block[]; onChange: (bl
   );
 }
 
-export function DragDropEditor({ blocks, onChange }: DragDropEditorProps) {
+export function DragDropEditor({ blocks, onChange, postSettings }: DragDropEditorProps) {
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [clipboard, setClipboard] = useState<Block | null>(null);
@@ -417,9 +434,46 @@ export function DragDropEditor({ blocks, onChange }: DragDropEditorProps) {
           />
         </div>
 
-        {/* Sidebar derecho: Propiedades - Hidden en mobile */}
-        <div className="hidden md:block w-72 shrink-0 border-l bg-muted/30">
-          <SidebarProperties selectedBlock={selectedBlock} />
+        {/* Sidebar derecho: Tabs mejorado - Hidden en mobile */}
+        <div className="hidden md:block w-80 shrink-0 border-l bg-muted/30">
+          {postSettings ? (
+            <EditorSidebarTabs
+              blocks={historyBlocks}
+              selectedBlockId={selectedBlockId}
+              onSelectBlock={setSelectedBlockId}
+              onDeleteBlocks={(ids) => {
+                setHistoryBlocks(historyBlocks.filter(b => !ids.includes(b.id)));
+                if (ids.includes(selectedBlockId || '')) {
+                  setSelectedBlockId(null);
+                }
+              }}
+              onDuplicateBlocks={(ids) => {
+                const blocksToDuplicate = historyBlocks.filter(b => ids.includes(b.id));
+                const newBlocks = blocksToDuplicate.map(block => ({
+                  ...block,
+                  id: `block-${Date.now()}-${Math.random().toString(36).substring(7)}`,
+                }));
+                setHistoryBlocks([...historyBlocks, ...newBlocks]);
+              }}
+              onReorderBlocks={(blockIds, targetIndex) => {
+                // TODO: Implementar reordenamiento
+              }}
+              titulo={postSettings.titulo}
+              slug={postSettings.slug}
+              descripcionCorta={postSettings.descripcionCorta}
+              tags={postSettings.tags}
+              publicado={postSettings.publicado}
+              fechaPublicacion={postSettings.fechaPublicacion}
+              autor={postSettings.autor}
+              onSlugChange={postSettings.onSlugChange}
+              onDescripcionChange={postSettings.onDescripcionChange}
+              onTagsChange={postSettings.onTagsChange}
+              onPublicadoChange={postSettings.onPublicadoChange}
+              onFechaChange={postSettings.onFechaChange}
+            />
+          ) : (
+            <SidebarProperties selectedBlock={selectedBlock} />
+          )}
         </div>
 
         {/* Botón flotante en mobile para agregar bloques */}

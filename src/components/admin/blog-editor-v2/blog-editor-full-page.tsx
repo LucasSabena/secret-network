@@ -46,6 +46,7 @@ import { EditorOnboarding } from './editor-onboarding';
 import { TemplateGallery } from './template-gallery';
 import { SpellCheckDialog } from './spell-check-dialog';
 import { ResponsivePreview } from './responsive-preview';
+import { ImagePasteHandler } from './image-paste-handler';
 import { BlockRenderer } from '@/components/blog/block-renderer';
 import { BlogPost, Autor, Block } from '@/lib/types';
 import { supabaseBrowserClient } from '@/lib/supabase-browser';
@@ -114,7 +115,10 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
   });
 
   const titulo = watch('titulo');
+  const slug = watch('slug');
   const descripcion_corta = watch('descripcion_corta');
+  const tags = watch('tags');
+  const publicado = watch('publicado');
   const autor_id = watch('autor_id');
 
   // Detectar cambios
@@ -248,6 +252,55 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
       await supabase
         .from('blog_posts_categories')
         .insert(relations);
+    }
+  }
+
+  async function handleImagePasted(file: File) {
+    try {
+      setIsSaving(true);
+      
+      // Validar imagen
+      const validation = validateImageFile(file);
+      if (!validation.valid) {
+        toast({
+          title: 'Error',
+          description: validation.error,
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      // Subir a Cloudinary
+      const imageUrl = await uploadToCloudinary(file, 'blog-pasted');
+
+      // Crear bloque de imagen
+      const newBlock: Block = {
+        id: `block-${Date.now()}-${Math.random().toString(36).substring(7)}`,
+        type: 'image',
+        data: {
+          url: imageUrl,
+          alt: `Imagen pegada ${new Date().toLocaleString('es-ES')}`,
+          caption: '',
+        },
+      };
+
+      // Agregar al final de los bloques
+      setBlocks([...blocks, newBlock]);
+      setHasUnsavedChanges(true);
+      
+      toast({
+        title: 'Imagen agregada',
+        description: 'La imagen se subió y agregó correctamente',
+      });
+    } catch (error) {
+      console.error('Error uploading pasted image:', error);
+      toast({
+        title: 'Error',
+        description: 'No se pudo subir la imagen pegada',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSaving(false);
     }
   }
 
@@ -716,7 +769,43 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
         <div className="flex-1 overflow-hidden">
           <Tabs value={activeTab} className="h-full">
             <TabsContent value="edit" className="h-full m-0">
-              <DragDropEditor blocks={blocks} onChange={setBlocks} />
+              <ImagePasteHandler 
+                onImagePasted={handleImagePasted}
+                enabled={activeTab === 'edit'}
+              />
+              <DragDropEditor 
+                blocks={blocks} 
+                onChange={setBlocks}
+                postSettings={{
+                  titulo,
+                  slug,
+                  descripcionCorta: descripcion_corta,
+                  tags: tags ? tags.split(',').map(t => t.trim()).filter(Boolean) : [],
+                  publicado,
+                  fechaPublicacion: new Date(post?.fecha_publicacion || Date.now()),
+                  autor: selectedAutorNombre,
+                  onSlugChange: (newSlug) => {
+                    setValue('slug', newSlug);
+                    setHasUnsavedChanges(true);
+                  },
+                  onDescripcionChange: (desc) => {
+                    setValue('descripcion_corta', desc);
+                    setHasUnsavedChanges(true);
+                  },
+                  onTagsChange: (newTags) => {
+                    setValue('tags', newTags.join(', '));
+                    setHasUnsavedChanges(true);
+                  },
+                  onPublicadoChange: (pub) => {
+                    setValue('publicado', pub);
+                    setHasUnsavedChanges(true);
+                  },
+                  onFechaChange: (fecha) => {
+                    // Actualizar fecha de publicación
+                    setHasUnsavedChanges(true);
+                  },
+                }}
+              />
             </TabsContent>
 
             <TabsContent value="preview" className="h-full m-0">
