@@ -18,7 +18,7 @@ export default function AdminAuthCheck({ children }: { children: React.ReactNode
   async function checkAuth() {
     try {
       const supabase = supabaseBrowserClient;
-      
+
       // Si estamos en la página de login o setup-password, no verificar
       if (pathname === '/admin/login' || pathname === '/admin/setup-password') {
         setIsLoading(false);

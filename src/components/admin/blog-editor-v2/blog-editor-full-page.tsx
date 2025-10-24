@@ -42,12 +42,16 @@ import { DragDropEditor } from './drag-drop-editor';
 import { EditorHelp } from './editor-help';
 import { EditorStats } from './editor-stats';
 import { EditorOnboarding } from './editor-onboarding';
+import { TemplateGallery } from './template-gallery';
+import { SpellCheckDialog } from './spell-check-dialog';
+import { ResponsivePreview } from './responsive-preview';
 import { BlockRenderer } from '@/components/blog/block-renderer';
 import { BlogPost, Autor, Block } from '@/lib/types';
 import { supabaseBrowserClient } from '@/lib/supabase-browser';
 import { uploadToCloudinary } from '@/lib/cloudinary-upload';
 import { validateImageFile } from '@/lib/cloudinary-config';
 import { ImageManager } from '@/lib/image-manager';
+import { hasClipboardData, getFromClipboard, formatClipboardAge, cloneBlocksWithNewIds } from '@/lib/clipboard-manager';
 
 interface BlogEditorFullPageProps {
   post: BlogPost | null;
@@ -83,7 +87,13 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
   const [selectedAutorNombre, setSelectedAutorNombre] = useState<string>('');
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const [showClipboardIndicator, setShowClipboardIndicator] = useState(false);
   const { toast } = useToast();
+
+  // Verificar si hay datos en el clipboard
+  useEffect(() => {
+    setShowClipboardIndicator(hasClipboardData());
+  }, []);
   
   const { register, handleSubmit, watch, setValue } = useForm<FormData>({
     defaultValues: {
@@ -321,6 +331,42 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
                   Guardado {formatTimeAgo(lastSaved)}
                 </span>
               )}
+              {showClipboardIndicator && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    const clipboardData = getFromClipboard();
+                    if (clipboardData) {
+                      const newBlocks = cloneBlocksWithNewIds(clipboardData.blocks);
+                      setBlocks([...blocks, ...newBlocks]);
+                      toast({
+                        title: 'Bloques pegados',
+                        description: `${newBlocks.length} bloque(s) agregado(s) desde el clipboard`,
+                      });
+                    }
+                  }}
+                  className="text-xs"
+                >
+                  📋 Pegar desde clipboard ({formatClipboardAge(getFromClipboard()?.timestamp ? Date.now() - getFromClipboard()!.timestamp : 0)})
+                </Button>
+              )}
+              <TemplateGallery onSelectTemplate={(templateBlocks) => {
+                setBlocks(templateBlocks);
+                setHasUnsavedChanges(true);
+                toast({
+                  title: 'Plantilla cargada',
+                  description: 'Puedes personalizarla ahora',
+                });
+              }} />
+              <SpellCheckDialog blocks={blocks} onApplyCorrection={(blockId, newContent) => {
+                const block = blocks.find(b => b.id === blockId);
+                if (block && block.type === 'text') {
+                  const updatedBlock = { ...block, data: { ...block.data, content: newContent } };
+                  setBlocks(blocks.map(b => b.id === blockId ? updatedBlock : b));
+                  setHasUnsavedChanges(true);
+                }
+              }} />
               <EditorHelp />
               
               <Sheet>
@@ -525,7 +571,7 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
 
           {/* Stats bar */}
           <div className="px-4 md:px-6 pb-3 overflow-x-auto">
-            <EditorStats blocks={blocks} title={titulo} />
+            <EditorStats blocks={blocks} title={titulo} description={descripcion_corta} />
           </div>
 
           {/* Tabs */}
@@ -554,48 +600,18 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
               <DragDropEditor blocks={blocks} onChange={setBlocks} />
             </TabsContent>
 
-            <TabsContent value="preview" className="h-full m-0 overflow-y-auto p-4 md:p-8">
-              <Card className="p-4 md:p-8 max-w-4xl mx-auto">
-                {(imageFile || post?.imagen_portada_url) && (
-                  <img
-                    src={
-                      imageFile
-                        ? URL.createObjectURL(imageFile)
-                        : post?.imagen_portada_url || ''
-                    }
-                    alt="Portada"
-                    className="w-full h-64 object-cover rounded-lg mb-6"
-                  />
-                )}
-
-                <div className="space-y-4">
-                  <h1 className="text-4xl font-bold">
-                    {titulo || 'Título del Post'}
-                  </h1>
-
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground border-b pb-4">
-                    <span>Por {selectedAutorNombre || 'Autor'}</span>
-                    <span>•</span>
-                    <span>
-                      {new Date().toLocaleDateString('es-ES', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      })}
-                    </span>
-                  </div>
-
-                  {descripcion_corta && (
-                    <p className="text-lg text-muted-foreground italic border-l-4 border-primary pl-4">
-                      {descripcion_corta}
-                    </p>
-                  )}
-
-                  <div className="prose prose-sm dark:prose-invert max-w-none pt-8">
-                    <BlockRenderer blocks={blocks} />
-                  </div>
-                </div>
-              </Card>
+            <TabsContent value="preview" className="h-full m-0">
+              <ResponsivePreview
+                blocks={blocks}
+                title={titulo}
+                description={descripcion_corta}
+                authorName={selectedAutorNombre}
+                coverImage={
+                  imageFile
+                    ? URL.createObjectURL(imageFile)
+                    : post?.imagen_portada_url || undefined
+                }
+              />
             </TabsContent>
           </Tabs>
         </div>
