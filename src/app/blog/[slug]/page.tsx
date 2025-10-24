@@ -8,6 +8,7 @@ import { BlogPostHeader } from "@/components/blog/blog-post-header";
 import { RelatedPosts } from "@/components/blog/related-posts";
 import { BlogShareButtons } from "@/components/blog/blog-share-buttons";
 import { ReadingProgressBar } from "@/components/blog/reading-progress-bar";
+import { BlogAnalyticsTracker } from "@/components/blog/blog-analytics-tracker";
 import { JsonLdArticle } from "@/components/seo/json-ld-article";
 import { JsonLdBreadcrumb } from "@/components/seo/json-ld-breadcrumb";
 import type { BlogPost } from "@/lib/types";
@@ -97,6 +98,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     <>
       {/* Barra de progreso de lectura */}
       <ReadingProgressBar />
+      
+      {/* Tracking de analytics */}
+      <BlogAnalyticsTracker postId={post.id} />
       
       <div className="container mx-auto px-4 py-8">
         {/* JSON-LD Structured Data */}
