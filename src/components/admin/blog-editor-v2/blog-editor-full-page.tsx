@@ -359,6 +359,48 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
                   description: 'Puedes personalizarla ahora',
                 });
               }} />
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={async () => {
+                  if (blocks.length === 0) {
+                    toast({
+                      title: 'Error',
+                      description: 'Agrega bloques antes de guardar como template',
+                      variant: 'destructive',
+                    });
+                    return;
+                  }
+                  const nombre = prompt('Nombre del template:');
+                  if (!nombre) return;
+                  const descripcion = prompt('Descripción (opcional):') || '';
+                  const { error } = await supabaseBrowserClient
+                    .from('blog_templates')
+                    .insert([{
+                      nombre,
+                      descripcion,
+                      categoria: 'guia',
+                      thumbnail_url: 'file-text',
+                      bloques: blocks,
+                      es_predefinida: false,
+                    }]);
+                  if (!error) {
+                    toast({
+                      title: 'Template guardado',
+                      description: 'Ahora puedes usarlo en otros posts',
+                    });
+                  } else {
+                    toast({
+                      title: 'Error',
+                      description: 'No se pudo guardar el template',
+                      variant: 'destructive',
+                    });
+                  }
+                }}
+                className="hidden md:flex"
+              >
+                💾 Guardar como Template
+              </Button>
               <SpellCheckDialog blocks={blocks} onApplyCorrection={(blockId, newContent) => {
                 const block = blocks.find(b => b.id === blockId);
                 if (block && block.type === 'text') {

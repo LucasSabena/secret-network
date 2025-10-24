@@ -1,7 +1,8 @@
 // FILE: src/components/admin/blog-editor-v2/template-gallery.tsx
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { supabaseBrowserClient } from '@/lib/supabase-browser';
 import {
   Dialog,
   DialogContent,
@@ -109,6 +110,42 @@ function TemplateCard({ template, onSelect }: { template: BlogTemplate; onSelect
 export function TemplateGallery({ onSelectTemplate, children }: TemplateGalleryProps) {
   const [open, setOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<'all' | BlogTemplate['categoria']>('all');
+  const [templates, setTemplates] = useState<BlogTemplate[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Cargar templates desde Supabase
+  useEffect(() => {
+    async function loadTemplates() {
+      setLoading(true);
+      const { data, error } = await supabaseBrowserClient
+        .from('blog_templates')
+        .select('*')
+        .eq('es_predefinida', true)
+        .order('nombre');
+
+      if (!error && data) {
+        // Mapear los datos de Supabase al formato BlogTemplate
+        const mappedTemplates: BlogTemplate[] = data.map((t: any) => ({
+          id: t.id.toString(),
+          nombre: t.nombre,
+          descripcion: t.descripcion || '',
+          categoria: t.categoria as BlogTemplate['categoria'],
+          thumbnail: t.thumbnail_url || 'file-text',
+          bloques: t.bloques || [],
+        }));
+        setTemplates(mappedTemplates);
+      } else if (error) {
+        console.error('Error cargando templates:', error);
+        // Fallback a templates del código si hay error
+        setTemplates(PREDEFINED_TEMPLATES);
+      }
+      setLoading(false);
+    }
+    
+    if (open) {
+      loadTemplates();
+    }
+  }, [open]);
 
   const handleSelectTemplate = (template: BlogTemplate) => {
     const blocks = cloneTemplate(template);
@@ -117,8 +154,8 @@ export function TemplateGallery({ onSelectTemplate, children }: TemplateGalleryP
   };
 
   const filteredTemplates = selectedCategory === 'all'
-    ? PREDEFINED_TEMPLATES
-    : PREDEFINED_TEMPLATES.filter(t => t.categoria === (selectedCategory as BlogTemplate['categoria']));
+    ? templates
+    : templates.filter(t => t.categoria === (selectedCategory as BlogTemplate['categoria']));
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -151,7 +188,12 @@ export function TemplateGallery({ onSelectTemplate, children }: TemplateGalleryP
 
           <div className="flex-1 overflow-y-auto mt-4">
             <TabsContent value={selectedCategory} className="m-0">
-              {filteredTemplates.length === 0 ? (
+              {loading ? (
+                <div className="text-center py-12 text-muted-foreground">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
+                  Cargando plantillas...
+                </div>
+              ) : filteredTemplates.length === 0 ? (
                 <div className="text-center py-12 text-muted-foreground">
                   No hay plantillas en esta categoría
                 </div>

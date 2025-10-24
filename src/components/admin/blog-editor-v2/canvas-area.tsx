@@ -23,6 +23,18 @@ import { AccordionBlockEditor } from '../blocks/accordion-block-editor';
 import { AlertBlockEditor } from '../blocks/alert-block-editor';
 import { CodeBlockEditor } from '../blocks/code-block-editor';
 import { SeparatorBlockEditor } from '../blocks/separator-block-editor';
+import { VideoBlockEditor } from '../blocks/video-block-editor';
+import { TweetBlockEditor } from '../blocks/tweet-block-editor';
+import { TableBlockEditor } from '../blocks/table-block-editor';
+import { CalloutBlockEditor } from '../blocks/callout-block-editor';
+import { ButtonBlockEditor } from '../blocks/button-block-editor';
+import { DividerTextBlockEditor } from '../blocks/divider-text-block-editor';
+import { QuoteBlockEditor } from '../blocks/quote-block-editor';
+import { StatsBlockEditor } from '../blocks/stats-block-editor';
+import { TimelineBlockEditor } from '../blocks/timeline-block-editor';
+import { ComparisonBlockEditor } from '../blocks/comparison-block-editor';
+import { FileDownloadBlockEditor } from '../blocks/file-download-block-editor';
+import { EmbedBlockEditor } from '../blocks/embed-block-editor';
 
 interface CanvasAreaProps {
   blocks: Block[];
@@ -211,6 +223,90 @@ function BlockEditorRenderer({
       return (
         <SeparatorBlockEditor
           block={block as Extract<Block, { type: 'separator' }>}
+          onChange={onChange as any}
+        />
+      );
+    case 'video':
+      return (
+        <VideoBlockEditor
+          block={block as Extract<Block, { type: 'video' }>}
+          onChange={onChange as any}
+        />
+      );
+    case 'tweet':
+      return (
+        <TweetBlockEditor
+          block={block as Extract<Block, { type: 'tweet' }>}
+          onChange={onChange as any}
+        />
+      );
+    case 'table':
+      return (
+        <TableBlockEditor
+          block={block as Extract<Block, { type: 'table' }>}
+          onChange={onChange as any}
+        />
+      );
+    case 'callout':
+      return (
+        <CalloutBlockEditor
+          block={block as Extract<Block, { type: 'callout' }>}
+          onChange={onChange as any}
+        />
+      );
+    case 'button':
+      return (
+        <ButtonBlockEditor
+          block={block as Extract<Block, { type: 'button' }>}
+          onChange={onChange as any}
+        />
+      );
+    case 'divider-text':
+      return (
+        <DividerTextBlockEditor
+          block={block as Extract<Block, { type: 'divider-text' }>}
+          onChange={onChange as any}
+        />
+      );
+    case 'quote':
+      return (
+        <QuoteBlockEditor
+          block={block as Extract<Block, { type: 'quote' }>}
+          onChange={onChange as any}
+        />
+      );
+    case 'stats':
+      return (
+        <StatsBlockEditor
+          block={block as Extract<Block, { type: 'stats' }>}
+          onChange={onChange as any}
+        />
+      );
+    case 'timeline':
+      return (
+        <TimelineBlockEditor
+          block={block as Extract<Block, { type: 'timeline' }>}
+          onChange={onChange as any}
+        />
+      );
+    case 'comparison':
+      return (
+        <ComparisonBlockEditor
+          block={block as Extract<Block, { type: 'comparison' }>}
+          onChange={onChange as any}
+        />
+      );
+    case 'file-download':
+      return (
+        <FileDownloadBlockEditor
+          block={block as Extract<Block, { type: 'file-download' }>}
+          onChange={onChange as any}
+        />
+      );
+    case 'embed':
+      return (
+        <EmbedBlockEditor
+          block={block as Extract<Block, { type: 'embed' }>}
           onChange={onChange as any}
         />
       );

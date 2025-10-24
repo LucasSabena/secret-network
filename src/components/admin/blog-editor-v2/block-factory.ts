@@ -92,6 +92,116 @@ export class BlockFactory {
           data: { style: 'solid' },
         };
 
+      case 'video':
+        return {
+          id,
+          type: 'video',
+          data: { url: '', platform: 'youtube', caption: '' },
+        };
+
+      case 'tweet':
+        return {
+          id,
+          type: 'tweet',
+          data: { tweetUrl: '' },
+        };
+
+      case 'table':
+        return {
+          id,
+          type: 'table',
+          data: {
+            headers: ['Columna 1', 'Columna 2'],
+            rows: [['', '']],
+            striped: false,
+          },
+        };
+
+      case 'callout':
+        return {
+          id,
+          type: 'callout',
+          data: { icon: '💡', content: '', color: 'blue' },
+        };
+
+      case 'button':
+        return {
+          id,
+          type: 'button',
+          data: {
+            text: 'Click aquí',
+            url: '',
+            variant: 'primary',
+            size: 'md',
+            openInNewTab: false,
+          },
+        };
+
+      case 'divider-text':
+        return {
+          id,
+          type: 'divider-text',
+          data: { text: '', style: 'solid' },
+        };
+
+      case 'quote':
+        return {
+          id,
+          type: 'quote',
+          data: { quote: '', author: '', role: '', variant: 'default' },
+        };
+
+      case 'stats':
+        return {
+          id,
+          type: 'stats',
+          data: {
+            stats: [{ label: 'Métrica', value: '0' }],
+            columns: 3,
+          },
+        };
+
+      case 'timeline':
+        return {
+          id,
+          type: 'timeline',
+          data: {
+            items: [
+              { id: this.generateId(), date: '', title: '', description: '' },
+            ],
+          },
+        };
+
+      case 'comparison':
+        return {
+          id,
+          type: 'comparison',
+          data: {
+            items: [{ name: 'Item 1', features: {} }],
+            featureLabels: ['Feature 1'],
+          },
+        };
+
+      case 'file-download':
+        return {
+          id,
+          type: 'file-download',
+          data: {
+            fileName: 'documento.pdf',
+            fileUrl: '',
+            fileSize: '',
+            fileType: 'PDF',
+            description: '',
+          },
+        };
+
+      case 'embed':
+        return {
+          id,
+          type: 'embed',
+          data: { embedCode: '', height: 400, caption: '' },
+        };
+
       default:
         return {
           id,

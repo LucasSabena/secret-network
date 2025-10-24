@@ -449,6 +449,300 @@ function CodeBlockComponent({ block }: { block: Extract<Block, { type: 'code' }>
   );
 }
 
+// Componente para video embed
+function VideoBlockComponent({ block }: { block: Extract<Block, { type: 'video' }> }) {
+  const getEmbedUrl = () => {
+    const { url, platform } = block.data;
+    if (platform === 'youtube') {
+      const videoId = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&]+)/)?.[1];
+      return videoId ? `https://www.youtube.com/embed/${videoId}` : '';
+    }
+    if (platform === 'vimeo') {
+      const videoId = url.match(/vimeo\.com\/(\d+)/)?.[1];
+      return videoId ? `https://player.vimeo.com/video/${videoId}` : '';
+    }
+    if (platform === 'loom') {
+      const videoId = url.match(/loom\.com\/share\/([^?]+)/)?.[1];
+      return videoId ? `https://www.loom.com/embed/${videoId}` : '';
+    }
+    return '';
+  };
+
+  const embedUrl = getEmbedUrl();
+  if (!embedUrl) return null;
+
+  return (
+    <div className="my-8">
+      <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+        <iframe
+          src={embedUrl}
+          className="absolute top-0 left-0 w-full h-full rounded-lg"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
+      </div>
+      {block.data.caption && (
+        <p className="text-center text-sm text-muted-foreground mt-2">{block.data.caption}</p>
+      )}
+    </div>
+  );
+}
+
+// Componente para tweet embed
+function TweetBlockComponent({ block }: { block: Extract<Block, { type: 'tweet' }> }) {
+  return (
+    <div className="my-8 flex justify-center">
+      <blockquote className="twitter-tweet">
+        <a href={block.data.tweetUrl}>Tweet</a>
+      </blockquote>
+    </div>
+  );
+}
+
+// Componente para tabla
+function TableBlockComponent({ block }: { block: Extract<Block, { type: 'table' }> }) {
+  return (
+    <div className="my-8 overflow-x-auto">
+      <table className="w-full border-collapse">
+        <thead>
+          <tr>
+            {block.data.headers.map((header, i) => (
+              <th key={i} className="border p-3 bg-muted font-semibold text-left">
+                {header}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {block.data.rows.map((row, rowIndex) => (
+            <tr key={rowIndex} className={block.data.striped && rowIndex % 2 === 1 ? 'bg-muted/50' : ''}>
+              {row.map((cell, cellIndex) => (
+                <td key={cellIndex} className="border p-3">
+                  {cell}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+// Componente para callout
+function CalloutBlockComponent({ block }: { block: Extract<Block, { type: 'callout' }> }) {
+  const colorClasses = {
+    blue: 'bg-blue-50 border-blue-200 text-blue-900 dark:bg-blue-950 dark:border-blue-800 dark:text-blue-100',
+    green: 'bg-green-50 border-green-200 text-green-900 dark:bg-green-950 dark:border-green-800 dark:text-green-100',
+    yellow: 'bg-yellow-50 border-yellow-200 text-yellow-900 dark:bg-yellow-950 dark:border-yellow-800 dark:text-yellow-100',
+    red: 'bg-red-50 border-red-200 text-red-900 dark:bg-red-950 dark:border-red-800 dark:text-red-100',
+    purple: 'bg-purple-50 border-purple-200 text-purple-900 dark:bg-purple-950 dark:border-purple-800 dark:text-purple-100',
+    gray: 'bg-gray-50 border-gray-200 text-gray-900 dark:bg-gray-950 dark:border-gray-800 dark:text-gray-100',
+  };
+
+  return (
+    <div className={cn('my-6 p-4 border-l-4 rounded-r-lg', colorClasses[block.data.color])}>
+      <div className="flex gap-3">
+        <span className="text-2xl">{block.data.icon}</span>
+        <div className="flex-1 whitespace-pre-wrap">{block.data.content}</div>
+      </div>
+    </div>
+  );
+}
+
+// Componente para botón
+function ButtonBlockComponent({ block }: { block: Extract<Block, { type: 'button' }> }) {
+  const variantClasses = {
+    primary: 'bg-primary text-primary-foreground hover:bg-primary/90',
+    secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+    outline: 'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
+    ghost: 'hover:bg-accent hover:text-accent-foreground',
+  };
+
+  const sizeClasses = {
+    sm: 'h-9 px-3 text-sm',
+    md: 'h-10 px-4 py-2',
+    lg: 'h-11 px-8 text-lg',
+  };
+
+  return (
+    <div className="my-8 flex justify-center">
+      <a
+        href={block.data.url}
+        target={block.data.openInNewTab ? '_blank' : undefined}
+        rel={block.data.openInNewTab ? 'noopener noreferrer' : undefined}
+        className={cn(
+          'inline-flex items-center justify-center rounded-md font-medium transition-colors',
+          variantClasses[block.data.variant],
+          sizeClasses[block.data.size]
+        )}
+      >
+        {block.data.text}
+      </a>
+    </div>
+  );
+}
+
+// Componente para divider con texto
+function DividerTextBlockComponent({ block }: { block: Extract<Block, { type: 'divider-text' }> }) {
+  const styleClasses = {
+    solid: 'border-solid',
+    dashed: 'border-dashed',
+    dotted: 'border-dotted',
+  };
+
+  if (!block.data.text) {
+    return <Separator className={cn('my-8', styleClasses[block.data.style])} />;
+  }
+
+  return (
+    <div className="relative my-8">
+      <div className="absolute inset-0 flex items-center">
+        <span className={cn('w-full border-t', styleClasses[block.data.style])} />
+      </div>
+      <div className="relative flex justify-center text-xs uppercase">
+        <span className="bg-background px-2 text-muted-foreground">{block.data.text}</span>
+      </div>
+    </div>
+  );
+}
+
+// Componente para quote con autor
+function QuoteBlockComponent({ block }: { block: Extract<Block, { type: 'quote' }> }) {
+  const variantClasses = {
+    default: 'border-l-4 border-primary pl-6 italic',
+    bordered: 'border-2 border-primary p-6 rounded-lg',
+    highlighted: 'bg-primary/10 border-l-4 border-primary p-6 rounded-r-lg',
+  };
+
+  return (
+    <blockquote className={cn('my-8', variantClasses[block.data.variant])}>
+      <p className="text-lg">{block.data.quote}</p>
+      {(block.data.author || block.data.role) && (
+        <footer className="mt-4 text-sm text-muted-foreground">
+          {block.data.author && <cite className="font-semibold not-italic">{block.data.author}</cite>}
+          {block.data.role && <span className="ml-2">— {block.data.role}</span>}
+        </footer>
+      )}
+    </blockquote>
+  );
+}
+
+// Componente para stats
+function StatsBlockComponent({ block }: { block: Extract<Block, { type: 'stats' }> }) {
+  return (
+    <div className={cn('my-8 grid gap-4', `grid-cols-1 md:grid-cols-${block.data.columns}`)}>
+      {block.data.stats.map((stat, i) => (
+        <div key={i} className="border rounded-lg p-6 text-center">
+          <div className="text-3xl font-bold text-primary">{stat.value}</div>
+          <div className="text-sm text-muted-foreground mt-2">{stat.label}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// Componente para timeline
+function TimelineBlockComponent({ block }: { block: Extract<Block, { type: 'timeline' }> }) {
+  return (
+    <div className="my-8 space-y-8">
+      {block.data.items.map((item, i) => (
+        <div key={item.id} className="flex gap-4">
+          <div className="flex flex-col items-center">
+            <div className="w-3 h-3 rounded-full bg-primary" />
+            {i < block.data.items.length - 1 && <div className="w-0.5 flex-1 bg-border mt-2" />}
+          </div>
+          <div className="flex-1 pb-8">
+            <div className="text-sm text-muted-foreground mb-1">{item.date}</div>
+            <h4 className="font-semibold mb-2">{item.title}</h4>
+            <p className="text-muted-foreground">{item.description}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// Componente para comparison
+function ComparisonBlockComponent({ block }: { block: Extract<Block, { type: 'comparison' }> }) {
+  return (
+    <div className="my-8 overflow-x-auto">
+      <table className="w-full border-collapse">
+        <thead>
+          <tr>
+            <th className="border p-3 bg-muted font-semibold text-left">Feature</th>
+            {block.data.items.map((item, i) => (
+              <th key={i} className="border p-3 bg-muted font-semibold text-center">
+                {item.name}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {block.data.featureLabels.map((label, i) => (
+            <tr key={i}>
+              <td className="border p-3 font-medium">{label}</td>
+              {block.data.items.map((item, j) => (
+                <td key={j} className="border p-3 text-center">
+                  {typeof item.features[label] === 'boolean' ? (
+                    item.features[label] ? '✓' : '✗'
+                  ) : (
+                    item.features[label]
+                  )}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+// Componente para file download
+function FileDownloadBlockComponent({ block }: { block: Extract<Block, { type: 'file-download' }> }) {
+  return (
+    <div className="my-8">
+      <a
+        href={block.data.fileUrl}
+        download
+        className="flex items-center gap-4 p-4 border rounded-lg hover:bg-accent transition-colors"
+      >
+        <div className="w-12 h-12 rounded bg-primary/10 flex items-center justify-center text-2xl">
+          📄
+        </div>
+        <div className="flex-1">
+          <div className="font-semibold">{block.data.fileName}</div>
+          {block.data.description && (
+            <div className="text-sm text-muted-foreground">{block.data.description}</div>
+          )}
+          <div className="text-xs text-muted-foreground mt-1">
+            {block.data.fileType && <span>{block.data.fileType}</span>}
+            {block.data.fileSize && <span className="ml-2">• {block.data.fileSize}</span>}
+          </div>
+        </div>
+        <div className="text-primary">↓</div>
+      </a>
+    </div>
+  );
+}
+
+// Componente para embed genérico
+function EmbedBlockComponent({ block }: { block: Extract<Block, { type: 'embed' }> }) {
+  return (
+    <div className="my-8">
+      <div
+        className="w-full"
+        style={{ height: block.data.height ? `${block.data.height}px` : 'auto' }}
+        dangerouslySetInnerHTML={{ __html: block.data.embedCode }}
+      />
+      {block.data.caption && (
+        <p className="text-center text-sm text-muted-foreground mt-2">{block.data.caption}</p>
+      )}
+    </div>
+  );
+}
+
 // Componente principal que renderiza todos los bloques
 export function BlockRenderer({ blocks }: BlockRendererProps) {
   if (!blocks || blocks.length === 0) {
@@ -480,6 +774,30 @@ export function BlockRenderer({ blocks }: BlockRendererProps) {
               return <ImageBlockComponent key={block.id} block={block} />;
             case 'code':
               return <CodeBlockComponent key={block.id} block={block} />;
+            case 'video':
+              return <VideoBlockComponent key={block.id} block={block} />;
+            case 'tweet':
+              return <TweetBlockComponent key={block.id} block={block} />;
+            case 'table':
+              return <TableBlockComponent key={block.id} block={block} />;
+            case 'callout':
+              return <CalloutBlockComponent key={block.id} block={block} />;
+            case 'button':
+              return <ButtonBlockComponent key={block.id} block={block} />;
+            case 'divider-text':
+              return <DividerTextBlockComponent key={block.id} block={block} />;
+            case 'quote':
+              return <QuoteBlockComponent key={block.id} block={block} />;
+            case 'stats':
+              return <StatsBlockComponent key={block.id} block={block} />;
+            case 'timeline':
+              return <TimelineBlockComponent key={block.id} block={block} />;
+            case 'comparison':
+              return <ComparisonBlockComponent key={block.id} block={block} />;
+            case 'file-download':
+              return <FileDownloadBlockComponent key={block.id} block={block} />;
+            case 'embed':
+              return <EmbedBlockComponent key={block.id} block={block} />;
             default:
               console.warn('Unknown block type:', (block as any).type);
               return null;

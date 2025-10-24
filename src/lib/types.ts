@@ -159,6 +159,165 @@ export type CodeBlock = {
   style?: BlockStyle;
 };
 
+// Bloque de video embed
+export type VideoBlock = {
+  id: string;
+  type: 'video';
+  data: {
+    url: string;
+    platform: 'youtube' | 'vimeo' | 'loom';
+    caption?: string;
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de tweet embed
+export type TweetBlock = {
+  id: string;
+  type: 'tweet';
+  data: {
+    tweetUrl: string;
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de tabla
+export type TableBlock = {
+  id: string;
+  type: 'table';
+  data: {
+    headers: string[];
+    rows: string[][];
+    striped?: boolean;
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de callout/note
+export type CalloutBlock = {
+  id: string;
+  type: 'callout';
+  data: {
+    icon: string;
+    content: string;
+    color: 'blue' | 'green' | 'yellow' | 'red' | 'purple' | 'gray';
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de botón/CTA
+export type ButtonBlock = {
+  id: string;
+  type: 'button';
+  data: {
+    text: string;
+    url: string;
+    variant: 'primary' | 'secondary' | 'outline' | 'ghost';
+    size: 'sm' | 'md' | 'lg';
+    icon?: string;
+    openInNewTab?: boolean;
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de divider con texto
+export type DividerTextBlock = {
+  id: string;
+  type: 'divider-text';
+  data: {
+    text?: string;
+    style: 'solid' | 'dashed' | 'dotted';
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de quote con autor
+export type QuoteBlock = {
+  id: string;
+  type: 'quote';
+  data: {
+    quote: string;
+    author?: string;
+    role?: string;
+    avatar?: string;
+    variant: 'default' | 'bordered' | 'highlighted';
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de stats/metrics
+export type StatsBlock = {
+  id: string;
+  type: 'stats';
+  data: {
+    stats: Array<{
+      label: string;
+      value: string;
+      icon?: string;
+      trend?: 'up' | 'down' | 'neutral';
+      trendValue?: string;
+    }>;
+    columns: 2 | 3 | 4;
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de timeline
+export type TimelineBlock = {
+  id: string;
+  type: 'timeline';
+  data: {
+    items: Array<{
+      id: string;
+      date: string;
+      title: string;
+      description: string;
+      icon?: string;
+    }>;
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de comparison table
+export type ComparisonBlock = {
+  id: string;
+  type: 'comparison';
+  data: {
+    items: Array<{
+      name: string;
+      features: Record<string, boolean | string>;
+    }>;
+    featureLabels: string[];
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de file download
+export type FileDownloadBlock = {
+  id: string;
+  type: 'file-download';
+  data: {
+    fileName: string;
+    fileUrl: string;
+    fileSize?: string;
+    fileType?: string;
+    description?: string;
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de embed genérico
+export type EmbedBlock = {
+  id: string;
+  type: 'embed';
+  data: {
+    embedCode: string;
+    height?: number;
+    caption?: string;
+  };
+  style?: BlockStyle;
+};
+
 // Unión de todos los tipos de bloques
 export type Block =
   | TextBlock
@@ -170,7 +329,19 @@ export type Block =
   | AlertBlock
   | SeparatorBlock
   | ImageBlock
-  | CodeBlock;
+  | CodeBlock
+  | VideoBlock
+  | TweetBlock
+  | TableBlock
+  | CalloutBlock
+  | ButtonBlock
+  | DividerTextBlock
+  | QuoteBlock
+  | StatsBlock
+  | TimelineBlock
+  | ComparisonBlock
+  | FileDownloadBlock
+  | EmbedBlock;
 
 // Tipo para posts del blog
 export type BlogPost = {
