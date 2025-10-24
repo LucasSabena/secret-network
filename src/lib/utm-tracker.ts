@@ -27,28 +27,28 @@ export function addUTMParams(
 ): string {
   try {
     const urlObj = new URL(url);
-    
+
     // Agregar parámetros UTM
     if (params.source || !urlObj.searchParams.has('utm_source')) {
       urlObj.searchParams.set('utm_source', params.source || DEFAULT_UTM_SOURCE);
     }
-    
+
     if (params.medium || !urlObj.searchParams.has('utm_medium')) {
       urlObj.searchParams.set('utm_medium', params.medium || DEFAULT_UTM_MEDIUM);
     }
-    
+
     if (params.campaign) {
       urlObj.searchParams.set('utm_campaign', params.campaign);
     }
-    
+
     if (params.term) {
       urlObj.searchParams.set('utm_term', params.term);
     }
-    
+
     if (params.content) {
       urlObj.searchParams.set('utm_content', params.content);
     }
-    
+
     return urlObj.toString();
   } catch (error) {
     // Si la URL no es válida, retornar la original

@@ -22,12 +22,16 @@ import { BlogQuickCreate } from './blog-editor-v2/blog-quick-create';
 import { EditorAnnouncement } from './blog-editor-v2/editor-announcement';
 import { TemplateGallery } from './blog-editor-v2/template-gallery';
 import { supabaseBrowserClient } from '@/lib/supabase-browser';
+import { BlogCategoryBadge } from '@/components/blog/blog-category-badge';
 
 export default function BlogManager() {
   const router = useRouter();
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedStatus, setSelectedStatus] = useState<string>('all');
+  const [categories, setCategories] = useState<any[]>([]);
   const [isQuickCreateOpen, setIsQuickCreateOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [postToDelete, setPostToDelete] = useState<number | null>(null);
@@ -78,19 +82,47 @@ export default function BlogManager() {
 
   useEffect(() => {
     loadPosts();
+    loadCategories();
   }, []);
 
   useEffect(() => {
+    let filtered = posts;
+    
+    // Filtrar por búsqueda
     if (searchTerm) {
-      setFilteredPosts(
-        posts.filter((p) =>
-          p.titulo.toLowerCase().includes(searchTerm.toLowerCase())
-        )
+      filtered = filtered.filter((p) =>
+        p.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        p.descripcion_corta?.toLowerCase().includes(searchTerm.toLowerCase())
       );
-    } else {
-      setFilteredPosts(posts);
     }
-  }, [searchTerm, posts]);
+    
+    // Filtrar por estado
+    if (selectedStatus !== 'all') {
+      filtered = filtered.filter((p) => 
+        selectedStatus === 'published' ? p.publicado : !p.publicado
+      );
+    }
+    
+    // Filtrar por categoría
+    if (selectedCategory !== 'all') {
+      filtered = filtered.filter((p) => 
+        p.categories?.includes(parseInt(selectedCategory))
+      );
+    }
+    
+    setFilteredPosts(filtered);
+  }, [searchTerm, selectedStatus, selectedCategory, posts]);
+
+  async function loadCategories() {
+    const { data } = await supabaseBrowserClient
+      .from('blog_categories')
+      .select('*')
+      .order('orden');
+    
+    if (data) {
+      setCategories(data);
+    }
+  }
 
   async function loadPosts() {
     try {
@@ -102,8 +134,24 @@ export default function BlogManager() {
         .order('fecha_publicacion', { ascending: false });
 
       if (error) throw error;
-      setPosts(data || []);
-      setFilteredPosts(data || []);
+      
+      // Cargar categorías de cada post
+      const postsWithCategories = await Promise.all(
+        (data || []).map(async (post) => {
+          const { data: cats } = await supabase
+            .from('blog_posts_categories')
+            .select('category_id')
+            .eq('post_id', post.id);
+          
+          return {
+            ...post,
+            categories: cats?.map(c => c.category_id) || [],
+          };
+        })
+      );
+      
+      setPosts(postsWithCategories);
+      setFilteredPosts(postsWithCategories);
     } catch (error) {
       console.error('Error loading posts:', error);
       toast({
@@ -218,18 +266,19 @@ export default function BlogManager() {
     <div className="space-y-6">
       <EditorAnnouncement />
       
-      <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Buscar posts..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-        <div className="flex gap-2">
-          <Button onClick={handleNew} className="gap-2 bg-pink-500 hover:bg-pink-600">
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
+          <div className="relative flex-1 max-w-md">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Buscar posts..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+          <div className="flex gap-2">
+            <Button onClick={handleNew} className="gap-2 bg-pink-500 hover:bg-pink-600">
             <Plus className="h-4 w-4" />
             Nuevo Post
           </Button>
@@ -247,6 +296,33 @@ export default function BlogManager() {
             <FileText className="h-4 w-4" />
             Gestionar Templates
           </Button>
+        </div>
+        </div>
+        
+        {/* Filtros */}
+        <div className="flex gap-2">
+          <select
+            value={selectedStatus}
+            onChange={(e) => setSelectedStatus(e.target.value)}
+            className="px-3 py-2 border rounded-md text-sm"
+          >
+            <option value="all">Todos los estados</option>
+            <option value="published">Publicados</option>
+            <option value="draft">Borradores</option>
+          </select>
+          
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="px-3 py-2 border rounded-md text-sm"
+          >
+            <option value="all">Todas las categorías</option>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.id.toString()}>
+                {cat.nombre}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
@@ -269,7 +345,7 @@ export default function BlogManager() {
                 <p className="text-xs md:text-sm text-muted-foreground">
                   {new Date(post.fecha_publicacion).toLocaleDateString('es-ES')}
                 </p>
-                <div className="flex items-center gap-2 mt-1">
+                <div className="flex items-center gap-2 mt-1 flex-wrap">
                   {post.publicado ? (
                     <span className="text-xs bg-green-500/10 text-green-500 px-2 py-0.5 rounded">
                       Publicado
@@ -278,6 +354,21 @@ export default function BlogManager() {
                     <span className="text-xs bg-yellow-500/10 text-yellow-500 px-2 py-0.5 rounded">
                       Borrador
                     </span>
+                  )}
+                  {post.categories && post.categories.length > 0 && (
+                    <>
+                      {categories
+                        .filter(cat => post.categories?.includes(cat.id))
+                        .slice(0, 2)
+                        .map(cat => (
+                          <BlogCategoryBadge key={cat.id} category={cat} size="sm" />
+                        ))}
+                      {post.categories.length > 2 && (
+                        <span className="text-xs text-muted-foreground">
+                          +{post.categories.length - 2}
+                        </span>
+                      )}
+                    </>
                   )}
                 </div>
               </div>
