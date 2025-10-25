@@ -89,32 +89,23 @@ export function ImageBlockEditor({ block, onChange }: ImageBlockEditorProps) {
     if (file) await uploadFile(file);
   };
 
-  // Paste (Ctrl+V) - Captura paste en todo el documento cuando el bloque está visible
-  useEffect(() => {
-    const handlePaste = async (e: ClipboardEvent) => {
-      // Solo procesar si el dropZone existe y está visible
-      if (!dropZoneRef.current) return;
-      
-      const items = e.clipboardData?.items;
-      if (!items) return;
+  // Paste (Ctrl+V) - Solo cuando el dropZone tiene foco
+  const handlePaste = async (e: React.ClipboardEvent) => {
+    const items = e.clipboardData?.items;
+    if (!items) return;
 
-      for (let i = 0; i < items.length; i++) {
-        if (items[i].type.indexOf('image') !== -1) {
-          e.preventDefault();
-          e.stopPropagation();
-          const file = items[i].getAsFile();
-          if (file) {
-            await uploadFile(file);
-          }
-          return;
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') !== -1) {
+        e.preventDefault();
+        e.stopPropagation();
+        const file = items[i].getAsFile();
+        if (file) {
+          await uploadFile(file);
         }
+        return;
       }
-    };
-
-    // Escuchar paste en todo el documento
-    document.addEventListener('paste', handlePaste);
-    return () => document.removeEventListener('paste', handlePaste);
-  }, []);
+    }
+  };
 
   return (
     <div className="space-y-4">
@@ -125,8 +116,9 @@ export function ImageBlockEditor({ block, onChange }: ImageBlockEditorProps) {
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
+        onPaste={handlePaste}
         className={`
-          relative border-2 border-dashed rounded-lg transition-all
+          relative border-2 border-dashed rounded-lg transition-all focus:ring-2 focus:ring-primary focus:border-primary outline-none
           ${isDragging ? 'border-pink-500 bg-pink-50 dark:bg-pink-950/20' : 'border-border'}
           ${uploading ? 'opacity-50 pointer-events-none' : ''}
         `}
@@ -154,42 +146,9 @@ export function ImageBlockEditor({ block, onChange }: ImageBlockEditorProps) {
                     <Upload className="h-4 w-4 mr-2" />
                     Seleccionar archivo
                   </Button>
-                  <span className="text-xs text-muted-foreground">o</span>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={(e) => {
-                      e.currentTarget.focus();
-                    }}
-                    onFocus={(e) => {
-                      // Cuando el botón tiene foco, escuchar paste
-                      const handlePasteOnButton = async (pasteEvent: ClipboardEvent) => {
-                        const items = pasteEvent.clipboardData?.items;
-                        if (!items) return;
-
-                        for (let i = 0; i < items.length; i++) {
-                          if (items[i].type.indexOf('image') !== -1) {
-                            pasteEvent.preventDefault();
-                            const file = items[i].getAsFile();
-                            if (file) await uploadFile(file);
-                            return;
-                          }
-                        }
-                      };
-
-                      document.addEventListener('paste', handlePasteOnButton);
-                      e.currentTarget.addEventListener('blur', () => {
-                        document.removeEventListener('paste', handlePasteOnButton);
-                      }, { once: true });
-                    }}
-                  >
-                    <ImagePlus className="h-4 w-4 mr-2" />
-                    Pegar imagen (Ctrl+V)
-                  </Button>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  PNG, JPG, GIF hasta 5MB
+                  PNG, JPG, GIF hasta 5MB | Click aquí y presiona Ctrl+V para pegar
                 </p>
               </div>
             </>
