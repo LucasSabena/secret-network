@@ -81,25 +81,49 @@ export function ImageUploadZone({ onImageUploaded, currentImageUrl }: ImageUploa
   // Paste - Listener nativo en el elemento
   useEffect(() => {
     const dropZone = dropZoneRef.current;
-    if (!dropZone) return;
+    console.log('🔧 [ImageUploadZone] useEffect ejecutado, dropZone:', dropZone);
+    if (!dropZone) {
+      console.error('❌ [ImageUploadZone] No hay dropZone ref');
+      return;
+    }
 
     const handlePaste = async (e: Event) => {
+      console.log('📋 [ImageUploadZone] PASTE EVENT DETECTADO!', e);
       const clipboardEvent = e as ClipboardEvent;
       const items = clipboardEvent.clipboardData?.items;
-      if (!items) return;
+      console.log('📋 [ImageUploadZone] Clipboard items:', items);
+      
+      if (!items) {
+        console.warn('⚠️ [ImageUploadZone] No hay items en clipboard');
+        return;
+      }
 
+      console.log('📋 [ImageUploadZone] Cantidad de items:', items.length);
       for (let i = 0; i < items.length; i++) {
+        console.log(`📋 [ImageUploadZone] Item ${i}:`, items[i].type, items[i].kind);
         if (items[i].type.indexOf('image') !== -1) {
+          console.log('✅ [ImageUploadZone] Imagen encontrada! Tipo:', items[i].type);
           e.preventDefault();
           const file = items[i].getAsFile();
-          if (file) await uploadFile(file);
+          console.log('📁 [ImageUploadZone] File obtenido:', file);
+          if (file) {
+            console.log('🚀 [ImageUploadZone] Iniciando upload...');
+            await uploadFile(file);
+          } else {
+            console.error('❌ [ImageUploadZone] getAsFile() retornó null');
+          }
           return;
         }
       }
+      console.warn('⚠️ [ImageUploadZone] No se encontró ninguna imagen en el clipboard');
     };
 
+    console.log('✅ [ImageUploadZone] Agregando listener de paste');
     dropZone.addEventListener('paste', handlePaste);
-    return () => dropZone.removeEventListener('paste', handlePaste);
+    return () => {
+      console.log('🧹 [ImageUploadZone] Removiendo listener de paste');
+      dropZone.removeEventListener('paste', handlePaste);
+    };
   }, []);
 
   return (
@@ -109,7 +133,11 @@ export function ImageUploadZone({ onImageUploaded, currentImageUrl }: ImageUploa
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      onClick={() => dropZoneRef.current?.focus()}
+      onClick={() => {
+        console.log('🖱️ [ImageUploadZone] Click detectado, dando focus');
+        dropZoneRef.current?.focus();
+        console.log('🎯 [ImageUploadZone] Focus dado, activeElement:', document.activeElement);
+      }}
       className={`
         relative border-2 border-dashed rounded-lg transition-all cursor-pointer
         focus:ring-2 focus:ring-primary focus:border-primary outline-none
