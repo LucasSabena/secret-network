@@ -469,8 +469,14 @@ function CodeBlockComponent({ block }: { block: Extract<Block, { type: 'code' }>
 
 // Componente para video embed
 function VideoBlockComponent({ block }: { block: Extract<Block, { type: 'video' }> }) {
+  const { url, platform } = block.data;
+  
+  // Detectar si es un video de Cloudinary o directo
+  const isCloudinaryVideo = url?.includes('cloudinary.com') && url?.includes('/video/');
+  const isDirectVideo = url && !url.includes('youtube.com') && !url.includes('youtu.be') && 
+                       !url.includes('vimeo.com') && !url.includes('loom.com');
+  
   const getEmbedUrl = () => {
-    const { url, platform } = block.data;
     if (platform === 'youtube') {
       const videoId = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&]+)/)?.[1];
       return videoId ? `https://www.youtube.com/embed/${videoId}` : '';
@@ -486,6 +492,28 @@ function VideoBlockComponent({ block }: { block: Extract<Block, { type: 'video' 
     return '';
   };
 
+  // Si es un video directo (Cloudinary u otro)
+  if (isDirectVideo || isCloudinaryVideo) {
+    return (
+      <div className="my-8">
+        <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-muted">
+          <video 
+            src={url} 
+            controls 
+            className="w-full h-full object-contain"
+            preload="metadata"
+          >
+            Tu navegador no soporta el elemento de video.
+          </video>
+        </div>
+        {block.data.caption && (
+          <p className="text-center text-sm text-muted-foreground mt-2">{block.data.caption}</p>
+        )}
+      </div>
+    );
+  }
+
+  // Si es un video de plataforma externa
   const embedUrl = getEmbedUrl();
   if (!embedUrl) return null;
 
