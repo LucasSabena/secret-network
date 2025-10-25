@@ -14,7 +14,7 @@ import { Plus, Video as VideoIcon, FileIcon, Twitter } from 'lucide-react';
 
 // Importar los editores de bloques existentes
 import { RichTextBlockEditor } from '../blocks/rich-text-block-editor';
-import { ImageBlockEditor } from '../blocks/image-block-editor';
+import { ImageBlockEditorV2 } from '../blocks/image-block-editor-v2';
 import { ProgramCardBlockEditor } from '../blocks/program-card-block-editor';
 import { ProgramsGridBlockEditor } from '../blocks/programs-grid-block-editor';
 import { ImagesGridBlockEditor } from '../blocks/images-grid-block-editor';
@@ -165,7 +165,7 @@ function BlockEditorRenderer({
       );
     case 'image':
       return (
-        <ImageBlockEditor
+        <ImageBlockEditorV2
           block={block as Extract<Block, { type: 'image' }>}
           onChange={onChange as any}
         />
