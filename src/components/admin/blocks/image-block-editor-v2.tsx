@@ -95,13 +95,29 @@ export function ImageBlockEditorV2({ block, onChange }: ImageBlockEditorProps) {
         />
       </div>
 
-      {/* URL Manual */}
+      {/* URL Manual con paste de imagen */}
       <div>
-        <Label className="text-sm mb-2 block">O ingresa una URL:</Label>
+        <Label className="text-sm mb-2 block">O ingresa una URL (o pega una imagen con Ctrl+V):</Label>
         <Input
           value={block.data.url}
           onChange={(e) => onChange({ ...block, data: { ...block.data, url: e.target.value } })}
-          placeholder="https://..."
+          onPaste={async (e) => {
+            const items = e.clipboardData?.items;
+            if (!items) return;
+
+            for (let i = 0; i < items.length; i++) {
+              if (items[i].type.indexOf('image') !== -1) {
+                e.preventDefault();
+                const file = items[i].getAsFile();
+                if (file) {
+                  await uploadFile(file);
+                }
+                return;
+              }
+            }
+          }}
+          placeholder="https://... o pega una imagen aquí"
+          disabled={uploading}
         />
       </div>
 
