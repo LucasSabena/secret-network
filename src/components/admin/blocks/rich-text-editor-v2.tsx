@@ -8,12 +8,12 @@ import Image from '@tiptap/extension-image';
 import { Color } from '@tiptap/extension-color';
 import { TextStyle } from '@tiptap/extension-text-style';
 import Highlight from '@tiptap/extension-highlight';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { 
-  Bold, Italic, Underline, Strikethrough, Code, Link2, 
+  Bold, Italic, Strikethrough, Code, Link2, 
   Heading1, Heading2, Heading3, List, ListOrdered, Quote,
-  Undo, Redo, Image as ImageIcon, Video, Palette
+  Undo, Redo, Palette, Upload, Package
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -23,6 +23,9 @@ import {
 } from '@/components/ui/popover';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { SlashCommands, suggestion } from './tiptap-extensions/slash-commands';
+import { ProgramNode } from './tiptap-extensions/program-node';
+import { useToast } from '@/components/ui/use-toast';
 
 interface RichTextEditorV2Props {
   content: string;
@@ -33,6 +36,9 @@ interface RichTextEditorV2Props {
 export function RichTextEditorV2({ content, onChange, placeholder }: RichTextEditorV2Props) {
   const [linkUrl, setLinkUrl] = useState('');
   const [showLinkPopover, setShowLinkPopover] = useState(false);
+  const [showProgramPopover, setShowProgramPopover] = useState(false);
+  const [programId, setProgramId] = useState('');
+  const { toast } = useToast();
 
   const editor = useEditor({
     extensions: [
@@ -60,6 +66,10 @@ export function RichTextEditorV2({ content, onChange, placeholder }: RichTextEdi
       Highlight.configure({
         multicolor: true,
       }),
+      ProgramNode,
+      SlashCommands.configure({
+        suggestion,
+      }),
     ],
     content,
     onUpdate: ({ editor }) => {
@@ -69,8 +79,58 @@ export function RichTextEditorV2({ content, onChange, placeholder }: RichTextEdi
       attributes: {
         class: 'prose prose-sm dark:prose-invert max-w-none focus:outline-none min-h-[200px] px-4 py-3',
       },
+      handleDrop: (view, event, slice, moved) => {
+        if (!moved && event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files[0]) {
+          const file = event.dataTransfer.files[0];
+          if (file.type.startsWith('image/')) {
+            event.preventDefault();
+            uploadImage(file);
+            return true;
+          }
+        }
+        return false;
+      },
+      handlePaste: (view, event) => {
+        const items = event.clipboardData?.items;
+        if (items) {
+          for (let i = 0; i < items.length; i++) {
+            if (items[i].type.indexOf('image') !== -1) {
+              event.preventDefault();
+              const file = items[i].getAsFile();
+              if (file) {
+                uploadImage(file);
+              }
+              return true;
+            }
+          }
+        }
+        return false;
+      },
     },
   });
+
+  const uploadImage = useCallback(async (file: File) => {
+    if (!editor) return;
+
+    try {
+      const { uploadToCloudinary } = await import('@/lib/cloudinary-upload');
+      const url = await uploadToCloudinary(file, 'blog/images');
+      
+      editor.chain().focus().setImage({ src: url }).run();
+      
+      toast({
+        title: 'Imagen subida',
+        description: 'La imagen se subió correctamente',
+      });
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      toast({
+        title: 'Error',
+        description: 'Error al subir la imagen',
+        variant: 'destructive',
+      });
+    }
+  }, [editor, toast]);
 
   useEffect(() => {
     if (editor && content !== editor.getHTML()) {
@@ -285,12 +345,14 @@ export function RichTextEditorV2({ content, onChange, placeholder }: RichTextEdi
               <Label>Color de texto</Label>
               <div className="grid grid-cols-6 gap-2">
                 {['#000000', '#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6', '#8b5cf6', '#ec4899'].map((color) => (
-                  <button
+                  <Button
                     key={color}
                     type="button"
+                    variant="ghost"
+                    size="sm"
                     title={`Color ${color}`}
                     aria-label={`Seleccionar color ${color}`}
-                    className="w-8 h-8 rounded border-2 border-border hover:scale-110 transition-transform"
+                    className="w-8 h-8 p-0 rounded border-2 border-border hover:scale-110 transition-transform"
                     style={{ backgroundColor: color }}
                     onClick={() => editor.chain().focus().setColor(color).run()}
                   />
@@ -308,6 +370,87 @@ export function RichTextEditorV2({ content, onChange, placeholder }: RichTextEdi
             </div>
           </PopoverContent>
         </Popover>
+
+        <div className="w-px h-6 bg-border mx-1" />
+
+        {/* Imagen */}
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className="h-8 w-8 p-0"
+          onClick={() => document.getElementById('image-upload')?.click()}
+          title="Subir imagen"
+        >
+          <Upload className="h-4 w-4" />
+        </Button>
+        <input
+          id="image-upload"
+          type="file"
+          accept="image/*"
+          className="hidden"
+          title="Subir imagen"
+          aria-label="Subir imagen"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) uploadImage(file);
+          }}
+        />
+
+        {/* Programa */}
+        <Popover open={showProgramPopover} onOpenChange={setShowProgramPopover}>
+          <PopoverTrigger asChild>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="h-8 w-8 p-0"
+              title="Insertar programa"
+            >
+              <Package className="h-4 w-4" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-80">
+            <div className="space-y-2">
+              <Label>ID del Programa</Label>
+              <Input
+                value={programId}
+                onChange={(e) => setProgramId(e.target.value)}
+                placeholder="123"
+                type="number"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (programId) {
+                      editor?.commands.insertContent({
+                        type: 'programCard',
+                        attrs: { programId: parseInt(programId) },
+                      });
+                      setProgramId('');
+                      setShowProgramPopover(false);
+                    }
+                  }
+                }}
+              />
+              <Button
+                type="button"
+                size="sm"
+                onClick={() => {
+                  if (programId) {
+                    editor?.commands.insertContent({
+                      type: 'programCard',
+                      attrs: { programId: parseInt(programId) },
+                    });
+                    setProgramId('');
+                    setShowProgramPopover(false);
+                  }
+                }}
+              >
+                Insertar
+              </Button>
+            </div>
+          </PopoverContent>
+        </Popover>
       </div>
 
 
@@ -317,7 +460,8 @@ export function RichTextEditorV2({ content, onChange, placeholder }: RichTextEdi
 
       {/* Helper Text */}
       <div className="border-t bg-muted/20 px-4 py-2 text-xs text-muted-foreground">
-        <span className="font-medium">Atajos:</span> # H1, ## H2, ### H3, - Lista, 1. Lista numerada, &gt; Cita, ` Código
+        <span className="font-medium">Atajos:</span> / Comandos, # H1, ## H2, - Lista, &gt; Cita | 
+        <span className="ml-2 font-medium">Drag & Drop:</span> Arrastra imágenes para subirlas
       </div>
     </div>
   );
