@@ -5,7 +5,7 @@ import { Block } from '@/lib/types';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { Upload, Loader2, ImagePlus } from 'lucide-react';
 import Image from 'next/image';
 import { useToast } from '@/components/ui/use-toast';
@@ -21,7 +21,7 @@ export function ImageBlockEditor({ block, onChange }: ImageBlockEditorProps) {
   const dropZoneRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
-  const uploadFile = async (file: File) => {
+  const uploadFile = useCallback(async (file: File) => {
     if (!file.type.startsWith('image/')) {
       toast({
         title: 'Error',
@@ -60,7 +60,7 @@ export function ImageBlockEditor({ block, onChange }: ImageBlockEditorProps) {
     } finally {
       setUploading(false);
     }
-  };
+  }, [block, onChange, toast]);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -89,23 +89,35 @@ export function ImageBlockEditor({ block, onChange }: ImageBlockEditorProps) {
     if (file) await uploadFile(file);
   };
 
-  // Paste (Ctrl+V) - Solo cuando el dropZone tiene foco
-  const handlePaste = async (e: React.ClipboardEvent) => {
-    const items = e.clipboardData?.items;
-    if (!items) return;
+  // Paste (Ctrl+V) - Listener cuando el dropZone está enfocado
+  useEffect(() => {
+    const dropZone = dropZoneRef.current;
+    if (!dropZone) return;
 
-    for (let i = 0; i < items.length; i++) {
-      if (items[i].type.indexOf('image') !== -1) {
-        e.preventDefault();
-        e.stopPropagation();
-        const file = items[i].getAsFile();
-        if (file) {
-          await uploadFile(file);
+    const handlePaste = async (e: ClipboardEvent) => {
+      // Solo procesar si el dropZone tiene foco
+      if (document.activeElement !== dropZone) return;
+
+      const items = e.clipboardData?.items;
+      if (!items) return;
+
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf('image') !== -1) {
+          e.preventDefault();
+          e.stopPropagation();
+          const file = items[i].getAsFile();
+          if (file) {
+            await uploadFile(file);
+          }
+          return;
         }
-        return;
       }
-    }
-  };
+    };
+
+    // Agregar listener al dropZone específico
+    dropZone.addEventListener('paste', handlePaste as any);
+    return () => dropZone.removeEventListener('paste', handlePaste as any);
+  }, [uploadFile]);
 
   return (
     <div className="space-y-4">
@@ -116,9 +128,8 @@ export function ImageBlockEditor({ block, onChange }: ImageBlockEditorProps) {
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        onPaste={handlePaste}
         className={`
-          relative border-2 border-dashed rounded-lg transition-all focus:ring-2 focus:ring-primary focus:border-primary outline-none
+          relative border-2 border-dashed rounded-lg transition-all focus:ring-2 focus:ring-primary focus:border-primary outline-none cursor-pointer
           ${isDragging ? 'border-pink-500 bg-pink-50 dark:bg-pink-950/20' : 'border-border'}
           ${uploading ? 'opacity-50 pointer-events-none' : ''}
         `}
