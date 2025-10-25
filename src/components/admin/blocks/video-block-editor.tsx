@@ -89,6 +89,9 @@ export function VideoBlockEditor({ block, onChange }: VideoBlockEditorProps) {
     if (file) await uploadFile(file);
   };
 
+  // Detectar si el video actual es de Cloudinary
+  const isCloudinaryVideo = block.data.url?.includes('cloudinary.com') && block.data.url?.includes('/video/');
+
   return (
     <div className="space-y-4">
       {/* Drop Zone */}
@@ -114,7 +117,7 @@ export function VideoBlockEditor({ block, onChange }: VideoBlockEditorProps) {
               <VideoIcon className="h-8 w-8 text-muted-foreground" />
               <div className="space-y-2">
                 <p className="text-sm font-medium">
-                  Arrastra un video aquí
+                  {isCloudinaryVideo ? 'Reemplazar video' : 'Arrastra un video aquí'}
                 </p>
                 <Button
                   type="button"
@@ -123,10 +126,10 @@ export function VideoBlockEditor({ block, onChange }: VideoBlockEditorProps) {
                   onClick={() => document.getElementById(`video-upload-${block.id}`)?.click()}
                 >
                   <Upload className="h-4 w-4 mr-2" />
-                  Seleccionar archivo
+                  {isCloudinaryVideo ? 'Reemplazar video' : 'Seleccionar archivo'}
                 </Button>
                 <p className="text-xs text-muted-foreground">
-                  MP4, WebM hasta 100MB
+                  MP4, WebM, MOV hasta 100MB
                 </p>
               </div>
             </>
@@ -197,8 +200,22 @@ export function VideoBlockEditor({ block, onChange }: VideoBlockEditorProps) {
                 allowFullScreen
                 title={block.data.caption || 'Video de Vimeo'}
               />
+            ) : block.data.url.includes('loom.com') ? (
+              <iframe
+                src={block.data.url.replace('/share/', '/embed/')}
+                className="w-full h-full"
+                allowFullScreen
+                title={block.data.caption || 'Video de Loom'}
+              />
             ) : (
-              <video src={block.data.url} controls className="w-full h-full" />
+              <video 
+                src={block.data.url} 
+                controls 
+                className="w-full h-full object-contain"
+                preload="metadata"
+              >
+                Tu navegador no soporta el elemento de video.
+              </video>
             )}
           </div>
           {block.data.caption && (

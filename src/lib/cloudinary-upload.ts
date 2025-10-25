@@ -9,12 +9,34 @@ import {
 // Helper function to extract public_id from Cloudinary URL
 export function extractPublicIdFromUrl(url: string): string | null {
   try {
-    // URL format: https://res.cloudinary.com/{cloud_name}/image/upload/v{version}/{folder}/{public_id}.{format}
+    // URL format: https://res.cloudinary.com/{cloud_name}/image|video/upload/v{version}/{folder}/{public_id}.{format}
     const match = url.match(/\/upload\/(?:v\d+\/)?(.+)\.\w+$/);
     return match ? match[1] : null;
   } catch {
     return null;
   }
+}
+
+// Helper function to validate video files
+export function validateVideoFile(file: File): { valid: boolean; error?: string } {
+  const maxSize = 100 * 1024 * 1024; // 100MB
+  const allowedTypes = ['video/mp4', 'video/webm', 'video/quicktime', 'video/x-msvideo'];
+
+  if (!allowedTypes.includes(file.type)) {
+    return {
+      valid: false,
+      error: 'Tipo de archivo no permitido. Solo se aceptan videos MP4, WebM, MOV y AVI.',
+    };
+  }
+
+  if (file.size > maxSize) {
+    return {
+      valid: false,
+      error: 'El video es demasiado grande. El tamaño máximo es 100MB.',
+    };
+  }
+
+  return { valid: true };
 }
 
 // Helper function to upload images to Cloudinary
@@ -28,8 +50,12 @@ export async function uploadToCloudinary(
     throw new Error('Cloudinary configuration is missing');
   }
 
+  // Determine if it's an image or video
+  const isVideo = file.type.startsWith('video/');
+  const resourceType = isVideo ? 'video' : 'image';
+
   // Validate file
-  const validation = validateImageFile(file);
+  const validation = isVideo ? validateVideoFile(file) : validateImageFile(file);
   if (!validation.valid) {
     throw new Error(validation.error);
   }
@@ -53,7 +79,7 @@ export async function uploadToCloudinary(
 
   try {
     const response = await fetch(
-      `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+      `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`,
       {
         method: 'POST',
         body: formData,
@@ -62,7 +88,7 @@ export async function uploadToCloudinary(
 
     if (!response.ok) {
       const error = await response.json();
-      throw new Error(error.error?.message || 'Failed to upload image');
+      throw new Error(error.error?.message || `Failed to upload ${resourceType}`);
     }
 
     const data = await response.json();
@@ -70,7 +96,7 @@ export async function uploadToCloudinary(
   } catch (error) {
     console.error('Error uploading to Cloudinary:', error);
     throw new Error(
-      'No se pudo subir la imagen. Verifica tu configuración de Cloudinary.'
+      `No se pudo subir el ${isVideo ? 'video' : 'imagen'}. Verifica tu configuración de Cloudinary.`
     );
   }
 }
