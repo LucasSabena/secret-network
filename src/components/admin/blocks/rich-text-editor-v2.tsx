@@ -124,20 +124,10 @@ export function RichTextEditorV2({ content, onChange, placeholder }: RichTextEdi
         }
         return false;
       },
+      // NO capturar paste de imágenes - eso debe manejarse en bloques de imagen dedicados
       handlePaste: (view, event) => {
-        const items = event.clipboardData?.items;
-        if (items) {
-          for (let i = 0; i < items.length; i++) {
-            if (items[i].type.indexOf('image') !== -1) {
-              event.preventDefault();
-              const file = items[i].getAsFile();
-              if (file) {
-                uploadImage(file);
-              }
-              return true;
-            }
-          }
-        }
+        // Permitir que el paste normal funcione (texto, links, etc.)
+        // pero NO capturar imágenes aquí
         return false;
       },
       handleKeyDown: (view, event) => {
@@ -162,11 +152,12 @@ export function RichTextEditorV2({ content, onChange, placeholder }: RichTextEdi
       const { uploadToCloudinary } = await import('@/lib/cloudinary-upload');
       const url = await uploadToCloudinary(file, 'blog/images');
       
+      // Insertar imagen inline en el editor de texto
       editor.chain().focus().setImage({ src: url }).run();
       
       toast({
         title: 'Imagen subida',
-        description: 'La imagen se subió correctamente',
+        description: 'La imagen se insertó en el texto',
       });
     } catch (error) {
       console.error('Error uploading image:', error);
@@ -637,7 +628,7 @@ export function RichTextEditorV2({ content, onChange, placeholder }: RichTextEdi
       {/* Helper Text */}
       <div className="border-t bg-muted/20 px-4 py-2 text-xs text-muted-foreground">
         <span className="font-medium">Atajos:</span> Escribe / para ver comandos disponibles | 
-        <span className="ml-2 font-medium">Drag & Drop:</span> Arrastra imágenes para subirlas
+        <span className="ml-2 font-medium">Drag & Drop:</span> Arrastra imágenes para insertarlas inline
       </div>
     </div>
   );
