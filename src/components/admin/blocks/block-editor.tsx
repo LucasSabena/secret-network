@@ -36,7 +36,7 @@ import { TabsBlockEditor } from './tabs-block-editor';
 import { AccordionBlockEditor } from './accordion-block-editor';
 import { AlertBlockEditor } from './alert-block-editor';
 import { SeparatorBlockEditor } from './separator-block-editor';
-import { ImageBlockEditor } from './image-block-editor';
+import { ImageBlockEditorV2 } from './image-block-editor-v2';
 import { CodeBlockEditor } from './code-block-editor';
 
 interface BlockEditorProps {
@@ -174,7 +174,7 @@ export function BlockEditor({ blocks, onChange }: BlockEditorProps) {
               <SeparatorBlockEditor block={block as Extract<Block, { type: 'separator' }>} onChange={(updated: Block) => updateBlock(block.id, updated)} />
             )}
             {block.type === 'image' && (
-              <ImageBlockEditor block={block as Extract<Block, { type: 'image' }>} onChange={(updated: Block) => updateBlock(block.id, updated)} />
+              <ImageBlockEditorV2 block={block as Extract<Block, { type: 'image' }>} onChange={(updated: Block) => updateBlock(block.id, updated)} />
             )}
             {block.type === 'code' && (
               <CodeBlockEditor block={block as Extract<Block, { type: 'code' }>} onChange={(updated: Block) => updateBlock(block.id, updated)} />
