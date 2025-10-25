@@ -178,6 +178,7 @@ export function DragDropEditor({ blocks, onChange, postSettings }: DragDropEdito
     const activeData = active.data.current;
     const overData = over.data.current;
     const isNewBlock = activeData?.isNew;
+    const isBlockReorder = activeData?.type === 'block-reorder';
 
     if (isNewBlock) {
       // Crear nuevo bloque desde la herramienta
@@ -195,8 +196,25 @@ export function DragDropEditor({ blocks, onChange, postSettings }: DragDropEdito
         setHistoryBlocks([...historyBlocks, newBlock]);
       }
       setSelectedBlockId(newBlock.id);
+    } else if (isBlockReorder) {
+      // Reordenar desde el panel de bloques
+      const activeId = active.id as string;
+      const overId = over.id as string;
+      
+      if (activeId !== overId) {
+        const oldIndex = historyBlocks.findIndex((b) => b.id === activeId);
+        const newIndex = historyBlocks.findIndex((b) => b.id === overId);
+
+        if (oldIndex !== -1 && newIndex !== -1) {
+          setHistoryBlocks(arrayMove(historyBlocks, oldIndex, newIndex));
+          toast({
+            title: 'Bloque reordenado',
+            description: `Movido de posición ${oldIndex + 1} a ${newIndex + 1}`,
+          });
+        }
+      }
     } else {
-      // Reordenar bloques existentes
+      // Reordenar bloques existentes en el canvas
       const activeId = active.id as string;
       
       if (overData?.type === 'drop-zone') {
