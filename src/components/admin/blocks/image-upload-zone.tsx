@@ -78,7 +78,7 @@ export function ImageUploadZone({ onImageUploaded, currentImageUrl }: ImageUploa
     if (file) await uploadFile(file);
   };
 
-  // Paste - Listener nativo en el elemento
+  // Paste - Listener global cuando el elemento tiene foco
   useEffect(() => {
     const dropZone = dropZoneRef.current;
     console.log('🔧 [ImageUploadZone] useEffect ejecutado, dropZone:', dropZone);
@@ -87,10 +87,15 @@ export function ImageUploadZone({ onImageUploaded, currentImageUrl }: ImageUploa
       return;
     }
 
-    const handlePaste = async (e: Event) => {
+    const handlePaste = async (e: ClipboardEvent) => {
+      // Solo procesar si este elemento tiene foco
+      if (document.activeElement !== dropZone) {
+        console.log('⏭️ [ImageUploadZone] Paste ignorado - elemento no tiene foco');
+        return;
+      }
+
       console.log('📋 [ImageUploadZone] PASTE EVENT DETECTADO!', e);
-      const clipboardEvent = e as ClipboardEvent;
-      const items = clipboardEvent.clipboardData?.items;
+      const items = e.clipboardData?.items;
       console.log('📋 [ImageUploadZone] Clipboard items:', items);
       
       if (!items) {
@@ -104,6 +109,7 @@ export function ImageUploadZone({ onImageUploaded, currentImageUrl }: ImageUploa
         if (items[i].type.indexOf('image') !== -1) {
           console.log('✅ [ImageUploadZone] Imagen encontrada! Tipo:', items[i].type);
           e.preventDefault();
+          e.stopPropagation();
           const file = items[i].getAsFile();
           console.log('📁 [ImageUploadZone] File obtenido:', file);
           if (file) {
@@ -118,11 +124,12 @@ export function ImageUploadZone({ onImageUploaded, currentImageUrl }: ImageUploa
       console.warn('⚠️ [ImageUploadZone] No se encontró ninguna imagen en el clipboard');
     };
 
-    console.log('✅ [ImageUploadZone] Agregando listener de paste');
-    dropZone.addEventListener('paste', handlePaste);
+    console.log('✅ [ImageUploadZone] Agregando listener de paste al documento');
+    // Usar capture phase para interceptar antes que otros handlers
+    document.addEventListener('paste', handlePaste, true);
     return () => {
-      console.log('🧹 [ImageUploadZone] Removiendo listener de paste');
-      dropZone.removeEventListener('paste', handlePaste);
+      console.log('🧹 [ImageUploadZone] Removiendo listener de paste del documento');
+      document.removeEventListener('paste', handlePaste, true);
     };
   }, []);
 
