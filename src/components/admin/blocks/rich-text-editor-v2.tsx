@@ -7,13 +7,15 @@ import Link from '@tiptap/extension-link';
 import Image from '@tiptap/extension-image';
 import { Color } from '@tiptap/extension-color';
 import { TextStyle } from '@tiptap/extension-text-style';
+import { FontSize } from './tiptap-extensions/font-size';
 import Highlight from '@tiptap/extension-highlight';
 import { useEffect, useState, useCallback } from 'react';
+import { supabaseBrowserClient } from '@/lib/supabase-browser';
 import { Button } from '@/components/ui/button';
 import { 
   Bold, Italic, Strikethrough, Code, Link2, 
-  Heading1, Heading2, Heading3, List, ListOrdered, Quote,
-  Undo, Redo, Palette, Upload, Package
+  List, ListOrdered, Quote,
+  Undo, Redo, Palette, Upload, Package, ChevronDown
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -37,14 +39,43 @@ export function RichTextEditorV2({ content, onChange, placeholder }: RichTextEdi
   const [linkUrl, setLinkUrl] = useState('');
   const [showLinkPopover, setShowLinkPopover] = useState(false);
   const [showProgramPopover, setShowProgramPopover] = useState(false);
-  const [programId, setProgramId] = useState('');
+  const [programSearch, setProgramSearch] = useState('');
+  const [programs, setPrograms] = useState<any[]>([]);
+  const [selectedVariant, setSelectedVariant] = useState<'small' | 'medium' | 'large'>('medium');
   const { toast } = useToast();
+
+  // Buscar programas
+  useEffect(() => {
+    const searchPrograms = async () => {
+      if (programSearch.length < 2) {
+        setPrograms([]);
+        return;
+      }
+
+      const { data } = await supabaseBrowserClient
+        .from('programas')
+        .select('id, nombre, icono_url')
+        .ilike('nombre', `%${programSearch}%`)
+        .limit(10);
+
+      setPrograms(data || []);
+    };
+
+    const debounce = setTimeout(searchPrograms, 300);
+    return () => clearTimeout(debounce);
+  }, [programSearch]);
 
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
         heading: {
           levels: [1, 2, 3, 4, 5, 6],
+        },
+        // Deshabilitar markdown shortcuts
+        blockquote: {
+          HTMLAttributes: {
+            class: 'border-l-4 border-primary pl-4 italic',
+          },
         },
       }),
       Placeholder.configure({
@@ -57,11 +88,14 @@ export function RichTextEditorV2({ content, onChange, placeholder }: RichTextEdi
         },
       }),
       Image.configure({
+        inline: false,
+        allowBase64: true,
         HTMLAttributes: {
-          class: 'rounded-lg max-w-full h-auto',
+          class: 'rounded-lg max-w-full h-auto cursor-pointer',
         },
       }),
       TextStyle,
+      FontSize,
       Color,
       Highlight.configure({
         multicolor: true,
@@ -104,6 +138,18 @@ export function RichTextEditorV2({ content, onChange, placeholder }: RichTextEdi
             }
           }
         }
+        return false;
+      },
+      handleKeyDown: (view, event) => {
+        // Permitir eliminar imágenes con Delete o Backspace
+        const { selection } = view.state;
+        const { $from } = selection;
+        const node = $from.node();
+        
+        if (node && node.type.name === 'image' && (event.key === 'Delete' || event.key === 'Backspace')) {
+          return false; // Permitir eliminación
+        }
+        
         return false;
       },
     },
@@ -178,34 +224,128 @@ export function RichTextEditorV2({ content, onChange, placeholder }: RichTextEdi
 
         <div className="w-px h-6 bg-border mx-1" />
 
-        {/* Headings */}
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-          className={cn('h-8 px-2', editor.isActive('heading', { level: 1 }) && 'bg-accent')}
-        >
-          <Heading1 className="h-4 w-4" />
-        </Button>
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-          className={cn('h-8 px-2', editor.isActive('heading', { level: 2 }) && 'bg-accent')}
-        >
-          <Heading2 className="h-4 w-4" />
-        </Button>
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-          className={cn('h-8 px-2', editor.isActive('heading', { level: 3 }) && 'bg-accent')}
-        >
-          <Heading3 className="h-4 w-4" />
-        </Button>
+        {/* Selector de Formato */}
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="h-8 min-w-[120px] justify-between"
+            >
+              <span className="text-xs">
+                {editor.isActive('heading', { level: 1 }) ? 'Título 1' :
+                 editor.isActive('heading', { level: 2 }) ? 'Título 2' :
+                 editor.isActive('heading', { level: 3 }) ? 'Título 3' :
+                 editor.isActive('heading', { level: 4 }) ? 'Título 4' :
+                 editor.isActive('heading', { level: 5 }) ? 'Título 5' :
+                 editor.isActive('heading', { level: 6 }) ? 'Título 6' :
+                 'Párrafo'}
+              </span>
+              <ChevronDown className="h-3 w-3 ml-2" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-48 p-2">
+            <div className="space-y-1">
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="w-full justify-start text-xs"
+                onClick={() => editor.chain().focus().setParagraph().run()}
+              >
+                Párrafo
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="w-full justify-start text-2xl font-bold"
+                onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+              >
+                Título 1
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="w-full justify-start text-xl font-bold"
+                onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+              >
+                Título 2
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="w-full justify-start text-lg font-bold"
+                onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+              >
+                Título 3
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="w-full justify-start text-base font-semibold"
+                onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
+              >
+                Título 4
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="w-full justify-start text-sm font-semibold"
+                onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
+              >
+                Título 5
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="w-full justify-start text-xs font-semibold"
+                onClick={() => editor.chain().focus().toggleHeading({ level: 6 }).run()}
+              >
+                Título 6
+              </Button>
+            </div>
+          </PopoverContent>
+        </Popover>
+
+        {/* Selector de Tamaño */}
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="h-8 w-16 justify-between"
+            >
+              <span className="text-xs">
+                {editor.getAttributes('textStyle').fontSize || '16px'}
+              </span>
+              <ChevronDown className="h-3 w-3 ml-1" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-32 p-2">
+            <div className="space-y-1">
+              {['12px', '14px', '16px', '18px', '20px', '24px', '28px', '32px', '36px', '48px'].map((size) => (
+                <Button
+                  key={size}
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="w-full justify-start text-xs"
+                  onClick={() => editor.chain().focus().setMark('textStyle', { fontSize: size }).run()}
+                >
+                  {size}
+                </Button>
+              ))}
+            </div>
+          </PopoverContent>
+        </Popover>
 
         <div className="w-px h-6 bg-border mx-1" />
 
@@ -410,44 +550,80 @@ export function RichTextEditorV2({ content, onChange, placeholder }: RichTextEdi
               <Package className="h-4 w-4" />
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-80">
-            <div className="space-y-2">
-              <Label>ID del Programa</Label>
-              <Input
-                value={programId}
-                onChange={(e) => setProgramId(e.target.value)}
-                placeholder="123"
-                type="number"
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault();
-                    if (programId) {
-                      editor?.commands.insertContent({
-                        type: 'programCard',
-                        attrs: { programId: parseInt(programId) },
-                      });
-                      setProgramId('');
-                      setShowProgramPopover(false);
-                    }
-                  }
-                }}
-              />
-              <Button
-                type="button"
-                size="sm"
-                onClick={() => {
-                  if (programId) {
-                    editor?.commands.insertContent({
-                      type: 'programCard',
-                      attrs: { programId: parseInt(programId) },
-                    });
-                    setProgramId('');
-                    setShowProgramPopover(false);
-                  }
-                }}
-              >
-                Insertar
-              </Button>
+          <PopoverContent className="w-96">
+            <div className="space-y-3">
+              <div>
+                <Label>Buscar Programa</Label>
+                <Input
+                  value={programSearch}
+                  onChange={(e) => setProgramSearch(e.target.value)}
+                  placeholder="Escribe el nombre del programa..."
+                  autoFocus
+                />
+              </div>
+
+              {programs.length > 0 && (
+                <div className="max-h-64 overflow-y-auto space-y-1 border rounded-lg p-2">
+                  {programs.map((program) => (
+                    <button
+                      key={program.id}
+                      type="button"
+                      className="w-full flex items-center gap-3 p-2 hover:bg-accent rounded-lg text-left transition-colors"
+                      onClick={() => {
+                        editor?.commands.insertContent({
+                          type: 'programCard',
+                          attrs: { 
+                            programId: program.id,
+                            variant: selectedVariant,
+                          },
+                        });
+                        setProgramSearch('');
+                        setPrograms([]);
+                        setShowProgramPopover(false);
+                      }}
+                    >
+                      {program.icono_url && (
+                        <img 
+                          src={program.icono_url} 
+                          alt={program.nombre}
+                          className="w-8 h-8 rounded object-cover"
+                        />
+                      )}
+                      <span className="text-sm font-medium">{program.nombre}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              <div>
+                <Label className="text-xs text-muted-foreground mb-2 block">Tamaño de card</Label>
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    variant={selectedVariant === 'small' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setSelectedVariant('small')}
+                  >
+                    Pequeña
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={selectedVariant === 'medium' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setSelectedVariant('medium')}
+                  >
+                    Mediana
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={selectedVariant === 'large' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setSelectedVariant('large')}
+                  >
+                    Grande
+                  </Button>
+                </div>
+              </div>
             </div>
           </PopoverContent>
         </Popover>
@@ -460,7 +636,7 @@ export function RichTextEditorV2({ content, onChange, placeholder }: RichTextEdi
 
       {/* Helper Text */}
       <div className="border-t bg-muted/20 px-4 py-2 text-xs text-muted-foreground">
-        <span className="font-medium">Atajos:</span> / Comandos, # H1, ## H2, - Lista, &gt; Cita | 
+        <span className="font-medium">Atajos:</span> Escribe / para ver comandos disponibles | 
         <span className="ml-2 font-medium">Drag & Drop:</span> Arrastra imágenes para subirlas
       </div>
     </div>

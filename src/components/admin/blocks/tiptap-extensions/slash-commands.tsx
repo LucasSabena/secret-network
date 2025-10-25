@@ -78,6 +78,45 @@ export const suggestion = {
         },
       },
       {
+        title: 'Título 4',
+        description: 'Subtítulo',
+        searchTerms: ['h4', 'heading', 'titulo', 'subtitulo'],
+        command: ({ editor, range }: any) => {
+          editor
+            .chain()
+            .focus()
+            .deleteRange(range)
+            .setNode('heading', { level: 4 })
+            .run();
+        },
+      },
+      {
+        title: 'Título 5',
+        description: 'Subtítulo pequeño',
+        searchTerms: ['h5', 'heading', 'titulo', 'subtitulo'],
+        command: ({ editor, range }: any) => {
+          editor
+            .chain()
+            .focus()
+            .deleteRange(range)
+            .setNode('heading', { level: 5 })
+            .run();
+        },
+      },
+      {
+        title: 'Título 6',
+        description: 'Subtítulo mínimo',
+        searchTerms: ['h6', 'heading', 'titulo', 'subtitulo'],
+        command: ({ editor, range }: any) => {
+          editor
+            .chain()
+            .focus()
+            .deleteRange(range)
+            .setNode('heading', { level: 6 })
+            .run();
+        },
+      },
+      {
         title: 'Lista',
         description: 'Lista con viñetas',
         searchTerms: ['ul', 'list', 'lista'],
