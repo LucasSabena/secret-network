@@ -21,6 +21,25 @@ export function VideoBlockEditor({ block, onChange }: VideoBlockEditorProps) {
   const dropZoneRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
+  // Función para detectar la plataforma automáticamente
+  const detectPlatform = (url: string): 'youtube' | 'vimeo' | 'loom' | 'direct' => {
+    if (!url) return 'direct';
+    if (url.includes('youtube.com') || url.includes('youtu.be')) return 'youtube';
+    if (url.includes('vimeo.com')) return 'vimeo';
+    if (url.includes('loom.com')) return 'loom';
+    return 'direct'; // Cloudinary u otro video directo
+  };
+
+  // Actualizar plataforma automáticamente cuando cambia la URL
+  useEffect(() => {
+    if (block.data.url) {
+      const detectedPlatform = detectPlatform(block.data.url);
+      if (detectedPlatform !== 'direct' && block.data.platform !== detectedPlatform) {
+        onChange({ ...block, data: { ...block.data, platform: detectedPlatform } });
+      }
+    }
+  }, [block.data.url]);
+
   const uploadFile = async (file: File) => {
     if (!file.type.startsWith('video/')) {
       toast({
@@ -91,6 +110,13 @@ export function VideoBlockEditor({ block, onChange }: VideoBlockEditorProps) {
 
   // Detectar si el video actual es de Cloudinary
   const isCloudinaryVideo = block.data.url?.includes('cloudinary.com') && block.data.url?.includes('/video/');
+  const detectedPlatform = detectPlatform(block.data.url || '');
+  const platformName = {
+    youtube: 'YouTube',
+    vimeo: 'Vimeo',
+    loom: 'Loom',
+    direct: 'Video directo'
+  }[detectedPlatform];
 
   return (
     <div className="space-y-4">
@@ -153,24 +179,11 @@ export function VideoBlockEditor({ block, onChange }: VideoBlockEditorProps) {
           onChange={(e) => onChange({ ...block, data: { ...block.data, url: e.target.value } })}
           placeholder="https://youtube.com/watch?v=... o URL de video subido"
         />
-      </div>
-      <div>
-        <Label>Plataforma</Label>
-        <Select
-          value={block.data.platform}
-          onValueChange={(value: 'youtube' | 'vimeo' | 'loom') =>
-            onChange({ ...block, data: { ...block.data, platform: value } })
-          }
-        >
-          <SelectTrigger>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="youtube">YouTube</SelectItem>
-            <SelectItem value="vimeo">Vimeo</SelectItem>
-            <SelectItem value="loom">Loom</SelectItem>
-          </SelectContent>
-        </Select>
+        {block.data.url && (
+          <p className="text-xs text-muted-foreground mt-1">
+            Plataforma detectada: <span className="font-medium">{platformName}</span>
+          </p>
+        )}
       </div>
       <div>
         <Label>Caption (opcional)</Label>

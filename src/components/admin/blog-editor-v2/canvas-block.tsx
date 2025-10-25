@@ -124,10 +124,18 @@ export function CanvasBlock({
             : 'hover:border-primary/50 hover:shadow-md'
         )}
       >
-        {/* Toolbar superior */}
+        {/* Etiqueta del tipo de bloque - siempre visible */}
+        {Icon && (
+          <div className="absolute -top-2 left-3 flex items-center gap-1.5 bg-muted/80 backdrop-blur-sm border rounded-md px-2 py-0.5 text-xs text-muted-foreground">
+            <Icon className="h-3 w-3" />
+            <span className="font-medium">{tool?.label}</span>
+          </div>
+        )}
+
+        {/* Toolbar de acciones - visible al hover o selección */}
         <div
           className={cn(
-            'absolute -top-3 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-background border rounded-lg px-2 py-1 shadow-md transition-opacity',
+            'absolute -top-3 right-3 flex items-center gap-1 bg-background border rounded-lg px-2 py-1 shadow-md transition-opacity',
             isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
           )}
         >
@@ -140,13 +148,6 @@ export function CanvasBlock({
           >
             <GripVertical className="h-3 w-3" />
           </Button>
-
-          {Icon && (
-            <div className="px-2 flex items-center gap-1.5 text-xs text-muted-foreground">
-              <Icon className="h-3 w-3" />
-              <span>{tool?.label}</span>
-            </div>
-          )}
 
           <Button
             size="icon"

@@ -9,9 +9,9 @@ import { Switch } from '@/components/ui/switch';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { 
-  Settings, 
-  Link as LinkIcon, 
+import {
+  Settings,
+  Link as LinkIcon,
   Calendar as CalendarIcon,
   Tag,
   User,
@@ -40,25 +40,25 @@ interface PostMetadataPanelProps {
   titulo: string;
   slug: string;
   descripcionCorta: string;
-  
+
   // Autor
   autorId: number | null;
   autores: Autor[];
-  
+
   // Publicación
   publicado: boolean;
   fechaPublicacion: Date;
   scheduledFor: string | null;
-  
+
   // Taxonomía
   tags: string[];
   categories: number[];
-  
+
   // Imagen de portada
   imagenPortadaUrl?: string;
   imagenPortadaAlt?: string;
   imageFile: File | null;
-  
+
   // Callbacks
   onTituloChange: (titulo: string) => void;
   onSlugChange: (slug: string) => void;
@@ -110,7 +110,7 @@ export function PostMetadataPanel({
       .replace(/[\u0300-\u036f]/g, '')
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)/g, '');
-    
+
     onSlugChange(cleanSlug);
     setTempSlug(cleanSlug);
     setEditingSlug(false);
@@ -128,7 +128,7 @@ export function PostMetadataPanel({
       .replace(/[\u0300-\u036f]/g, '')
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)/g, '');
-    
+
     setTempSlug(newSlug);
     onSlugChange(newSlug);
   };
@@ -187,7 +187,7 @@ export function PostMetadataPanel({
             <LinkIcon className="h-3 w-3" />
             URL del Post (Slug)
           </Label>
-          
+
           {editingSlug ? (
             <div className="space-y-2">
               <Input
@@ -241,7 +241,7 @@ export function PostMetadataPanel({
               </Button>
             </div>
           )}
-          
+
           <p className="text-xs text-muted-foreground break-all">
             URL: /blog/{slug || 'sin-slug'}
           </p>
@@ -268,7 +268,7 @@ export function PostMetadataPanel({
             <ImageIcon className="h-3 w-3" />
             Imagen de Portada
           </Label>
-          
+
           {(imageFile || imagenPortadaUrl) && (
             <div className="relative">
               <img
@@ -286,7 +286,7 @@ export function PostMetadataPanel({
               </Button>
             </div>
           )}
-          
+
           <div className="flex gap-2">
             <Button
               size="sm"
@@ -307,7 +307,7 @@ export function PostMetadataPanel({
               title="Subir imagen de portada"
             />
           </div>
-          
+
           {(imageFile || imagenPortadaUrl) && (
             <Input
               value={imagenPortadaAlt || ''}
@@ -382,7 +382,7 @@ export function PostMetadataPanel({
             <Tag className="h-3 w-3" />
             Etiquetas
           </Label>
-          
+
           {tags.length > 0 && (
             <div className="flex flex-wrap gap-1">
               {tags.map((tag) => (
@@ -489,7 +489,7 @@ export function PostMetadataPanel({
                 }}
               />
             </div>
-            
+
             {scheduledFor && (
               <div className="space-y-2">
                 <Popover>
@@ -518,7 +518,7 @@ export function PostMetadataPanel({
                     />
                   </PopoverContent>
                 </Popover>
-                
+
                 <div>
                   <Label className="text-xs mb-1 block">Hora</Label>
                   <Input
@@ -535,7 +535,7 @@ export function PostMetadataPanel({
                 </div>
               </div>
             )}
-            
+
             {scheduledFor && (
               <p className="text-xs text-muted-foreground">
                 El post se publicará automáticamente en la fecha seleccionada

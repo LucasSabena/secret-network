@@ -319,66 +319,165 @@ function BlockEditorRenderer({
 function BlockPreview({ block }: { block: Block }) {
   switch (block.type) {
     case 'text':
+      const textContent = block.data.content?.replace(/<[^>]*>/g, '').substring(0, 100) || 'Texto vacío...';
       return (
-        <div className="text-sm text-muted-foreground">
-          {block.data.content || 'Texto vacío...'}
+        <div className="text-sm text-muted-foreground line-clamp-2">
+          {textContent}
         </div>
       );
     case 'image':
       return block.data.url ? (
-        <img
-          src={block.data.url}
-          alt={block.data.alt || ''}
-          className="w-full h-32 object-cover rounded"
-        />
+        <div className="space-y-2">
+          <img
+            src={block.data.url}
+            alt={block.data.alt || ''}
+            className="w-full h-32 object-cover rounded"
+          />
+          {block.data.caption && (
+            <p className="text-xs text-muted-foreground">{block.data.caption}</p>
+          )}
+        </div>
       ) : (
-        <div className="text-sm text-muted-foreground">Sin imagen</div>
+        <div className="text-sm text-muted-foreground">Sin imagen seleccionada</div>
+      );
+    case 'video':
+      return block.data.url ? (
+        <div className="space-y-2">
+          <div className="w-full h-32 bg-muted rounded flex items-center justify-center">
+            <span className="text-xs text-muted-foreground">🎥 Video</span>
+          </div>
+          {block.data.caption && (
+            <p className="text-xs text-muted-foreground">{block.data.caption}</p>
+          )}
+        </div>
+      ) : (
+        <div className="text-sm text-muted-foreground">Sin video seleccionado</div>
       );
     case 'program-card':
       return (
         <div className="text-sm text-muted-foreground">
-          Programa ID: {block.data.programId || 'No seleccionado'}
+          {block.data.programId ? `Programa ID: ${block.data.programId}` : 'No seleccionado'}
         </div>
       );
     case 'programs-grid':
       return (
         <div className="text-sm text-muted-foreground">
-          {block.data.programIds.length} programas en {block.data.columns} columnas
+          {block.data.programIds.length > 0 
+            ? `${block.data.programIds.length} programas en ${block.data.columns} columnas`
+            : 'Sin programas seleccionados'}
         </div>
       );
     case 'images-grid':
       return (
         <div className="text-sm text-muted-foreground">
-          {block.data.images.length} imágenes en {block.data.columns} columnas
+          {block.data.images.length > 0
+            ? `${block.data.images.length} imágenes en ${block.data.columns} columnas`
+            : 'Sin imágenes'}
         </div>
       );
     case 'tabs':
       return (
         <div className="text-sm text-muted-foreground">
-          {block.data.tabs.length} pestañas
+          {block.data.tabs.length > 0
+            ? `${block.data.tabs.length} pestañas: ${block.data.tabs.map(t => t.label).join(', ')}`
+            : 'Sin pestañas'}
         </div>
       );
     case 'accordion':
       return (
         <div className="text-sm text-muted-foreground">
-          {block.data.items.length} items
+          {block.data.items.length > 0
+            ? `${block.data.items.length} items`
+            : 'Sin items'}
         </div>
       );
     case 'alert':
       return (
         <div className="text-sm text-muted-foreground">
+          {block.data.title && <span className="font-medium">{block.data.title}: </span>}
           {block.data.description || 'Alerta vacía...'}
         </div>
       );
     case 'code':
       return (
         <div className="text-sm text-muted-foreground font-mono">
-          {block.data.language}: {block.data.code ? `${block.data.code.substring(0, 50)}...` : 'Código vacío'}
+          {block.data.language && <span className="font-semibold">{block.data.language}: </span>}
+          {block.data.code ? `${block.data.code.substring(0, 50)}...` : 'Código vacío'}
         </div>
       );
     case 'separator':
-      return <div className="border-t-2 border-border" />;
+      return <div className="border-t-2 border-border my-2" />;
+    case 'divider-text':
+      return (
+        <div className="flex items-center gap-2 my-2">
+          <div className="flex-1 border-t-2 border-border" />
+          {block.data.text && <span className="text-xs text-muted-foreground">{block.data.text}</span>}
+          <div className="flex-1 border-t-2 border-border" />
+        </div>
+      );
+    case 'quote':
+      return (
+        <div className="text-sm text-muted-foreground italic border-l-2 border-primary pl-3">
+          "{block.data.quote || 'Cita vacía...'}"
+          {block.data.author && <span className="block mt-1 not-italic">— {block.data.author}</span>}
+        </div>
+      );
+    case 'callout':
+      return (
+        <div className="text-sm text-muted-foreground flex items-start gap-2">
+          <span className="text-lg">{block.data.icon}</span>
+          <span>{block.data.content || 'Callout vacío...'}</span>
+        </div>
+      );
+    case 'button':
+      return (
+        <div className="text-sm text-muted-foreground">
+          Botón: {block.data.text || 'Sin texto'} → {block.data.url || 'Sin URL'}
+        </div>
+      );
+    case 'table':
+      return (
+        <div className="text-sm text-muted-foreground">
+          Tabla: {block.data.headers.length} columnas × {block.data.rows.length} filas
+        </div>
+      );
+    case 'stats':
+      return (
+        <div className="text-sm text-muted-foreground">
+          {block.data.stats.length} estadísticas en {block.data.columns} columnas
+        </div>
+      );
+    case 'timeline':
+      return (
+        <div className="text-sm text-muted-foreground">
+          Timeline con {block.data.items.length} eventos
+        </div>
+      );
+    case 'comparison':
+      return (
+        <div className="text-sm text-muted-foreground">
+          Comparación de {block.data.items.length} items
+        </div>
+      );
+    case 'file-download':
+      return (
+        <div className="text-sm text-muted-foreground">
+          📄 {block.data.fileName || 'Archivo sin nombre'}
+        </div>
+      );
+    case 'tweet':
+      return (
+        <div className="text-sm text-muted-foreground">
+          🐦 Tweet: {block.data.tweetUrl || 'Sin URL'}
+        </div>
+      );
+    case 'embed':
+      return (
+        <div className="text-sm text-muted-foreground">
+          Embed HTML {block.data.caption && `- ${block.data.caption}`}
+        </div>
+      );
     default:
-      return null;
+      return <div className="text-sm text-muted-foreground">Contenido del bloque</div>;
   }
 }
