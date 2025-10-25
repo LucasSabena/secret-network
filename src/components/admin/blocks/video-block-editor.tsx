@@ -5,7 +5,7 @@ import { VideoBlock } from '@/lib/types';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
 import { useState, useRef, useEffect } from 'react';
 import { Upload, Loader2, Video as VideoIcon } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
@@ -192,6 +192,55 @@ export function VideoBlockEditor({ block, onChange }: VideoBlockEditorProps) {
           onChange={(e) => onChange({ ...block, data: { ...block.data, caption: e.target.value } })}
           placeholder="Descripción del video"
         />
+      </div>
+
+      {/* Opciones de reproducción */}
+      <div className="space-y-3 pt-2 border-t">
+        <Label className="text-sm font-semibold">Opciones de Reproducción</Label>
+        
+        <div className="flex items-center justify-between">
+          <div className="space-y-0.5">
+            <Label className="text-sm font-normal">Reproducción automática</Label>
+            <p className="text-xs text-muted-foreground">El video se reproduce al cargar</p>
+          </div>
+          <Switch
+            checked={block.data.autoplay || false}
+            onCheckedChange={(checked) => onChange({ ...block, data: { ...block.data, autoplay: checked } })}
+          />
+        </div>
+
+        <div className="flex items-center justify-between">
+          <div className="space-y-0.5">
+            <Label className="text-sm font-normal">Repetir en bucle</Label>
+            <p className="text-xs text-muted-foreground">El video se repite continuamente</p>
+          </div>
+          <Switch
+            checked={block.data.loop || false}
+            onCheckedChange={(checked) => onChange({ ...block, data: { ...block.data, loop: checked } })}
+          />
+        </div>
+
+        <div className="flex items-center justify-between">
+          <div className="space-y-0.5">
+            <Label className="text-sm font-normal">Sin sonido</Label>
+            <p className="text-xs text-muted-foreground">El video inicia silenciado</p>
+          </div>
+          <Switch
+            checked={block.data.muted || false}
+            onCheckedChange={(checked) => onChange({ ...block, data: { ...block.data, muted: checked } })}
+          />
+        </div>
+
+        <div className="flex items-center justify-between">
+          <div className="space-y-0.5">
+            <Label className="text-sm font-normal">Mostrar controles</Label>
+            <p className="text-xs text-muted-foreground">Muestra play, pausa, volumen, etc.</p>
+          </div>
+          <Switch
+            checked={block.data.controls !== false}
+            onCheckedChange={(checked) => onChange({ ...block, data: { ...block.data, controls: checked } })}
+          />
+        </div>
       </div>
 
       {/* Vista previa */}

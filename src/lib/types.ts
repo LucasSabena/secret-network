@@ -185,6 +185,10 @@ export type VideoBlock = {
     url: string;
     platform: 'youtube' | 'vimeo' | 'loom';
     caption?: string;
+    autoplay?: boolean;
+    loop?: boolean;
+    muted?: boolean;
+    controls?: boolean;
   };
   style?: BlockStyle;
 };

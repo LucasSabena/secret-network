@@ -10,7 +10,7 @@ import { Block } from '@/lib/types';
 import { CanvasBlock } from './canvas-block';
 import { DropZoneIndicator } from './drop-zone-indicator';
 import { cn } from '@/lib/utils';
-import { Plus } from 'lucide-react';
+import { Plus, Video as VideoIcon, FileIcon, Twitter } from 'lucide-react';
 
 // Importar los editores de bloques existentes
 import { RichTextBlockEditor } from '../blocks/rich-text-block-editor';
@@ -343,8 +343,9 @@ function BlockPreview({ block }: { block: Block }) {
     case 'video':
       return block.data.url ? (
         <div className="space-y-2">
-          <div className="w-full h-32 bg-muted rounded flex items-center justify-center">
-            <span className="text-xs text-muted-foreground">🎥 Video</span>
+          <div className="w-full h-32 bg-muted rounded flex items-center justify-center gap-2">
+            <VideoIcon className="h-5 w-5 text-muted-foreground" />
+            <span className="text-xs text-muted-foreground">Video</span>
           </div>
           {block.data.caption && (
             <p className="text-xs text-muted-foreground">{block.data.caption}</p>
@@ -461,14 +462,16 @@ function BlockPreview({ block }: { block: Block }) {
       );
     case 'file-download':
       return (
-        <div className="text-sm text-muted-foreground">
-          📄 {block.data.fileName || 'Archivo sin nombre'}
+        <div className="text-sm text-muted-foreground flex items-center gap-2">
+          <FileIcon className="h-4 w-4" />
+          {block.data.fileName || 'Archivo sin nombre'}
         </div>
       );
     case 'tweet':
       return (
-        <div className="text-sm text-muted-foreground">
-          🐦 Tweet: {block.data.tweetUrl || 'Sin URL'}
+        <div className="text-sm text-muted-foreground flex items-center gap-2">
+          <Twitter className="h-4 w-4" />
+          Tweet: {block.data.tweetUrl || 'Sin URL'}
         </div>
       );
     case 'embed':

@@ -499,7 +499,10 @@ function VideoBlockComponent({ block }: { block: Extract<Block, { type: 'video' 
         <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-muted">
           <video 
             src={url} 
-            controls 
+            controls={block.data.controls !== false}
+            autoPlay={block.data.autoplay || false}
+            loop={block.data.loop || false}
+            muted={block.data.muted || false}
             className="w-full h-full object-contain"
             preload="metadata"
           >
