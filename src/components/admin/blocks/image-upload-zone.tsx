@@ -100,7 +100,7 @@ export function ImageUploadZone({ onImageUploaded, currentImageUrl }: ImageUploa
 
     dropZone.addEventListener('paste', handlePaste);
     return () => dropZone.removeEventListener('paste', handlePaste);
-  }, [currentImageUrl, onImageUploaded]);
+  }, []);
 
   return (
     <div
@@ -109,6 +109,7 @@ export function ImageUploadZone({ onImageUploaded, currentImageUrl }: ImageUploa
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
+      onClick={() => dropZoneRef.current?.focus()}
       className={`
         relative border-2 border-dashed rounded-lg transition-all cursor-pointer
         focus:ring-2 focus:ring-primary focus:border-primary outline-none
