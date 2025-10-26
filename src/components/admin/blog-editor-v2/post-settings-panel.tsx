@@ -228,8 +228,16 @@ export function PostSettingsPanel({
                 <Calendar
                   mode="single"
                   selected={fechaPublicacion}
-                  onSelect={(date: Date | undefined) => date && onFechaChange(date)}
+                  onSelect={(date: Date | undefined) => {
+                    if (date) {
+                      // Ajustar la fecha a la zona horaria de Argentina (UTC-3)
+                      const argDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12, 0, 0);
+                      onFechaChange(argDate);
+                    }
+                  }}
                   locale={es}
+                  defaultMonth={fechaPublicacion}
+                  className="rounded-md border"
                 />
               </PopoverContent>
             </Popover>

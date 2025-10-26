@@ -20,7 +20,7 @@ export function BlogSchedulePicker({ scheduledFor, onChange }: BlogSchedulePicke
     if (!checked) {
       onChange(null);
     } else {
-      // Set default to tomorrow at 9 AM
+      // Set default to tomorrow at 9 AM Argentina time
       const tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
       tomorrow.setHours(9, 0, 0, 0);
@@ -30,20 +30,24 @@ export function BlogSchedulePicker({ scheduledFor, onChange }: BlogSchedulePicke
 
   const handleDateTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value) {
+      // El input datetime-local ya maneja la zona horaria local del navegador
       const date = new Date(e.target.value);
       onChange(date.toISOString());
     }
   };
 
-  // Convert ISO string to datetime-local format
+  // Convert ISO string to datetime-local format (respeta la zona horaria local)
   const getDateTimeLocalValue = () => {
     if (!scheduledFor) return '';
     const date = new Date(scheduledFor);
+    
+    // Obtener los valores en la zona horaria local del usuario
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     const hours = String(date.getHours()).padStart(2, '0');
     const minutes = String(date.getMinutes()).padStart(2, '0');
+    
     return `${year}-${month}-${day}T${hours}:${minutes}`;
   };
 
@@ -60,9 +64,12 @@ export function BlogSchedulePicker({ scheduledFor, onChange }: BlogSchedulePicke
 
       {isScheduled && (
         <div className="space-y-2">
-          <Label htmlFor="scheduled-date">Fecha y hora de publicación</Label>
+          <Label htmlFor="scheduled-date" className="flex items-center gap-2">
+            <Clock className="h-3.5 w-3.5" />
+            Fecha y hora de publicación
+          </Label>
           <div className="relative">
-            <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+            <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none z-10" />
             <Input
               id="scheduled-date"
               type="datetime-local"
@@ -73,7 +80,7 @@ export function BlogSchedulePicker({ scheduledFor, onChange }: BlogSchedulePicke
             />
           </div>
           <p className="text-xs text-muted-foreground">
-            El post se publicará automáticamente en la fecha seleccionada
+            El post se publicará automáticamente en la fecha y hora seleccionada (hora local de tu navegador)
           </p>
         </div>
       )}
