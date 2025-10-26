@@ -22,6 +22,7 @@ import {
   Image as ImageIcon,
   Upload,
   X,
+  Clock,
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -433,7 +434,13 @@ export function PostMetadataPanel({
             </Label>
             <Switch
               checked={publicado}
-              onCheckedChange={onPublicadoChange}
+              onCheckedChange={(checked) => {
+                // Si se activa "publicado", cancelar la programación
+                if (checked && scheduledFor) {
+                  onScheduledForChange(null);
+                }
+                onPublicadoChange(checked);
+              }}
             />
           </div>
 
@@ -481,6 +488,10 @@ export function PostMetadataPanel({
                   if (!checked) {
                     onScheduledForChange(null);
                   } else {
+                    // Al programar, desactivar "publicado" automáticamente
+                    if (publicado) {
+                      onPublicadoChange(false);
+                    }
                     const tomorrow = new Date();
                     tomorrow.setDate(tomorrow.getDate() + 1);
                     tomorrow.setHours(9, 0, 0, 0);
@@ -537,9 +548,12 @@ export function PostMetadataPanel({
             )}
 
             {scheduledFor && (
-              <p className="text-xs text-muted-foreground">
-                El post se publicará automáticamente en la fecha seleccionada
-              </p>
+              <div className="p-2 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-md">
+                <p className="text-xs text-blue-700 dark:text-blue-300 flex items-center gap-1">
+                  <Clock className="h-3 w-3" />
+                  El post se publicará automáticamente el {format(new Date(scheduledFor), 'PPP', { locale: es })} a las {format(new Date(scheduledFor), 'HH:mm')}
+                </p>
+              </div>
             )}
           </div>
         </div>
