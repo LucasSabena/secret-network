@@ -494,15 +494,20 @@ function VideoBlockComponent({ block }: { block: Extract<Block, { type: 'video' 
 
   // Si es un video directo (Cloudinary u otro)
   if (isDirectVideo || isCloudinaryVideo) {
+    // Para autoplay en móviles, el video DEBE estar muted
+    const shouldAutoplay = block.data.autoplay === true;
+    const shouldMute = block.data.muted === true || shouldAutoplay;
+    
     return (
       <div className="my-8">
         <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-muted">
           <video 
             src={url} 
             controls={block.data.controls !== false}
-            autoPlay={block.data.autoplay || false}
-            loop={block.data.loop || false}
-            muted={block.data.muted || false}
+            autoPlay={shouldAutoplay}
+            loop={block.data.loop === true}
+            muted={shouldMute}
+            playsInline
             className="w-full h-full object-contain"
             preload="metadata"
           >
