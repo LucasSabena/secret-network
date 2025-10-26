@@ -202,15 +202,12 @@ export const suggestion = {
         description: 'Etiqueta de categoría',
         searchTerms: ['badge', 'tag', 'etiqueta', 'categoria'],
         command: ({ editor, range }: any) => {
-          const text = window.prompt('Texto del badge:');
-          if (text) {
-            editor
-              .chain()
-              .focus()
-              .deleteRange(range)
-              .setBadge({ text, color: 'primary' })
-              .run();
-          }
+          editor
+            .chain()
+            .focus()
+            .deleteRange(range)
+            .setBadge({ text: 'Categoría', color: 'primary' })
+            .run();
         },
       },
     ]
