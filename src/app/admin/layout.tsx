@@ -5,5 +5,11 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <AdminAuthCheck>{children}</AdminAuthCheck>;
+  return (
+    <AdminAuthCheck>
+      <div className="min-h-screen bg-background">
+        {children}
+      </div>
+    </AdminAuthCheck>
+  );
 }

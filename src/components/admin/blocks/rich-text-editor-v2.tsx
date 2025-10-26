@@ -15,7 +15,7 @@ import { Button } from '@/components/ui/button';
 import { 
   Bold, Italic, Strikethrough, Code, Link2, 
   List, ListOrdered, Quote,
-  Undo, Redo, Palette, Upload, Package, ChevronDown
+  Undo, Redo, Palette, Upload, Package, ChevronDown, Tag
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -27,6 +27,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { SlashCommands, suggestion } from './tiptap-extensions/slash-commands';
 import { ProgramNode } from './tiptap-extensions/program-node';
+import { BadgeNode, BADGE_COLORS, BadgeColor } from './tiptap-extensions/badge-node';
 import { useToast } from '@/components/ui/use-toast';
 
 interface RichTextEditorV2Props {
@@ -42,6 +43,9 @@ export function RichTextEditorV2({ content, onChange, placeholder }: RichTextEdi
   const [programSearch, setProgramSearch] = useState('');
   const [programs, setPrograms] = useState<any[]>([]);
   const [selectedVariant, setSelectedVariant] = useState<'small' | 'medium' | 'large'>('medium');
+  const [showBadgePopover, setShowBadgePopover] = useState(false);
+  const [badgeText, setBadgeText] = useState('');
+  const [badgeColor, setBadgeColor] = useState<BadgeColor>('primary');
   const { toast } = useToast();
 
   // Buscar programas
@@ -101,6 +105,7 @@ export function RichTextEditorV2({ content, onChange, placeholder }: RichTextEdi
         multicolor: true,
       }),
       ProgramNode,
+      BadgeNode,
       SlashCommands.configure({
         suggestion,
       }),
@@ -615,6 +620,77 @@ export function RichTextEditorV2({ content, onChange, placeholder }: RichTextEdi
                   </Button>
                 </div>
               </div>
+            </div>
+          </PopoverContent>
+        </Popover>
+
+        {/* Badge */}
+        <Popover open={showBadgePopover} onOpenChange={setShowBadgePopover}>
+          <PopoverTrigger asChild>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="h-8 w-8 p-0"
+              title="Insertar badge"
+            >
+              <Tag className="h-4 w-4" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-80">
+            <div className="space-y-3">
+              <div>
+                <Label>Texto del Badge</Label>
+                <Input
+                  value={badgeText}
+                  onChange={(e) => setBadgeText(e.target.value)}
+                  placeholder="Ej: Software / Diseño AR/VR"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      if (badgeText.trim()) {
+                        editor?.commands.setBadge({ text: badgeText, color: badgeColor });
+                        setBadgeText('');
+                        setShowBadgePopover(false);
+                      }
+                    }
+                  }}
+                />
+              </div>
+
+              <div>
+                <Label className="text-xs text-muted-foreground mb-2 block">Color del Badge</Label>
+                <div className="grid grid-cols-5 gap-2">
+                  {Object.entries(BADGE_COLORS).map(([key, config]) => (
+                    <button
+                      key={key}
+                      type="button"
+                      className={`h-8 rounded-md transition-all ${config.bg} ${config.text} text-xs font-medium ${
+                        badgeColor === key ? 'ring-2 ring-primary ring-offset-2' : ''
+                      }`}
+                      onClick={() => setBadgeColor(key as BadgeColor)}
+                      title={config.label}
+                    >
+                      {config.label.slice(0, 3)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <Button
+                type="button"
+                size="sm"
+                className="w-full"
+                onClick={() => {
+                  if (badgeText.trim()) {
+                    editor?.commands.setBadge({ text: badgeText, color: badgeColor });
+                    setBadgeText('');
+                    setShowBadgePopover(false);
+                  }
+                }}
+              >
+                Insertar Badge
+              </Button>
             </div>
           </PopoverContent>
         </Popover>
