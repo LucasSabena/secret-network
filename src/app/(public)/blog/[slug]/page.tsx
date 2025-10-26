@@ -71,20 +71,36 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function BlogPostPage({ 
+  params,
+  searchParams 
+}: { 
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ preview?: string }>;
+}) {
   const { slug } = await params;
+  const { preview } = await searchParams;
   const supabase = await createClient();
   
-  const { data: post, error } = await supabase
+  // Si es modo preview, no filtrar por publicado
+  const query = supabase
     .from('blog_posts')
     .select('*')
-    .eq('slug', slug)
-    .eq('publicado', true)
-    .single();
+    .eq('slug', slug);
+  
+  // Solo filtrar por publicado si NO es preview
+  if (preview !== 'true') {
+    query.eq('publicado', true);
+  }
+  
+  const { data: post, error } = await query.single();
 
   if (error || !post) {
     notFound();
   }
+  
+  // Mostrar banner de preview si no está publicado
+  const isPreview = preview === 'true' && !post.publicado;
 
   // Obtener posts relacionados (mismos tags)
   const { data: relatedPosts } = await supabase
@@ -99,8 +115,15 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       {/* Barra de progreso de lectura */}
       <ReadingProgressBar />
       
-      {/* Tracking de analytics */}
-      <BlogAnalyticsTracker postId={post.id} />
+      {/* Tracking de analytics - solo si está publicado */}
+      {!isPreview && <BlogAnalyticsTracker postId={post.id} />}
+      
+      {/* Banner de preview */}
+      {isPreview && (
+        <div className="bg-yellow-500 text-yellow-950 py-3 px-4 text-center font-medium">
+          🔍 Modo Preview - Este post no está publicado aún
+        </div>
+      )}
       
       <div className="container mx-auto px-4 py-8">
         {/* JSON-LD Structured Data */}

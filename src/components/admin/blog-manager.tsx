@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Plus, Search, Edit, Trash2, Loader2, Copy, FileText } from 'lucide-react';
+import { Plus, Search, Edit, Trash2, Loader2, Copy, FileText, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
@@ -332,6 +332,7 @@ export default function BlogManager() {
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
             className="px-3 py-2 border rounded-md text-sm"
+            aria-label="Filtrar por estado"
           >
             <option value="all">Todos los estados</option>
             <option value="published">Publicados</option>
@@ -342,6 +343,7 @@ export default function BlogManager() {
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
             className="px-3 py-2 border rounded-md text-sm"
+            aria-label="Filtrar por categoría"
           >
             <option value="all">Todas las categorías</option>
             {categories.map((cat) => (
@@ -411,6 +413,18 @@ export default function BlogManager() {
               >
                 <Edit className="h-3 w-3 md:h-4 md:w-4" />
                 <span className="hidden sm:inline">Editar</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  const previewUrl = `/blog/${post.slug}?preview=true`;
+                  window.open(previewUrl, '_blank');
+                }}
+                className="gap-1 md:gap-2"
+                title="Vista previa"
+              >
+                <Eye className="h-3 w-3 md:h-4 md:w-4" />
               </Button>
               <Button
                 variant="outline"
