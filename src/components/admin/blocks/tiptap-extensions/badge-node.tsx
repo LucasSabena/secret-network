@@ -75,14 +75,17 @@ export const BadgeNode = Node.create({
     ];
   },
 
-  renderHTML({ HTMLAttributes }) {
-    const { text, color } = HTMLAttributes;
+  renderHTML({ node, HTMLAttributes }) {
+    const text = node.attrs.text || 'Badge';
+    const color = node.attrs.color || 'primary';
     const colorConfig = BADGE_COLORS[color as BadgeColor] || BADGE_COLORS.primary;
     
     return [
       'span',
       mergeAttributes(HTMLAttributes, {
         'data-badge': '',
+        'data-text': text,
+        'data-color': color,
         class: `inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${colorConfig.bg} ${colorConfig.text}`,
       }),
       text,
