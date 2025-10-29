@@ -37,9 +37,30 @@ export default function AdminHeader() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between px-4">
-        <div className="flex items-center gap-2">
-          <Shield className="h-6 w-6 text-pink-500" />
-          <span className="font-bold text-xl">Admin Panel</span>
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-2">
+            <Shield className="h-6 w-6 text-pink-500" />
+            <span className="font-bold text-xl">Admin Panel</span>
+          </div>
+          
+          {/* Quick Links */}
+          <nav className="hidden md:flex items-center gap-2">
+            <Link href="/admin/blog-series">
+              <Button variant="ghost" size="sm" className="text-xs">
+                Series
+              </Button>
+            </Link>
+            <Link href="/admin/blog-featured">
+              <Button variant="ghost" size="sm" className="text-xs">
+                Destacados
+              </Button>
+            </Link>
+            <Link href="/admin/blog-categorias">
+              <Button variant="ghost" size="sm" className="text-xs">
+                Categorías
+              </Button>
+            </Link>
+          </nav>
         </div>
 
         <div className="flex items-center gap-4">
@@ -47,7 +68,7 @@ export default function AdminHeader() {
           <Link href="/">
             <Button variant="outline" size="sm" className="gap-2">
               <Home className="h-4 w-4" />
-              Volver al sitio
+              <span className="hidden sm:inline">Volver al sitio</span>
             </Button>
           </Link>
           <Button 
@@ -57,7 +78,7 @@ export default function AdminHeader() {
             onClick={handleLogout}
           >
             <LogOut className="h-4 w-4" />
-            Cerrar Sesión
+            <span className="hidden sm:inline">Cerrar Sesión</span>
           </Button>
         </div>
       </div>
