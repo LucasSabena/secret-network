@@ -380,6 +380,7 @@ export type BlogPost = {
   fecha_publicacion: string;
   actualizado_en: string;
   publicado: boolean;
+  is_featured?: boolean; // Destacado en serie
   status?: 'draft' | 'scheduled' | 'published' | 'archived';
   scheduled_for?: string | null;
   tags: string[] | null;
