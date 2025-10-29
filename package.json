@@ -17,7 +17,8 @@
     "deep:diagnosis": "tsx scripts/deep-diagnosis.ts",
     "analyze:db": "tsx scripts/analyze-database.ts",
     "extract:programs": "tsx scripts/extract-programs.ts",
-    "update:admin": "tsx scripts/update-admin-info.ts"
+    "update:admin": "tsx scripts/update-admin-info.ts",
+    "migrate:blog-series": "tsx scripts/run-blog-series-migration.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
