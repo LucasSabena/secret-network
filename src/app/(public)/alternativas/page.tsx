@@ -32,7 +32,7 @@ export default async function AlternativasPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 pt-24">
       <AlternativesHero totalPrograms={programasPopulares?.length || 0} />
       <AlternativesGrid programs={programasPopulares || []} />
     </div>

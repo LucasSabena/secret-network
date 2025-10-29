@@ -34,6 +34,13 @@ export default async function SeriePage({ params }: SeriePageProps) {
   const { slug } = await params;
   const supabase = await createClient();
 
+  // Obtener metadatos de la serie desde blog_series
+  const { data: serieData } = await supabase
+    .from('blog_series')
+    .select('*')
+    .eq('slug', slug)
+    .single();
+
   // Obtener todos los posts publicados
   const { data: allPosts } = await supabase
     .from('blog_posts')
@@ -61,8 +68,15 @@ export default async function SeriePage({ params }: SeriePageProps) {
     notFound();
   }
 
-  // Obtener el nombre de la serie del primer tag que coincida
-  const serieName = seriePosts[0].tags?.find((tag: string) => createSlug(tag) === slug) || slug;
+  // Obtener el nombre de la serie (de blog_series o del tag)
+  const serieName = serieData?.nombre || seriePosts[0].tags?.find((tag: string) => createSlug(tag) === slug) || slug;
+  const serieDescription = serieData?.descripcion;
+  
+  // Títulos personalizables de las secciones
+  const featuredTitle = serieData?.featured_section_title || 'Artículos Destacados';
+  const featuredSubtitle = serieData?.featured_section_subtitle || 'Los artículos principales de esta serie';
+  const regularTitle = serieData?.regular_section_title || 'Más Artículos';
+  const regularSubtitle = serieData?.regular_section_subtitle || 'Otros artículos de esta serie';
 
   // Separar posts destacados de regulares
   const featuredPosts = seriePosts
@@ -80,23 +94,6 @@ export default async function SeriePage({ params }: SeriePageProps) {
     
     return (
       <div className="min-h-screen bg-background">
-        {/* Breadcrumb */}
-        <div className="border-b">
-          <div className="container mx-auto px-4 py-4">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Link href="/" className="hover:text-foreground">
-                Inicio
-              </Link>
-              <ChevronRight className="h-4 w-4" />
-              <Link href="/blog" className="hover:text-foreground">
-                Blog
-              </Link>
-              <ChevronRight className="h-4 w-4" />
-              <span className="text-foreground">Serie: {serieName}</span>
-            </div>
-          </div>
-        </div>
-
         {/* Header especial para series con destacados */}
         <div className={`border-b ${isAdobeMax ? 'bg-gradient-to-br from-red-500/10 via-primary/10 to-purple-500/10' : 'bg-gradient-to-b from-muted/50 to-background'}`}>
           <div className="container mx-auto px-4 py-16">
@@ -115,11 +112,28 @@ export default async function SeriePage({ params }: SeriePageProps) {
               </h1>
               
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                {isAdobeMax 
+                {serieDescription || (isAdobeMax 
                   ? 'Todas las novedades, actualizaciones y anuncios del evento más importante de Adobe'
-                  : 'Una colección de artículos relacionados sobre este tema'
+                  : 'Una colección de artículos relacionados sobre este tema')
                 }
               </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Breadcrumb */}
+        <div className="border-b bg-muted/30">
+          <div className="container mx-auto px-4 py-3">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Link href="/" className="hover:text-foreground transition-colors">
+                Inicio
+              </Link>
+              <ChevronRight className="h-3.5 w-3.5" />
+              <Link href="/blog" className="hover:text-foreground transition-colors">
+                Blog
+              </Link>
+              <ChevronRight className="h-3.5 w-3.5" />
+              <span className="text-foreground font-medium">{serieName}</span>
             </div>
           </div>
         </div>
@@ -130,13 +144,10 @@ export default async function SeriePage({ params }: SeriePageProps) {
             <section>
               <div className="mb-8">
                 <h2 className="text-3xl font-bold mb-2">
-                  {isAdobeMax ? 'Resúmenes Diarios' : 'Artículos Destacados'}
+                  {featuredTitle}
                 </h2>
                 <p className="text-muted-foreground">
-                  {isAdobeMax 
-                    ? 'Lo más destacado de cada día del evento'
-                    : 'Los artículos principales de esta serie'
-                  }
+                  {featuredSubtitle}
                 </p>
               </div>
               <SerieCarousel dailySummaries={featuredPosts} />
@@ -147,13 +158,10 @@ export default async function SeriePage({ params }: SeriePageProps) {
               <section>
                 <div className="mb-8">
                   <h2 className="text-3xl font-bold mb-2">
-                    {isAdobeMax ? 'Actualizaciones de Programas' : 'Más Artículos'}
+                    {regularTitle}
                   </h2>
                   <p className="text-muted-foreground">
-                    {isAdobeMax 
-                      ? 'Análisis detallado de cada novedad anunciada'
-                      : 'Otros artículos de esta serie'
-                    }
+                    {regularSubtitle}
                   </p>
                 </div>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -221,23 +229,6 @@ export default async function SeriePage({ params }: SeriePageProps) {
   // Layout estándar para otras series
   return (
     <div className="min-h-screen bg-background">
-      {/* Breadcrumb */}
-      <div className="border-b">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Link href="/" className="hover:text-foreground">
-              Inicio
-            </Link>
-            <ChevronRight className="h-4 w-4" />
-            <Link href="/blog" className="hover:text-foreground">
-              Blog
-            </Link>
-            <ChevronRight className="h-4 w-4" />
-            <span className="text-foreground">Serie: {serieName}</span>
-          </div>
-        </div>
-      </div>
-
       {/* Header de la serie */}
       <div className="border-b bg-gradient-to-b from-muted/50 to-background">
         <div className="container mx-auto px-4 py-16">
@@ -252,8 +243,25 @@ export default async function SeriePage({ params }: SeriePageProps) {
             </h1>
             
             <p className="text-xl text-muted-foreground">
-              Una colección de artículos relacionados sobre este tema
+              {serieDescription || 'Una colección de artículos relacionados sobre este tema'}
             </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Breadcrumb */}
+      <div className="border-b bg-muted/30">
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Link href="/" className="hover:text-foreground transition-colors">
+              Inicio
+            </Link>
+            <ChevronRight className="h-3.5 w-3.5" />
+            <Link href="/blog" className="hover:text-foreground transition-colors">
+              Blog
+            </Link>
+            <ChevronRight className="h-3.5 w-3.5" />
+            <span className="text-foreground font-medium">{serieName}</span>
           </div>
         </div>
       </div>

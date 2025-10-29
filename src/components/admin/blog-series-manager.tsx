@@ -39,6 +39,10 @@ interface Serie {
   slug: string;
   color: string;
   descripcion?: string;
+  featured_section_title?: string;
+  featured_section_subtitle?: string;
+  regular_section_title?: string;
+  regular_section_subtitle?: string;
   count: number;
   posts: BlogPost[];
   featuredPostId?: number;
@@ -216,6 +220,10 @@ export function BlogSeriesManager() {
             slug: metadata?.slug || createSlug(tag),
             color: metadata?.color || getColorForSeries(tag),
             descripcion: metadata?.descripcion,
+            featured_section_title: metadata?.featured_section_title,
+            featured_section_subtitle: metadata?.featured_section_subtitle,
+            regular_section_title: metadata?.regular_section_title,
+            regular_section_subtitle: metadata?.regular_section_subtitle,
             is_featured_in_hero: metadata?.is_featured_in_hero || false,
             count: posts.length,
             posts: sortedPosts,
@@ -266,10 +274,34 @@ export function BlogSeriesManager() {
       .replace(/^-+|-+$/g, '');
   }
 
-  async function handleCreateSerie(data: { nombre: string; slug: string; color: string; descripcion: string }) {
+  async function handleCreateSerie(data: { 
+    nombre: string; 
+    slug: string; 
+    color: string; 
+    descripcion: string;
+    featured_section_title?: string;
+    featured_section_subtitle?: string;
+    regular_section_title?: string;
+    regular_section_subtitle?: string;
+  }) {
     try {
-      // Por ahora, las series se crean mediante tags
-      // Esta función podría guardar metadatos en una tabla blog_series si existe
+      const supabase = supabaseBrowserClient;
+      
+      // Crear entrada en blog_series
+      await supabase
+        .from('blog_series')
+        .insert({
+          nombre: data.nombre,
+          slug: data.slug,
+          tag: data.nombre,
+          color: data.color,
+          descripcion: data.descripcion,
+          featured_section_title: data.featured_section_title || 'Artículos Destacados',
+          featured_section_subtitle: data.featured_section_subtitle || 'Lo más destacado de esta serie',
+          regular_section_title: data.regular_section_title || 'Más Artículos',
+          regular_section_subtitle: data.regular_section_subtitle || 'Todos los artículos de la serie',
+        });
+      
       toast.success('Serie creada. Agrega posts con el tag "' + data.nombre + '"');
       loadSeries();
     } catch (error) {
@@ -279,7 +311,16 @@ export function BlogSeriesManager() {
     }
   }
 
-  async function handleEditSerie(data: { nombre: string; slug: string; color: string; descripcion: string }) {
+  async function handleEditSerie(data: { 
+    nombre: string; 
+    slug: string; 
+    color: string; 
+    descripcion: string;
+    featured_section_title?: string;
+    featured_section_subtitle?: string;
+    regular_section_title?: string;
+    regular_section_subtitle?: string;
+  }) {
     try {
       if (!editingSerie) return;
 
@@ -302,6 +343,10 @@ export function BlogSeriesManager() {
             color: data.color,
             descripcion: data.descripcion,
             tag: data.nombre, // Actualizar tag si cambió el nombre
+            featured_section_title: data.featured_section_title || 'Artículos Destacados',
+            featured_section_subtitle: data.featured_section_subtitle || 'Lo más destacado de esta serie',
+            regular_section_title: data.regular_section_title || 'Más Artículos',
+            regular_section_subtitle: data.regular_section_subtitle || 'Todos los artículos de la serie',
             updated_at: new Date().toISOString(),
           })
           .eq('id', existingSerie.id);
@@ -315,6 +360,10 @@ export function BlogSeriesManager() {
             tag: data.nombre,
             color: data.color,
             descripcion: data.descripcion,
+            featured_section_title: data.featured_section_title || 'Artículos Destacados',
+            featured_section_subtitle: data.featured_section_subtitle || 'Lo más destacado de esta serie',
+            regular_section_title: data.regular_section_title || 'Más Artículos',
+            regular_section_subtitle: data.regular_section_subtitle || 'Todos los artículos de la serie',
           });
       }
       
@@ -730,6 +779,10 @@ export function BlogSeriesManager() {
           slug: editingSerie.slug,
           color: editingSerie.color,
           descripcion: editingSerie.descripcion || '',
+          featured_section_title: editingSerie.featured_section_title,
+          featured_section_subtitle: editingSerie.featured_section_subtitle,
+          regular_section_title: editingSerie.regular_section_title,
+          regular_section_subtitle: editingSerie.regular_section_subtitle,
         } : null}
         onClose={() => setEditingSerie(null)}
         onSave={handleEditSerie}

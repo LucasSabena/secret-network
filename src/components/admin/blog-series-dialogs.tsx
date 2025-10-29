@@ -44,6 +44,10 @@ interface SerieFormData {
   slug: string;
   color: string;
   descripcion: string;
+  featured_section_title?: string;
+  featured_section_subtitle?: string;
+  regular_section_title?: string;
+  regular_section_subtitle?: string;
 }
 
 interface CreateSerieDialogProps {
@@ -77,7 +81,7 @@ export function CreateSerieDialog({ open, onClose, onSave }: CreateSerieDialogPr
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.nombre.trim()) {
       alert('El nombre es requerido');
       return;
@@ -109,7 +113,7 @@ export function CreateSerieDialog({ open, onClose, onSave }: CreateSerieDialogPr
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[600px] max-h-[90vh]">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>Crear Nueva Serie</DialogTitle>
@@ -118,81 +122,127 @@ export function CreateSerieDialog({ open, onClose, onSave }: CreateSerieDialogPr
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4 py-4">
-            {/* Nombre */}
-            <div className="space-y-2">
-              <Label htmlFor="nombre">Nombre de la Serie *</Label>
-              <Input
-                id="nombre"
-                value={formData.nombre}
-                onChange={(e) => setFormData(prev => ({ ...prev, nombre: e.target.value }))}
-                placeholder="Ej: Adobe MAX 2025"
-                required
-              />
-            </div>
+          <ScrollArea className="max-h-[60vh] pr-4">
+            <div className="space-y-4 py-4">
+              {/* Nombre */}
+              <div className="space-y-2">
+                <Label htmlFor="nombre">Nombre de la Serie *</Label>
+                <Input
+                  id="nombre"
+                  value={formData.nombre}
+                  onChange={(e) => setFormData(prev => ({ ...prev, nombre: e.target.value }))}
+                  placeholder="Ej: Adobe MAX 2025"
+                  required
+                />
+              </div>
 
-            {/* Slug */}
-            <div className="space-y-2">
-              <Label htmlFor="slug">Slug (URL) *</Label>
-              <Input
-                id="slug"
-                value={formData.slug}
-                onChange={(e) => {
-                  setAutoSlug(false);
-                  setFormData(prev => ({ ...prev, slug: e.target.value }));
-                }}
-                placeholder="adobe-max-2025"
-                required
-              />
-              <p className="text-xs text-muted-foreground">
-                URL: /blog/serie/{formData.slug || 'slug'}
-              </p>
-            </div>
+              {/* Slug */}
+              <div className="space-y-2">
+                <Label htmlFor="slug">Slug (URL) *</Label>
+                <Input
+                  id="slug"
+                  value={formData.slug}
+                  onChange={(e) => {
+                    setAutoSlug(false);
+                    setFormData(prev => ({ ...prev, slug: e.target.value }));
+                  }}
+                  placeholder="adobe-max-2025"
+                  required
+                />
+                <p className="text-xs text-muted-foreground">
+                  URL: /blog/serie/{formData.slug || 'slug'}
+                </p>
+              </div>
 
-            {/* Color */}
-            <div className="space-y-2">
-              <Label htmlFor="color">Color</Label>
-              <Select
-                value={formData.color}
-                onValueChange={(value) => setFormData(prev => ({ ...prev, color: value }))}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {SERIE_COLORS.map((color) => (
-                    <SelectItem key={color.value} value={color.value}>
-                      <div className="flex items-center gap-2">
-                        <div
-                          className="w-4 h-4 rounded-full border"
-                          style={{ backgroundColor: color.value }}
-                        />
-                        {color.label}
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+              {/* Color */}
+              <div className="space-y-2">
+                <Label htmlFor="color">Color</Label>
+                <Select
+                  value={formData.color}
+                  onValueChange={(value) => setFormData(prev => ({ ...prev, color: value }))}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {SERIE_COLORS.map((color) => (
+                      <SelectItem key={color.value} value={color.value}>
+                        <div className="flex items-center gap-2">
+                          <div
+                            className="w-4 h-4 rounded-full border"
+                            style={{ backgroundColor: color.value }}
+                          />
+                          {color.label}
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
 
-            {/* Descripción */}
-            <div className="space-y-2">
-              <Label htmlFor="descripcion">Descripción (opcional)</Label>
-              <Textarea
-                id="descripcion"
-                value={formData.descripcion}
-                onChange={(e) => setFormData(prev => ({ ...prev, descripcion: e.target.value }))}
-                placeholder="Describe de qué trata esta serie..."
-                rows={3}
-                maxLength={500}
-              />
-              <p className="text-xs text-muted-foreground text-right">
-                {formData.descripcion.length}/500
-              </p>
-            </div>
-          </div>
+              {/* Descripción */}
+              <div className="space-y-2">
+                <Label htmlFor="descripcion">Descripción (opcional)</Label>
+                <Textarea
+                  id="descripcion"
+                  value={formData.descripcion}
+                  onChange={(e) => setFormData(prev => ({ ...prev, descripcion: e.target.value }))}
+                  placeholder="Describe de qué trata esta serie..."
+                  rows={3}
+                  maxLength={500}
+                />
+                <p className="text-xs text-muted-foreground text-right">
+                  {formData.descripcion.length}/500
+                </p>
+              </div>
 
-          <DialogFooter>
+              {/* Sección Destacados - Título */}
+              <div className="space-y-2">
+                <Label htmlFor="featured-title">Título Sección Destacados</Label>
+                <Input
+                  id="featured-title"
+                  value={formData.featured_section_title || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, featured_section_title: e.target.value }))}
+                  placeholder="Ej: Artículos Destacados"
+                />
+              </div>
+
+              {/* Sección Destacados - Subtítulo */}
+              <div className="space-y-2">
+                <Label htmlFor="featured-subtitle">Subtítulo Sección Destacados</Label>
+                <Input
+                  id="featured-subtitle"
+                  value={formData.featured_section_subtitle || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, featured_section_subtitle: e.target.value }))}
+                  placeholder="Ej: Lo más destacado de esta serie"
+                />
+              </div>
+
+              {/* Sección Regular - Título */}
+              <div className="space-y-2">
+                <Label htmlFor="regular-title">Título Sección Todos los Artículos</Label>
+                <Input
+                  id="regular-title"
+                  value={formData.regular_section_title || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, regular_section_title: e.target.value }))}
+                  placeholder="Ej: Más Artículos"
+                />
+              </div>
+
+              {/* Sección Regular - Subtítulo */}
+              <div className="space-y-2">
+                <Label htmlFor="regular-subtitle">Subtítulo Sección Todos los Artículos</Label>
+                <Input
+                  id="regular-subtitle"
+                  value={formData.regular_section_subtitle || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, regular_section_subtitle: e.target.value }))}
+                  placeholder="Ej: Todos los artículos de la serie"
+                />
+              </div>
+            </div>
+          </ScrollArea>
+
+          <DialogFooter className="mt-4">
             <Button type="button" variant="outline" onClick={onClose} disabled={isSaving}>
               Cancelar
             </Button>
@@ -237,7 +287,7 @@ export function EditSerieDialog({ open, serie, onClose, onSave }: EditSerieDialo
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.nombre.trim()) {
       alert('El nombre es requerido');
       return;
@@ -261,7 +311,7 @@ export function EditSerieDialog({ open, serie, onClose, onSave }: EditSerieDialo
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[600px] max-h-[90vh]">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>Editar Serie</DialogTitle>
@@ -270,78 +320,124 @@ export function EditSerieDialog({ open, serie, onClose, onSave }: EditSerieDialo
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4 py-4">
-            {/* Nombre */}
-            <div className="space-y-2">
-              <Label htmlFor="edit-nombre">Nombre de la Serie *</Label>
-              <Input
-                id="edit-nombre"
-                value={formData.nombre}
-                onChange={(e) => setFormData(prev => ({ ...prev, nombre: e.target.value }))}
-                placeholder="Ej: Adobe MAX 2025"
-                required
-              />
-            </div>
+          <ScrollArea className="max-h-[60vh] pr-4">
+            <div className="space-y-4 py-4">
+              {/* Nombre */}
+              <div className="space-y-2">
+                <Label htmlFor="edit-nombre">Nombre de la Serie *</Label>
+                <Input
+                  id="edit-nombre"
+                  value={formData.nombre}
+                  onChange={(e) => setFormData(prev => ({ ...prev, nombre: e.target.value }))}
+                  placeholder="Ej: Adobe MAX 2025"
+                  required
+                />
+              </div>
 
-            {/* Slug */}
-            <div className="space-y-2">
-              <Label htmlFor="edit-slug">Slug (URL) *</Label>
-              <Input
-                id="edit-slug"
-                value={formData.slug}
-                onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
-                placeholder="adobe-max-2025"
-                required
-              />
-              <p className="text-xs text-muted-foreground">
-                URL: /blog/serie/{formData.slug || 'slug'}
-              </p>
-            </div>
+              {/* Slug */}
+              <div className="space-y-2">
+                <Label htmlFor="edit-slug">Slug (URL) *</Label>
+                <Input
+                  id="edit-slug"
+                  value={formData.slug}
+                  onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
+                  placeholder="adobe-max-2025"
+                  required
+                />
+                <p className="text-xs text-muted-foreground">
+                  URL: /blog/serie/{formData.slug || 'slug'}
+                </p>
+              </div>
 
-            {/* Color */}
-            <div className="space-y-2">
-              <Label htmlFor="edit-color">Color</Label>
-              <Select
-                value={formData.color}
-                onValueChange={(value) => setFormData(prev => ({ ...prev, color: value }))}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {SERIE_COLORS.map((color) => (
-                    <SelectItem key={color.value} value={color.value}>
-                      <div className="flex items-center gap-2">
-                        <div
-                          className="w-4 h-4 rounded-full border"
-                          style={{ backgroundColor: color.value }}
-                        />
-                        {color.label}
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+              {/* Color */}
+              <div className="space-y-2">
+                <Label htmlFor="edit-color">Color</Label>
+                <Select
+                  value={formData.color}
+                  onValueChange={(value) => setFormData(prev => ({ ...prev, color: value }))}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {SERIE_COLORS.map((color) => (
+                      <SelectItem key={color.value} value={color.value}>
+                        <div className="flex items-center gap-2">
+                          <div
+                            className="w-4 h-4 rounded-full border"
+                            style={{ backgroundColor: color.value }}
+                          />
+                          {color.label}
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
 
-            {/* Descripción */}
-            <div className="space-y-2">
-              <Label htmlFor="edit-descripcion">Descripción (opcional)</Label>
-              <Textarea
-                id="edit-descripcion"
-                value={formData.descripcion}
-                onChange={(e) => setFormData(prev => ({ ...prev, descripcion: e.target.value }))}
-                placeholder="Describe de qué trata esta serie..."
-                rows={3}
-                maxLength={500}
-              />
-              <p className="text-xs text-muted-foreground text-right">
-                {formData.descripcion.length}/500
-              </p>
-            </div>
-          </div>
+              {/* Descripción */}
+              <div className="space-y-2">
+                <Label htmlFor="edit-descripcion">Descripción (opcional)</Label>
+                <Textarea
+                  id="edit-descripcion"
+                  value={formData.descripcion}
+                  onChange={(e) => setFormData(prev => ({ ...prev, descripcion: e.target.value }))}
+                  placeholder="Describe de qué trata esta serie..."
+                  rows={3}
+                  maxLength={500}
+                />
+                <p className="text-xs text-muted-foreground text-right">
+                  {formData.descripcion.length}/500
+                </p>
+              </div>
 
-          <DialogFooter>
+              {/* Sección Destacados - Título */}
+              <div className="space-y-2">
+                <Label htmlFor="edit-featured-title">Título Sección Destacados</Label>
+                <Input
+                  id="edit-featured-title"
+                  value={formData.featured_section_title || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, featured_section_title: e.target.value }))}
+                  placeholder="Ej: Artículos Destacados"
+                />
+              </div>
+
+              {/* Sección Destacados - Subtítulo */}
+              <div className="space-y-2">
+                <Label htmlFor="edit-featured-subtitle">Subtítulo Sección Destacados</Label>
+                <Input
+                  id="edit-featured-subtitle"
+                  value={formData.featured_section_subtitle || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, featured_section_subtitle: e.target.value }))}
+                  placeholder="Ej: Lo más destacado de esta serie"
+                />
+              </div>
+
+              {/* Sección Regular - Título */}
+              <div className="space-y-2">
+                <Label htmlFor="edit-regular-title">Título Sección Todos los Artículos</Label>
+                <Input
+                  id="edit-regular-title"
+                  value={formData.regular_section_title || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, regular_section_title: e.target.value }))}
+                  placeholder="Ej: Más Artículos"
+                />
+              </div>
+
+              {/* Sección Regular - Subtítulo */}
+              <div className="space-y-2">
+                <Label htmlFor="edit-regular-subtitle">Subtítulo Sección Todos los Artículos</Label>
+                <Input
+                  id="edit-regular-subtitle"
+                  value={formData.regular_section_subtitle || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, regular_section_subtitle: e.target.value }))}
+                  placeholder="Ej: Todos los artículos de la serie"
+                />
+              </div>
+            </div>
+          </ScrollArea>
+
+          <DialogFooter className="mt-4">
             <Button type="button" variant="outline" onClick={onClose} disabled={isSaving}>
               Cancelar
             </Button>
@@ -438,11 +534,10 @@ export function AddPostDialog({ open, serieTag, availablePosts, onClose, onAdd }
                     key={post.id}
                     type="button"
                     onClick={() => setSelectedPostId(post.id)}
-                    className={`w-full text-left p-3 rounded-lg border transition-colors ${
-                      selectedPostId === post.id
-                        ? 'border-primary bg-primary/5'
-                        : 'border-border hover:bg-muted/50'
-                    }`}
+                    className={`w-full text-left p-3 rounded-lg border transition-colors ${selectedPostId === post.id
+                      ? 'border-primary bg-primary/5'
+                      : 'border-border hover:bg-muted/50'
+                      }`}
                   >
                     <p className="font-medium">{post.titulo}</p>
                     <p className="text-xs text-muted-foreground mt-1">

@@ -25,7 +25,7 @@ export function Hero() {
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-card/50 px-4 py-1.5 text-sm font-medium backdrop-blur-sm">
             <Sparkles className="h-4 w-4 text-primary" />
             <span className="text-foreground">
-              Descubre más de <span className="font-bold text-primary">200 herramientas</span>
+              Descubrí más de <span className="font-bold text-primary">200 herramientas</span>
             </span>
           </div>
 
