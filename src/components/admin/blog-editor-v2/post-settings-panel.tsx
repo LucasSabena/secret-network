@@ -53,6 +53,7 @@ export function PostSettingsPanel({
   onDescripcionChange,
   onTagsChange,
   onPublicadoChange,
+  onIsFeaturedChange,
   onFechaChange,
 }: PostSettingsPanelProps) {
   const [editingSlug, setEditingSlug] = useState(false);
