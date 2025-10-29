@@ -9,6 +9,7 @@ import { BlogCategoryFilter } from "@/components/blog/blog-category-filter";
 import { ScrollToTopButton } from "@/components/blog/scroll-to-top-button";
 
 export const revalidate = 3600; // 1 hora
+export const dynamic = 'force-dynamic'; // Generar en cada request para mejor UX con skeleton
 
 export const metadata: Metadata = {
   title: 'Secret Blog | Secret Network',
@@ -39,31 +40,44 @@ function getColorForSeries(name: string): string {
 export default async function BlogPage() {
   const supabase = await createClient();
   
-  // Traer posts publicados con sus categorías
+  // Optimización: Solo traer campos necesarios
   const { data: posts } = await supabase
     .from('blog_posts')
-    .select('*')
+    .select('id, titulo, slug, descripcion_corta, imagen_portada_url, fecha_publicacion, tags, contenido_bloques')
     .eq('publicado', true)
-    .order('fecha_publicacion', { ascending: false });
+    .order('fecha_publicacion', { ascending: false })
+    .limit(50); // Limitar para mejor performance
 
-  // Traer categorías
+  // Traer categorías (solo las necesarias)
   const { data: categories } = await supabase
     .from('blog_categories')
-    .select('*')
+    .select('id, nombre, slug, color, icono')
     .order('orden', { ascending: true });
 
-  // Obtener relaciones post-categoría
+  // Obtener relaciones post-categoría solo para los posts cargados
+  const postIds = posts?.map(p => p.id) || [];
   const { data: postCategories } = await supabase
     .from('blog_posts_categories')
-    .select('post_id, category_id');
+    .select('post_id, category_id')
+    .in('post_id', postIds);
 
-  // Mapear categorías a posts
+  // Mapear categorías a posts de forma más eficiente
+  const categoryMap = new Map(categories?.map(c => [c.id, c]) || []);
+  const postCategoryMap = new Map<number, any[]>();
+  
+  postCategories?.forEach(pc => {
+    if (!postCategoryMap.has(pc.post_id)) {
+      postCategoryMap.set(pc.post_id, []);
+    }
+    const category = categoryMap.get(pc.category_id);
+    if (category) {
+      postCategoryMap.get(pc.post_id)!.push(category);
+    }
+  });
+
   const postsWithCategories = posts?.map(post => ({
     ...post,
-    categories: postCategories
-      ?.filter(pc => pc.post_id === post.id)
-      .map(pc => categories?.find(c => c.id === pc.category_id))
-      .filter(Boolean) || []
+    categories: postCategoryMap.get(post.id) || []
   })) || [];
 
   const totalPosts = posts?.length || 0;
