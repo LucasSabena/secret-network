@@ -136,7 +136,7 @@ export function BlogFeaturedCarousel({ posts }: BlogFeaturedCarouselProps) {
 
       {/* Indicadores */}
       {posts.length > 1 && (
-        <div className="flex items-center justify-center gap-2 mt-4">
+        <div className="flex items-center justify-center gap-2 mt-6">
           {posts.map((_, index) => (
             <button
               key={index}
@@ -149,44 +149,6 @@ export function BlogFeaturedCarousel({ posts }: BlogFeaturedCarouselProps) {
               }`}
               aria-label={`Ir al post ${index + 1}`}
             />
-          ))}
-        </div>
-      )}
-
-      {/* Miniaturas */}
-      {posts.length > 1 && (
-        <div className="mt-6 grid grid-cols-2 md:grid-cols-5 gap-3">
-          {posts.map((post, index) => (
-            <button
-              key={post.id}
-              type="button"
-              onClick={() => setCurrentIndex(index)}
-              className={`relative aspect-video rounded-lg overflow-hidden border-2 transition-all ${
-                index === currentIndex
-                  ? 'border-primary ring-2 ring-primary/20'
-                  : 'border-transparent hover:border-muted-foreground/30'
-              }`}
-            >
-              {post.imagen_portada_url ? (
-                <img
-                  src={post.imagen_portada_url}
-                  alt={post.titulo}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full bg-muted flex items-center justify-center">
-                  <span className="text-lg font-bold text-muted-foreground">
-                    {post.titulo.charAt(0)}
-                  </span>
-                </div>
-              )}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-              <div className="absolute bottom-2 left-2 right-2">
-                <p className="text-xs text-white font-medium line-clamp-2">
-                  {post.titulo}
-                </p>
-              </div>
-            </button>
           ))}
         </div>
       )}
