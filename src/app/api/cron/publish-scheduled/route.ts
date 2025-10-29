@@ -68,11 +68,6 @@ export async function GET(request: Request) {
       }, { status: 500 });
     }
 
-    if (updateError) {
-      console.error('Error publishing posts:', updateError);
-      return NextResponse.json({ error: updateError.message }, { status: 500 });
-    }
-
     console.log(`Published ${scheduledPosts.length} posts:`, scheduledPosts.map(p => p.titulo));
 
     return NextResponse.json({
