@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Plus, Search, Edit, Trash2, Loader2, Copy, FileText, Eye } from 'lucide-react';
+import { Plus, Search, Edit, Trash2, Loader2, Copy, FileText, Eye, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
@@ -308,6 +308,14 @@ export default function BlogManager() {
           >
             <FileText className="h-4 w-4" />
             Series
+          </Button>
+          <Button 
+            variant="outline" 
+            className="gap-2"
+            onClick={() => router.push('/admin/blog-featured')}
+          >
+            <Star className="h-4 w-4" />
+            Destacados
           </Button>
           <TemplateGallery onSelectTemplate={handleTemplateSelect}>
             <Button variant="outline" className="gap-2">

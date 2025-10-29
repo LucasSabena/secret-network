@@ -7,6 +7,7 @@ import { BlogHeroImproved } from "@/components/blog/blog-hero-improved";
 import { BlogGridImproved } from "@/components/blog/blog-grid-improved";
 import { BlogCategoryFilter } from "@/components/blog/blog-category-filter";
 import { ScrollToTopButton } from "@/components/blog/scroll-to-top-button";
+import { BlogFeaturedCarousel } from "@/components/blog/blog-featured-carousel";
 
 export const revalidate = 300; // 5 minutos - balance entre frescura y performance
 export const dynamic = 'force-static'; // Pre-renderizar para máxima velocidad
@@ -41,6 +42,15 @@ function getColorForSeries(name: string): string {
 export default async function BlogPage() {
   const supabase = await createClient();
   
+  // Obtener posts destacados para el carrusel
+  const { data: featuredPosts } = await supabase
+    .from('blog_posts')
+    .select('id, titulo, slug, descripcion_corta, imagen_portada_url, fecha_publicacion, contenido_bloques')
+    .eq('publicado', true)
+    .eq('is_featured_in_blog', true)
+    .order('blog_featured_order', { ascending: true })
+    .limit(5);
+
   // Optimización: Solo traer campos necesarios
   const { data: posts } = await supabase
     .from('blog_posts')
@@ -120,6 +130,11 @@ export default async function BlogPage() {
 
       {/* Main Content */}
       <div className="container mx-auto px-4 py-12">
+        {/* Carrusel de Posts Destacados */}
+        {featuredPosts && featuredPosts.length > 0 && (
+          <BlogFeaturedCarousel posts={featuredPosts as any[]} />
+        )}
+
         {/* Filtros de Categorías */}
         <BlogCategoryFilter categories={categories || []} />
 
