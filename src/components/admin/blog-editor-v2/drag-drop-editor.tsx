@@ -42,6 +42,7 @@ interface PostSettings {
   autorId: number | null;
   autores: Autor[];
   publicado: boolean;
+  isFeatured: boolean;
   fechaPublicacion: Date;
   scheduledFor: string | null;
   tags: string[];
@@ -54,6 +55,7 @@ interface PostSettings {
   onDescripcionChange: (desc: string) => void;
   onAutorChange: (autorId: number | null) => void;
   onPublicadoChange: (publicado: boolean) => void;
+  onIsFeaturedChange: (featured: boolean) => void;
   onFechaChange: (fecha: Date) => void;
   onScheduledForChange: (date: string | null) => void;
   onTagsChange: (tags: string[]) => void;
@@ -501,6 +503,7 @@ export function DragDropEditor({ blocks, onChange, postSettings }: DragDropEdito
               autorId={postSettings.autorId}
               autores={postSettings.autores}
               publicado={postSettings.publicado}
+              isFeatured={postSettings.isFeatured}
               fechaPublicacion={postSettings.fechaPublicacion}
               scheduledFor={postSettings.scheduledFor}
               tags={postSettings.tags}
@@ -513,6 +516,7 @@ export function DragDropEditor({ blocks, onChange, postSettings }: DragDropEdito
               onDescripcionChange={postSettings.onDescripcionChange}
               onAutorChange={postSettings.onAutorChange}
               onPublicadoChange={postSettings.onPublicadoChange}
+              onIsFeaturedChange={postSettings.onIsFeaturedChange}
               onFechaChange={postSettings.onFechaChange}
               onScheduledForChange={postSettings.onScheduledForChange}
               onTagsChange={postSettings.onTagsChange}

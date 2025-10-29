@@ -31,6 +31,7 @@ interface EditorSidebarTabsProps {
   autorId: number | null;
   autores: Autor[];
   publicado: boolean;
+  isFeatured: boolean;
   fechaPublicacion: Date;
   scheduledFor: string | null;
   tags: string[];
@@ -44,6 +45,7 @@ interface EditorSidebarTabsProps {
   onDescripcionChange: (desc: string) => void;
   onAutorChange: (autorId: number | null) => void;
   onPublicadoChange: (publicado: boolean) => void;
+  onIsFeaturedChange: (featured: boolean) => void;
   onFechaChange: (fecha: Date) => void;
   onScheduledForChange: (date: string | null) => void;
   onTagsChange: (tags: string[]) => void;
@@ -65,6 +67,7 @@ export function EditorSidebarTabs({
   autorId,
   autores,
   publicado,
+  isFeatured,
   fechaPublicacion,
   scheduledFor,
   tags,
@@ -77,6 +80,7 @@ export function EditorSidebarTabs({
   onDescripcionChange,
   onAutorChange,
   onPublicadoChange,
+  onIsFeaturedChange,
   onFechaChange,
   onScheduledForChange,
   onTagsChange,
@@ -113,6 +117,7 @@ export function EditorSidebarTabs({
           autorId={autorId}
           autores={autores}
           publicado={publicado}
+          isFeatured={isFeatured}
           fechaPublicacion={fechaPublicacion}
           scheduledFor={scheduledFor}
           tags={tags}
@@ -125,6 +130,7 @@ export function EditorSidebarTabs({
           onDescripcionChange={onDescripcionChange}
           onAutorChange={onAutorChange}
           onPublicadoChange={onPublicadoChange}
+          onIsFeaturedChange={onIsFeaturedChange}
           onFechaChange={onFechaChange}
           onScheduledForChange={onScheduledForChange}
           onTagsChange={onTagsChange}

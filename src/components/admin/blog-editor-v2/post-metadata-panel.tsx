@@ -48,6 +48,7 @@ interface PostMetadataPanelProps {
 
   // Publicación
   publicado: boolean;
+  isFeatured: boolean;
   fechaPublicacion: Date;
   scheduledFor: string | null;
 
@@ -66,6 +67,7 @@ interface PostMetadataPanelProps {
   onDescripcionChange: (desc: string) => void;
   onAutorChange: (autorId: number | null) => void;
   onPublicadoChange: (publicado: boolean) => void;
+  onIsFeaturedChange: (featured: boolean) => void;
   onFechaChange: (fecha: Date) => void;
   onScheduledForChange: (date: string | null) => void;
   onTagsChange: (tags: string[]) => void;
@@ -81,6 +83,7 @@ export function PostMetadataPanel({
   autorId,
   autores,
   publicado,
+  isFeatured,
   fechaPublicacion,
   scheduledFor,
   tags,
@@ -93,6 +96,7 @@ export function PostMetadataPanel({
   onDescripcionChange,
   onAutorChange,
   onPublicadoChange,
+  onIsFeaturedChange,
   onFechaChange,
   onScheduledForChange,
   onTagsChange,

@@ -77,6 +77,7 @@ interface FormData {
   autor: string;
   autor_id: number | null;
   publicado: boolean;
+  is_featured: boolean;
   tags: string;
   imagen_portada_alt: string;
 }
