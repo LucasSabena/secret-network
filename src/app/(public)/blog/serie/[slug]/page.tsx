@@ -37,36 +37,24 @@ export default async function SeriePage({ params }: SeriePageProps) {
   // Obtener todos los posts publicados
   const { data: allPosts } = await supabase
     .from('blog_posts')
-    .select('*')
+    .select('id, titulo, slug, descripcion_corta, imagen_portada_url, fecha_publicacion, tags, is_featured, serie_order, contenido_bloques')
     .eq('publicado', true)
-    .order('fecha_publicacion', { ascending: false });
+    .order('serie_order', { ascending: true });
 
   if (!allPosts) {
     notFound();
   }
 
-  // Obtener relaciones post-categoría
-  const { data: postCategories } = await supabase
-    .from('blog_posts_categories')
-    .select('post_id, category_id');
-
-  const { data: categories } = await supabase
-    .from('blog_categories')
-    .select('*');
-
-  // Mapear categorías a posts
-  const postsWithCategories = allPosts.map(post => ({
-    ...post,
-    categories: postCategories
-      ?.filter(pc => pc.post_id === post.id)
-      .map(pc => categories?.find(c => c.id === pc.category_id))
-      .filter(Boolean) || []
-  }));
-
-  // Encontrar posts de esta serie buscando en tags
-  const seriePosts = postsWithCategories.filter(post => {
+  // Encontrar posts de esta serie buscando en tags (sin cargar categorías innecesarias)
+  const seriePosts = allPosts.filter(post => {
     if (!post.tags) return false;
     return post.tags.some((tag: string) => createSlug(tag) === slug);
+  }).sort((a, b) => {
+    // Ordenar por serie_order si existe, sino por fecha
+    if (a.serie_order !== undefined && b.serie_order !== undefined) {
+      return a.serie_order - b.serie_order;
+    }
+    return new Date(b.fecha_publicacion).getTime() - new Date(a.fecha_publicacion).getTime();
   });
 
   if (seriePosts.length === 0) {
@@ -186,19 +174,6 @@ export default async function SeriePage({ params }: SeriePageProps) {
                           </div>
                         )}
                         <div className="p-6 flex-1 flex flex-col">
-                          {post.categories && post.categories.length > 0 && (
-                            <div className="flex flex-wrap gap-2 mb-3">
-                              {post.categories.slice(0, 2).map((cat: any) => (
-                                <span
-                                  key={cat.id}
-                                  className="px-2 py-1 rounded-full text-xs font-medium text-white"
-                                  style={{ backgroundColor: cat.color }}
-                                >
-                                  {cat.nombre}
-                                </span>
-                              ))}
-                            </div>
-                          )}
                           <h3 className="text-lg font-semibold mb-3 group-hover:text-primary transition-colors line-clamp-2">
                             {post.titulo}
                           </h3>
@@ -307,21 +282,6 @@ export default async function SeriePage({ params }: SeriePageProps) {
 
                   {/* Contenido */}
                   <div className="p-6 flex-1 flex flex-col">
-                    {/* Categorías */}
-                    {post.categories && post.categories.length > 0 && (
-                      <div className="flex flex-wrap gap-2 mb-3">
-                        {post.categories.slice(0, 2).map((cat: any) => (
-                          <span
-                            key={cat.id}
-                            className="px-2 py-1 rounded-full text-xs font-medium text-white"
-                            style={{ backgroundColor: cat.color }}
-                          >
-                            {cat.nombre}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-
                     <h3 className="text-lg font-semibold mb-3 group-hover:text-primary transition-colors line-clamp-2">
                       {post.titulo}
                     </h3>

@@ -162,6 +162,15 @@ export function BlogSeriesManager() {
       setLoading(true);
       const supabase = supabaseBrowserClient;
 
+      // Obtener metadatos de series guardadas
+      const { data: savedSeries } = await supabase
+        .from('blog_series')
+        .select('*');
+
+      const seriesMetadata = new Map(
+        savedSeries?.map(s => [s.tag, s]) || []
+      );
+
       // Obtener todos los posts con tags
       const { data: posts, error } = await supabase
         .from('blog_posts')
@@ -197,11 +206,15 @@ export function BlogSeriesManager() {
           });
           const featuredPost = sortedPosts.find(p => p.is_featured);
           
+          // Usar metadatos guardados si existen
+          const metadata = seriesMetadata.get(tag);
+          
           return {
             tag,
-            nombre: tag,
-            slug: createSlug(tag),
-            color: getColorForSeries(tag),
+            nombre: metadata?.nombre || tag,
+            slug: metadata?.slug || createSlug(tag),
+            color: metadata?.color || getColorForSeries(tag),
+            descripcion: metadata?.descripcion,
             count: posts.length,
             posts: sortedPosts,
             featuredPostId: featuredPost?.id,
@@ -269,6 +282,39 @@ export function BlogSeriesManager() {
       if (!editingSerie) return;
 
       const supabase = supabaseBrowserClient;
+      
+      // Guardar o actualizar en blog_series
+      const { data: existingSerie } = await supabase
+        .from('blog_series')
+        .select('*')
+        .eq('tag', editingSerie.tag)
+        .single();
+
+      if (existingSerie) {
+        // Actualizar serie existente
+        await supabase
+          .from('blog_series')
+          .update({
+            nombre: data.nombre,
+            slug: data.slug,
+            color: data.color,
+            descripcion: data.descripcion,
+            tag: data.nombre, // Actualizar tag si cambió el nombre
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', existingSerie.id);
+      } else {
+        // Crear nueva entrada
+        await supabase
+          .from('blog_series')
+          .insert({
+            nombre: data.nombre,
+            slug: data.slug,
+            tag: data.nombre,
+            color: data.color,
+            descripcion: data.descripcion,
+          });
+      }
       
       // Si el nombre cambió, actualizar el tag en todos los posts
       if (data.nombre !== editingSerie.tag) {
