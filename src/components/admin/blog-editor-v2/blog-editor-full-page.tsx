@@ -290,6 +290,7 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
       // Calcular status basado en publicado y scheduled_for
       let status = 'draft';
       if (data.publicado) {
+        // Si está marcado como publicado, siempre publicar (ignorar scheduled_for)
         status = 'published';
       } else if (scheduledFor && new Date(scheduledFor) > new Date()) {
         status = 'scheduled';
@@ -308,7 +309,8 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
         publicado: data.publicado,
         is_featured: data.is_featured || false,
         status,
-        scheduled_for: scheduledFor,
+        // Si se publica manualmente, limpiar scheduled_for
+        scheduled_for: data.publicado ? null : scheduledFor,
         tags: tagsArray.length > 0 ? tagsArray : null,
         fecha_publicacion: post?.fecha_publicacion || new Date().toISOString(),
         actualizado_en: new Date().toISOString(),

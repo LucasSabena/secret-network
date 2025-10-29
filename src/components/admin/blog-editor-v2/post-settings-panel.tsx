@@ -300,6 +300,7 @@ export function PostSettingsPanel({
                 >
                   {tag}
                   <button
+                    type="button"
                     onClick={() => handleRemoveTag(tag)}
                     className="hover:text-pink-900 dark:hover:text-pink-100"
                   >
@@ -315,11 +316,17 @@ export function PostSettingsPanel({
             <Input
               value={newTag}
               onChange={(e) => setNewTag(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleAddTag()}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  handleAddTag();
+                }
+              }}
               placeholder="nueva-etiqueta"
               className="text-sm h-8"
             />
             <Button
+              type="button"
               size="sm"
               onClick={handleAddTag}
               className="h-8 px-3 text-xs"
