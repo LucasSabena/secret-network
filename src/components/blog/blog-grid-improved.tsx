@@ -254,19 +254,16 @@ export function BlogGridImproved({ posts }: BlogGridImprovedProps) {
           
           {/* Contenido */}
           <div className="p-8 flex flex-col justify-center">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">
-                Destacado
-              </span>
-              {featuredPost.categories?.[0] && (
+            {featuredPost.categories?.[0] && (
+              <div className="mb-4">
                 <span
                   className="px-3 py-1 rounded-full text-xs font-medium text-white"
                   style={{ backgroundColor: featuredPost.categories[0].color }}
                 >
                   {featuredPost.categories[0].nombre}
                 </span>
-              )}
-            </div>
+              </div>
+            )}
 
             <h2 className="text-3xl md:text-4xl font-bold mb-4 group-hover:text-primary transition-colors">
               {featuredPost.titulo}

@@ -56,13 +56,6 @@ export function BlogFeaturedCarousel({ posts }: BlogFeaturedCarouselProps) {
                   </span>
                 </div>
               )}
-              
-              {/* Badge de destacado */}
-              <div className="absolute top-4 left-4">
-                <div className="px-3 py-1 rounded-full bg-primary text-primary-foreground text-xs font-medium">
-                  Destacado
-                </div>
-              </div>
             </div>
 
             {/* Contenido */}
