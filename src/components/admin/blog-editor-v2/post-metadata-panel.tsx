@@ -448,6 +448,23 @@ export function PostMetadataPanel({
             />
           </div>
 
+          {/* Post destacado en serie */}
+          <div className="flex items-center justify-between pt-2 border-t">
+            <div className="flex flex-col gap-1">
+              <Label className="flex items-center gap-2 text-xs">
+                <Settings className="h-3 w-3 text-primary" />
+                Destacado en Serie
+              </Label>
+              <p className="text-[10px] text-muted-foreground">
+                Aparecerá en el carrusel de su serie
+              </p>
+            </div>
+            <Switch
+              checked={isFeatured}
+              onCheckedChange={onIsFeaturedChange}
+            />
+          </div>
+
           {/* Fecha de publicación */}
           <div className="space-y-2">
             <Label className="flex items-center gap-2 text-xs">

@@ -21,11 +21,11 @@ export function BlogHeroImproved({ totalPosts, featuredSeries }: BlogHeroImprove
             <Sparkles className="h-4 w-4" />
             {totalPosts} artículos publicados
           </div>
-          
+
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
             Secret Blog
           </h1>
-          
+
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Artículos, tutoriales y recursos sobre diseño, creatividad y herramientas digitales
           </p>
