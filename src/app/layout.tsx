@@ -20,6 +20,7 @@ import { JsonLdWebsite } from "@/components/seo/json-ld-website";
 import { Toaster } from "@/components/ui/toaster";
 import { Analytics } from "@vercel/analytics/next";
 import { SmoothScrollWrapper } from "@/components/layout/smooth-scroll-wrapper";
+import { ServiceWorkerRegister } from "@/components/shared/service-worker-register";
 
 const fontSpaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -145,6 +146,9 @@ export default function RootLayout({
         
         {/* Vercel Analytics */}
         <Analytics />
+        
+        {/* Service Worker para cache offline */}
+        <ServiceWorkerRegister />
       </body>
     </html>
   );

@@ -8,8 +8,9 @@ import { BlogGridImproved } from "@/components/blog/blog-grid-improved";
 import { BlogCategoryFilter } from "@/components/blog/blog-category-filter";
 import { ScrollToTopButton } from "@/components/blog/scroll-to-top-button";
 
-export const revalidate = 3600; // 1 hora
-export const dynamic = 'force-dynamic'; // Generar en cada request para mejor UX con skeleton
+export const revalidate = 300; // 5 minutos - balance entre frescura y performance
+export const dynamic = 'force-static'; // Pre-renderizar para máxima velocidad
+export const dynamicParams = true; // Permitir nuevos params
 
 export const metadata: Metadata = {
   title: 'Secret Blog | Secret Network',
