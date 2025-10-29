@@ -2,7 +2,6 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Settings, Search, HelpCircle, List } from 'lucide-react';
-import { PostSettingsPanel } from './post-settings-panel';
 import { SEOPanel } from './seo-panel';
 import { PostMetadataPanel } from './post-metadata-panel';
 import { BlocksOutlinePanel } from './blocks-outline-panel';
@@ -89,22 +88,33 @@ export function EditorSidebarTabs(props: EditorSidebarTabsProps) {
       </TabsContent>
 
       <TabsContent value="settings" className="flex-1 overflow-hidden m-0">
-        <PostSettingsPanel
+        <PostMetadataPanel
           titulo={props.titulo}
           slug={props.slug}
           descripcionCorta={props.descripcionCorta}
-          tags={props.tags}
+          autorId={props.autorId}
+          autores={props.autores}
           publicado={props.publicado}
           isFeatured={props.isFeatured}
           fechaPublicacion={props.fechaPublicacion}
-          autor={autorActual?.nombre || 'Sin autor'}
-          onTituloChange={props.onTituloChange}
+          scheduledFor={props.scheduledFor}
+          tags={props.tags}
+          categories={props.categories}
+          imagenPortadaUrl={props.imagenPortadaUrl}
+          imagenPortadaAlt={props.imagenPortadaAlt}
+          imageFile={props.imageFile}
+          onTituloChange={props.onTituloChange || (() => {})}
           onSlugChange={props.onSlugChange}
           onDescripcionChange={props.onDescripcionChange}
-          onTagsChange={props.onTagsChange}
+          onAutorChange={props.onAutorChange}
           onPublicadoChange={props.onPublicadoChange}
           onIsFeaturedChange={props.onIsFeaturedChange}
           onFechaChange={props.onFechaChange}
+          onScheduledForChange={props.onScheduledForChange}
+          onTagsChange={props.onTagsChange}
+          onCategoriesChange={props.onCategoriesChange}
+          onImageFileChange={props.onImageFileChange}
+          onImagenAltChange={props.onImagenAltChange}
         />
       </TabsContent>
 
