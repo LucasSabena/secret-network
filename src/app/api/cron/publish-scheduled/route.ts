@@ -45,15 +45,28 @@ export async function GET(request: Request) {
       });
     }
 
-    // Publicar posts
-    const { error: updateError } = await supabase
-      .from('blog_posts')
-      .update({ 
-        status: 'published',
-        publicado: true,
-        fecha_publicacion: now,
-      })
-      .in('id', scheduledPosts.map(p => p.id));
+    // Publicar posts usando su fecha programada original
+    const updates = scheduledPosts.map(post => 
+      supabase
+        .from('blog_posts')
+        .update({ 
+          status: 'published',
+          publicado: true,
+          fecha_publicacion: post.scheduled_for, // Usar la fecha programada
+        })
+        .eq('id', post.id)
+    );
+
+    const results = await Promise.all(updates);
+    const errors = results.filter(r => r.error);
+
+    if (errors.length > 0) {
+      console.error('Error publishing some posts:', errors);
+      return NextResponse.json({ 
+        error: 'Some posts failed to publish',
+        details: errors 
+      }, { status: 500 });
+    }
 
     if (updateError) {
       console.error('Error publishing posts:', updateError);

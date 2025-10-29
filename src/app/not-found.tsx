@@ -162,15 +162,19 @@ export default function NotFound() {
               </Button>
             </div>
 
-            {/* Nota sobre el futuro blog */}
+            {/* Nota sobre el blog publicado */}
             <div className="mt-8 pt-6 border-t border-border/50 text-center">
               <p className="text-sm text-muted-foreground flex items-center justify-center gap-2 flex-wrap">
                 <Rocket className="h-4 w-4 text-primary" />
                 <span>
-                  <strong className="text-foreground">Próximamente:</strong> Un artículo sobre las mejores páginas 404 de diseño.
+                  <strong className="text-foreground">Recomendado:</strong>{' '}
+                  <a 
+                    href="/blog/las-40-mejores-paginas-404" 
+                    className="text-primary hover:underline font-medium"
+                  >
+                    Las 40 mejores páginas 404 de diseño
+                  </a>
                 </span>
-                <br className="hidden sm:inline" />
-                <span>Mientras tanto, disfrutá de esta.</span>
               </p>
             </div>
           </div>
