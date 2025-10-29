@@ -42,6 +42,7 @@ interface Serie {
   count: number;
   posts: BlogPost[];
   featuredPostId?: number;
+  is_featured_in_hero?: boolean;
 }
 
 // Componente sortable para cada post
@@ -215,6 +216,7 @@ export function BlogSeriesManager() {
             slug: metadata?.slug || createSlug(tag),
             color: metadata?.color || getColorForSeries(tag),
             descripcion: metadata?.descripcion,
+            is_featured_in_hero: metadata?.is_featured_in_hero || false,
             count: posts.length,
             posts: sortedPosts,
             featuredPostId: featuredPost?.id,
@@ -343,27 +345,63 @@ export function BlogSeriesManager() {
       const serie = series.find(s => s.tag === serieTag);
       if (!serie) return;
 
-      // Desmarcar todos los posts de la serie
-      for (const post of serie.posts) {
-        if (post.is_featured) {
-          await supabase
-            .from('blog_posts')
-            .update({ is_featured: false })
-            .eq('id', post.id);
-        }
-      }
+      const post = serie.posts.find(p => p.id === postId);
+      if (!post) return;
 
-      // Marcar el nuevo post destacado
+      // Toggle: si ya está destacado, desmarcarlo; si no, marcarlo
+      const newFeaturedState = !post.is_featured;
+
       await supabase
         .from('blog_posts')
-        .update({ is_featured: true })
+        .update({ is_featured: newFeaturedState })
         .eq('id', postId);
 
-      toast.success('Post destacado actualizado');
+      toast.success(newFeaturedState ? 'Post marcado como destacado' : 'Post desmarcado');
       loadSeries();
     } catch (error) {
       console.error('Error setting featured post:', error);
       toast.error('Error al actualizar el post destacado');
+    }
+  }
+
+  async function handleToggleFeaturedInHero(serieTag: string) {
+    try {
+      const supabase = supabaseBrowserClient;
+      const serie = series.find(s => s.tag === serieTag);
+      if (!serie) return;
+
+      const newFeaturedState = !serie.is_featured_in_hero;
+
+      // Buscar o crear la serie en blog_series
+      const { data: existingSerie } = await supabase
+        .from('blog_series')
+        .select('*')
+        .eq('tag', serieTag)
+        .single();
+
+      if (existingSerie) {
+        await supabase
+          .from('blog_series')
+          .update({ is_featured_in_hero: newFeaturedState })
+          .eq('id', existingSerie.id);
+      } else {
+        // Crear entrada si no existe
+        await supabase
+          .from('blog_series')
+          .insert({
+            nombre: serieTag,
+            slug: createSlug(serieTag),
+            tag: serieTag,
+            color: serie.color,
+            is_featured_in_hero: newFeaturedState,
+          });
+      }
+
+      toast.success(newFeaturedState ? 'Serie destacada en hero' : 'Serie removida del hero');
+      loadSeries();
+    } catch (error) {
+      console.error('Error toggling featured in hero:', error);
+      toast.error('Error al actualizar la serie');
     }
   }
 
@@ -575,20 +613,39 @@ export function BlogSeriesManager() {
           {series.map((serie) => (
             <Card key={serie.tag} className="p-6">
               <div className="flex items-start justify-between mb-4">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 flex-1">
                   <div
                     className="w-3 h-3 rounded-full"
                     style={{ backgroundColor: serie.color }}
                   />
-                  <div>
-                    <h3 className="text-xl font-semibold">{serie.tag}</h3>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-xl font-semibold">{serie.tag}</h3>
+                      {serie.is_featured_in_hero && (
+                        <span className="text-xs bg-gradient-to-r from-pink-500 to-purple-500 text-white px-2 py-1 rounded-full flex items-center gap-1">
+                          <Star className="h-3 w-3 fill-current" />
+                          En Hero
+                        </span>
+                      )}
+                    </div>
                     <p className="text-sm text-muted-foreground">
                       {serie.count} artículos
-                      {serie.featuredPostId && ' • 1 destacado'}
+                      {serie.posts.filter(p => p.is_featured).length > 0 && 
+                        ` • ${serie.posts.filter(p => p.is_featured).length} destacado${serie.posts.filter(p => p.is_featured).length > 1 ? 's' : ''}`
+                      }
                     </p>
                   </div>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 flex-wrap">
+                  <Button
+                    variant={serie.is_featured_in_hero ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => handleToggleFeaturedInHero(serie.tag)}
+                    title={serie.is_featured_in_hero ? "Quitar del hero" : "Destacar en hero"}
+                  >
+                    <Sparkles className="h-4 w-4 mr-2" />
+                    {serie.is_featured_in_hero ? "En Hero" : "Destacar"}
+                  </Button>
                   <Button
                     variant="outline"
                     size="sm"

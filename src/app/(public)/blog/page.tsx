@@ -68,28 +68,35 @@ export default async function BlogPage() {
 
   const totalPosts = posts?.length || 0;
 
-  // Extraer series destacadas de los tags
-  const seriesMap = new Map<string, number>();
-  postsWithCategories.forEach(post => {
-    if (post.tags && post.tags.length > 0) {
-      post.tags.forEach((tag: string) => {
-        if (tag.split(' ').length >= 2 || /\d{4}/.test(tag)) {
-          seriesMap.set(tag, (seriesMap.get(tag) || 0) + 1);
-        }
-      });
-    }
-  });
+  // Obtener serie destacada en hero desde blog_series
+  const { data: featuredSerieData } = await supabase
+    .from('blog_series')
+    .select('*')
+    .eq('is_featured_in_hero', true)
+    .single();
 
-  const featuredSeries = Array.from(seriesMap.entries())
-    .filter(([_, count]) => count >= 2)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 3)
-    .map(([name, count]) => ({
-      name,
-      slug: createSlug(name),
-      count,
-      color: getColorForSeries(name),
-    }));
+  let featuredSeries: Array<{
+    name: string;
+    slug: string;
+    count: number;
+    color: string;
+  }> = [];
+  
+  if (featuredSerieData) {
+    // Contar posts de la serie destacada
+    const seriePostsCount = postsWithCategories.filter(post => 
+      post.tags?.includes(featuredSerieData.tag)
+    ).length;
+
+    if (seriePostsCount > 0) {
+      featuredSeries = [{
+        name: featuredSerieData.nombre,
+        slug: featuredSerieData.slug,
+        count: seriePostsCount,
+        color: featuredSerieData.color,
+      }];
+    }
+  }
 
   return (
     <div className="min-h-screen bg-background">
