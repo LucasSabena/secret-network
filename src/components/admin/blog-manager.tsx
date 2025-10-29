@@ -301,6 +301,14 @@ export default function BlogManager() {
             <Plus className="h-4 w-4" />
             Nuevo Post
           </Button>
+          <Button 
+            variant="outline" 
+            className="gap-2"
+            onClick={() => router.push('/admin/blog-series')}
+          >
+            <FileText className="h-4 w-4" />
+            Series
+          </Button>
           <TemplateGallery onSelectTemplate={handleTemplateSelect}>
             <Button variant="outline" className="gap-2">
               <FileText className="h-4 w-4" />

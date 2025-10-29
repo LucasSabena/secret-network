@@ -32,6 +32,7 @@ interface PostSettingsPanelProps {
   isFeatured: boolean;
   fechaPublicacion: Date;
   autor: string;
+  onTituloChange?: (titulo: string) => void;
   onSlugChange: (slug: string) => void;
   onDescripcionChange: (desc: string) => void;
   onTagsChange: (tags: string[]) => void;
@@ -49,6 +50,7 @@ export function PostSettingsPanel({
   isFeatured,
   fechaPublicacion,
   autor,
+  onTituloChange,
   onSlugChange,
   onDescripcionChange,
   onTagsChange,
@@ -109,6 +111,22 @@ export function PostSettingsPanel({
           <Settings className="h-4 w-4" />
           <h3 className="font-semibold text-sm">Configuración del Post</h3>
         </div>
+
+        {/* Título */}
+        {onTituloChange && (
+          <div className="space-y-2">
+            <Label className="text-xs">Título del Post</Label>
+            <Input
+              value={titulo}
+              onChange={(e) => onTituloChange(e.target.value)}
+              placeholder="Título del post..."
+              className="text-sm font-semibold"
+            />
+            <p className="text-xs text-muted-foreground">
+              {titulo.length} caracteres
+            </p>
+          </div>
+        )}
 
         {/* URL/Slug */}
         <div className="space-y-2">

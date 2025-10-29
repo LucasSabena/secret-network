@@ -38,7 +38,7 @@ interface EditorSidebarTabsProps {
   imagenPortadaUrl?: string;
   imagenPortadaAlt?: string;
   imageFile: File | null;
-  onTituloChange: (titulo: string) => void;
+  onTituloChange?: (titulo: string) => void;
   onSlugChange: (slug: string) => void;
   onDescripcionChange: (desc: string) => void;
   onAutorChange: (autorId: number | null) => void;
@@ -98,6 +98,7 @@ export function EditorSidebarTabs(props: EditorSidebarTabsProps) {
           isFeatured={props.isFeatured}
           fechaPublicacion={props.fechaPublicacion}
           autor={autorActual?.nombre || 'Sin autor'}
+          onTituloChange={props.onTituloChange}
           onSlugChange={props.onSlugChange}
           onDescripcionChange={props.onDescripcionChange}
           onTagsChange={props.onTagsChange}
