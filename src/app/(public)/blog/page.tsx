@@ -6,13 +6,35 @@ import { BlogPost } from "@/lib/types";
 import { BlogHeroImproved } from "@/components/blog/blog-hero-improved";
 import { BlogGridImproved } from "@/components/blog/blog-grid-improved";
 import { BlogCategoryFilter } from "@/components/blog/blog-category-filter";
+import { ScrollToTopButton } from "@/components/blog/scroll-to-top-button";
 
 export const revalidate = 3600; // 1 hora
 
 export const metadata: Metadata = {
-  title: 'Blog | Secret Network',
+  title: 'Secret Blog | Secret Network',
   description: 'Artículos, tutoriales y recursos sobre diseño, creatividad y herramientas digitales.',
 };
+
+function createSlug(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function getColorForSeries(name: string): string {
+  const colors = [
+    '#ff3399', '#FF6B6B', '#4ECDC4', '#45B7D1',
+    '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE',
+  ];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return colors[Math.abs(hash) % colors.length];
+}
 
 export default async function BlogPage() {
   const supabase = await createClient();
@@ -46,10 +68,33 @@ export default async function BlogPage() {
 
   const totalPosts = posts?.length || 0;
 
+  // Extraer series destacadas de los tags
+  const seriesMap = new Map<string, number>();
+  postsWithCategories.forEach(post => {
+    if (post.tags && post.tags.length > 0) {
+      post.tags.forEach((tag: string) => {
+        if (tag.split(' ').length >= 2 || /\d{4}/.test(tag)) {
+          seriesMap.set(tag, (seriesMap.get(tag) || 0) + 1);
+        }
+      });
+    }
+  });
+
+  const featuredSeries = Array.from(seriesMap.entries())
+    .filter(([_, count]) => count >= 2)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 3)
+    .map(([name, count]) => ({
+      name,
+      slug: createSlug(name),
+      count,
+      color: getColorForSeries(name),
+    }));
+
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <BlogHeroImproved totalPosts={totalPosts} />
+      <BlogHeroImproved totalPosts={totalPosts} featuredSeries={featuredSeries} />
 
       {/* Main Content */}
       <div className="container mx-auto px-4 py-12">
@@ -67,6 +112,9 @@ export default async function BlogPage() {
           </div>
         )}
       </div>
+
+      {/* Botón volver arriba */}
+      <ScrollToTopButton />
     </div>
   );
 }

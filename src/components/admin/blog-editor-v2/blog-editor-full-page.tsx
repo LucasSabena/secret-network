@@ -532,6 +532,7 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
                   autorId: autor_id,
                   autores,
                   publicado,
+                  isFeatured: watch('is_featured') || false,
                   fechaPublicacion: new Date(post?.fecha_publicacion || Date.now()),
                   scheduledFor,
                   tags: tags ? tags.split(',').map(t => t.trim()).filter(Boolean) : [],
@@ -557,6 +558,10 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
                   },
                   onPublicadoChange: (pub) => {
                     setValue('publicado', pub);
+                    setHasUnsavedChanges(true);
+                  },
+                  onIsFeaturedChange: (featured) => {
+                    setValue('is_featured', featured);
                     setHasUnsavedChanges(true);
                   },
                   onFechaChange: (fecha) => {

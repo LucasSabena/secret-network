@@ -29,12 +29,14 @@ interface PostSettingsPanelProps {
   descripcionCorta: string;
   tags: string[];
   publicado: boolean;
+  isFeatured: boolean;
   fechaPublicacion: Date;
   autor: string;
   onSlugChange: (slug: string) => void;
   onDescripcionChange: (desc: string) => void;
   onTagsChange: (tags: string[]) => void;
   onPublicadoChange: (publicado: boolean) => void;
+  onIsFeaturedChange: (featured: boolean) => void;
   onFechaChange: (fecha: Date) => void;
 }
 
@@ -44,6 +46,7 @@ export function PostSettingsPanel({
   descripcionCorta,
   tags,
   publicado,
+  isFeatured,
   fechaPublicacion,
   autor,
   onSlugChange,
@@ -200,6 +203,23 @@ export function PostSettingsPanel({
               onCheckedChange={onPublicadoChange}
             />
           </div>
+
+          {/* Post destacado en serie */}
+          <div className="flex items-center justify-between">
+            <Label className="flex items-center gap-2 text-xs">
+              <Settings className="h-3 w-3 text-primary" />
+              Destacado en Serie
+            </Label>
+            <Switch
+              checked={isFeatured}
+              onCheckedChange={onIsFeaturedChange}
+            />
+          </div>
+          {isFeatured && (
+            <p className="text-xs text-muted-foreground">
+              Aparecerá en el carrusel destacado de su serie
+            </p>
+          )}
 
           {/* Fecha de publicación */}
           <div className="space-y-2">
