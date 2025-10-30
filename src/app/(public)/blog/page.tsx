@@ -9,8 +9,8 @@ import { BlogCategoryFilter } from "@/components/blog/blog-category-filter";
 import { ScrollToTopButton } from "@/components/blog/scroll-to-top-button";
 import { BlogFeaturedCarousel } from "@/components/blog/blog-featured-carousel";
 
-export const revalidate = 300; // 5 minutos - balance entre frescura y performance
-export const dynamic = 'force-static'; // Pre-renderizar para máxima velocidad
+export const revalidate = 60; // 1 minuto - actualización más rápida para cambios en admin
+export const dynamic = 'force-dynamic'; // Generar dinámicamente para ver cambios inmediatos
 export const dynamicParams = true; // Permitir nuevos params
 
 export const metadata: Metadata = {

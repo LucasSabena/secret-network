@@ -15,9 +15,9 @@ import { supabaseBrowserClient } from '@/lib/supabase-browser';
 // Helper para aplicar estilos de bloque
 function getBlockStyleClasses(style?: BlockStyle): string {
   if (!style) return '';
-  
+
   const classes: string[] = [];
-  
+
   if (style.alignment) {
     classes.push({
       left: 'text-left',
@@ -25,14 +25,14 @@ function getBlockStyleClasses(style?: BlockStyle): string {
       right: 'text-right ml-auto',
     }[style.alignment]);
   }
-  
+
   if (style.width) {
     classes.push({
       full: 'w-full',
       content: 'max-w-3xl mx-auto',
     }[style.width]);
   }
-  
+
   return classes.join(' ');
 }
 
@@ -44,7 +44,7 @@ interface BlockRendererProps {
 function TextBlockComponent({ block }: { block: Extract<Block, { type: 'text' }> }) {
   const { format, content } = block.data;
   const styleClasses = getBlockStyleClasses(block.style);
-  
+
   const className = {
     paragraph: 'text-foreground leading-7 [&:not(:first-child)]:mt-6 whitespace-pre-wrap',
     h1: 'scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl',
@@ -62,7 +62,7 @@ function TextBlockComponent({ block }: { block: Extract<Block, { type: 'text' }>
   // Para formatos de texto enriquecido, usar dangerouslySetInnerHTML
   if (format === 'paragraph') {
     return (
-      <div 
+      <div
         className={cn(className, styleClasses, 'prose prose-sm dark:prose-invert max-w-none')}
         dangerouslySetInnerHTML={{ __html: content }}
       />
@@ -70,7 +70,7 @@ function TextBlockComponent({ block }: { block: Extract<Block, { type: 'text' }>
   }
   if (format === 'h1') {
     return (
-      <h1 
+      <h1
         className={cn(className, styleClasses)}
         dangerouslySetInnerHTML={{ __html: content }}
       />
@@ -78,7 +78,7 @@ function TextBlockComponent({ block }: { block: Extract<Block, { type: 'text' }>
   }
   if (format === 'h2') {
     return (
-      <h2 
+      <h2
         className={cn(className, styleClasses)}
         dangerouslySetInnerHTML={{ __html: content }}
       />
@@ -86,7 +86,7 @@ function TextBlockComponent({ block }: { block: Extract<Block, { type: 'text' }>
   }
   if (format === 'h3') {
     return (
-      <h3 
+      <h3
         className={cn(className, styleClasses)}
         dangerouslySetInnerHTML={{ __html: content }}
       />
@@ -94,7 +94,7 @@ function TextBlockComponent({ block }: { block: Extract<Block, { type: 'text' }>
   }
   if (format === 'h4') {
     return (
-      <h4 
+      <h4
         className={cn(className, styleClasses)}
         dangerouslySetInnerHTML={{ __html: content }}
       />
@@ -102,7 +102,7 @@ function TextBlockComponent({ block }: { block: Extract<Block, { type: 'text' }>
   }
   if (format === 'h5') {
     return (
-      <h5 
+      <h5
         className={cn(className, styleClasses)}
         dangerouslySetInnerHTML={{ __html: content }}
       />
@@ -110,7 +110,7 @@ function TextBlockComponent({ block }: { block: Extract<Block, { type: 'text' }>
   }
   if (format === 'h6') {
     return (
-      <h6 
+      <h6
         className={cn(className, styleClasses)}
         dangerouslySetInnerHTML={{ __html: content }}
       />
@@ -124,7 +124,7 @@ function TextBlockComponent({ block }: { block: Extract<Block, { type: 'text' }>
   }
   if (format === 'quote') {
     return (
-      <blockquote 
+      <blockquote
         className={className}
         dangerouslySetInnerHTML={{ __html: content }}
       />
@@ -149,7 +149,7 @@ function ProgramCardBlockComponent({ block }: { block: Extract<Block, { type: 'p
         .select('*')
         .eq('id', block.data.programId)
         .single();
-      
+
       setProgram(data);
       setLoading(false);
     };
@@ -258,7 +258,7 @@ function ProgramsGridBlockComponent({ block }: { block: Extract<Block, { type: '
         .from('programas')
         .select('*')
         .in('id', block.data.programIds);
-      
+
       if (data) {
         // Ordenar según el orden en programIds
         const ordered = block.data.programIds
@@ -331,11 +331,10 @@ function TabsBlockComponent({ block }: { block: Extract<Block, { type: 'tabs' }>
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-              activeTab === tab.id
+            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${activeTab === tab.id
                 ? 'bg-primary text-primary-foreground'
                 : 'bg-muted hover:bg-muted/80 text-muted-foreground'
-            }`}
+              }`}
           >
             {tab.label}
           </button>
@@ -470,12 +469,12 @@ function CodeBlockComponent({ block }: { block: Extract<Block, { type: 'code' }>
 // Componente para video embed
 function VideoBlockComponent({ block }: { block: Extract<Block, { type: 'video' }> }) {
   const { url, platform } = block.data;
-  
+
   // Detectar si es un video de Cloudinary o directo
   const isCloudinaryVideo = url?.includes('cloudinary.com') && url?.includes('/video/');
-  const isDirectVideo = url && !url.includes('youtube.com') && !url.includes('youtu.be') && 
-                       !url.includes('vimeo.com') && !url.includes('loom.com');
-  
+  const isDirectVideo = url && !url.includes('youtube.com') && !url.includes('youtu.be') &&
+    !url.includes('vimeo.com') && !url.includes('loom.com');
+
   const getEmbedUrl = () => {
     if (platform === 'youtube') {
       const videoId = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&]+)/)?.[1];
@@ -497,12 +496,12 @@ function VideoBlockComponent({ block }: { block: Extract<Block, { type: 'video' 
     // Para autoplay en móviles, el video DEBE estar muted
     const shouldAutoplay = block.data.autoplay === true;
     const shouldMute = block.data.muted === true || shouldAutoplay;
-    
+
     return (
       <div className="my-8">
         <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-muted">
-          <video 
-            src={url} 
+          <video
+            src={url}
             controls={block.data.controls !== false}
             autoPlay={shouldAutoplay}
             loop={block.data.loop === true}

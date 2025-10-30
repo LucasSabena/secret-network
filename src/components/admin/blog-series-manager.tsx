@@ -198,9 +198,15 @@ export function BlogSeriesManager() {
         });
       });
 
-      // Convertir a array y filtrar series con 2+ posts
+      // Agregar series guardadas que no tienen posts todavía
+      savedSeries?.forEach(serie => {
+        if (!seriesMap.has(serie.tag)) {
+          seriesMap.set(serie.tag, []);
+        }
+      });
+
+      // Convertir a array - MOSTRAR TODAS LAS SERIES (incluso sin posts)
       const seriesArray = Array.from(seriesMap.entries())
-        .filter(([_, posts]) => posts.length >= 2)
         .map(([tag, posts]) => {
           // Ordenar por serie_order si existe, sino por fecha
           const sortedPosts = posts.sort((a, b) => {
