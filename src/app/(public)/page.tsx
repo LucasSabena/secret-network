@@ -3,6 +3,8 @@
 import { createClient } from "@/lib/supabase";
 import { Hero } from "@/components/layout/hero";
 import { ProgramsListClient } from "@/components/shared/programs-list-client";
+import { Suspense } from "react";
+import { ProgramsListSkeleton } from "@/components/shared/programs-list-skeleton";
 
 // ⚡ ISR: Regenerar esta página cada hora (3600 segundos)
 // Esto mejora drásticamente la velocidad al servir páginas pre-renderizadas
@@ -35,8 +37,9 @@ export default async function HomePage() {
   ] = await Promise.all([
     supabase
       .from('programas')
-      .select('*')
-      .order('nombre', { ascending: true }),
+      .select('id, nombre, slug, descripcion_corta, icono_url, es_open_source, es_recomendado, categoria_id, categoria_slug')
+      .order('nombre', { ascending: true })
+      .limit(100), // Limitar a 100 programas iniciales
     supabase
       .from('categorias')
       .select('*')
@@ -78,16 +81,13 @@ export default async function HomePage() {
     );
   }
 
-  // 2. Fetch all category data needed for programs
+  // 2. Fetch only necessary category data
   const categoriaIds = [...new Set(programas.map(p => p.categoria_id))];
-  
-  // 🚀 Optimización: Fetch paralelo de categorías y relaciones
   const programaIds = programas.map(p => p.id);
   
   const [
     { data: categorias },
     { data: subcatRelations },
-    { data: programasModelosPrecios },
   ] = await Promise.all([
     supabase
       .from('categorias')
@@ -96,22 +96,22 @@ export default async function HomePage() {
     supabase
       .from('programas_subcategorias')
       .select('programa_id, subcategoria_id')
-      .in('programa_id', programaIds),
-    supabase
-      .from('programas_modelos_de_precios')
-      .select('programa_id, modelo_precio_id')
-      .in('programa_id', programaIds),
+      .in('programa_id', programaIds)
+      .limit(500), // Limitar relaciones
   ]);
+
+  // Fetch modelos de precios solo si es necesario (lazy load)
+  const programasModelosPrecios: any[] = [];
 
   // Create maps for quick lookup
   const categoriaMap = new Map(categorias?.map(c => [c.id, c]) || []);
 
-  // 4. Fetch all subcategories
-  const subcatIds = [...new Set(subcatRelations?.map(r => r.subcategoria_id) || [])];
-  const { data: subcatsData } = await supabase
+  // 4. Fetch subcategories (limited)
+  const subcatIds = [...new Set(subcatRelations?.map(r => r.subcategoria_id) || [])].slice(0, 100);
+  const { data: subcatsData } = subcatIds.length > 0 ? await supabase
     .from('categorias')
     .select('id, nombre, slug, id_categoria_padre')
-    .in('id', subcatIds);
+    .in('id', subcatIds) : { data: [] };
 
   // Create a map for quick lookup
   const subcategoriaMap = new Map(subcatsData?.map(s => [s.id, s]) || []);

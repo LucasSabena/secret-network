@@ -64,13 +64,13 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
               {program.icono_url ? (
                 <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-muted">
                   <Image
-                    src={optimizeImageUrl(program.icono_url, { width: 48, quality: 85 })}
+                    src={optimizeImageUrl(program.icono_url, { width: 48, quality: 75 })}
                     alt={`${program.nombre} icon`}
                     fill
                     className="object-contain p-1.5"
                     sizes="48px"
                     loading="lazy"
-                    quality={75}
+                    quality={60}
                   />
                 </div>
               ) : (
@@ -209,7 +209,7 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
                       className="object-cover"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       loading="lazy"
-                      quality={85}
+                      quality={70}
                     />
                   ) : (
                     <div className="absolute inset-0 flex items-center justify-center text-muted-foreground">

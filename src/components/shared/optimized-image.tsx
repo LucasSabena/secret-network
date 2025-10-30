@@ -56,7 +56,7 @@ export function OptimizedImage({
           setError(true);
         }}
         loading={priority ? 'eager' : 'lazy'}
-        quality={85}
+        quality={75}
       />
     </div>
   );
