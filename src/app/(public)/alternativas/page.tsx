@@ -18,7 +18,7 @@ export default async function AlternativasPage() {
   // Obtener programas más populares/recomendados con sus alternativas
   const { data: programasPopulares, error } = await supabase
     .from('programas')
-    .select('id, nombre, slug, descripcion_corta, icono_url, captura_url, es_open_source, es_recomendado, categoria_id')
+    .select('*')
     .eq('es_recomendado', true)
     .order('nombre', { ascending: true })
     .limit(50); // Limitar a 50 programas populares
