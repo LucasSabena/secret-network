@@ -37,9 +37,9 @@ export default async function HomePage() {
   ] = await Promise.all([
     supabase
       .from('programas')
-      .select('id, nombre, slug, descripcion_corta, icono_url, es_open_source, es_recomendado, categoria_id, categoria_slug')
-      .order('nombre', { ascending: true })
-      .limit(100), // Limitar a 100 programas iniciales
+      .select('*') // Necesitamos todos los campos para las cards
+      .order('nombre', { ascending: true }),
+      // Sin LIMIT - el infinite scroll maneja la paginación en el cliente
     supabase
       .from('categorias')
       .select('*')
