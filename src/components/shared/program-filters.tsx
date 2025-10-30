@@ -159,10 +159,15 @@ export function ProgramFilters({
 
         {/* Sort Dropdown */}
         <div className="relative">
+          <label htmlFor="sort-programs" className="sr-only">
+            Ordenar programas
+          </label>
           <select
+            id="sort-programs"
             value={filters.sortBy}
             onChange={(e) => updateFilter('sortBy', e.target.value)}
             className="h-10 appearance-none rounded-lg border border-border bg-background px-4 pr-10 text-sm transition-colors hover:border-primary focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+            aria-label="Ordenar programas por"
           >
             <option value="nombre-asc">A → Z</option>
             <option value="nombre-desc">Z → A</option>
@@ -170,15 +175,17 @@ export function ProgramFilters({
             <option value="recomendado">Recomendados</option>
             <option value="nombre-recomendado">A → Z + Recomendados</option>
           </select>
-          <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
         </div>
 
         {/* Filters Toggle Button */}
         <button
           onClick={() => setShowFilters(!showFilters)}
           className="flex h-10 items-center gap-2 rounded-lg border border-border bg-background px-4 text-sm transition-colors hover:border-primary hover:bg-accent"
+          aria-label={showFilters ? "Ocultar filtros" : "Mostrar filtros"}
+          aria-expanded={showFilters}
         >
-          <SlidersHorizontal className="h-4 w-4" />
+          <SlidersHorizontal className="h-4 w-4" aria-hidden="true" />
           <span>Filtros</span>
           {activeFiltersCount > 0 && (
             <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs font-medium text-primary-foreground">
