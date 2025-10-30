@@ -134,10 +134,10 @@ export default async function HomePage() {
 
   return (
     <main className="min-h-screen">
-      {/* Hero Section */}
+      {/* Hero Section - Renderiza inmediatamente */}
       <Hero />
 
-      {/* Programs Section with Filters */}
+      {/* Programs Section with Filters - Con Suspense para streaming */}
       <section className="container mx-auto px-4 py-12">
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-foreground sm:text-3xl">
