@@ -216,10 +216,10 @@ export function BlogSeriesManager() {
             return new Date(b.fecha_publicacion).getTime() - new Date(a.fecha_publicacion).getTime();
           });
           const featuredPost = sortedPosts.find(p => p.is_featured);
-          
+
           // Usar metadatos guardados si existen
           const metadata = seriesMetadata.get(tag);
-          
+
           return {
             tag,
             nombre: metadata?.nombre || tag,
@@ -280,10 +280,10 @@ export function BlogSeriesManager() {
       .replace(/^-+|-+$/g, '');
   }
 
-  async function handleCreateSerie(data: { 
-    nombre: string; 
-    slug: string; 
-    color: string; 
+  async function handleCreateSerie(data: {
+    nombre: string;
+    slug: string;
+    color: string;
     descripcion: string;
     featured_section_title?: string;
     featured_section_subtitle?: string;
@@ -292,7 +292,7 @@ export function BlogSeriesManager() {
   }) {
     try {
       const supabase = supabaseBrowserClient;
-      
+
       // Crear entrada en blog_series
       await supabase
         .from('blog_series')
@@ -307,7 +307,7 @@ export function BlogSeriesManager() {
           regular_section_title: data.regular_section_title || 'Más Artículos',
           regular_section_subtitle: data.regular_section_subtitle || 'Todos los artículos de la serie',
         });
-      
+
       toast.success('Serie creada. Agrega posts con el tag "' + data.nombre + '"');
       loadSeries();
     } catch (error) {
@@ -317,10 +317,10 @@ export function BlogSeriesManager() {
     }
   }
 
-  async function handleEditSerie(data: { 
-    nombre: string; 
-    slug: string; 
-    color: string; 
+  async function handleEditSerie(data: {
+    nombre: string;
+    slug: string;
+    color: string;
     descripcion: string;
     featured_section_title?: string;
     featured_section_subtitle?: string;
@@ -331,7 +331,7 @@ export function BlogSeriesManager() {
       if (!editingSerie) return;
 
       const supabase = supabaseBrowserClient;
-      
+
       // Guardar o actualizar en blog_series
       const { data: existingSerie } = await supabase
         .from('blog_series')
@@ -372,7 +372,7 @@ export function BlogSeriesManager() {
             regular_section_subtitle: data.regular_section_subtitle || 'Todos los artículos de la serie',
           });
       }
-      
+
       // Si el nombre cambió, actualizar el tag en todos los posts
       if (data.nombre !== editingSerie.tag) {
         for (const post of editingSerie.posts) {
@@ -489,7 +489,7 @@ export function BlogSeriesManager() {
   async function handleRemovePostFromSerie(serieTag: string, postId: number) {
     try {
       const supabase = supabaseBrowserClient;
-      
+
       const { data: post, error: fetchError } = await supabase
         .from('blog_posts')
         .select('tags')
@@ -521,7 +521,7 @@ export function BlogSeriesManager() {
     try {
       const supabase = supabaseBrowserClient;
       const serie = series.find(s => s.tag === serieTag);
-      
+
       if (!serie) return;
 
       for (const post of serie.posts) {
@@ -555,16 +555,16 @@ export function BlogSeriesManager() {
 
     // Reordenar localmente
     const newPosts = arrayMove(serie.posts, oldIndex, newIndex);
-    
+
     // Actualizar estado local inmediatamente
-    setSeries(series.map(s => 
+    setSeries(series.map(s =>
       s.tag === serieTag ? { ...s, posts: newPosts } : s
     ));
 
     // Guardar orden en la base de datos
     try {
       const supabase = supabaseBrowserClient;
-      
+
       // Actualizar el orden de todos los posts
       for (let i = 0; i < newPosts.length; i++) {
         await supabase
@@ -685,7 +685,7 @@ export function BlogSeriesManager() {
                     </div>
                     <p className="text-sm text-muted-foreground">
                       {serie.count} artículos
-                      {serie.posts.filter(p => p.is_featured).length > 0 && 
+                      {serie.posts.filter(p => p.is_featured).length > 0 &&
                         ` • ${serie.posts.filter(p => p.is_featured).length} destacado${serie.posts.filter(p => p.is_featured).length > 1 ? 's' : ''}`
                       }
                     </p>
@@ -797,7 +797,7 @@ export function BlogSeriesManager() {
       <AddPostDialog
         open={addingToSerie !== null}
         serieTag={addingToSerie || ''}
-        availablePosts={availablePosts.filter(post => 
+        availablePosts={availablePosts.filter(post =>
           !post.tags?.includes(addingToSerie || '')
         )}
         onClose={() => setAddingToSerie(null)}
