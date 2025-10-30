@@ -65,6 +65,13 @@ export async function uploadToCloudinary(
   formData.append('upload_preset', cloudinaryConfig.uploadPreset);
   formData.append('folder', folder);
   
+  // Optimizaciones para imágenes
+  if (!isVideo) {
+    formData.append('format', 'webp'); // Convertir a WebP automáticamente
+    formData.append('quality', 'auto:good'); // Calidad automática optimizada
+    formData.append('fetch_format', 'auto'); // Formato automático según navegador
+  }
+  
   // Si hay una URL existente, extraer el public_id y reemplazar
   if (existingUrl) {
     const publicId = extractPublicIdFromUrl(existingUrl);

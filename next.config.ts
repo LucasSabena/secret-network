@@ -6,6 +6,8 @@ const nextConfig: NextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   images: {
+    // DESACTIVAR optimización de Next.js - usar imágenes ya optimizadas de Cloudinary
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
@@ -26,11 +28,7 @@ const nextConfig: NextConfig = {
         hostname: 'images.unsplash.com',
       },
     ],
-    formats: ['image/webp', 'image/avif'], // AVIF para mejor compresión
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    minimumCacheTTL: 31536000, // 1 año - las imágenes no cambian
-    dangerouslyAllowSVG: true, // Permitir SVGs de Cloudinary
+    dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
