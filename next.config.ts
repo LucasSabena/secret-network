@@ -37,6 +37,9 @@ const nextConfig: NextConfig = {
   compress: true,
   poweredByHeader: false,
   reactStrictMode: true,
+  // Optimizar producción
+  productionBrowserSourceMaps: false, // Desactivar source maps en producción
+  generateEtags: true, // ETags para mejor cache
   // Desactivar ESLint durante el build (errores pre-existentes)
   eslint: {
     ignoreDuringBuilds: true,
