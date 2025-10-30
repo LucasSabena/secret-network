@@ -270,8 +270,9 @@ export function BlogEditorFullPage({ post, onClose }: BlogEditorFullPageProps) {
         if (!validation.valid) {
           throw new Error(validation.error);
         }
-        const existingUrl = post?.imagen_portada_url || undefined;
-        imagenUrl = await uploadToCloudinary(imageFile, 'blog', existingUrl);
+        // Siempre subir como imagen nueva (no reemplazar)
+        // Esto evita conflictos cuando se duplica un post
+        imagenUrl = await uploadToCloudinary(imageFile, 'blog');
       }
 
       const slug =
