@@ -116,12 +116,15 @@ export default function RootLayout({
     <html lang="es" suppressHydrationWarning>
       <head>
         {/* Preconnect para mejorar rendimiento */}
+        {/* Preconnect crítico - establece conexión temprana */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://fkfoapcvmuxycebsnttd.supabase.co" />
         <link rel="preconnect" href="https://res.cloudinary.com" />
-        <link rel="dns-prefetch" href="https://fkfoapcvmuxycebsnttd.supabase.co" />
-        <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+        
+        {/* DNS prefetch para recursos secundarios */}
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         
         {/* PWA y favicons */}
         <meta name="theme-color" content="#ff3399" media="(prefers-color-scheme: dark)" />
