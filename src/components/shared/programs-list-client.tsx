@@ -73,8 +73,8 @@ export function ProgramsListClient({
   });
 
   // Estado para infinite scroll
-  const [displayCount, setDisplayCount] = useState(30); // Mostrar 30 inicialmente
-  const ITEMS_PER_PAGE = 30;
+  const [displayCount, setDisplayCount] = useState(24); // Mostrar 24 inicialmente (3x8 grid)
+  const ITEMS_PER_PAGE = 24; // Cargar de 24 en 24
 
   // Crear mapa de modelos de precio por programa
   const programaModelosMap = useMemo(() => {
@@ -189,7 +189,7 @@ export function ProgramsListClient({
 
   // Reset display count cuando cambian los filtros
   useEffect(() => {
-    setDisplayCount(30);
+    setDisplayCount(24);
   }, [filters]);
 
   // Infinite scroll trigger

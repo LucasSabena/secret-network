@@ -64,13 +64,15 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
               {program.icono_url ? (
                 <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-muted">
                   <Image
-                    src={optimizeImageUrl(program.icono_url, { width: 48, quality: 75 })}
+                    src={optimizeImageUrl(program.icono_url, { width: 48, quality: 60 })}
                     alt={`${program.nombre} icon`}
                     fill
                     className="object-contain p-1.5"
                     sizes="48px"
                     loading="lazy"
-                    quality={60}
+                    quality={50}
+                    placeholder="blur"
+                    blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiBmaWxsPSIjMmEyYTJhIi8+PC9zdmc+"
                   />
                 </div>
               ) : (
@@ -209,7 +211,9 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
                       className="object-cover"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       loading="lazy"
-                      quality={70}
+                      quality={60}
+                      placeholder="blur"
+                      blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iIzIwMjAyMCIvPjwvc3ZnPg=="
                     />
                   ) : (
                     <div className="absolute inset-0 flex items-center justify-center text-muted-foreground">
