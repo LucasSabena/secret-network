@@ -51,11 +51,15 @@ export default async function BlogPage() {
     .order('blog_featured_order', { ascending: true })
     .limit(5);
 
-  // Optimización: Solo traer campos necesarios
+  // Obtener IDs de posts destacados para excluirlos de la grilla
+  const featuredPostIds = featuredPosts?.map(p => p.id) || [];
+
+  // Optimización: Solo traer campos necesarios, excluyendo los destacados
   const { data: posts } = await supabase
     .from('blog_posts')
     .select('id, titulo, slug, descripcion_corta, imagen_portada_url, fecha_publicacion, tags, contenido_bloques')
     .eq('publicado', true)
+    .not('id', 'in', `(${featuredPostIds.join(',') || '0'})`)
     .order('fecha_publicacion', { ascending: false })
     .limit(50); // Limitar para mejor performance
 
