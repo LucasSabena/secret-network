@@ -2,9 +2,18 @@
 
 import { createClient } from "@/lib/supabase";
 import { Hero } from "@/components/layout/hero";
-import { ProgramsListClient } from "@/components/shared/programs-list-client";
 import { Suspense } from "react";
 import { ProgramsListSkeleton } from "@/components/shared/programs-list-skeleton";
+import dynamic from "next/dynamic";
+
+// Lazy load del componente pesado de filtros y lista
+const ProgramsListClient = dynamic(
+  () => import("@/components/shared/programs-list-client").then(mod => ({ default: mod.ProgramsListClient })),
+  { 
+    loading: () => <ProgramsListSkeleton />,
+    ssr: false // No necesita SSR, es client-side filtering
+  }
+);
 
 // ⚡ ISR: Regenerar esta página cada hora (3600 segundos)
 // Esto mejora drásticamente la velocidad al servir páginas pre-renderizadas
