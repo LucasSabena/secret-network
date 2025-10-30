@@ -28,11 +28,12 @@ interface Post {
 
 interface BlogGridImprovedProps {
   posts: Post[];
+  allPosts?: Post[]; // Todos los posts incluyendo destacados (para vista de series)
 }
 
 const POSTS_PER_PAGE = 12;
 
-export function BlogGridImproved({ posts }: BlogGridImprovedProps) {
+export function BlogGridImproved({ posts, allPosts }: BlogGridImprovedProps) {
   const searchParams = useSearchParams();
   const selectedCategory = searchParams.get('categoria');
   
@@ -41,6 +42,9 @@ export function BlogGridImproved({ posts }: BlogGridImprovedProps) {
   const [sortBy, setSortBy] = useState('recent');
   const [dateFilter, setDateFilter] = useState('all');
   const [viewMode, setViewMode] = useState<'all' | 'series' | 'timeline'>('all');
+  
+  // Usar allPosts si está disponible, sino usar posts
+  const postsForSeries = allPosts || posts;
 
   // Filtrar y ordenar posts
   const filteredPosts = useMemo(() => {
@@ -167,7 +171,7 @@ export function BlogGridImproved({ posts }: BlogGridImprovedProps) {
             onViewModeChange={setViewMode}
           />
         </div>
-        <BlogSeriesView posts={filteredPosts} />
+        <BlogSeriesView posts={postsForSeries} />
       </div>
     );
   }

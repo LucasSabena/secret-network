@@ -51,17 +51,19 @@ export default async function BlogPage() {
     .order('blog_featured_order', { ascending: true })
     .limit(5);
 
-  // Obtener IDs de posts destacados para excluirlos de la grilla
-  const featuredPostIds = featuredPosts?.map(p => p.id) || [];
-
-  // Optimización: Solo traer campos necesarios, excluyendo los destacados
-  const { data: posts } = await supabase
+  // Obtener TODOS los posts (incluyendo destacados) para que las series se cuenten correctamente
+  const { data: allPosts } = await supabase
     .from('blog_posts')
     .select('id, titulo, slug, descripcion_corta, imagen_portada_url, fecha_publicacion, tags, contenido_bloques')
     .eq('publicado', true)
-    .not('id', 'in', `(${featuredPostIds.join(',') || '0'})`)
     .order('fecha_publicacion', { ascending: false })
     .limit(50); // Limitar para mejor performance
+
+  // IDs de posts destacados para excluirlos en la grilla (pero no en series)
+  const featuredPostIds = featuredPosts?.map(p => p.id) || [];
+  
+  // Posts sin destacados para la grilla normal
+  const posts = allPosts?.filter(p => !featuredPostIds.includes(p.id)) || [];
 
   // Traer categorías (solo las necesarias)
   const { data: categories } = await supabase
@@ -69,12 +71,12 @@ export default async function BlogPage() {
     .select('id, nombre, slug, color, icono')
     .order('orden', { ascending: true });
 
-  // Obtener relaciones post-categoría solo para los posts cargados
-  const postIds = posts?.map(p => p.id) || [];
+  // Obtener relaciones post-categoría para TODOS los posts
+  const allPostIds = allPosts?.map(p => p.id) || [];
   const { data: postCategories } = await supabase
     .from('blog_posts_categories')
     .select('post_id, category_id')
-    .in('post_id', postIds);
+    .in('post_id', allPostIds);
 
   // Mapear categorías a posts de forma más eficiente
   const categoryMap = new Map(categories?.map(c => [c.id, c]) || []);
@@ -90,12 +92,19 @@ export default async function BlogPage() {
     }
   });
 
+  // Posts sin destacados con categorías (para la grilla)
   const postsWithCategories = posts?.map(post => ({
     ...post,
     categories: postCategoryMap.get(post.id) || []
   })) || [];
 
-  const totalPosts = posts?.length || 0;
+  // TODOS los posts con categorías (para vista de series)
+  const allPostsWithCategories = allPosts?.map(post => ({
+    ...post,
+    categories: postCategoryMap.get(post.id) || []
+  })) || [];
+
+  const totalPosts = allPosts?.length || 0;
 
   // Obtener serie destacada en hero desde blog_series
   const { data: featuredSerieData } = await supabase
@@ -144,7 +153,10 @@ export default async function BlogPage() {
 
         {/* Grid de Posts */}
         {postsWithCategories && postsWithCategories.length > 0 ? (
-          <BlogGridImproved posts={postsWithCategories as any[]} />
+          <BlogGridImproved 
+            posts={postsWithCategories as any[]} 
+            allPosts={allPostsWithCategories as any[]}
+          />
         ) : (
           <div className="text-center py-12">
             <p className="text-muted-foreground">
