@@ -437,6 +437,15 @@ function SeparatorBlockComponent({ block }: { block: Extract<Block, { type: 'sep
 function ImageBlockComponent({ block }: { block: Extract<Block, { type: 'image' }> }) {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
+  // Validar que haya URL
+  if (!block.data.url) {
+    return (
+      <div className="my-8 p-4 border-2 border-dashed border-muted rounded-lg text-center text-muted-foreground">
+        Agrega una imagen
+      </div>
+    );
+  }
+
   // Bloquear scroll cuando el lightbox está abierto
   useEffect(() => {
     if (isLightboxOpen) {
@@ -516,6 +525,15 @@ function VideoBlockComponent({ block }: { block: Extract<Block, { type: 'video' 
   const { url, platform } = block.data;
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
+  // Validar que haya URL
+  if (!url) {
+    return (
+      <div className="my-8 p-4 border-2 border-dashed border-muted rounded-lg text-center text-muted-foreground">
+        Agrega una URL de video
+      </div>
+    );
+  }
+
   // Bloquear scroll cuando el lightbox está abierto
   useEffect(() => {
     if (isLightboxOpen) {
@@ -529,8 +547,8 @@ function VideoBlockComponent({ block }: { block: Extract<Block, { type: 'video' 
   }, [isLightboxOpen]);
 
   // Detectar si es un video de Cloudinary o directo
-  const isCloudinaryVideo = url?.includes('cloudinary.com') && url?.includes('/video/');
-  const isDirectVideo = url && !url.includes('youtube.com') && !url.includes('youtu.be') &&
+  const isCloudinaryVideo = url.includes('cloudinary.com') && url.includes('/video/');
+  const isDirectVideo = !url.includes('youtube.com') && !url.includes('youtu.be') &&
     !url.includes('vimeo.com') && !url.includes('loom.com');
 
   const getEmbedUrl = () => {
@@ -617,7 +635,14 @@ function VideoBlockComponent({ block }: { block: Extract<Block, { type: 'video' 
 
   // Si es un video de plataforma externa
   const embedUrl = getEmbedUrl();
-  if (!embedUrl) return null;
+  
+  if (!embedUrl) {
+    return (
+      <div className="my-8 p-4 border-2 border-dashed border-muted rounded-lg text-center text-muted-foreground">
+        URL de video inválida o plataforma no soportada
+      </div>
+    );
+  }
 
   return (
     <div className="not-prose">
