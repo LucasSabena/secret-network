@@ -133,20 +133,26 @@ export function ProgramFilters({
       <div className="flex flex-col gap-3 sm:flex-row">
         {/* Search Input */}
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <label htmlFor="search-programs" className="sr-only">
+            Buscar programas y categorías
+          </label>
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
           <input
-            type="text"
+            id="search-programs"
+            type="search"
             placeholder="Buscar programas, categorías..."
             value={filters.searchTerm}
             onChange={(e) => updateFilter('searchTerm', e.target.value)}
             className="h-10 w-full rounded-lg border border-border bg-background pl-10 pr-10 text-sm transition-colors placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+            aria-label="Buscar programas y categorías"
           />
           {filters.searchTerm && (
             <button
               onClick={() => updateFilter('searchTerm', '')}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
+              aria-label="Limpiar búsqueda"
             >
-              <X className="h-4 w-4" />
+              <X className="h-4 w-4" aria-hidden="true" />
             </button>
           )}
         </div>

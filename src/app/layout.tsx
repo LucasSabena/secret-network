@@ -92,8 +92,15 @@ export const metadata: Metadata = {
   },
   manifest: '/manifest.json',
   verification: {
-    google: 'tu-codigo-de-verificacion-google', // Agregar después
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
   },
+  alternates: {
+    canonical: 'https://secretnetwork.co',
+    languages: {
+      'es-ES': 'https://secretnetwork.co',
+    },
+  },
+  category: 'technology',
 };
 
 export default function RootLayout({
