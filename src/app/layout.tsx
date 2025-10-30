@@ -79,12 +79,18 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
+      { url: '/icon.svg', type: 'image/svg+xml' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+    other: [
+      { rel: 'mask-icon', url: '/icon.svg', color: '#ff3399' },
     ],
   },
+  manifest: '/manifest.json',
   verification: {
     google: 'tu-codigo-de-verificacion-google', // Agregar después
   },
@@ -107,6 +113,13 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://fkfoapcvmuxycebsnttd.supabase.co" />
         <link rel="dns-prefetch" href="https://fkfoapcvmuxycebsnttd.supabase.co" />
+        
+        {/* PWA y favicons */}
+        <meta name="theme-color" content="#ff3399" media="(prefers-color-scheme: dark)" />
+        <meta name="theme-color" content="#ff3399" media="(prefers-color-scheme: light)" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="Secret Network" />
         
         {/* Redirección automática para invitaciones */}
         <script dangerouslySetInnerHTML={{
