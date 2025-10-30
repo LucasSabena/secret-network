@@ -30,10 +30,12 @@ export function Hero() {
           </div>
 
           {/* Main heading */}
-          <h1 className="mb-6 text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
-            Descubrí programas y páginas de{" "}
-            <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-              diseño
+          <h1 className="mb-6 text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl min-h-[120px] sm:min-h-[140px] md:min-h-[180px] flex items-center justify-center">
+            <span className="block">
+              Descubrí programas y páginas de{" "}
+              <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+                diseño
+              </span>
             </span>
           </h1>
 

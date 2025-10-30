@@ -112,7 +112,9 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://fkfoapcvmuxycebsnttd.supabase.co" />
+        <link rel="preconnect" href="https://res.cloudinary.com" />
         <link rel="dns-prefetch" href="https://fkfoapcvmuxycebsnttd.supabase.co" />
+        <link rel="dns-prefetch" href="https://res.cloudinary.com" />
         
         {/* PWA y favicons */}
         <meta name="theme-color" content="#ff3399" media="(prefers-color-scheme: dark)" />

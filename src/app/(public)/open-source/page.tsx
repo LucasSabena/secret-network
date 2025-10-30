@@ -23,16 +23,17 @@ export default async function OpenSourcePage() {
   ] = await Promise.all([
     supabase
       .from('programas')
-      .select('*')
-      .eq('es_open_source', true) // Solo programas open-source
-      .order('nombre', { ascending: true }),
+      .select('id, nombre, slug, descripcion_corta, icono_url, es_open_source, es_recomendado, categoria_id, categoria_slug')
+      .eq('es_open_source', true)
+      .order('nombre', { ascending: true })
+      .limit(100), // Limitar resultados
     supabase
       .from('categorias')
-      .select('*')
+      .select('id, nombre, slug, id_categoria_padre')
       .order('nombre', { ascending: true }),
     supabase
       .from('modelos_de_precios')
-      .select('*')
+      .select('id, nombre, slug')
       .order('nombre', { ascending: true }),
   ]);
 
