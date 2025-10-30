@@ -49,11 +49,11 @@ export function Hero() {
           {/* Stats */}
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
-              <div className="h-2 w-2 rounded-full bg-secondary animate-pulse"></div>
+              <div className="h-2 w-2 rounded-full bg-secondary"></div>
               <span>200+ Herramientas</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="h-2 w-2 rounded-full bg-primary animate-pulse"></div>
+              <div className="h-2 w-2 rounded-full bg-primary"></div>
               <span>Actualizaciones Continuas</span>
             </div>
           </div>
