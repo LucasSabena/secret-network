@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { ProgramCard } from "@/components/shared/program-card";
 import { ProgramFilters, type FilterOptions } from "@/components/shared/program-filters";
+import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
 
 interface Programa {
   id: number;
@@ -70,6 +71,10 @@ export function ProgramsListClient({
     esRecomendado: null,
     sortBy: 'nombre-asc'
   });
+
+  // Estado para infinite scroll
+  const [displayCount, setDisplayCount] = useState(30); // Mostrar 30 inicialmente
+  const ITEMS_PER_PAGE = 30;
 
   // Crear mapa de modelos de precio por programa
   const programaModelosMap = useMemo(() => {
@@ -170,6 +175,31 @@ export function ProgramsListClient({
     return result;
   }, [initialPrograms, filters, programaModelosMap]);
 
+  // Programas a mostrar (con infinite scroll)
+  const displayedPrograms = useMemo(() => {
+    return filteredPrograms.slice(0, displayCount);
+  }, [filteredPrograms, displayCount]);
+
+  // Cargar más programas
+  const loadMore = useCallback(() => {
+    if (displayCount < filteredPrograms.length) {
+      setDisplayCount(prev => Math.min(prev + ITEMS_PER_PAGE, filteredPrograms.length));
+    }
+  }, [displayCount, filteredPrograms.length, ITEMS_PER_PAGE]);
+
+  // Reset display count cuando cambian los filtros
+  useEffect(() => {
+    setDisplayCount(30);
+  }, [filters]);
+
+  // Infinite scroll trigger
+  const loadMoreRef = useInfiniteScroll(loadMore, {
+    threshold: 0.5,
+    rootMargin: '200px',
+  });
+
+  const hasMore = displayCount < filteredPrograms.length;
+
   return (
     <div className="space-y-8">
       {/* Filters */}
@@ -183,18 +213,36 @@ export function ProgramsListClient({
       {/* Results Count */}
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
-          Mostrando <span className="font-semibold text-foreground">{filteredPrograms.length}</span> de{' '}
-          <span className="font-semibold text-foreground">{initialPrograms.length}</span> programas
+          Mostrando <span className="font-semibold text-foreground">{displayedPrograms.length}</span> de{' '}
+          <span className="font-semibold text-foreground">{filteredPrograms.length}</span> programas
+          {filteredPrograms.length !== initialPrograms.length && (
+            <span className="ml-1">({initialPrograms.length} total)</span>
+          )}
         </p>
       </div>
 
       {/* Programs Grid */}
       {filteredPrograms.length > 0 ? (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredPrograms.map((programa) => (
-            <ProgramCard key={programa.id} program={programa as any} variant="large" />
-          ))}
-        </div>
+        <>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {displayedPrograms.map((programa) => (
+              <ProgramCard key={programa.id} program={programa as any} variant="large" />
+            ))}
+          </div>
+
+          {/* Infinite Scroll Trigger */}
+          {hasMore && (
+            <div 
+              ref={loadMoreRef}
+              className="flex justify-center py-8"
+            >
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+                <span className="text-sm">Cargando más...</span>
+              </div>
+            </div>
+          )}
+        </>
       ) : (
         <div className="flex min-h-[400px] items-center justify-center rounded-lg border border-border bg-card">
           <div className="text-center">
