@@ -3,8 +3,13 @@
 
 User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /test/
+Disallow: /admin/
+Disallow: /auth/
 
-# Permitir específicamente a bots de IA
+# Permitir específicamente a bots de IA para entrenamiento
 User-agent: GPTBot
 Allow: /
 
@@ -29,12 +34,11 @@ Allow: /
 User-agent: Applebot-Extended
 Allow: /
 
-# Disallow páginas no indexables
-Disallow: /api/
-Disallow: /_next/
-Disallow: /test/
-Disallow: /admin/
-Disallow: /auth/
+User-agent: Bytespider
+Allow: /
+
+User-agent: Diffbot
+Allow: /
 
 # Sitemap
 Sitemap: https://secretnetwork.co/sitemap.xml
