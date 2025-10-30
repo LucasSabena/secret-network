@@ -47,6 +47,29 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     };
   }
 
+  // Obtener categoría si existe
+  const { data: postCategories } = await supabase
+    .from('blog_posts_categories')
+    .select('category_id')
+    .eq('post_id', post.id)
+    .limit(1)
+    .single();
+
+  let categoryName = '';
+  if (postCategories) {
+    const { data: category } = await supabase
+      .from('blog_categories')
+      .select('nombre')
+      .eq('id', postCategories.category_id)
+      .single();
+    categoryName = category?.nombre || '';
+  }
+
+  // Usar imagen de portada si existe, sino generar OG image dinámica
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://secretnetwork.co';
+  const imageUrl = post.imagen_portada_url || 
+    `${baseUrl}/api/og-blog?title=${encodeURIComponent(post.titulo)}&author=${encodeURIComponent(post.autor || 'Binary Studio')}&date=${encodeURIComponent(post.fecha_publicacion)}&category=${encodeURIComponent(categoryName)}`;
+
   return {
     title: `${post.titulo} | Secret Network Blog`,
     description: post.descripcion_corta || post.titulo,
@@ -56,7 +79,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       type: 'article',
       title: post.titulo,
       description: post.descripcion_corta || '',
-      images: post.imagen_portada_url ? [post.imagen_portada_url] : [],
+      images: [imageUrl],
       publishedTime: post.fecha_publicacion,
       modifiedTime: post.actualizado_en,
       authors: post.autor ? [post.autor] : undefined,
@@ -66,7 +89,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       card: 'summary_large_image',
       title: post.titulo,
       description: post.descripcion_corta || '',
-      images: post.imagen_portada_url ? [post.imagen_portada_url] : [],
+      images: [imageUrl],
     },
   };
 }
