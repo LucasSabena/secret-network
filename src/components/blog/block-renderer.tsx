@@ -437,6 +437,18 @@ function SeparatorBlockComponent({ block }: { block: Extract<Block, { type: 'sep
 function ImageBlockComponent({ block }: { block: Extract<Block, { type: 'image' }> }) {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
+  // Bloquear scroll cuando el lightbox está abierto
+  useEffect(() => {
+    if (isLightboxOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isLightboxOpen]);
+
   return (
     <>
       <figure className="not-prose">
@@ -503,6 +515,18 @@ function CodeBlockComponent({ block }: { block: Extract<Block, { type: 'code' }>
 function VideoBlockComponent({ block }: { block: Extract<Block, { type: 'video' }> }) {
   const { url, platform } = block.data;
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+
+  // Bloquear scroll cuando el lightbox está abierto
+  useEffect(() => {
+    if (isLightboxOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isLightboxOpen]);
 
   // Detectar si es un video de Cloudinary o directo
   const isCloudinaryVideo = url?.includes('cloudinary.com') && url?.includes('/video/');
