@@ -45,6 +45,14 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['@/components', '@/lib'],
   },
+  // Minificación más agresiva
+  swcMinify: true,
+  // Optimizar CSS
+  modularizeImports: {
+    'lucide-react': {
+      transform: 'lucide-react/dist/esm/icons/{{kebabCase member}}',
+    },
+  },
   // Headers para cache agresivo
   async headers() {
     return [

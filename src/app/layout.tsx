@@ -17,6 +17,7 @@ import { GoogleAnalytics } from "@/components/analytics/google-analytics";
 import { GoogleTagManager, GoogleTagManagerNoScript } from "@/components/analytics/google-tag-manager";
 import { JsonLdOrganization } from "@/components/seo/json-ld-organization";
 import { JsonLdWebsite } from "@/components/seo/json-ld-website";
+import { JsonLdSitelinksSearch } from "@/components/seo/json-ld-sitelinks-search";
 import { Toaster } from "@/components/ui/toaster";
 import { Analytics } from "@vercel/analytics/next";
 import { SmoothScrollWrapper } from "@/components/layout/smooth-scroll-wrapper";
@@ -25,6 +26,9 @@ import { ServiceWorkerRegister } from "@/components/shared/service-worker-regist
 const fontSpaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-space-grotesk",
+  display: 'swap', // Evita bloqueo de renderizado
+  preload: true,
+  fallback: ['system-ui', '-apple-system', 'sans-serif'],
 });
 
 export const metadata: Metadata = {
@@ -101,6 +105,8 @@ export default function RootLayout({
         {/* Preconnect para mejorar rendimiento */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://fkfoapcvmuxycebsnttd.supabase.co" />
+        <link rel="dns-prefetch" href="https://fkfoapcvmuxycebsnttd.supabase.co" />
         
         {/* Redirección automática para invitaciones */}
         <script dangerouslySetInnerHTML={{
@@ -114,6 +120,7 @@ export default function RootLayout({
         {/* JSON-LD Structured Data */}
         <JsonLdOrganization />
         <JsonLdWebsite />
+        <JsonLdSitelinksSearch />
         
         {/* Google Tag Manager - Solo en producción */}
         {process.env.NODE_ENV === 'production' && <GoogleTagManager gtmId={gtmId} />}

@@ -72,6 +72,54 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     })) || [];
 
+  // Series del blog
+  const { data: series } = await supabase
+    .from('blog_series')
+    .select('slug, updated_at');
+
+  const seriesPages: MetadataRoute.Sitemap =
+    series?.map((serie) => ({
+      url: `${baseUrl}/blog/serie/${serie.slug}`,
+      lastModified: new Date(serie.updated_at),
+      changeFrequency: 'weekly' as const,
+      priority: 0.75,
+    })) || [];
+
+  // Página de índice de series
+  const seriesIndexPage: MetadataRoute.Sitemap = [
+    {
+      url: `${baseUrl}/blog/serie`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.7,
+    },
+  ];
+
+  // Alternativas (páginas de comparación)
+  const { data: alternativas } = await supabase
+    .from('programas')
+    .select('slug')
+    .not('alternativa_a', 'is', null)
+    .limit(500);
+
+  const alternativasPages: MetadataRoute.Sitemap =
+    alternativas?.map((alt) => ({
+      url: `${baseUrl}/alternativas/${alt.slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.65,
+    })) || [];
+
+  // Página de índice de alternativas
+  const alternativasIndexPage: MetadataRoute.Sitemap = [
+    {
+      url: `${baseUrl}/alternativas`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.7,
+    },
+  ];
+
   // Programas
   const { data: programas } = await supabase
     .from('programas')
@@ -86,5 +134,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.6,
     })) || [];
 
-  return [...staticPages, ...blogPages, ...categoryPages, ...programaPages];
+  return [
+    ...staticPages,
+    ...blogPages,
+    ...categoryPages,
+    ...seriesPages,
+    ...seriesIndexPage,
+    ...programaPages,
+    ...alternativasPages,
+    ...alternativasIndexPage,
+  ];
 }
