@@ -213,11 +213,13 @@ export function ProgramFilters({
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {/* Category Filter */}
             <div className="space-y-2">
-              <label className="text-sm font-medium">Categoría</label>
+              <label htmlFor="filter-categoria" className="text-sm font-medium">Categoría</label>
               <select
+                id="filter-categoria"
                 value={filters.categoriaId || ''}
                 onChange={(e) => updateFilter('categoriaId', e.target.value ? Number(e.target.value) : null)}
                 className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                aria-label="Filtrar por categoría"
               >
                 <option value="">Todas las categorías</option>
                 {categorias.map(cat => (
@@ -270,11 +272,13 @@ export function ProgramFilters({
 
             {/* Difficulty Filter */}
             <div className="space-y-2">
-              <label className="text-sm font-medium">Dificultad</label>
+              <label htmlFor="filter-dificultad" className="text-sm font-medium">Dificultad</label>
               <select
+                id="filter-dificultad"
                 value={filters.dificultad || ''}
                 onChange={(e) => updateFilter('dificultad', e.target.value || null)}
                 className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                aria-label="Filtrar por dificultad"
               >
                 <option value="">Todos los niveles</option>
                 <option value="Facil">Fácil</option>
@@ -366,32 +370,44 @@ export function ProgramFilters({
           {filters.categoriaId && (
             <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
               Category: {categorias.find(c => c.id === filters.categoriaId)?.nombre}
-              <button onClick={() => updateFilter('categoriaId', null)}>
-                <X className="h-3 w-3" />
+              <button 
+                onClick={() => updateFilter('categoriaId', null)}
+                aria-label="Quitar filtro de categoría"
+              >
+                <X className="h-3 w-3" aria-hidden="true" />
               </button>
             </span>
           )}
           {filters.dificultad && (
             <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
               {filters.dificultad}
-              <button onClick={() => updateFilter('dificultad', null)}>
-                <X className="h-3 w-3" />
+              <button 
+                onClick={() => updateFilter('dificultad', null)}
+                aria-label="Quitar filtro de dificultad"
+              >
+                <X className="h-3 w-3" aria-hidden="true" />
               </button>
             </span>
           )}
           {filters.esOpenSource !== null && (
             <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
               Open Source: {filters.esOpenSource ? 'Yes' : 'No'}
-              <button onClick={() => updateFilter('esOpenSource', null)}>
-                <X className="h-3 w-3" />
+              <button 
+                onClick={() => updateFilter('esOpenSource', null)}
+                aria-label="Quitar filtro de open source"
+              >
+                <X className="h-3 w-3" aria-hidden="true" />
               </button>
             </span>
           )}
           {filters.esRecomendado !== null && (
             <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
               Recommended: {filters.esRecomendado ? 'Yes' : 'No'}
-              <button onClick={() => updateFilter('esRecomendado', null)}>
-                <X className="h-3 w-3" />
+              <button 
+                onClick={() => updateFilter('esRecomendado', null)}
+                aria-label="Quitar filtro de recomendado"
+              >
+                <X className="h-3 w-3" aria-hidden="true" />
               </button>
             </span>
           )}
