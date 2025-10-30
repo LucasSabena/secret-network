@@ -59,6 +59,15 @@ export function BlogHeroImproved({ totalPosts, featuredSeries }: BlogHeroImprove
                   </Link>
                 ))}
               </div>
+              <div className="mt-4">
+                <Link
+                  href="/blog/serie"
+                  className="inline-flex items-center gap-2 text-sm text-primary hover:underline"
+                >
+                  <Layers className="h-4 w-4" />
+                  Ver todas las series
+                </Link>
+              </div>
             </div>
           )}
         </div>
