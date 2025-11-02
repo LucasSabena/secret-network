@@ -48,6 +48,9 @@ next-env.d.ts
 # Scripts de utilidad
 /scripts
 
+# Kiro IDE (archivos de configuración y specs locales)
+/.kiro
+
 # Info para Copilot (algunos archivos, pero NO copilot-instructions.md)
 /.github/GUIA_CARGA_BASE_DATOS.md
 /.github/QUICK_START.md
