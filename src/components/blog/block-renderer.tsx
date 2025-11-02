@@ -896,10 +896,16 @@ function CalloutBlockComponent({ block }: { block: Extract<Block, { type: 'callo
     gray: 'bg-gray-50 border-gray-200 text-gray-900 dark:bg-gray-950 dark:border-gray-800 dark:text-gray-100',
   };
 
+  const Icon = block.data.icon ? getIcon(block.data.icon) : null;
+
   return (
     <div className={cn('my-6 p-4 border-l-4 rounded-r-lg', colorClasses[block.data.color])}>
       <div className="flex gap-3">
-        <span className="text-2xl">{block.data.icon}</span>
+        {Icon && (
+          <div className="flex-shrink-0">
+            <Icon className="h-6 w-6" />
+          </div>
+        )}
         <div className="flex-1 whitespace-pre-wrap">{block.data.content}</div>
       </div>
     </div>
