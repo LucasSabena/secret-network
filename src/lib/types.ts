@@ -340,6 +340,257 @@ export type EmbedBlock = {
   style?: BlockStyle;
 };
 
+// Bloque de tarjeta de blog
+export type BlogCardBlock = {
+  id: string;
+  type: 'blog-card';
+  data: {
+    blogId: number;
+    variant?: 'small' | 'default' | 'large';
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de grid de blogs
+export type BlogsGridBlock = {
+  id: string;
+  type: 'blogs-grid';
+  data: {
+    blogIds: number[];
+    columns: 2 | 3 | 4;
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de FAQ
+export type FAQBlock = {
+  id: string;
+  type: 'faq';
+  data: {
+    items: Array<{
+      id: string;
+      question: string;
+      answer: string;
+    }>;
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de Pros & Cons
+export type ProsConsBlock = {
+  id: string;
+  type: 'pros-cons';
+  data: {
+    pros: string[];
+    cons: string[];
+    title?: string;
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de Feature List
+export type FeatureListBlock = {
+  id: string;
+  type: 'feature-list';
+  data: {
+    features: Array<{
+      id: string;
+      icon: string; // Nombre del icono de Lucide
+      title: string;
+      description: string;
+    }>;
+    columns: 2 | 3 | 4;
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de Before/After
+export type BeforeAfterBlock = {
+  id: string;
+  type: 'before-after';
+  data: {
+    beforeImage: string;
+    afterImage: string;
+    beforeLabel?: string;
+    afterLabel?: string;
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de Icon Grid
+export type IconGridBlock = {
+  id: string;
+  type: 'icon-grid';
+  data: {
+    items: Array<{
+      id: string;
+      icon: string; // Nombre del icono de Lucide
+      title: string;
+      description?: string;
+    }>;
+    columns: 2 | 3 | 4;
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de Category Card
+export type CategoryCardBlock = {
+  id: string;
+  type: 'category-card';
+  data: {
+    categoryId: number;
+    variant?: 'small' | 'default' | 'large';
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de Author Bio
+export type AuthorBioBlock = {
+  id: string;
+  type: 'author-bio';
+  data: {
+    authorId: number;
+    showSocial?: boolean;
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de Poll/Survey
+export type PollBlock = {
+  id: string;
+  type: 'poll';
+  data: {
+    pollId: string; // ID único para identificar el poll
+    question: string;
+    options: Array<{
+      id: string;
+      text: string;
+    }>;
+    allowMultiple?: boolean;
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de Progress Bar
+export type ProgressBarBlock = {
+  id: string;
+  type: 'progress-bar';
+  data: {
+    items: Array<{
+      id: string;
+      label: string;
+      value: number; // 0-100
+      color?: string;
+    }>;
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de Checklist
+export type ChecklistBlock = {
+  id: string;
+  type: 'checklist';
+  data: {
+    items: Array<{
+      id: string;
+      text: string;
+      checked?: boolean;
+    }>;
+    title?: string;
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de Changelog
+export type ChangelogBlock = {
+  id: string;
+  type: 'changelog';
+  data: {
+    entries: Array<{
+      id: string;
+      version: string;
+      date: string;
+      changes: string[];
+      type?: 'added' | 'fixed' | 'changed' | 'removed';
+    }>;
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de Pricing Table
+export type PricingTableBlock = {
+  id: string;
+  type: 'pricing-table';
+  data: {
+    plans: Array<{
+      id: string;
+      name: string;
+      price: string;
+      period?: string;
+      features: string[];
+      highlighted?: boolean;
+      ctaText?: string;
+      ctaUrl?: string;
+    }>;
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de Testimonial
+export type TestimonialBlock = {
+  id: string;
+  type: 'testimonial';
+  data: {
+    quote: string;
+    author: string;
+    role?: string;
+    company?: string;
+    avatar?: string;
+    rating?: number;
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de Warning/Tip Box
+export type TipBoxBlock = {
+  id: string;
+  type: 'tip-box';
+  data: {
+    type: 'tip' | 'warning' | 'danger' | 'info' | 'success';
+    title?: string;
+    content: string;
+    icon?: string;
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de CTA Banner
+export type CTABannerBlock = {
+  id: string;
+  type: 'cta-banner';
+  data: {
+    title: string;
+    description?: string;
+    ctaText: string;
+    ctaUrl: string;
+    backgroundImage?: string;
+    backgroundColor?: string;
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de Product Showcase
+export type ProductShowcaseBlock = {
+  id: string;
+  type: 'product-showcase';
+  data: {
+    programId: number;
+    features?: string[];
+    ctaText?: string;
+  };
+  style?: BlockStyle;
+};
+
 // Unión de todos los tipos de bloques
 export type Block =
   | TextBlock
@@ -363,7 +614,25 @@ export type Block =
   | TimelineBlock
   | ComparisonBlock
   | FileDownloadBlock
-  | EmbedBlock;
+  | EmbedBlock
+  | BlogCardBlock
+  | BlogsGridBlock
+  | FAQBlock
+  | ProsConsBlock
+  | FeatureListBlock
+  | BeforeAfterBlock
+  | IconGridBlock
+  | CategoryCardBlock
+  | AuthorBioBlock
+  | PollBlock
+  | ProgressBarBlock
+  | ChecklistBlock
+  | ChangelogBlock
+  | PricingTableBlock
+  | TestimonialBlock
+  | TipBoxBlock
+  | CTABannerBlock
+  | ProductShowcaseBlock;
 
 // Tipo para posts del blog
 export type BlogPost = {

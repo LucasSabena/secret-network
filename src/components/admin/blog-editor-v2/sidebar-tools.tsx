@@ -5,12 +5,28 @@ import { useDraggable } from '@dnd-kit/core';
 import { Card } from '@/components/ui/card';
 import { BLOCK_TOOLS, BLOCK_CATEGORIES } from './block-tools';
 import { cn } from '@/lib/utils';
+import { ChevronDown } from 'lucide-react';
+import { useState } from 'react';
 
 export function SidebarTools() {
+  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
+    new Set(Object.keys(BLOCK_CATEGORIES))
+  );
+
+  const toggleCategory = (categoryKey: string) => {
+    const newExpanded = new Set(expandedCategories);
+    if (newExpanded.has(categoryKey)) {
+      newExpanded.delete(categoryKey);
+    } else {
+      newExpanded.add(categoryKey);
+    }
+    setExpandedCategories(newExpanded);
+  };
+
   return (
-    <div className="h-full overflow-y-auto p-4 space-y-6">
+    <div className="h-full overflow-y-auto p-4 space-y-3">
       <div>
-        <h3 className="text-sm font-semibold mb-3 text-muted-foreground uppercase tracking-wide">
+        <h3 className="text-sm font-semibold mb-2 text-muted-foreground uppercase tracking-wide">
           Bloques Disponibles
         </h3>
         <p className="text-xs text-muted-foreground mb-4">
@@ -25,16 +41,31 @@ export function SidebarTools() {
 
         if (categoryTools.length === 0) return null;
 
+        const isExpanded = expandedCategories.has(categoryKey);
+
         return (
-          <div key={categoryKey}>
-            <h4 className={cn('text-xs font-medium mb-2', category.color)}>
-              {category.label}
-            </h4>
-            <div className="space-y-2">
-              {categoryTools.map((tool) => (
-                <DraggableBlockTool key={tool.id} tool={tool} />
-              ))}
-            </div>
+          <div key={categoryKey} className="border rounded-lg overflow-hidden">
+            <button
+              onClick={() => toggleCategory(categoryKey)}
+              className="w-full flex items-center justify-between p-3 hover:bg-accent transition-colors"
+            >
+              <h4 className={cn('text-xs font-medium', category.color)}>
+                {category.label} ({categoryTools.length})
+              </h4>
+              <ChevronDown
+                className={cn(
+                  'h-4 w-4 transition-transform',
+                  isExpanded ? 'rotate-180' : ''
+                )}
+              />
+            </button>
+            {isExpanded && (
+              <div className="p-2 space-y-2 bg-muted/30">
+                {categoryTools.map((tool) => (
+                  <DraggableBlockTool key={tool.id} tool={tool} />
+                ))}
+              </div>
+            )}
           </div>
         );
       })}

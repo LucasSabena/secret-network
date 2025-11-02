@@ -11,7 +11,7 @@ import { supabaseBrowserClient } from '@/lib/supabase-browser';
 import { useToast } from '@/components/ui/use-toast';
 
 interface ImageWithAlt {
-  id: number;
+  id: number | string;
   url: string;
   alt: string | null;
   source: 'blog_post' | 'program';
@@ -22,7 +22,7 @@ interface ImageWithAlt {
 export default function AltTextManager() {
   const [images, setImages] = useState<ImageWithAlt[]>([]);
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState<number | null>(null);
+  const [saving, setSaving] = useState<number | string | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export default function AltTextManager() {
       // Cargar imágenes de posts de blog
       const { data: blogPosts, error: blogError } = await supabase
         .from('blog_posts')
-        .select('id, titulo, imagen_portada_url, imagen_portada_alt')
+        .select('id, titulo, imagen_portada_url, imagen_portada_alt, contenido_bloques')
         .not('imagen_portada_url', 'is', null);
 
       if (blogError) {
@@ -56,7 +56,7 @@ export default function AltTextManager() {
 
       const allImages: ImageWithAlt[] = [];
 
-      // Agregar imágenes de blog
+      // Agregar imágenes de blog (portadas)
       blogPosts?.forEach((post) => {
         allImages.push({
           id: post.id,
@@ -64,8 +64,65 @@ export default function AltTextManager() {
           alt: post.imagen_portada_alt || null,
           source: 'blog_post',
           sourceId: post.id,
-          sourceName: post.titulo,
+          sourceName: `${post.titulo} (Portada)`,
         });
+
+        // Extraer imágenes de los bloques
+        if (post.contenido_bloques && Array.isArray(post.contenido_bloques)) {
+          post.contenido_bloques.forEach((block: any, index: number) => {
+            // Bloque de imagen individual
+            if (block.type === 'image' && block.data?.url) {
+              allImages.push({
+                id: `${post.id}-block-${index}`,
+                url: block.data.url,
+                alt: block.data.alt || null,
+                source: 'blog_post',
+                sourceId: post.id,
+                sourceName: `${post.titulo} (Bloque imagen #${index + 1})`,
+              });
+            }
+
+            // Grid de imágenes
+            if (block.type === 'images-grid' && block.data?.images) {
+              block.data.images.forEach((img: any, imgIndex: number) => {
+                if (img.url) {
+                  allImages.push({
+                    id: `${post.id}-grid-${index}-${imgIndex}`,
+                    url: img.url,
+                    alt: img.alt || null,
+                    source: 'blog_post',
+                    sourceId: post.id,
+                    sourceName: `${post.titulo} (Grid #${index + 1}, imagen ${imgIndex + 1})`,
+                  });
+                }
+              });
+            }
+
+            // Before/After
+            if (block.type === 'before-after') {
+              if (block.data?.beforeImage) {
+                allImages.push({
+                  id: `${post.id}-before-${index}`,
+                  url: block.data.beforeImage,
+                  alt: block.data.beforeLabel || null,
+                  source: 'blog_post',
+                  sourceId: post.id,
+                  sourceName: `${post.titulo} (Before/After - Antes)`,
+                });
+              }
+              if (block.data?.afterImage) {
+                allImages.push({
+                  id: `${post.id}-after-${index}`,
+                  url: block.data.afterImage,
+                  alt: block.data.afterLabel || null,
+                  source: 'blog_post',
+                  sourceId: post.id,
+                  sourceName: `${post.titulo} (Before/After - Después)`,
+                });
+              }
+            }
+          });
+        }
       });
 
       // Agregar imágenes de programas
@@ -100,12 +157,63 @@ export default function AltTextManager() {
       const supabase = supabaseBrowserClient;
 
       if (image.source === 'blog_post') {
-        const { error } = await supabase
-          .from('blog_posts')
-          .update({ imagen_portada_alt: newAlt })
-          .eq('id', image.sourceId);
+        // Si es la portada
+        if (typeof image.id === 'number') {
+          const { error } = await supabase
+            .from('blog_posts')
+            .update({ imagen_portada_alt: newAlt })
+            .eq('id', image.sourceId);
 
-        if (error) throw error;
+          if (error) throw error;
+        } else {
+          // Es una imagen dentro de un bloque
+          // Necesitamos cargar el post, actualizar el bloque y guardar
+          const { data: post, error: fetchError } = await supabase
+            .from('blog_posts')
+            .select('contenido_bloques')
+            .eq('id', image.sourceId)
+            .single();
+
+          if (fetchError) throw fetchError;
+
+          if (post && post.contenido_bloques) {
+            const blocks = [...post.contenido_bloques];
+            const imageId = String(image.id);
+
+            // Parsear el ID para saber qué bloque actualizar
+            if (imageId.includes('-block-')) {
+              const blockIndex = parseInt(imageId.split('-block-')[1]);
+              if (blocks[blockIndex] && blocks[blockIndex].type === 'image') {
+                blocks[blockIndex].data.alt = newAlt;
+              }
+            } else if (imageId.includes('-grid-')) {
+              const parts = imageId.split('-grid-')[1].split('-');
+              const blockIndex = parseInt(parts[0]);
+              const imgIndex = parseInt(parts[1]);
+              if (blocks[blockIndex] && blocks[blockIndex].type === 'images-grid') {
+                blocks[blockIndex].data.images[imgIndex].alt = newAlt;
+              }
+            } else if (imageId.includes('-before-')) {
+              const blockIndex = parseInt(imageId.split('-before-')[1]);
+              if (blocks[blockIndex] && blocks[blockIndex].type === 'before-after') {
+                blocks[blockIndex].data.beforeLabel = newAlt;
+              }
+            } else if (imageId.includes('-after-')) {
+              const blockIndex = parseInt(imageId.split('-after-')[1]);
+              if (blocks[blockIndex] && blocks[blockIndex].type === 'before-after') {
+                blocks[blockIndex].data.afterLabel = newAlt;
+              }
+            }
+
+            // Guardar bloques actualizados
+            const { error: updateError } = await supabase
+              .from('blog_posts')
+              .update({ contenido_bloques: blocks })
+              .eq('id', image.sourceId);
+
+            if (updateError) throw updateError;
+          }
+        }
       } else {
         // Guardar en programas
         const { error } = await supabase

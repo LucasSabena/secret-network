@@ -10,6 +10,9 @@ export const revalidate = 3600; // 1 hora
 export const metadata: Metadata = {
   title: 'Herramientas Open Source | Secret Network',
   description: 'Descubre las mejores herramientas de diseño open source. Software libre y de código abierto para creativos y diseñadores.',
+  alternates: {
+    canonical: 'https://secretnetwork.co/open-source'
+  }
 };
 
 export default async function OpenSourcePage() {

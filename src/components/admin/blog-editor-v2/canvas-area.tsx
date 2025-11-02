@@ -17,6 +17,8 @@ import { RichTextBlockEditor } from '../blocks/rich-text-block-editor';
 import { ImageBlockEditorV2 } from '../blocks/image-block-editor-v2';
 import { ProgramCardBlockEditor } from '../blocks/program-card-block-editor';
 import { ProgramsGridBlockEditor } from '../blocks/programs-grid-block-editor';
+import { BlogCardBlockEditor } from '../blocks/blog-card-block-editor';
+import { BlogsGridBlockEditor } from '../blocks/blogs-grid-block-editor';
 import { ImagesGridBlockEditor } from '../blocks/images-grid-block-editor';
 import { TabsBlockEditor } from '../blocks/tabs-block-editor';
 import { AccordionBlockEditor } from '../blocks/accordion-block-editor';
@@ -35,6 +37,26 @@ import { TimelineBlockEditor } from '../blocks/timeline-block-editor';
 import { ComparisonBlockEditor } from '../blocks/comparison-block-editor';
 import { FileDownloadBlockEditor } from '../blocks/file-download-block-editor';
 import { EmbedBlockEditor } from '../blocks/embed-block-editor';
+import { FAQBlockEditor } from '../blocks/faq-block-editor';
+import { ProsConsBlockEditor } from '../blocks/pros-cons-block-editor';
+import {
+  FeatureListBlockEditor,
+  BeforeAfterBlockEditor,
+  IconGridBlockEditor,
+  CategoryCardBlockEditor,
+  AuthorBioBlockEditor,
+  PollBlockEditor,
+} from '../blocks/new-blocks-editors';
+import {
+  ProgressBarBlockEditor,
+  ChecklistBlockEditor,
+  ChangelogBlockEditor,
+  PricingTableBlockEditor,
+  TestimonialBlockEditor,
+  TipBoxBlockEditor,
+  CTABannerBlockEditor,
+  ProductShowcaseBlockEditor,
+} from '../blocks/new-blocks-editors-part2';
 
 interface CanvasAreaProps {
   blocks: Block[];
@@ -184,6 +206,20 @@ function BlockEditorRenderer({
           onChange={onChange as any}
         />
       );
+    case 'blog-card':
+      return (
+        <BlogCardBlockEditor
+          block={block as Extract<Block, { type: 'blog-card' }>}
+          onChange={onChange as any}
+        />
+      );
+    case 'blogs-grid':
+      return (
+        <BlogsGridBlockEditor
+          block={block as Extract<Block, { type: 'blogs-grid' }>}
+          onChange={onChange as any}
+        />
+      );
     case 'images-grid':
       return (
         <ImagesGridBlockEditor
@@ -310,6 +346,118 @@ function BlockEditorRenderer({
           onChange={onChange as any}
         />
       );
+    case 'faq':
+      return (
+        <FAQBlockEditor
+          block={block as Extract<Block, { type: 'faq' }>}
+          onChange={onChange as any}
+        />
+      );
+    case 'pros-cons':
+      return (
+        <ProsConsBlockEditor
+          block={block as Extract<Block, { type: 'pros-cons' }>}
+          onChange={onChange as any}
+        />
+      );
+    case 'feature-list':
+      return (
+        <FeatureListBlockEditor
+          block={block as Extract<Block, { type: 'feature-list' }>}
+          onChange={onChange as any}
+        />
+      );
+    case 'before-after':
+      return (
+        <BeforeAfterBlockEditor
+          block={block as Extract<Block, { type: 'before-after' }>}
+          onChange={onChange as any}
+        />
+      );
+    case 'icon-grid':
+      return (
+        <IconGridBlockEditor
+          block={block as Extract<Block, { type: 'icon-grid' }>}
+          onChange={onChange as any}
+        />
+      );
+    case 'category-card':
+      return (
+        <CategoryCardBlockEditor
+          block={block as Extract<Block, { type: 'category-card' }>}
+          onChange={onChange as any}
+        />
+      );
+    case 'author-bio':
+      return (
+        <AuthorBioBlockEditor
+          block={block as Extract<Block, { type: 'author-bio' }>}
+          onChange={onChange as any}
+        />
+      );
+    case 'poll':
+      return (
+        <PollBlockEditor
+          block={block as Extract<Block, { type: 'poll' }>}
+          onChange={onChange as any}
+        />
+      );
+    case 'progress-bar':
+      return (
+        <ProgressBarBlockEditor
+          block={block as Extract<Block, { type: 'progress-bar' }>}
+          onChange={onChange as any}
+        />
+      );
+    case 'checklist':
+      return (
+        <ChecklistBlockEditor
+          block={block as Extract<Block, { type: 'checklist' }>}
+          onChange={onChange as any}
+        />
+      );
+    case 'changelog':
+      return (
+        <ChangelogBlockEditor
+          block={block as Extract<Block, { type: 'changelog' }>}
+          onChange={onChange as any}
+        />
+      );
+    case 'pricing-table':
+      return (
+        <PricingTableBlockEditor
+          block={block as Extract<Block, { type: 'pricing-table' }>}
+          onChange={onChange as any}
+        />
+      );
+    case 'testimonial':
+      return (
+        <TestimonialBlockEditor
+          block={block as Extract<Block, { type: 'testimonial' }>}
+          onChange={onChange as any}
+        />
+      );
+    case 'tip-box':
+      return (
+        <TipBoxBlockEditor
+          block={block as Extract<Block, { type: 'tip-box' }>}
+          onChange={onChange as any}
+        />
+      );
+    case 'cta-banner':
+      return (
+        <CTABannerBlockEditor
+          block={block as Extract<Block, { type: 'cta-banner' }>}
+          onChange={onChange as any}
+        />
+      );
+    case 'product-showcase':
+      return (
+        <ProductShowcaseBlockEditor
+          block={block as Extract<Block, { type: 'product-showcase' }>}
+          onChange={onChange as any}
+        />
+      );
     default:
       return <div className="text-muted-foreground">Tipo de bloque desconocido</div>;
   }
@@ -366,6 +514,116 @@ function BlockPreview({ block }: { block: Block }) {
           {block.data.programIds.length > 0 
             ? `${block.data.programIds.length} programas en ${block.data.columns} columnas`
             : 'Sin programas seleccionados'}
+        </div>
+      );
+    case 'blog-card':
+      return (
+        <div className="text-sm text-muted-foreground">
+          {block.data.blogId ? `Blog ID: ${block.data.blogId}` : 'No seleccionado'}
+        </div>
+      );
+    case 'blogs-grid':
+      return (
+        <div className="text-sm text-muted-foreground">
+          {block.data.blogIds.length > 0 
+            ? `${block.data.blogIds.length} blogs en ${block.data.columns} columnas`
+            : 'Sin blogs seleccionados'}
+        </div>
+      );
+    case 'faq':
+      return (
+        <div className="text-sm text-muted-foreground">
+          {block.data.items.length} preguntas frecuentes
+        </div>
+      );
+    case 'pros-cons':
+      return (
+        <div className="text-sm text-muted-foreground">
+          {block.data.pros.length} pros, {block.data.cons.length} cons
+        </div>
+      );
+    case 'feature-list':
+      return (
+        <div className="text-sm text-muted-foreground">
+          {block.data.features.length} features en {block.data.columns} columnas
+        </div>
+      );
+    case 'before-after':
+      return (
+        <div className="text-sm text-muted-foreground">
+          Comparador: {block.data.beforeLabel || 'Antes'} / {block.data.afterLabel || 'Después'}
+        </div>
+      );
+    case 'icon-grid':
+      return (
+        <div className="text-sm text-muted-foreground">
+          {block.data.items.length} items en {block.data.columns} columnas
+        </div>
+      );
+    case 'category-card':
+      return (
+        <div className="text-sm text-muted-foreground">
+          Categoría ID: {block.data.categoryId}
+        </div>
+      );
+    case 'author-bio':
+      return (
+        <div className="text-sm text-muted-foreground">
+          Bio del autor ID: {block.data.authorId}
+        </div>
+      );
+    case 'poll':
+      return (
+        <div className="text-sm text-muted-foreground">
+          Encuesta: {block.data.question} ({block.data.options.length} opciones)
+        </div>
+      );
+    case 'progress-bar':
+      return (
+        <div className="text-sm text-muted-foreground">
+          {block.data.items.length} barras de progreso
+        </div>
+      );
+    case 'checklist':
+      return (
+        <div className="text-sm text-muted-foreground">
+          Checklist: {block.data.items.length} items
+        </div>
+      );
+    case 'changelog':
+      return (
+        <div className="text-sm text-muted-foreground">
+          Changelog: {block.data.entries.length} versiones
+        </div>
+      );
+    case 'pricing-table':
+      return (
+        <div className="text-sm text-muted-foreground">
+          {block.data.plans.length} planes de precios
+        </div>
+      );
+    case 'testimonial':
+      return (
+        <div className="text-sm text-muted-foreground italic">
+          "{block.data.quote.substring(0, 50)}..." — {block.data.author}
+        </div>
+      );
+    case 'tip-box':
+      return (
+        <div className="text-sm text-muted-foreground">
+          {block.data.type.toUpperCase()}: {block.data.title || block.data.content.substring(0, 40)}
+        </div>
+      );
+    case 'cta-banner':
+      return (
+        <div className="text-sm text-muted-foreground">
+          Banner: {block.data.title}
+        </div>
+      );
+    case 'product-showcase':
+      return (
+        <div className="text-sm text-muted-foreground">
+          Showcase del programa ID: {block.data.programId}
         </div>
       );
     case 'images-grid':

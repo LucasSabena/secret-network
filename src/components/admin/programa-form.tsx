@@ -22,8 +22,19 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/components/ui/use-toast';
-import RichTextEditor from './rich-text-editor';
+import dynamic from 'next/dynamic';
 import { Programa, Categoria, Plataforma, ModeloDePrecio } from '@/lib/types';
+
+// Lazy load del editor pesado (solo se carga cuando se necesita)
+const RichTextEditor = dynamic(
+  () => import('./rich-text-editor'),
+  { 
+    ssr: false,
+    loading: () => (
+      <div className="h-96 bg-muted rounded animate-pulse" />
+    )
+  }
+);
 import { supabaseBrowserClient } from '@/lib/supabase-browser';
 import { uploadToCloudinary } from '@/lib/cloudinary-upload';
 import { validateImageFile } from '@/lib/cloudinary-config';

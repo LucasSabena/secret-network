@@ -20,6 +20,7 @@ import { ProgramCard } from "@/components/shared/program-card";
 import { FormattedText } from "@/components/shared/formatted-text";
 import { JsonLdSoftware } from "@/components/seo/json-ld-software";
 import { JsonLdBreadcrumb } from "@/components/seo/json-ld-breadcrumb";
+import { JsonLdFAQ, type FAQ } from "@/components/seo/json-ld-faq";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -99,6 +100,9 @@ export async function generateMetadata({ params }: ProgramPageProps): Promise<Me
       programa.es_open_source ? 'gratis' : '',
       `alternativa ${programa.nombre}`,
     ],
+    alternates: {
+      canonical: `https://secretnetwork.co/programas/${slug}`
+    },
     openGraph: {
       title: `${programa.nombre} - Secret Network`,
       description,
@@ -263,6 +267,34 @@ export default async function ProgramPage({ params }: ProgramPageProps) {
     alternativas
   };
 
+  // Generar FAQs dinámicamente basadas en el programa
+  const faqs: FAQ[] = [
+    {
+      question: `¿Es gratis ${programaCompleto.nombre}?`,
+      answer: programaCompleto.es_open_source 
+        ? `Sí, ${programaCompleto.nombre} es completamente gratuito y de código abierto.`
+        : `${programaCompleto.nombre} ofrece diferentes modelos de precios. Consulta su sitio oficial para más detalles.`
+    },
+    {
+      question: `¿Para qué plataformas está disponible ${programaCompleto.nombre}?`,
+      answer: plataformas.length > 0
+        ? `${programaCompleto.nombre} está disponible para: ${plataformas.map(p => p.nombre).join(', ')}.`
+        : `Consulta el sitio oficial de ${programaCompleto.nombre} para conocer las plataformas compatibles.`
+    },
+    ...(programaCompleto.alternativas.length > 0 ? [{
+      question: `¿Cuáles son las mejores alternativas a ${programaCompleto.nombre}?`,
+      answer: `Algunas alternativas populares a ${programaCompleto.nombre} incluyen: ${programaCompleto.alternativas.slice(0, 3).map((a: any) => a.nombre).join(', ')}.`
+    }] : []),
+    ...(programaCompleto.dificultad ? [{
+      question: `¿Es difícil aprender a usar ${programaCompleto.nombre}?`,
+      answer: programaCompleto.dificultad === 'Facil'
+        ? `${programaCompleto.nombre} es considerado fácil de aprender, ideal para principiantes.`
+        : programaCompleto.dificultad === 'Intermedio'
+        ? `${programaCompleto.nombre} tiene una curva de aprendizaje moderada, adecuado para usuarios con algo de experiencia.`
+        : `${programaCompleto.nombre} es una herramienta avanzada que requiere tiempo y práctica para dominar.`
+    }] : [])
+  ];
+
   return (
     <main className="min-h-screen">
       {/* JSON-LD Structured Data */}
@@ -277,6 +309,7 @@ export default async function ProgramPage({ params }: ProgramPageProps) {
           { name: programaCompleto.nombre, url: `/programas/${programaCompleto.slug}` },
         ]}
       />
+      <JsonLdFAQ faqs={faqs} />
 
       {/* Breadcrumb Navigation */}
       <div className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -315,10 +348,12 @@ export default async function ProgramPage({ params }: ProgramPageProps) {
                 <div className="relative h-24 w-24 overflow-hidden rounded-2xl bg-muted ring-1 ring-border md:h-32 md:w-32">
                   <Image
                     src={programaCompleto.icono_url}
-                    alt={`${programaCompleto.nombre} icon`}
+                    alt={`${programaCompleto.nombre} - ${programaCompleto.categoria?.nombre || 'Herramienta de diseño'}${programaCompleto.es_open_source ? ' gratis y open source' : ''}`}
+                    title={programaCompleto.nombre}
                     fill
                     className="object-contain p-2"
                     priority
+                    fetchPriority="high"
                   />
                 </div>
               ) : (
@@ -397,7 +432,8 @@ export default async function ProgramPage({ params }: ProgramPageProps) {
                   <div className="relative aspect-video overflow-hidden rounded-lg bg-muted">
                     <Image
                       src={programaCompleto.captura_url}
-                      alt={`${programaCompleto.nombre} screenshot`}
+                      alt={`Captura de pantalla de ${programaCompleto.nombre} mostrando su interfaz y funcionalidades principales`}
+                      title={`Captura de pantalla de ${programaCompleto.nombre}`}
                       fill
                       className="object-cover"
                     />

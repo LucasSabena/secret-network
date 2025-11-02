@@ -212,6 +212,18 @@ export function EditorHelp() {
                 </p>
               </div>
               <div>
+                <strong className="text-primary">Blog</strong>
+                <p className="text-xs text-muted-foreground">
+                  Tarjeta de blog relacionado
+                </p>
+              </div>
+              <div>
+                <strong className="text-primary">Grid Blogs</strong>
+                <p className="text-xs text-muted-foreground">
+                  Múltiples blogs en columnas
+                </p>
+              </div>
+              <div>
                 <strong className="text-primary">Pestañas</strong>
                 <p className="text-xs text-muted-foreground">
                   Contenido organizado en tabs

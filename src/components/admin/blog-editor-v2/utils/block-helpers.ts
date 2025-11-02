@@ -44,6 +44,24 @@ export const BLOCK_ICONS: Record<string, any> = {
   accordion: Folder,
   'program-card': Package,
   'programs-grid': Grid3x3,
+  'blog-card': FileText,
+  'blogs-grid': Grid3x3,
+  faq: MessageSquare,
+  'pros-cons': BarChart3,
+  'feature-list': Layers,
+  'before-after': Grid3x3,
+  'icon-grid': Grid3x3,
+  'category-card': Folder,
+  'author-bio': Package,
+  poll: BarChart3,
+  'progress-bar': BarChart3,
+  checklist: List,
+  changelog: Calendar,
+  'pricing-table': Table,
+  testimonial: Quote,
+  'tip-box': AlertCircle,
+  'cta-banner': MessageSquare,
+  'product-showcase': Package,
 };
 
 export const BLOCK_LABELS: Record<string, string> = {
@@ -68,6 +86,24 @@ export const BLOCK_LABELS: Record<string, string> = {
   accordion: 'Acordeón',
   'program-card': 'Programa',
   'programs-grid': 'Grid Programas',
+  'blog-card': 'Blog',
+  'blogs-grid': 'Grid Blogs',
+  faq: 'FAQ',
+  'pros-cons': 'Pros & Cons',
+  'feature-list': 'Lista de Features',
+  'before-after': 'Before/After',
+  'icon-grid': 'Grid de Iconos',
+  'category-card': 'Categoría',
+  'author-bio': 'Bio de Autor',
+  poll: 'Encuesta',
+  'progress-bar': 'Barra de Progreso',
+  checklist: 'Checklist',
+  changelog: 'Changelog',
+  'pricing-table': 'Tabla de Precios',
+  testimonial: 'Testimonio',
+  'tip-box': 'Caja de Tip',
+  'cta-banner': 'Banner CTA',
+  'product-showcase': 'Showcase Programa',
 };
 
 export function getBlockIcon(type: string) {
@@ -101,6 +137,42 @@ export function getBlockPreview(block: Block): string {
       return `Programa ID: ${block.data.programId}`;
     case 'programs-grid':
       return `${block.data.programIds?.length || 0} programas`;
+    case 'blogs-grid':
+      return `${block.data.blogIds?.length || 0} blogs`;
+    case 'blog-card':
+      return `Blog ID: ${block.data.blogId}`;
+    case 'faq':
+      return `${block.data.items?.length || 0} preguntas`;
+    case 'pros-cons':
+      return `${block.data.pros?.length || 0} pros, ${block.data.cons?.length || 0} cons`;
+    case 'feature-list':
+      return `${block.data.features?.length || 0} features`;
+    case 'before-after':
+      return 'Comparador de imágenes';
+    case 'icon-grid':
+      return `${block.data.items?.length || 0} items`;
+    case 'category-card':
+      return `Categoría ID: ${block.data.categoryId}`;
+    case 'author-bio':
+      return `Autor ID: ${block.data.authorId}`;
+    case 'poll':
+      return `${block.data.options?.length || 0} opciones`;
+    case 'progress-bar':
+      return `${block.data.items?.length || 0} barras`;
+    case 'checklist':
+      return `${block.data.items?.length || 0} items`;
+    case 'changelog':
+      return `${block.data.entries?.length || 0} versiones`;
+    case 'pricing-table':
+      return `${block.data.plans?.length || 0} planes`;
+    case 'testimonial':
+      return block.data.author || 'Testimonio';
+    case 'tip-box':
+      return block.data.type || 'Tip';
+    case 'cta-banner':
+      return block.data.title || 'Banner CTA';
+    case 'product-showcase':
+      return `Programa ID: ${block.data.programId}`;
     case 'images-grid':
       return `${block.data.images?.length || 0} imágenes`;
     case 'tabs':

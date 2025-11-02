@@ -116,6 +116,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${categoria.nombre} - Secret Network`,
     description: categoria.descripcion || `Explora todas las herramientas de ${categoria.nombre}`,
+    alternates: {
+      canonical: `https://secretnetwork.co/categorias/${categoriaSlug}`
+    },
   };
 }
 

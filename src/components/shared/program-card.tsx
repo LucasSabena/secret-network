@@ -65,7 +65,8 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
                 <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-muted">
                   <Image
                     src={optimizeImageUrl(program.icono_url, { width: 48, quality: 60 })}
-                    alt={`${program.nombre} icon`}
+                    alt={`${program.nombre} - ${program.categoria?.nombre || 'Herramienta de diseño'}${program.es_open_source ? ' gratis y open source' : ''}`}
+                    title={program.nombre}
                     fill
                     className="object-contain p-1.5"
                     sizes="48px"
@@ -161,7 +162,8 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
                     <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-muted">
                       <Image
                         src={program.icono_url}
-                        alt={`${program.nombre} icon`}
+                        alt={`${program.nombre} - ${program.categoria?.nombre || 'Herramienta de diseño'}${program.es_open_source ? ' gratis y open source' : ''}`}
+                        title={program.nombre}
                         fill
                         className="object-contain p-1"
                         sizes="48px"
@@ -206,7 +208,8 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
                   {program.captura_url ? (
                     <Image
                       src={program.captura_url}
-                      alt={`${program.nombre} screenshot`}
+                      alt={`Captura de pantalla de ${program.nombre} mostrando su interfaz y funcionalidades`}
+                      title={`Captura de pantalla de ${program.nombre}`}
                       fill
                       className="object-cover"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -239,7 +242,8 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
                     <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-muted">
                       <Image
                         src={program.icono_url}
-                        alt={`${program.nombre} icon`}
+                        alt={`${program.nombre} - ${program.categoria?.nombre || 'Herramienta de diseño'}${program.es_open_source ? ' gratis y open source' : ''}`}
+                        title={program.nombre}
                         fill
                         className="object-contain p-1"
                         sizes="48px"
@@ -337,7 +341,8 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
               <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-muted">
                 <Image
                   src={program.icono_url}
-                  alt={`${program.nombre} icon`}
+                  alt={`${program.nombre} - ${program.categoria?.nombre || 'Herramienta de diseño'}${program.es_open_source ? ' gratis y open source' : ''}`}
+                  title={program.nombre}
                   fill
                   className="object-contain p-1"
                   sizes="48px"

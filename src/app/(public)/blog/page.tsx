@@ -16,6 +16,9 @@ export const dynamicParams = true; // Permitir nuevos params
 export const metadata: Metadata = {
   title: 'Secret Blog | Secret Network',
   description: 'Artículos, tutoriales y recursos sobre diseño, creatividad y herramientas digitales.',
+  alternates: {
+    canonical: 'https://secretnetwork.co/blog'
+  }
 };
 
 function createSlug(text: string): string {

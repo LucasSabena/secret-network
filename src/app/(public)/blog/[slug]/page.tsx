@@ -75,6 +75,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     description: post.descripcion_corta || post.titulo,
     keywords: post.tags || [],
     authors: post.autor ? [{ name: post.autor }] : [{ name: 'Secret Network' }],
+    alternates: {
+      canonical: `https://secretnetwork.co/blog/${slug}`
+    },
     openGraph: {
       type: 'article',
       title: post.titulo,

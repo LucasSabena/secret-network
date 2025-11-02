@@ -24,9 +24,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import RichTextEditor from './rich-text-editor';
-import { BlockEditor } from './blocks/block-editor';
+import dynamic from 'next/dynamic';
 import { BlockRenderer } from '@/components/blog/block-renderer';
+
+// Lazy load del editor pesado (solo se carga cuando se necesita)
+const BlockEditor = dynamic(
+  () => import('./blocks/block-editor').then(mod => ({ default: mod.BlockEditor })),
+  { 
+    ssr: false,
+    loading: () => (
+      <div className="space-y-4 animate-pulse">
+        <div className="h-12 bg-muted rounded" />
+        <div className="h-96 bg-muted rounded" />
+      </div>
+    )
+  }
+);
 import BlogStats from './blog-stats';
 import { BlogPost, Autor, Block } from '@/lib/types';
 import { supabaseBrowserClient } from '@/lib/supabase-browser';

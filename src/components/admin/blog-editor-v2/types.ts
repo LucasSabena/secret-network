@@ -11,7 +11,7 @@ export interface BlockToolDefinition {
   label: string;
   icon: React.ComponentType<{ className?: string }>;
   description: string;
-  category: 'content' | 'media' | 'interactive' | 'layout';
+  category: 'content' | 'media' | 'interactive' | 'layout' | 'advanced' | 'conversion';
 }
 
 export interface EditorState {

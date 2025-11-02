@@ -3,7 +3,30 @@
 
 import { Block, BlockStyle } from '@/lib/types';
 import { ProgramCard } from '@/components/shared/program-card';
+import { BlogCard } from '@/components/blog/blog-card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import {
+  FAQBlockComponent,
+  ProsConsBlockComponent,
+  FeatureListBlockComponent,
+  BeforeAfterBlockComponent,
+  IconGridBlockComponent,
+  CategoryCardBlockComponent,
+} from './new-blocks-renderers';
+import {
+  AuthorBioBlockComponent,
+  PollBlockComponent,
+  ProgressBarBlockComponent,
+  ChecklistBlockComponent,
+  ChangelogBlockComponent,
+} from './new-blocks-renderers-part2';
+import {
+  PricingTableBlockComponent,
+  TestimonialBlockComponent,
+  TipBoxBlockComponent,
+  CTABannerBlockComponent,
+  ProductShowcaseBlockComponent,
+} from './new-blocks-renderers-part3';
 import { Separator } from '@/components/ui/separator';
 import { Info, AlertTriangle, CheckCircle2, XCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -236,6 +259,126 @@ function ImagesGridBlockComponent({ block }: { block: Extract<Block, { type: 'im
               </figcaption>
             )}
           </figure>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Componente para renderizar tarjeta de blog
+function BlogCardBlockComponent({ block }: { block: Extract<Block, { type: 'blog-card' }> }) {
+  const [blog, setBlog] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchBlog = async () => {
+      const { data } = await supabaseBrowserClient
+        .from('blog_posts')
+        .select('*')
+        .eq('id', block.data.blogId)
+        .single();
+
+      setBlog(data);
+      setLoading(false);
+    };
+
+    if (block.data.blogId) {
+      fetchBlog();
+    } else {
+      setLoading(false);
+    }
+  }, [block.data.blogId]);
+
+  if (loading) {
+    return <div className="animate-pulse bg-muted h-32 rounded-lg my-8" />;
+  }
+
+  if (!blog) {
+    return (
+      <div className="my-8 p-4 border-2 border-dashed border-muted rounded-lg text-center text-muted-foreground">
+        Selecciona un blog para mostrar
+      </div>
+    );
+  }
+
+  return (
+    <div className="my-8 not-prose">
+      <BlogCard post={blog} />
+    </div>
+  );
+}
+
+// Componente para renderizar grid de blogs
+function BlogsGridBlockComponent({ block }: { block: Extract<Block, { type: 'blogs-grid' }> }) {
+  const [blogs, setBlogs] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      if (block.data.blogIds.length === 0) {
+        setLoading(false);
+        return;
+      }
+
+      const { data } = await supabaseBrowserClient
+        .from('blog_posts')
+        .select('*')
+        .in('id', block.data.blogIds);
+
+      if (data) {
+        // Ordenar según el orden en blogIds
+        const ordered = block.data.blogIds
+          .map(id => data.find(b => b.id === id))
+          .filter(Boolean);
+        setBlogs(ordered);
+      }
+      setLoading(false);
+    };
+
+    fetchBlogs();
+  }, [block.data.blogIds]);
+
+  if (loading) {
+    return (
+      <div className={cn(
+        'my-8 grid gap-4',
+        block.data.columns === 2 && 'grid-cols-1 md:grid-cols-2',
+        block.data.columns === 3 && 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
+        block.data.columns === 4 && 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4'
+      )}>
+        {Array.from({ length: block.data.blogIds.length }).map((_, i) => (
+          <div key={i} className="animate-pulse bg-muted h-64 rounded-lg" />
+        ))}
+      </div>
+    );
+  }
+
+  if (blogs.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="my-8 not-prose">
+      {/* Mobile: Scroll horizontal */}
+      <div className="md:hidden overflow-x-auto pb-4 -mx-4 px-4">
+        <div className="flex gap-4" style={{ width: 'max-content' }}>
+          {blogs.map((blog) => (
+            <div key={blog.id} style={{ width: '280px' }}>
+              <BlogCard post={blog} />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Desktop: Grid normal */}
+      <div className={cn(
+        'hidden md:grid gap-4',
+        block.data.columns === 2 && 'md:grid-cols-2',
+        block.data.columns === 3 && 'md:grid-cols-2 lg:grid-cols-3',
+        block.data.columns === 4 && 'md:grid-cols-2 lg:grid-cols-4'
+      )}>
+        {blogs.map((blog) => (
+          <BlogCard key={blog.id} post={blog} />
         ))}
       </div>
     </div>
@@ -933,6 +1076,10 @@ export function BlockRenderer({ blocks }: BlockRendererProps) {
               return <ProgramCardBlockComponent key={block.id} block={block} />;
             case 'programs-grid':
               return <ProgramsGridBlockComponent key={block.id} block={block} />;
+            case 'blog-card':
+              return <BlogCardBlockComponent key={block.id} block={block} />;
+            case 'blogs-grid':
+              return <BlogsGridBlockComponent key={block.id} block={block} />;
             case 'images-grid':
               return <ImagesGridBlockComponent key={block.id} block={block} />;
             case 'tabs':
@@ -971,6 +1118,38 @@ export function BlockRenderer({ blocks }: BlockRendererProps) {
               return <FileDownloadBlockComponent key={block.id} block={block} />;
             case 'embed':
               return <EmbedBlockComponent key={block.id} block={block} />;
+            case 'faq':
+              return <FAQBlockComponent key={block.id} block={block} />;
+            case 'pros-cons':
+              return <ProsConsBlockComponent key={block.id} block={block} />;
+            case 'feature-list':
+              return <FeatureListBlockComponent key={block.id} block={block} />;
+            case 'before-after':
+              return <BeforeAfterBlockComponent key={block.id} block={block} />;
+            case 'icon-grid':
+              return <IconGridBlockComponent key={block.id} block={block} />;
+            case 'category-card':
+              return <CategoryCardBlockComponent key={block.id} block={block} />;
+            case 'author-bio':
+              return <AuthorBioBlockComponent key={block.id} block={block} />;
+            case 'poll':
+              return <PollBlockComponent key={block.id} block={block} />;
+            case 'progress-bar':
+              return <ProgressBarBlockComponent key={block.id} block={block} />;
+            case 'checklist':
+              return <ChecklistBlockComponent key={block.id} block={block} />;
+            case 'changelog':
+              return <ChangelogBlockComponent key={block.id} block={block} />;
+            case 'pricing-table':
+              return <PricingTableBlockComponent key={block.id} block={block} />;
+            case 'testimonial':
+              return <TestimonialBlockComponent key={block.id} block={block} />;
+            case 'tip-box':
+              return <TipBoxBlockComponent key={block.id} block={block} />;
+            case 'cta-banner':
+              return <CTABannerBlockComponent key={block.id} block={block} />;
+            case 'product-showcase':
+              return <ProductShowcaseBlockComponent key={block.id} block={block} />;
             default:
               console.warn('Unknown block type:', (block as any).type);
               return null;

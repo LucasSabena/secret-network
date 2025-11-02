@@ -50,6 +50,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: `Alternativas a ${programa.nombre} | Secret Network`,
     description: `Descubre las mejores alternativas a ${programa.nombre}. Compara características, precios y funcionalidades.`,
+    alternates: {
+      canonical: `https://secretnetwork.co/alternativas/${slug}`
+    },
   };
 }
 

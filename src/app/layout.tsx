@@ -1,7 +1,9 @@
 // FILE: src/app/layout.tsx
 
 import type { Metadata } from "next";
-import { Space_Grotesk } from "next/font/google";
+// ✅ FUENTES LOCALES ACTIVADAS
+import { spaceGrotesk as fontSpaceGrotesk } from "./fonts";
+// import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/layout/theme-provider";
@@ -23,13 +25,14 @@ import { Analytics } from "@vercel/analytics/next";
 import { SmoothScrollWrapper } from "@/components/layout/smooth-scroll-wrapper";
 import { ServiceWorkerRegister } from "@/components/shared/service-worker-register";
 
-const fontSpaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-space-grotesk",
-  display: 'swap', // Evita bloqueo de renderizado
-  preload: true,
-  fallback: ['system-ui', '-apple-system', 'sans-serif'],
-});
+// ✅ Fuentes locales - ya no necesitamos este bloque
+// const fontSpaceGrotesk = Space_Grotesk({
+//   subsets: ["latin"],
+//   variable: "--font-space-grotesk",
+//   display: 'swap',
+//   preload: true,
+//   fallback: ['system-ui', '-apple-system', 'sans-serif'],
+// });
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://secretnetwork.co'),
@@ -117,14 +120,21 @@ export default function RootLayout({
       <head>
         {/* Preconnect para mejorar rendimiento */}
         {/* Preconnect crítico - establece conexión temprana */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* ✅ Google Fonts eliminado - usando fuentes locales */}
         <link rel="preconnect" href="https://fkfoapcvmuxycebsnttd.supabase.co" />
         <link rel="preconnect" href="https://res.cloudinary.com" />
         
         {/* DNS prefetch para recursos secundarios */}
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        
+        {/* RSS Feed */}
+        <link 
+          rel="alternate" 
+          type="application/rss+xml" 
+          title="Secret Network Blog" 
+          href="/rss.xml" 
+        />
         
         {/* PWA y favicons */}
         <meta name="theme-color" content="#ff3399" media="(prefers-color-scheme: dark)" />

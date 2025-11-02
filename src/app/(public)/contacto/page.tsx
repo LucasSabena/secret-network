@@ -10,6 +10,9 @@ export const metadata: Metadata = {
   title: 'Contacto',
   description:
     'Ponte en contacto con Secret Network. Reporta errores, sugiere programas, conviértete en sponsor o simplemente saluda.',
+  alternates: {
+    canonical: 'https://secretnetwork.co/contacto'
+  },
   openGraph: {
     title: 'Contacto | Secret Network',
     description:

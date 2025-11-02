@@ -6,7 +6,23 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { BlogPost, Autor, Block } from '@/lib/types';
 import { supabaseBrowserClient } from '@/lib/supabase-browser';
 import { Loader2 } from 'lucide-react';
-import { BlogEditorFullPage } from '@/components/admin/blog-editor-v2/blog-editor-full-page';
+import dynamic from 'next/dynamic';
+
+// ✅ LAZY LOAD: Editor pesado (~200KB) - solo carga cuando se necesita
+const BlogEditorFullPage = dynamic(
+  () => import('@/components/admin/blog-editor-v2/blog-editor-full-page').then(mod => ({ default: mod.BlogEditorFullPage })),
+  { 
+    ssr: false, // No renderizar en servidor
+    loading: () => (
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-center space-y-4">
+          <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto" />
+          <p className="text-sm text-muted-foreground">Cargando editor...</p>
+        </div>
+      </div>
+    )
+  }
+);
 
 function EditorContent() {
   const router = useRouter();
