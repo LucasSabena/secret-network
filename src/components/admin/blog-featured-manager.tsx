@@ -1,9 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Star, GripVertical, Loader2 } from 'lucide-react';
+import { Star, GripVertical, Loader2, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabaseBrowserClient } from '@/lib/supabase-browser';
 import {
@@ -239,8 +240,20 @@ export function BlogFeaturedManager() {
     );
   }
 
+  const router = useRouter();
+
   return (
     <div className="space-y-6">
+      {/* Botón de regreso */}
+      <Button 
+        variant="ghost" 
+        onClick={() => router.push('/admin')}
+        className="gap-2"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Volver a Blogs
+      </Button>
+
       <Card>
         <CardHeader>
           <CardTitle>Posts Destacados en Blog</CardTitle>

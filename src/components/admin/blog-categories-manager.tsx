@@ -2,6 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -21,7 +22,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/use-toast';
-import { Plus, Edit, Trash2, GripVertical } from 'lucide-react';
+import { Plus, Edit, Trash2, GripVertical, ArrowLeft } from 'lucide-react';
 import { supabaseBrowserClient } from '@/lib/supabase-browser';
 
 interface Category {
@@ -35,6 +36,7 @@ interface Category {
 }
 
 export function BlogCategoriesManager() {
+  const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
@@ -160,12 +162,28 @@ export function BlogCategoriesManager() {
 
   return (
     <div className="space-y-6">
-      {/* Botón Crear */}
-      <div className="flex justify-end">
+      {/* Botón de regreso */}
+      <Button 
+        variant="ghost" 
+        onClick={() => router.push('/admin')}
+        className="gap-2"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Volver a Blogs
+      </Button>
+
+      {/* Header y Botón Crear */}
+      <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
+        <div>
+          <h2 className="text-2xl font-bold">Categorías de Blog</h2>
+          <p className="text-sm text-muted-foreground">
+            Gestiona las categorías para organizar tus posts
+          </p>
+        </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button onClick={() => setEditingCategory(null)}>
-              <Plus className="h-4 w-4 mr-2" />
+            <Button onClick={() => setEditingCategory(null)} className="gap-2">
+              <Plus className="h-4 w-4" />
               Nueva Categoría
             </Button>
           </DialogTrigger>

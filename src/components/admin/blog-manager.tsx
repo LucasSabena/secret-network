@@ -2,11 +2,19 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Plus, Search, Edit, Trash2, Loader2, Copy, FileText, Eye, Star } from 'lucide-react';
+import { Plus, Search, Edit, Trash2, Loader2, Copy, FileText, Eye, Star, MoreVertical, FolderOpen, Tag, Sparkles, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -335,7 +343,8 @@ export default function BlogManager() {
       <EditorAnnouncement />
       
       <div className="flex flex-col gap-4">
-        <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
+        {/* Barra de búsqueda y acciones principales */}
+        <div className="flex flex-col sm:flex-row gap-3 justify-between items-stretch sm:items-center">
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
@@ -345,58 +354,59 @@ export default function BlogManager() {
               className="pl-10"
             />
           </div>
+          
           <div className="flex gap-2">
+            {/* Botón principal: Nuevo Post */}
             <Button 
-              onClick={() => setIsJsonImporterOpen(true)} 
-              variant="outline"
-              className="gap-2"
+              onClick={handleNew} 
+              className="gap-2 bg-pink-500 hover:bg-pink-600 flex-1 sm:flex-none"
             >
-              <FileText className="h-4 w-4" />
-              <span className="hidden sm:inline">Importar JSON</span>
+              <Plus className="h-4 w-4" />
+              <span>Nuevo Post</span>
             </Button>
-            <Button onClick={handleNew} className="gap-2 bg-pink-500 hover:bg-pink-600">
-            <Plus className="h-4 w-4" />
-            Nuevo Post
-          </Button>
-          <Button 
-            variant="outline" 
-            className="gap-2"
-            onClick={() => router.push('/admin/blog-series')}
-          >
-            <FileText className="h-4 w-4" />
-            Series
-          </Button>
-          <Button 
-            variant="outline" 
-            className="gap-2"
-            onClick={() => router.push('/admin/blog-featured')}
-          >
-            <Star className="h-4 w-4" />
-            Destacados
-          </Button>
-          <TemplateGallery onSelectTemplate={handleTemplateSelect}>
-            <Button variant="outline" className="gap-2">
-              <FileText className="h-4 w-4" />
-              Desde Template
-            </Button>
-          </TemplateGallery>
-          <Button 
-            variant="outline" 
-            className="gap-2"
-            onClick={() => router.push('/admin/templates')}
-          >
-            <FileText className="h-4 w-4" />
-            Templates
-          </Button>
-          <Button 
-            variant="outline" 
-            className="gap-2"
-            onClick={() => router.push('/admin/blog-categorias')}
-          >
-            <FileText className="h-4 w-4" />
-            Categorías
-          </Button>
-        </div>
+
+            {/* Menú de opciones secundarias */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="gap-2">
+                  <MoreVertical className="h-4 w-4" />
+                  <span className="hidden sm:inline">Más opciones</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>Crear desde</DropdownMenuLabel>
+                <DropdownMenuItem onClick={() => setIsJsonImporterOpen(true)}>
+                  <Upload className="mr-2 h-4 w-4" />
+                  Importar JSON con IA
+                </DropdownMenuItem>
+                <TemplateGallery onSelectTemplate={handleTemplateSelect}>
+                  <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                    <Sparkles className="mr-2 h-4 w-4" />
+                    Desde Template
+                  </DropdownMenuItem>
+                </TemplateGallery>
+                
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel>Gestionar</DropdownMenuLabel>
+                <DropdownMenuItem onClick={() => router.push('/admin/blog-series')}>
+                  <FolderOpen className="mr-2 h-4 w-4" />
+                  Series de Blogs
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push('/admin/blog-featured')}>
+                  <Star className="mr-2 h-4 w-4" />
+                  Posts Destacados
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push('/admin/blog-categorias')}>
+                  <Tag className="mr-2 h-4 w-4" />
+                  Categorías
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push('/admin/templates')}>
+                  <FileText className="mr-2 h-4 w-4" />
+                  Gestionar Templates
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
         
         {/* Filtros */}

@@ -1,10 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { supabaseBrowserClient } from '@/lib/supabase-browser';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Layers, Plus, Edit, Trash2, Eye, Sparkles, ExternalLink, Star, UserPlus, GripVertical } from 'lucide-react';
+import { Layers, Plus, Edit, Trash2, Eye, Sparkles, ExternalLink, Star, UserPlus, GripVertical, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
 import { CreateSerieDialog, EditSerieDialog, AddPostDialog, SERIE_COLORS } from './blog-series-dialogs';
 import {
@@ -593,18 +594,30 @@ export function BlogSeriesManager() {
     );
   }
 
+  const router = useRouter();
+
   return (
     <div className="space-y-6">
+      {/* Botón de regreso */}
+      <Button 
+        variant="ghost" 
+        onClick={() => router.push('/admin')}
+        className="gap-2"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Volver a Blogs
+      </Button>
+
       {/* Header con botón crear */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row gap-4 sm:items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold">Series de Blog</h2>
-          <p className="text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             Gestiona las series de artículos relacionados
           </p>
         </div>
-        <Button onClick={() => setShowCreateDialog(true)}>
-          <Plus className="h-4 w-4 mr-2" />
+        <Button onClick={() => setShowCreateDialog(true)} className="gap-2">
+          <Plus className="h-4 w-4" />
           Crear Serie
         </Button>
       </div>

@@ -2,6 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { supabaseBrowserClient } from '@/lib/supabase-browser';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -16,7 +17,8 @@ import {
   Search,
   FileText,
   Loader2,
-  TrendingUp
+  TrendingUp,
+  ArrowLeft
 } from 'lucide-react';
 import { TemplateEditor } from './template-editor';
 import { Block } from '@/lib/types';
@@ -43,6 +45,7 @@ const CATEGORY_LABELS: Record<string, string> = {
 };
 
 export function TemplateManager() {
+  const router = useRouter();
   const [templates, setTemplates] = useState<Template[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -127,16 +130,26 @@ export function TemplateManager() {
   }
 
   return (
-    <div className="container mx-auto py-8 px-4">
-      <div className="flex items-center justify-between mb-8">
+    <div className="container mx-auto py-8 px-4 space-y-6">
+      {/* Botón de regreso */}
+      <Button 
+        variant="ghost" 
+        onClick={() => router.push('/admin')}
+        className="gap-2"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Volver a Blogs
+      </Button>
+
+      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Gestión de Templates</h1>
-          <p className="text-muted-foreground mt-2">
+          <p className="text-sm text-muted-foreground mt-2">
             Administra las plantillas de posts del blog
           </p>
         </div>
-        <Button onClick={() => setIsCreating(true)}>
-          <Plus className="mr-2 h-4 w-4" />
+        <Button onClick={() => setIsCreating(true)} className="gap-2">
+          <Plus className="h-4 w-4" />
           Nuevo Template
         </Button>
       </div>
@@ -155,6 +168,7 @@ export function TemplateManager() {
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
           className="px-4 py-2 border rounded-md"
+          aria-label="Filtrar por categoría"
         >
           <option value="all">Todas las categorías</option>
           {Object.entries(CATEGORY_LABELS).map(([key, label]) => (
