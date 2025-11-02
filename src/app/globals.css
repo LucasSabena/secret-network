@@ -178,6 +178,31 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
+  /* Text wrap balance para mejor legibilidad */
+  h1, h2, h3, h4, h5, h6,
+  p, li, blockquote, figcaption,
+  .text-balance {
+    /* Fallback para navegadores antiguos */
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+    /* Propiedad moderna para balance de texto */
+    text-wrap: balance;
+  }
+
+  /* Pretty para párrafos largos (mejor distribución de líneas) */
+  article p,
+  .prose p {
+    text-wrap: pretty;
+  }
+  
+  /* Soporte para navegadores que no soportan text-wrap */
+  @supports not (text-wrap: balance) {
+    h1, h2, h3, h4, h5, h6 {
+      max-width: 50ch; /* Limitar ancho para mejor legibilidad */
+    }
+  }
+
   /* Estilos de selección de texto */
   ::selection {
     background-color: hsl(var(--primary) / 0.3);
