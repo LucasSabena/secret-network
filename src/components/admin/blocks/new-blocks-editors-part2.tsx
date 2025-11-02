@@ -12,6 +12,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card } from '@/components/ui/card';
 import { Plus, X } from 'lucide-react';
+import { IconPicker } from './icon-picker';
 import { useState, useEffect } from 'react';
 import { supabaseBrowserClient } from '@/lib/supabase-browser';
 import {
@@ -669,13 +670,12 @@ export function TipBoxBlockEditor({ block, onChange }: TipBoxBlockEditorProps) {
       </div>
 
       <div>
-        <Label>Icono (opcional)</Label>
-        <Input
+        <IconPicker
           value={block.data.icon || ''}
-          onChange={(e) =>
-            onChange({ ...block, data: { ...block.data, icon: e.target.value } })
+          onChange={(icon) =>
+            onChange({ ...block, data: { ...block.data, icon } })
           }
-          placeholder="Nombre del icono de Lucide"
+          label="Icono (opcional)"
         />
       </div>
     </div>

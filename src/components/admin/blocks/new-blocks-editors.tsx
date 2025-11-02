@@ -13,6 +13,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card } from '@/components/ui/card';
 import { Plus, X, GripVertical, Upload, Columns2, Columns3, Columns4 } from 'lucide-react';
+import { IconPicker } from './icon-picker';
 import { useState, useEffect } from 'react';
 import { supabaseBrowserClient } from '@/lib/supabase-browser';
 import {
@@ -108,10 +109,10 @@ export function FeatureListBlockEditor({ block, onChange }: FeatureListBlockEdit
           <Card key={feature.id} className="p-3">
             <div className="flex gap-2">
               <div className="flex-1 space-y-2">
-                <Input
+                <IconPicker
                   value={feature.icon}
-                  onChange={(e) => updateFeature(feature.id, 'icon', e.target.value)}
-                  placeholder="Nombre del icono (ej: Check, Star)"
+                  onChange={(icon) => updateFeature(feature.id, 'icon', icon)}
+                  label="Icono"
                 />
                 <Input
                   value={feature.title}
@@ -267,10 +268,10 @@ export function IconGridBlockEditor({ block, onChange }: IconGridBlockEditorProp
           <Card key={item.id} className="p-3">
             <div className="flex gap-2">
               <div className="flex-1 space-y-2">
-                <Input
+                <IconPicker
                   value={item.icon}
-                  onChange={(e) => updateItem(item.id, 'icon', e.target.value)}
-                  placeholder="Icono (ej: Star)"
+                  onChange={(icon) => updateItem(item.id, 'icon', icon)}
+                  label="Icono"
                 />
                 <Input
                   value={item.title}

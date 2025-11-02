@@ -822,6 +822,7 @@ function TableBlockComponent({ block }: { block: Extract<Block, { type: 'table' 
       <table className="w-full border-collapse">
         <thead>
           <tr>
+            {block.data.showLeftHeaders && <th className="border p-3 bg-muted"></th>}
             {block.data.headers.map((header, i) => (
               <th key={i} className="border p-3 bg-muted font-semibold text-left">
                 {header}
@@ -832,6 +833,11 @@ function TableBlockComponent({ block }: { block: Extract<Block, { type: 'table' 
         <tbody>
           {block.data.rows.map((row, rowIndex) => (
             <tr key={rowIndex} className={block.data.striped && rowIndex % 2 === 1 ? 'bg-muted/50' : ''}>
+              {block.data.showLeftHeaders && (
+                <th className="border p-3 bg-muted font-semibold text-left">
+                  {block.data.leftHeaders?.[rowIndex] || ''}
+                </th>
+              )}
               {row.map((cell, cellIndex) => (
                 <td key={cellIndex} className="border p-3">
                   {cell}
@@ -840,6 +846,18 @@ function TableBlockComponent({ block }: { block: Extract<Block, { type: 'table' 
             </tr>
           ))}
         </tbody>
+        {block.data.showFooter && block.data.footerRow && (
+          <tfoot>
+            <tr>
+              {block.data.showLeftHeaders && <td className="border p-3 bg-muted"></td>}
+              {block.data.footerRow.map((cell, i) => (
+                <td key={i} className="border p-3 bg-muted font-semibold">
+                  {cell}
+                </td>
+              ))}
+            </tr>
+          </tfoot>
+        )}
       </table>
     </div>
   );

@@ -211,6 +211,10 @@ export type TableBlock = {
     headers: string[];
     rows: string[][];
     striped?: boolean;
+    showLeftHeaders?: boolean;
+    leftHeaders?: string[];
+    showFooter?: boolean;
+    footerRow?: string[];
   };
   style?: BlockStyle;
 };
