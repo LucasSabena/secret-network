@@ -18,28 +18,13 @@ interface IconPickerProps {
   label?: string;
 }
 
-// Lista de iconos más comunes y útiles
-const POPULAR_ICONS = [
-  'Check', 'X', 'Star', 'Heart', 'ThumbsUp', 'ThumbsDown',
-  'AlertCircle', 'Info', 'HelpCircle', 'Lightbulb', 'Zap',
-  'Sparkles', 'Award', 'Target', 'TrendingUp', 'TrendingDown',
-  'ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown',
-  'ChevronRight', 'ChevronLeft', 'ChevronUp', 'ChevronDown',
-  'Plus', 'Minus', 'Edit', 'Trash2', 'Save', 'Download',
-  'Upload', 'Share', 'Copy', 'Link', 'ExternalLink',
-  'Eye', 'EyeOff', 'Lock', 'Unlock', 'User', 'Users',
-  'Mail', 'Phone', 'MapPin', 'Calendar', 'Clock',
-  'Home', 'Settings', 'Search', 'Filter', 'Menu',
-  'Grid', 'List', 'Layers', 'Package', 'ShoppingCart',
-  'CreditCard', 'DollarSign', 'Percent', 'Gift',
-  'Image', 'File', 'FileText', 'Folder', 'FolderOpen',
-  'Code', 'Terminal', 'Database', 'Server', 'Cloud',
-  'Wifi', 'Bluetooth', 'Battery', 'Power', 'Cpu',
-  'Smartphone', 'Tablet', 'Laptop', 'Monitor', 'Tv',
-  'Camera', 'Video', 'Music', 'Mic', 'Volume2',
-  'Bell', 'MessageCircle', 'MessageSquare', 'Send',
-  'Bookmark', 'Flag', 'Tag', 'Hash', 'AtSign',
-];
+// Obtener TODOS los iconos disponibles de Lucide
+const ALL_ICONS = Object.keys(LucideIcons).filter(
+  (key) => 
+    key !== 'default' && 
+    key !== 'createLucideIcon' &&
+    typeof (LucideIcons as any)[key] === 'function'
+).sort();
 
 export function IconPicker({ value, onChange, label }: IconPickerProps) {
   const [open, setOpen] = useState(false);
@@ -50,10 +35,10 @@ export function IconPicker({ value, onChange, label }: IconPickerProps) {
 
   // Filtrar iconos por búsqueda
   const filteredIcons = useMemo(() => {
-    if (!search) return POPULAR_ICONS;
+    if (!search) return ALL_ICONS;
     
     const searchLower = search.toLowerCase();
-    return POPULAR_ICONS.filter(name => 
+    return ALL_ICONS.filter(name => 
       name.toLowerCase().includes(searchLower)
     );
   }, [search]);
@@ -109,32 +94,37 @@ export function IconPicker({ value, onChange, label }: IconPickerProps) {
             </div>
           </div>
 
-          <div className="max-h-[300px] overflow-y-auto p-2">
+          <div className="max-h-[400px] overflow-y-auto p-2">
             {filteredIcons.length === 0 ? (
               <div className="text-center py-6 text-sm text-muted-foreground">
                 No se encontraron iconos
               </div>
             ) : (
-              <div className="grid grid-cols-6 gap-1">
-                {filteredIcons.map((iconName) => {
-                  const Icon = (LucideIcons as any)[iconName];
-                  if (!Icon) return null;
+              <>
+                <div className="text-xs text-muted-foreground mb-2 px-2">
+                  {filteredIcons.length} {filteredIcons.length === 1 ? 'icono' : 'iconos'} disponibles
+                </div>
+                <div className="grid grid-cols-6 gap-1">
+                  {filteredIcons.map((iconName) => {
+                    const Icon = (LucideIcons as any)[iconName];
+                    if (!Icon) return null;
 
-                  return (
-                    <Button
-                      key={iconName}
-                      variant={value === iconName ? 'default' : 'ghost'}
-                      size="icon"
-                      className="h-10 w-10"
-                      onClick={() => handleSelect(iconName)}
-                      title={iconName}
-                      type="button"
-                    >
-                      <Icon className="h-4 w-4" />
-                    </Button>
-                  );
-                })}
-              </div>
+                    return (
+                      <Button
+                        key={iconName}
+                        variant={value === iconName ? 'default' : 'ghost'}
+                        size="icon"
+                        className="h-10 w-10"
+                        onClick={() => handleSelect(iconName)}
+                        title={iconName}
+                        type="button"
+                      >
+                        <Icon className="h-4 w-4" />
+                      </Button>
+                    );
+                  })}
+                </div>
+              </>
             )}
           </div>
 
