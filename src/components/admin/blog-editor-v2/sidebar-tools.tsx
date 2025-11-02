@@ -3,15 +3,18 @@
 
 import { useDraggable } from '@dnd-kit/core';
 import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import { BLOCK_TOOLS, BLOCK_CATEGORIES } from './block-tools';
 import { cn } from '@/lib/utils';
-import { ChevronDown } from 'lucide-react';
-import { useState } from 'react';
+import { ChevronDown, Search, X } from 'lucide-react';
+import { useState, useMemo } from 'react';
+import { Button } from '@/components/ui/button';
 
 export function SidebarTools() {
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
     new Set(Object.keys(BLOCK_CATEGORIES))
   );
+  const [searchQuery, setSearchQuery] = useState('');
 
   const toggleCategory = (categoryKey: string) => {
     const newExpanded = new Set(expandedCategories);
@@ -23,25 +26,74 @@ export function SidebarTools() {
     setExpandedCategories(newExpanded);
   };
 
+  // Filtrar bloques según búsqueda
+  const filteredTools = useMemo(() => {
+    if (!searchQuery.trim()) return BLOCK_TOOLS;
+    
+    const query = searchQuery.toLowerCase();
+    return BLOCK_TOOLS.filter(tool => 
+      tool.label.toLowerCase().includes(query) ||
+      tool.description.toLowerCase().includes(query) ||
+      tool.type.toLowerCase().includes(query)
+    );
+  }, [searchQuery]);
+
+  // Auto-expandir categorías cuando hay búsqueda
+  const displayCategories = useMemo(() => {
+    if (searchQuery.trim()) {
+      return new Set(Object.keys(BLOCK_CATEGORIES));
+    }
+    return expandedCategories;
+  }, [searchQuery, expandedCategories]);
+
   return (
     <div className="h-full overflow-y-auto p-4 space-y-3">
       <div>
         <h3 className="text-sm font-semibold mb-2 text-muted-foreground uppercase tracking-wide">
           Bloques Disponibles
         </h3>
-        <p className="text-xs text-muted-foreground mb-4">
+        <p className="text-xs text-muted-foreground mb-3">
           Arrastra los bloques al canvas para construir tu post
         </p>
+        
+        {/* Buscador */}
+        <div className="relative mb-4">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="text"
+            placeholder="Buscar bloques..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-9 pr-9 h-9 text-sm"
+          />
+          {searchQuery && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setSearchQuery('')}
+              className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 p-0"
+            >
+              <X className="h-3 w-3" />
+            </Button>
+          )}
+        </div>
+
+        {/* Contador de resultados */}
+        {searchQuery && (
+          <p className="text-xs text-muted-foreground mb-3">
+            {filteredTools.length} {filteredTools.length === 1 ? 'resultado' : 'resultados'}
+          </p>
+        )}
       </div>
 
       {Object.entries(BLOCK_CATEGORIES).map(([categoryKey, category]) => {
-        const categoryTools = BLOCK_TOOLS.filter(
+        const categoryTools = filteredTools.filter(
           (tool) => tool.category === categoryKey
         );
 
         if (categoryTools.length === 0) return null;
 
-        const isExpanded = expandedCategories.has(categoryKey);
+        const isExpanded = displayCategories.has(categoryKey);
 
         return (
           <div key={categoryKey} className="border rounded-lg overflow-hidden">
