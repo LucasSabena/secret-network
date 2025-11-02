@@ -989,13 +989,13 @@ function StatsBlockComponent({ block }: { block: Extract<Block, { type: 'stats' 
   console.log('[StatsBlock] Rendering with', block.data.stats.length, 'stats');
   return (
     <div className={cn('my-8 grid gap-4', `grid-cols-1 md:grid-cols-${block.data.columns}`)}>
-      {block.data.stats.map((stat, i) => {
+      {block.data.stats.filter(stat => stat != null).map((stat, i) => {
         try {
           console.log(`[StatsBlock] Stat ${i}:`, { label: stat.label, icon: stat.icon, hasIcon: !!stat.icon });
-          const Icon = getIcon(stat.icon);
+          const Icon = stat?.icon ? getIcon(stat.icon) : null;
           return (
             <div key={i} className="border rounded-lg p-6 text-center">
-              {stat.icon && (
+              {Icon && (
                 <div className="flex justify-center mb-3">
                   <Icon className="h-8 w-8 text-primary" />
                 </div>
