@@ -1,0 +1,311 @@
+{
+  "metadata": {
+    "titulo": "Test de Importación: Las 10 Mejores Herramientas de IA en 2025",
+    "slug": "test-importacion-herramientas-ia-2025",
+    "descripcion_corta": "Descubre las herramientas de IA más poderosas del 2025. Guía completa con comparaciones, precios y casos de uso reales.",
+    "autor": "Equipo Editorial",
+    "tags": ["IA", "Herramientas", "Tecnología", "2025"],
+    "imagen_portada_url": "",
+    "imagen_portada_alt": "Collage de interfaces de herramientas de IA modernas",
+    "publicado": false,
+    "fecha_publicacion": "2025-01-15T10:00:00Z"
+  },
+  
+  "bloques": [
+    {
+      "type": "text",
+      "data": {
+        "format": "h1",
+        "content": "Las 10 Mejores Herramientas de IA en 2025"
+      }
+    },
+    {
+      "type": "text",
+      "data": {
+        "format": "paragraph",
+        "content": "La <strong>inteligencia artificial</strong> ha revolucionado la forma en que trabajamos. En esta guía, exploraremos las <em>10 herramientas más poderosas</em> que están transformando industrias en 2025."
+      }
+    },
+    {
+      "type": "callout",
+      "data": {
+        "icon": "💡",
+        "content": "Esta guía está actualizada a enero 2025 con las últimas herramientas y características.",
+        "color": "blue"
+      }
+    },
+    {
+      "type": "text",
+      "data": {
+        "format": "h2",
+        "content": "¿Por qué usar herramientas de IA?"
+      }
+    },
+    {
+      "type": "feature-list",
+      "data": {
+        "features": [
+          {
+            "id": "feat-1",
+            "icon": "Zap",
+            "title": "Automatización",
+            "description": "Automatiza tareas repetitivas y ahorra tiempo"
+          },
+          {
+            "id": "feat-2",
+            "icon": "TrendingUp",
+            "title": "Productividad",
+            "description": "Aumenta tu productividad hasta 10x"
+          },
+          {
+            "id": "feat-3",
+            "icon": "Sparkles",
+            "title": "Creatividad",
+            "description": "Genera contenido creativo en segundos"
+          },
+          {
+            "id": "feat-4",
+            "icon": "Target",
+            "title": "Precisión",
+            "description": "Resultados más precisos y consistentes"
+          }
+        ],
+        "columns": 2
+      }
+    },
+    {
+      "type": "text",
+      "data": {
+        "format": "h2",
+        "content": "Ventajas y Desventajas de las Herramientas de IA"
+      }
+    },
+    {
+      "type": "pros-cons",
+      "data": {
+        "title": "Análisis General",
+        "pros": [
+          "Ahorro de tiempo significativo en tareas repetitivas",
+          "Mejora la calidad y consistencia del trabajo",
+          "Acceso a capacidades antes imposibles",
+          "Escalabilidad sin límites",
+          "Reducción de errores humanos"
+        ],
+        "cons": [
+          "Curva de aprendizaje inicial",
+          "Costos de suscripción mensuales",
+          "Dependencia de conexión a internet",
+          "Preocupaciones sobre privacidad de datos"
+        ]
+      }
+    },
+    {
+      "type": "text",
+      "data": {
+        "format": "h2",
+        "content": "Comparación de Herramientas"
+      }
+    },
+    {
+      "type": "table",
+      "data": {
+        "headers": ["Herramienta", "Categoría", "Precio", "Rating"],
+        "rows": [
+          ["ChatGPT", "Texto", "$20/mes", "⭐⭐⭐⭐⭐"],
+          ["Midjourney", "Imágenes", "$30/mes", "⭐⭐⭐⭐⭐"],
+          ["GitHub Copilot", "Código", "$10/mes", "⭐⭐⭐⭐"],
+          ["Jasper", "Marketing", "$49/mes", "⭐⭐⭐⭐"],
+          ["Runway", "Video", "$35/mes", "⭐⭐⭐⭐"]
+        ],
+        "striped": true,
+        "showLeftHeaders": false,
+        "leftHeaders": [],
+        "showFooter": false,
+        "footerRow": []
+      }
+    },
+    {
+      "type": "text",
+      "data": {
+        "format": "h2",
+        "content": "Preguntas Frecuentes"
+      }
+    },
+    {
+      "type": "faq",
+      "data": {
+        "items": [
+          {
+            "id": "faq-1",
+            "question": "¿Necesito conocimientos técnicos para usar estas herramientas?",
+            "answer": "No necesariamente. La mayoría de las herramientas modernas de IA están diseñadas para ser <strong>intuitivas y fáciles de usar</strong>. Sin embargo, algunas herramientas especializadas pueden requerir conocimientos básicos."
+          },
+          {
+            "id": "faq-2",
+            "question": "¿Son seguras estas herramientas con mis datos?",
+            "answer": "Las herramientas principales cumplen con <em>estándares de seguridad</em> como GDPR y SOC 2. Siempre revisa la política de privacidad antes de compartir información sensible."
+          },
+          {
+            "id": "faq-3",
+            "question": "¿Puedo usar estas herramientas gratis?",
+            "answer": "Muchas ofrecen <strong>planes gratuitos</strong> con limitaciones. Los planes pagos desbloquean características avanzadas y mayor capacidad de uso."
+          },
+          {
+            "id": "faq-4",
+            "question": "¿Cuál es la mejor herramienta para principiantes?",
+            "answer": "ChatGPT es excelente para comenzar debido a su <strong>interfaz simple</strong> y versatilidad. Puedes usarlo para múltiples tareas sin necesidad de configuración compleja."
+          }
+        ]
+      }
+    },
+    {
+      "type": "text",
+      "data": {
+        "format": "h2",
+        "content": "Planes y Precios"
+      }
+    },
+    {
+      "type": "pricing-table",
+      "data": {
+        "plans": [
+          {
+            "id": "plan-free",
+            "name": "Gratis",
+            "price": "$0",
+            "period": "/mes",
+            "features": [
+              "Acceso básico a herramientas",
+              "Límite de uso diario",
+              "Soporte por email",
+              "Actualizaciones básicas"
+            ],
+            "highlighted": false,
+            "ctaText": "Comenzar Gratis",
+            "ctaUrl": ""
+          },
+          {
+            "id": "plan-pro",
+            "name": "Profesional",
+            "price": "$29",
+            "period": "/mes",
+            "features": [
+              "Acceso ilimitado",
+              "Todas las herramientas premium",
+              "Soporte prioritario 24/7",
+              "API access",
+              "Integraciones avanzadas"
+            ],
+            "highlighted": true,
+            "ctaText": "Probar 14 días gratis",
+            "ctaUrl": ""
+          },
+          {
+            "id": "plan-team",
+            "name": "Equipos",
+            "price": "$99",
+            "period": "/mes",
+            "features": [
+              "Todo de Profesional",
+              "Hasta 10 usuarios",
+              "Workspace compartido",
+              "Admin dashboard",
+              "Facturación centralizada"
+            ],
+            "highlighted": false,
+            "ctaText": "Contactar Ventas",
+            "ctaUrl": ""
+          }
+        ]
+      }
+    },
+    {
+      "type": "text",
+      "data": {
+        "format": "h2",
+        "content": "Consejos para Aprovechar al Máximo las Herramientas de IA"
+      }
+    },
+    {
+      "type": "tip-box",
+      "data": {
+        "type": "tip",
+        "title": "Empieza con prompts claros",
+        "content": "La calidad de los resultados depende de la <strong>claridad de tus instrucciones</strong>. Sé específico sobre lo que necesitas y proporciona contexto relevante.",
+        "icon": "Lightbulb"
+      }
+    },
+    {
+      "type": "tip-box",
+      "data": {
+        "type": "success",
+        "title": "Experimenta y aprende",
+        "content": "No tengas miedo de probar diferentes enfoques. La mayoría de las herramientas tienen <strong>planes gratuitos</strong> perfectos para experimentar.",
+        "icon": "CheckCircle"
+      }
+    },
+    {
+      "type": "tip-box",
+      "data": {
+        "type": "warning",
+        "title": "Revisa siempre los resultados",
+        "content": "Aunque las IA son poderosas, pueden cometer errores. Siempre <strong>revisa y valida</strong> el contenido generado antes de usarlo.",
+        "icon": "AlertTriangle"
+      }
+    },
+    {
+      "type": "text",
+      "data": {
+        "format": "h2",
+        "content": "Estadísticas del Mercado"
+      }
+    },
+    {
+      "type": "stats",
+      "data": {
+        "stats": [
+          {
+            "label": "Usuarios Activos",
+            "value": "500M+",
+            "icon": "Users"
+          },
+          {
+            "label": "Empresas Usando IA",
+            "value": "85%",
+            "icon": "Building"
+          },
+          {
+            "label": "Ahorro de Tiempo",
+            "value": "40%",
+            "icon": "Clock"
+          }
+        ],
+        "columns": 3
+      }
+    },
+    {
+      "type": "separator",
+      "data": {
+        "style": "solid"
+      }
+    },
+    {
+      "type": "cta-banner",
+      "data": {
+        "title": "¿Listo para transformar tu trabajo con IA?",
+        "description": "Únete a millones de profesionales que ya están usando estas herramientas para <strong>trabajar más rápido y mejor</strong>.",
+        "ctaText": "Comenzar Ahora",
+        "ctaUrl": "",
+        "backgroundColor": "#3b82f6",
+        "backgroundImage": ""
+      }
+    },
+    {
+      "type": "text",
+      "data": {
+        "format": "paragraph",
+        "content": "¿Tienes preguntas sobre estas herramientas? Déjanos un comentario y te ayudaremos a elegir la mejor opción para ti."
+      }
+    }
+  ]
+}

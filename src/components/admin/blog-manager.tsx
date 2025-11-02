@@ -21,6 +21,7 @@ import { BlogPost, Block } from '@/lib/types';
 import { BlogQuickCreate } from './blog-editor-v2/blog-quick-create';
 import { EditorAnnouncement } from './blog-editor-v2/editor-announcement';
 import { TemplateGallery } from './blog-editor-v2/template-gallery';
+import { BlogJsonImporter } from './blog-json-importer';
 import { supabaseBrowserClient } from '@/lib/supabase-browser';
 import { BlogCategoryBadge } from '@/components/blog/blog-category-badge';
 import { BlogStatusBadge } from './blog-status-badge';
@@ -36,6 +37,7 @@ export default function BlogManager() {
   const [sortBy, setSortBy] = useState<string>('date-desc');
   const [categories, setCategories] = useState<any[]>([]);
   const [isQuickCreateOpen, setIsQuickCreateOpen] = useState(false);
+  const [isJsonImporterOpen, setIsJsonImporterOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [postToDelete, setPostToDelete] = useState<number | null>(null);
   const [postToDuplicate, setPostToDuplicate] = useState<BlogPost | null>(null);
@@ -213,6 +215,53 @@ export default function BlogManager() {
     setIsQuickCreateOpen(true);
   }
 
+  async function handleJsonImport(data: { metadata: any; blocks: Block[] }) {
+    try {
+      const supabase = supabaseBrowserClient;
+      
+      const newPost = {
+        titulo: data.metadata.titulo,
+        slug: data.metadata.slug,
+        descripcion_corta: data.metadata.descripcion_corta,
+        contenido: '',
+        contenido_bloques: data.blocks,
+        imagen_portada_url: data.metadata.imagen_portada_url || null,
+        imagen_portada_alt: data.metadata.imagen_portada_alt || null,
+        autor: data.metadata.autor || null,
+        publicado: data.metadata.publicado || false,
+        tags: data.metadata.tags || [],
+        fecha_publicacion: data.metadata.fecha_publicacion || new Date().toISOString(),
+        actualizado_en: new Date().toISOString(),
+      };
+
+      const { data: insertedPost, error } = await supabase
+        .from('blog_posts')
+        .insert([newPost])
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      toast({
+        title: 'Blog importado',
+        description: 'El blog ha sido importado exitosamente',
+      });
+
+      setIsJsonImporterOpen(false);
+      loadPosts();
+      
+      // Abrir el post importado para completar campos manuales
+      router.push(`/admin/blog/editor?id=${insertedPost.id}`);
+    } catch (error) {
+      console.error('Error importing blog:', error);
+      toast({
+        title: 'Error',
+        description: 'No se pudo importar el blog',
+        variant: 'destructive',
+      });
+    }
+  }
+
   function handleEdit(post: BlogPost) {
     router.push(`/admin/blog/editor?id=${post.id}`);
   }
@@ -297,6 +346,14 @@ export default function BlogManager() {
             />
           </div>
           <div className="flex gap-2">
+            <Button 
+              onClick={() => setIsJsonImporterOpen(true)} 
+              variant="outline"
+              className="gap-2"
+            >
+              <FileText className="h-4 w-4" />
+              <span className="hidden sm:inline">Importar JSON</span>
+            </Button>
             <Button onClick={handleNew} className="gap-2 bg-pink-500 hover:bg-pink-600">
             <Plus className="h-4 w-4" />
             Nuevo Post
@@ -477,6 +534,22 @@ export default function BlogManager() {
           loadPosts();
         }}
       />
+
+      {/* Dialog del importador JSON */}
+      <AlertDialog open={isJsonImporterOpen} onOpenChange={setIsJsonImporterOpen}>
+        <AlertDialogContent className="max-w-2xl">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Importar Blog desde JSON</AlertDialogTitle>
+            <AlertDialogDescription>
+              Sube un archivo JSON generado por IA para crear un blog automáticamente
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <BlogJsonImporter onImport={handleJsonImport} />
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cerrar</AlertDialogCancel>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {/* Dialog de confirmación para eliminar */}
       <AlertDialog open={postToDelete !== null} onOpenChange={() => setPostToDelete(null)}>
