@@ -156,7 +156,7 @@ export function TipBoxBlockComponent({ block }: { block: Extract<Block, { type: 
     },
   };
 
-  const config = typeConfig[block.data.type];
+  const config = typeConfig[block.data.type] || typeConfig.info; // Fallback a 'info' si el tipo no existe
   const IconComponent = block.data.icon ? getIcon(block.data.icon) : config.icon;
 
   return (

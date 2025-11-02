@@ -139,7 +139,7 @@ export function FeatureListBlockComponent({ block }: { block: Extract<Block, { t
       )}
     >
       {block.data.features.map((feature) => {
-        const Icon = getIcon(feature.icon);
+        const Icon = getIcon(feature.icon || 'Check'); // Fallback a 'Check' si no hay icon
         return (
           <div key={feature.id} className="flex gap-4">
             <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -250,7 +250,7 @@ export function IconGridBlockComponent({ block }: { block: Extract<Block, { type
       )}
     >
       {block.data.items.map((item) => {
-        const Icon = getIcon(item.icon);
+        const Icon = getIcon(item.icon || 'Star'); // Fallback a 'Star' si no hay icon
         return (
           <div key={item.id} className="text-center">
             <div className="inline-flex w-16 h-16 rounded-full bg-primary/10 items-center justify-center mb-3">
