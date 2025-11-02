@@ -29,11 +29,19 @@ import {
 } from './new-blocks-renderers-part3';
 import { Separator } from '@/components/ui/separator';
 import { Info, AlertTriangle, CheckCircle2, XCircle } from 'lucide-react';
+import * as LucideIcons from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { parseTextWithIcons } from '@/lib/icon-renderer';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { supabaseBrowserClient } from '@/lib/supabase-browser';
+
+// Helper para obtener iconos dinámicamente
+const getIcon = (iconName?: string) => {
+  if (!iconName) return LucideIcons.HelpCircle;
+  const Icon = (LucideIcons as any)[iconName];
+  return Icon || LucideIcons.HelpCircle;
+};
 
 // Helper para aplicar estilos de bloque
 function getBlockStyleClasses(style?: BlockStyle): string {
@@ -966,12 +974,20 @@ function QuoteBlockComponent({ block }: { block: Extract<Block, { type: 'quote' 
 function StatsBlockComponent({ block }: { block: Extract<Block, { type: 'stats' }> }) {
   return (
     <div className={cn('my-8 grid gap-4', `grid-cols-1 md:grid-cols-${block.data.columns}`)}>
-      {block.data.stats.map((stat, i) => (
-        <div key={i} className="border rounded-lg p-6 text-center">
-          <div className="text-3xl font-bold text-primary">{stat.value}</div>
-          <div className="text-sm text-muted-foreground mt-2">{stat.label}</div>
-        </div>
-      ))}
+      {block.data.stats.map((stat, i) => {
+        const Icon = getIcon(stat.icon);
+        return (
+          <div key={i} className="border rounded-lg p-6 text-center">
+            {stat.icon && (
+              <div className="flex justify-center mb-3">
+                <Icon className="h-8 w-8 text-primary" />
+              </div>
+            )}
+            <div className="text-3xl font-bold text-primary">{stat.value}</div>
+            <div className="text-sm text-muted-foreground mt-2">{stat.label}</div>
+          </div>
+        );
+      })}
     </div>
   );
 }
