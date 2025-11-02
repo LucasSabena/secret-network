@@ -388,7 +388,10 @@ export function ChangelogBlockComponent({ block }: { block: Extract<Block, { typ
             {entry.changes.map((change, index) => (
               <li key={index} className="text-sm text-muted-foreground flex items-start gap-2">
                 <span className="text-primary mt-1">•</span>
-                <span>{change}</span>
+                <div 
+                  className="flex-1 prose prose-sm dark:prose-invert max-w-none"
+                  dangerouslySetInnerHTML={{ __html: change }}
+                />
               </li>
             ))}
           </ul>

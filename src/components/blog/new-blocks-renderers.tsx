@@ -99,7 +99,10 @@ export function ProsConsBlockComponent({ block }: { block: Extract<Block, { type
             {block.data.pros.map((pro, index) => (
               <li key={index} className="flex items-start gap-2 text-sm">
                 <Check className="h-4 w-4 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
-                <span>{pro}</span>
+                <div 
+                  className="flex-1 prose prose-sm dark:prose-invert max-w-none"
+                  dangerouslySetInnerHTML={{ __html: pro }}
+                />
               </li>
             ))}
           </ul>
@@ -115,7 +118,10 @@ export function ProsConsBlockComponent({ block }: { block: Extract<Block, { type
             {block.data.cons.map((con, index) => (
               <li key={index} className="flex items-start gap-2 text-sm">
                 <X className="h-4 w-4 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0" />
-                <span>{con}</span>
+                <div 
+                  className="flex-1 prose prose-sm dark:prose-invert max-w-none"
+                  dangerouslySetInnerHTML={{ __html: con }}
+                />
               </li>
             ))}
           </ul>
@@ -148,7 +154,10 @@ export function FeatureListBlockComponent({ block }: { block: Extract<Block, { t
             <div className="flex-1">
               <h4 className="font-semibold mb-1">{feature.title}</h4>
               {feature.description && (
-                <p className="text-sm text-muted-foreground">{feature.description}</p>
+                <div 
+                  className="text-sm text-muted-foreground prose prose-sm dark:prose-invert max-w-none"
+                  dangerouslySetInnerHTML={{ __html: feature.description }}
+                />
               )}
             </div>
           </div>
@@ -258,7 +267,10 @@ export function IconGridBlockComponent({ block }: { block: Extract<Block, { type
             </div>
             <h4 className="font-semibold mb-1">{item.title}</h4>
             {item.description && (
-              <p className="text-sm text-muted-foreground">{item.description}</p>
+              <div 
+                className="text-sm text-muted-foreground prose prose-sm dark:prose-invert max-w-none"
+                dangerouslySetInnerHTML={{ __html: item.description }}
+              />
             )}
           </div>
         );
