@@ -19,12 +19,17 @@ interface IconPickerProps {
 }
 
 // Obtener TODOS los iconos disponibles de Lucide
-const ALL_ICONS = Object.keys(LucideIcons).filter(
-  (key) => 
-    key !== 'default' && 
-    key !== 'createLucideIcon' &&
-    typeof (LucideIcons as any)[key] === 'function'
-).sort();
+const ALL_ICONS = Object.keys(LucideIcons)
+  .filter((key) => {
+    // Excluir exports especiales de lucide-react
+    if (key === 'default' || key === 'createLucideIcon' || key.startsWith('Lucide')) {
+      return false;
+    }
+    // Verificar que sea un componente React válido
+    const value = (LucideIcons as any)[key];
+    return typeof value === 'object' && value !== null && typeof value.render === 'function';
+  })
+  .sort();
 
 export function IconPicker({ value, onChange, label }: IconPickerProps) {
   const [open, setOpen] = useState(false);
