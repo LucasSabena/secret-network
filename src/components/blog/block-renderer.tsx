@@ -38,9 +38,21 @@ import { supabaseBrowserClient } from '@/lib/supabase-browser';
 
 // Helper para obtener iconos dinámicamente
 const getIcon = (iconName?: string) => {
-  if (!iconName) return LucideIcons.HelpCircle;
-  const Icon = (LucideIcons as any)[iconName];
-  return Icon || LucideIcons.HelpCircle;
+  try {
+    if (!iconName) {
+      console.warn('[getIcon] No icon name provided, using HelpCircle');
+      return LucideIcons.HelpCircle;
+    }
+    const Icon = (LucideIcons as any)[iconName];
+    if (!Icon) {
+      console.warn(`[getIcon] Icon "${iconName}" not found, using HelpCircle`);
+      return LucideIcons.HelpCircle;
+    }
+    return Icon;
+  } catch (error) {
+    console.error('[getIcon] Error getting icon:', error, 'iconName:', iconName);
+    return LucideIcons.HelpCircle;
+  }
 };
 
 // Helper para aplicar estilos de bloque
@@ -974,21 +986,32 @@ function QuoteBlockComponent({ block }: { block: Extract<Block, { type: 'quote' 
 
 // Componente para stats
 function StatsBlockComponent({ block }: { block: Extract<Block, { type: 'stats' }> }) {
+  console.log('[StatsBlock] Rendering with', block.data.stats.length, 'stats');
   return (
     <div className={cn('my-8 grid gap-4', `grid-cols-1 md:grid-cols-${block.data.columns}`)}>
       {block.data.stats.map((stat, i) => {
-        const Icon = getIcon(stat.icon);
-        return (
-          <div key={i} className="border rounded-lg p-6 text-center">
-            {stat.icon && (
-              <div className="flex justify-center mb-3">
-                <Icon className="h-8 w-8 text-primary" />
-              </div>
-            )}
-            <div className="text-3xl font-bold text-primary">{stat.value}</div>
-            <div className="text-sm text-muted-foreground mt-2">{stat.label}</div>
-          </div>
-        );
+        try {
+          console.log(`[StatsBlock] Stat ${i}:`, { label: stat.label, icon: stat.icon, hasIcon: !!stat.icon });
+          const Icon = getIcon(stat.icon);
+          return (
+            <div key={i} className="border rounded-lg p-6 text-center">
+              {stat.icon && (
+                <div className="flex justify-center mb-3">
+                  <Icon className="h-8 w-8 text-primary" />
+                </div>
+              )}
+              <div className="text-3xl font-bold text-primary">{stat.value}</div>
+              <div className="text-sm text-muted-foreground mt-2">{stat.label}</div>
+            </div>
+          );
+        } catch (error) {
+          console.error(`[StatsBlock] Error rendering stat ${i}:`, error, stat);
+          return (
+            <div key={i} className="border rounded-lg p-6 text-center bg-red-50">
+              <div className="text-sm text-red-600">Error rendering stat</div>
+            </div>
+          );
+        }
       })}
     </div>
   );
@@ -1101,10 +1124,13 @@ export function BlockRenderer({ blocks }: BlockRendererProps) {
     return <p className="text-muted-foreground">No hay contenido para mostrar.</p>;
   }
 
+  console.log('[BlockRenderer] Rendering', blocks.length, 'blocks');
+
   return (
     <div className="space-y-6">
-      {blocks.map((block) => {
+      {blocks.map((block, index) => {
         try {
+          console.log(`[BlockRenderer] Block ${index}: type=${block.type}`);
           switch (block.type) {
             case 'text':
               return <TextBlockComponent key={block.id} block={block} />;
@@ -1187,11 +1213,17 @@ export function BlockRenderer({ blocks }: BlockRendererProps) {
             case 'product-showcase':
               return <ProductShowcaseBlockComponent key={block.id} block={block} />;
             default:
-              console.warn('Unknown block type:', (block as any).type);
+              console.warn('[BlockRenderer] Unknown block type:', (block as any).type);
               return null;
           }
         } catch (error) {
-          console.error('Error rendering block:', (block as any).type, error);
+          console.error('[BlockRenderer] Error rendering block:', {
+            index,
+            type: (block as any).type,
+            id: block.id,
+            error,
+            blockData: block
+          });
           return (
             <div key={block.id} className="p-4 border-2 border-destructive rounded-lg text-destructive">
               Error al renderizar bloque de tipo: {(block as any).type}

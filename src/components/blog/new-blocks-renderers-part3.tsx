@@ -14,8 +14,21 @@ import { ProgramCard } from '@/components/shared/program-card';
 
 // Helper para obtener iconos dinámicamente
 const getIcon = (iconName: string) => {
-  const Icon = (LucideIcons as any)[iconName];
-  return Icon || LucideIcons.HelpCircle;
+  try {
+    if (!iconName) {
+      console.warn('[new-blocks-renderers-part3 getIcon] No icon name provided');
+      return LucideIcons.HelpCircle;
+    }
+    const Icon = (LucideIcons as any)[iconName];
+    if (!Icon) {
+      console.warn(`[new-blocks-renderers-part3 getIcon] Icon "${iconName}" not found`);
+      return LucideIcons.HelpCircle;
+    }
+    return Icon;
+  } catch (error) {
+    console.error('[new-blocks-renderers-part3 getIcon] Error:', error, 'iconName:', iconName);
+    return LucideIcons.HelpCircle;
+  }
 };
 
 // ============================================================================
