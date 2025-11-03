@@ -31,9 +31,16 @@ export async function POST(request: NextRequest) {
     });
 
     if (!tokenResponse.ok) {
-      const errorData = await tokenResponse.json();
+      const errorText = await tokenResponse.text();
+      console.error('LinkedIn token error:', errorText);
+      let errorData;
+      try {
+        errorData = JSON.parse(errorText);
+      } catch {
+        errorData = { error_description: errorText };
+      }
       return NextResponse.json(
-        { error: errorData.error_description || 'Error al obtener token' },
+        { error: errorData.error_description || errorData.error || 'Error al obtener token' },
         { status: 400 }
       );
     }
@@ -63,7 +70,7 @@ export async function POST(request: NextRequest) {
   } catch (error: any) {
     console.error('LinkedIn token exchange error:', error);
     return NextResponse.json(
-      { error: 'Error interno del servidor' },
+      { error: `Error interno del servidor: ${error.message}` },
       { status: 500 }
     );
   }
