@@ -309,7 +309,12 @@ export function BlogCardModern({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => window.open(`/blog/${post.slug}`, '_blank')}>
+              <DropdownMenuItem onClick={() => {
+                const previewUrl = post.publicado 
+                  ? `/blog/${post.slug}` 
+                  : `/blog/${post.slug}?preview=true`;
+                window.open(previewUrl, '_blank');
+              }}>
                 <Eye className="h-4 w-4 mr-2" />
                 Vista previa
               </DropdownMenuItem>
