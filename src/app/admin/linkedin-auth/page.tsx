@@ -70,39 +70,28 @@ export default function LinkedInAuthPage() {
     try {
       const redirectUri = `${window.location.origin}/admin/linkedin-auth`;
 
-      const response = await fetch('https://www.linkedin.com/oauth/v2/accessToken', {
+      // Usar nuestro API endpoint para evitar CORS
+      const response = await fetch('/api/linkedin/token', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/json',
         },
-        body: new URLSearchParams({
-          grant_type: 'authorization_code',
+        body: JSON.stringify({
           code: code,
-          client_id: clientId,
-          client_secret: clientSecret,
-          redirect_uri: redirectUri,
+          clientId: clientId,
+          clientSecret: clientSecret,
+          redirectUri: redirectUri,
         }),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error_description || 'Error al obtener token');
+        throw new Error(errorData.error || 'Error al obtener token');
       }
 
       const data = await response.json();
       setAccessToken(data.access_token);
-
-      // Obtener Person URN
-      const meResponse = await fetch('https://api.linkedin.com/v2/me', {
-        headers: {
-          'Authorization': `Bearer ${data.access_token}`,
-        },
-      });
-
-      if (meResponse.ok) {
-        const meData = await meResponse.json();
-        setPersonUrn(`urn:li:person:${meData.id}`);
-      }
+      setPersonUrn(data.person_urn);
 
     } catch (err: any) {
       setError(err.message);
