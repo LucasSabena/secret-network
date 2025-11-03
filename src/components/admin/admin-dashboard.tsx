@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Package, FileText, FolderTree, Link2, Monitor, DollarSign, Users, Image } from 'lucide-react';
 import ProgramasManager from './programas-manager';
-import BlogManager from './blog-manager';
+import BlogManagerV2 from './blog-manager-v2';
 import CategoriasManager from './categorias-manager';
 import AlternativasManagerNew from './alternativas-manager-new';
 import PlataformasManager from './plataformas-manager';
@@ -78,7 +78,7 @@ export default function AdminDashboard() {
           </TabsContent>
 
           <TabsContent value="blogs" className="mt-6">
-            <BlogManager />
+            <BlogManagerV2 />
           </TabsContent>
 
           <TabsContent value="alt-text" className="mt-6">
