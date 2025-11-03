@@ -19,11 +19,16 @@ const getIcon = (iconName: string) => {
       console.warn('[new-blocks-renderers-part3 getIcon] No icon name provided');
       return LucideIcons.HelpCircle;
     }
+    
+    console.log('[new-blocks-renderers-part3 getIcon] Looking for icon:', iconName);
     const Icon = (LucideIcons as any)[iconName];
+    
     if (!Icon) {
-      console.warn(`[new-blocks-renderers-part3 getIcon] Icon "${iconName}" not found`);
+      console.warn(`[new-blocks-renderers-part3 getIcon] Icon "${iconName}" not found in LucideIcons`);
       return LucideIcons.HelpCircle;
     }
+    
+    console.log('[new-blocks-renderers-part3 getIcon] Icon found successfully:', iconName);
     return Icon;
   } catch (error) {
     console.error('[new-blocks-renderers-part3 getIcon] Error:', error, 'iconName:', iconName);
@@ -136,6 +141,8 @@ export function TestimonialBlockComponent({ block }: { block: Extract<Block, { t
 // TIP BOX RENDERER
 // ============================================================================
 export function TipBoxBlockComponent({ block }: { block: Extract<Block, { type: 'tip-box' }> }) {
+  console.log('[TipBoxBlock] Rendering with data:', JSON.stringify(block.data));
+  
   const typeConfig = {
     tip: {
       icon: Lightbulb,
@@ -170,6 +177,13 @@ export function TipBoxBlockComponent({ block }: { block: Extract<Block, { type: 
   };
 
   const config = typeConfig[block.data.type] || typeConfig.info; // Fallback a 'info' si el tipo no existe
+  console.log('[TipBoxBlock] Config:', config, 'Type:', block.data.type, 'Custom icon:', block.data.icon);
+  
+  if (!config) {
+    console.error('[TipBoxBlock] Config is undefined! block.data:', block.data);
+    return null;
+  }
+  
   const IconComponent = block.data.icon ? getIcon(block.data.icon) : config.icon;
 
   return (

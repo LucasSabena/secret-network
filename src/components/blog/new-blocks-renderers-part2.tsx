@@ -19,11 +19,16 @@ const getIcon = (iconName: string) => {
       console.warn('[new-blocks-renderers-part2 getIcon] No icon name provided');
       return LucideIcons.HelpCircle;
     }
+    
+    console.log('[new-blocks-renderers-part2 getIcon] Looking for icon:', iconName);
     const Icon = (LucideIcons as any)[iconName];
+    
     if (!Icon) {
-      console.warn(`[new-blocks-renderers-part2 getIcon] Icon "${iconName}" not found`);
+      console.warn(`[new-blocks-renderers-part2 getIcon] Icon "${iconName}" not found in LucideIcons`);
       return LucideIcons.HelpCircle;
     }
+    
+    console.log('[new-blocks-renderers-part2 getIcon] Icon found successfully:', iconName);
     return Icon;
   } catch (error) {
     console.error('[new-blocks-renderers-part2 getIcon] Error:', error, 'iconName:', iconName);

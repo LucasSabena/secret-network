@@ -59,6 +59,8 @@ export function BlogShareButtons({ postId, title, url, className }: BlogShareBut
       color: 'hover:text-[#0A66C2]',
     },
   ];
+  
+  console.log('[BlogShareButtons] Share links:', shareLinks.map(l => ({ name: l.name, hasIcon: !!l.icon })));
 
   return (
     <div className={className}>
@@ -68,18 +70,26 @@ export function BlogShareButtons({ postId, title, url, className }: BlogShareBut
           Compartir:
         </span>
         <div className="flex gap-1">
-          {shareLinks.map((link) => (
-            <Button
-              key={link.name}
-              variant="ghost"
-              size="sm"
-              onClick={() => handleShare(link.name.toLowerCase(), link.url)}
-              className={link.color}
-              title={`Compartir en ${link.name}`}
-            >
-              <link.icon className="h-4 w-4" />
-            </Button>
-          ))}
+          {shareLinks.map((link) => {
+            console.log('[BlogShareButtons] Rendering link:', link.name, 'Icon:', link.icon);
+            if (!link.icon) {
+              console.error('[BlogShareButtons] Missing icon for:', link.name);
+              return null;
+            }
+            const IconComponent = link.icon;
+            return (
+              <Button
+                key={link.name}
+                variant="ghost"
+                size="sm"
+                onClick={() => handleShare(link.name.toLowerCase(), link.url)}
+                className={link.color}
+                title={`Compartir en ${link.name}`}
+              >
+                <IconComponent className="h-4 w-4" />
+              </Button>
+            );
+          })}
           <Button
             variant="ghost"
             size="sm"

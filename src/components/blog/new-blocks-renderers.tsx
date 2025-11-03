@@ -19,11 +19,17 @@ const getIcon = (iconName: string) => {
       console.warn('[new-blocks-renderers getIcon] No icon name provided');
       return LucideIcons.HelpCircle;
     }
+    
+    console.log('[new-blocks-renderers getIcon] Looking for icon:', iconName);
     const Icon = (LucideIcons as any)[iconName];
+    
     if (!Icon) {
-      console.warn(`[new-blocks-renderers getIcon] Icon "${iconName}" not found`);
+      console.warn(`[new-blocks-renderers getIcon] Icon "${iconName}" not found in LucideIcons`);
+      console.log('[new-blocks-renderers getIcon] Available icons sample:', Object.keys(LucideIcons).slice(0, 10));
       return LucideIcons.HelpCircle;
     }
+    
+    console.log('[new-blocks-renderers getIcon] Icon found successfully:', iconName);
     return Icon;
   } catch (error) {
     console.error('[new-blocks-renderers getIcon] Error:', error, 'iconName:', iconName);
@@ -148,6 +154,8 @@ export function ProsConsBlockComponent({ block }: { block: Extract<Block, { type
 // FEATURE LIST RENDERER
 // ============================================================================
 export function FeatureListBlockComponent({ block }: { block: Extract<Block, { type: 'feature-list' }> }) {
+  console.log('[FeatureListBlock] Rendering with features:', block.data.features);
+  
   return (
     <div
       className={cn(
@@ -157,7 +165,8 @@ export function FeatureListBlockComponent({ block }: { block: Extract<Block, { t
         block.data.columns === 4 && 'md:grid-cols-2 lg:grid-cols-4'
       )}
     >
-      {block.data.features.filter(feature => feature != null).map((feature) => {
+      {block.data.features.filter(feature => feature != null).map((feature, idx) => {
+        console.log(`[FeatureListBlock] Feature ${idx}:`, { id: feature.id, title: feature.title, icon: feature?.icon });
         const Icon = getIcon(feature?.icon || 'Check'); // Fallback a 'Check' si no hay icon
         return (
           <div key={feature.id} className="flex gap-4">
@@ -262,6 +271,8 @@ export function BeforeAfterBlockComponent({ block }: { block: Extract<Block, { t
 // ICON GRID RENDERER
 // ============================================================================
 export function IconGridBlockComponent({ block }: { block: Extract<Block, { type: 'icon-grid' }> }) {
+  console.log('[IconGridBlock] Rendering with items:', block.data.items);
+  
   return (
     <div
       className={cn(
@@ -271,7 +282,8 @@ export function IconGridBlockComponent({ block }: { block: Extract<Block, { type
         block.data.columns === 4 && 'md:grid-cols-2 lg:grid-cols-4'
       )}
     >
-      {block.data.items.filter(item => item != null).map((item) => {
+      {block.data.items.filter(item => item != null).map((item, idx) => {
+        console.log(`[IconGridBlock] Item ${idx}:`, { id: item.id, title: item.title, icon: item?.icon });
         const Icon = getIcon(item?.icon || 'Star'); // Fallback a 'Star' si no hay icon
         return (
           <div key={item.id} className="text-center">

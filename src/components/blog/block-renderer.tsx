@@ -569,6 +569,8 @@ function AccordionBlockComponent({ block }: { block: Extract<Block, { type: 'acc
 
 // Componente para renderizar alertas
 function AlertBlockComponent({ block }: { block: Extract<Block, { type: 'alert' }> }) {
+  console.log('[AlertBlock] Rendering with data:', JSON.stringify(block.data));
+  
   const variantConfig = {
     default: { icon: Info, className: '' },
     destructive: { icon: XCircle, className: 'border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive' },
@@ -576,7 +578,14 @@ function AlertBlockComponent({ block }: { block: Extract<Block, { type: 'alert' 
     warning: { icon: AlertTriangle, className: 'border-warning/50 text-warning [&>svg]:text-warning' },
   };
 
-  const config = variantConfig[block.data.variant];
+  const config = variantConfig[block.data.variant] || variantConfig.default;
+  console.log('[AlertBlock] Config:', config, 'Variant:', block.data.variant);
+  
+  if (!config) {
+    console.error('[AlertBlock] Config is undefined! block.data:', block.data);
+    return null;
+  }
+  
   const Icon = config.icon;
 
   return (
@@ -1143,7 +1152,7 @@ export function BlockRenderer({ blocks }: BlockRendererProps) {
     <div className="space-y-6">
       {blocks.map((block, index) => {
         try {
-          console.log(`[BlockRenderer] Block ${index}: type=${block.type}`);
+          console.log(`[BlockRenderer] Block ${index}:`, { type: block.type, id: block.id, data: block.data });
           switch (block.type) {
             case 'text':
               return <TextBlockComponent key={block.id} block={block} />;
