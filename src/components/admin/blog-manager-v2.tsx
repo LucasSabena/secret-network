@@ -249,6 +249,31 @@ export default function BlogManagerV2() {
     }
   }
 
+  async function handleUpdateAuthor(id: number, author: string) {
+    try {
+      const supabase = supabaseBrowserClient;
+      const { error } = await supabase
+        .from('blog_posts')
+        .update({ autor: author })
+        .eq('id', id);
+
+      if (error) throw error;
+
+      setPosts(posts.map((p) => (p.id === id ? { ...p, autor: author } : p)));
+      toast({
+        title: 'Autor actualizado',
+        description: 'El autor se cambió correctamente',
+      });
+    } catch (error) {
+      console.error('Error updating author:', error);
+      toast({
+        title: 'Error',
+        description: 'No se pudo actualizar el autor',
+        variant: 'destructive',
+      });
+    }
+  }
+
   async function handleUpdateCover(id: number, file: File) {
     try {
       toast({
@@ -385,6 +410,7 @@ export default function BlogManagerV2() {
               onUpdateStatus={handleUpdateStatus}
               onUpdateTitle={handleUpdateTitle}
               onUpdateDescription={handleUpdateDescription}
+              onUpdateAuthor={handleUpdateAuthor}
               onUpdateCover={handleUpdateCover}
               onExport={handleExport}
             />

@@ -1,15 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BlogPost } from '@/lib/types';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 import {
   Edit2, Trash2, Copy, Eye, Download, Upload, Check, X,
-  MoreVertical, FileJson, FileText, Image as ImageIcon
+  MoreVertical, FileJson, FileText, Image as ImageIcon, User
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -18,7 +20,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { cn } from '@/lib/utils';
+import { supabaseBrowserClient } from '@/lib/supabase-browser';
 
 interface BlogCardModernProps {
   post: BlogPost;
@@ -28,6 +38,7 @@ interface BlogCardModernProps {
   onUpdateStatus: (id: number, published: boolean) => void;
   onUpdateTitle: (id: number, title: string) => void;
   onUpdateDescription: (id: number, description: string) => void;
+  onUpdateAuthor: (id: number, author: string) => void;
   onUpdateCover: (id: number, file: File) => void;
   onExport: (post: BlogPost, format: 'json' | 'md') => void;
 }
@@ -40,6 +51,7 @@ export function BlogCardModern({
   onUpdateStatus,
   onUpdateTitle,
   onUpdateDescription,
+  onUpdateAuthor,
   onUpdateCover,
   onExport,
 }: BlogCardModernProps) {
@@ -48,6 +60,26 @@ export function BlogCardModern({
   const [editedTitle, setEditedTitle] = useState(post.titulo);
   const [editedDescription, setEditedDescription] = useState(post.descripcion_corta || '');
   const [isDragging, setIsDragging] = useState(false);
+  const [authors, setAuthors] = useState<string[]>([]);
+
+  useEffect(() => {
+    loadAuthors();
+  }, []);
+
+  async function loadAuthors() {
+    try {
+      const supabase = supabaseBrowserClient;
+      const { data, error } = await supabase
+        .from('autores')
+        .select('nombre')
+        .order('nombre');
+
+      if (error) throw error;
+      setAuthors(data?.map(a => a.nombre) || []);
+    } catch (error) {
+      console.error('Error loading authors:', error);
+    }
+  }
 
   const handleSaveTitle = () => {
     if (editedTitle.trim() && editedTitle !== post.titulo) {
@@ -122,21 +154,6 @@ export function BlogCardModern({
               <span className="text-xs text-white/70">o arrastra aquí</span>
             </div>
           </label>
-        </div>
-
-        {/* Status badge */}
-        <div className="absolute top-3 left-3">
-          <button
-            onClick={() => onUpdateStatus(post.id, !post.publicado)}
-            className="group/status"
-          >
-            <Badge
-              variant={post.publicado ? 'default' : 'secondary'}
-              className="cursor-pointer hover:scale-105 transition-transform"
-            >
-              {post.publicado ? 'Publicado' : 'Borrador'}
-            </Badge>
-          </button>
         </div>
 
         {/* Post ID */}
@@ -236,15 +253,42 @@ export function BlogCardModern({
           </p>
         )}
 
+        {/* Status Switch */}
+        <div className="flex items-center justify-between py-2 px-3 bg-muted/50 rounded-lg">
+          <Label htmlFor={`status-${post.id}`} className="text-sm cursor-pointer">
+            {post.publicado ? 'Publicado' : 'Borrador'}
+          </Label>
+          <Switch
+            id={`status-${post.id}`}
+            checked={post.publicado}
+            onCheckedChange={(checked) => onUpdateStatus(post.id, checked)}
+          />
+        </div>
+
+        {/* Author Selector */}
+        <div className="space-y-1">
+          <Label className="text-xs text-muted-foreground">Autor</Label>
+          <Select
+            value={post.autor || ''}
+            onValueChange={(value) => onUpdateAuthor(post.id, value)}
+          >
+            <SelectTrigger className="h-8 text-sm">
+              <User className="h-3 w-3 mr-2" />
+              <SelectValue placeholder="Seleccionar autor" />
+            </SelectTrigger>
+            <SelectContent>
+              {authors.map((author) => (
+                <SelectItem key={author} value={author}>
+                  {author}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
         {/* Meta info */}
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
           <span>{new Date(post.fecha_publicacion).toLocaleDateString()}</span>
-          {post.autor && (
-            <>
-              <span>•</span>
-              <span>{post.autor}</span>
-            </>
-          )}
         </div>
 
         {/* Actions */}
