@@ -644,7 +644,7 @@ function ImageBlockComponent({ block }: { block: Extract<Block, { type: 'image' 
           </div>
         </div>
         {block.data.caption && (
-          <figcaption className="text-center text-sm text-muted-foreground mt-2">
+          <figcaption className="text-left text-sm text-muted-foreground mt-2">
             {block.data.caption}
           </figcaption>
         )}
@@ -840,47 +840,54 @@ function TweetBlockComponent({ block }: { block: Extract<Block, { type: 'tweet' 
 // Componente para tabla
 function TableBlockComponent({ block }: { block: Extract<Block, { type: 'table' }> }) {
   return (
-    <div className="my-8 overflow-x-auto">
-      <table className="w-full border-collapse">
-        <thead>
-          <tr>
-            {block.data.showLeftHeaders && <th className="border p-3 bg-muted"></th>}
-            {block.data.headers.map((header, i) => (
-              <th key={i} className="border p-3 bg-muted font-semibold text-left">
-                {header}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {block.data.rows.map((row, rowIndex) => (
-            <tr key={rowIndex} className={block.data.striped && rowIndex % 2 === 1 ? 'bg-muted/50' : ''}>
-              {block.data.showLeftHeaders && (
-                <th className="border p-3 bg-muted font-semibold text-left">
-                  {block.data.leftHeaders?.[rowIndex] || ''}
-                </th>
-              )}
-              {row.map((cell, cellIndex) => (
-                <td key={cellIndex} className="border p-3">
-                  {cell}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-        {block.data.showFooter && block.data.footerRow && (
-          <tfoot>
+    <div className="my-8">
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse">
+          <thead>
             <tr>
-              {block.data.showLeftHeaders && <td className="border p-3 bg-muted"></td>}
-              {block.data.footerRow.map((cell, i) => (
-                <td key={i} className="border p-3 bg-muted font-semibold">
-                  {cell}
-                </td>
+              {block.data.showLeftHeaders && <th className="border p-3 bg-muted"></th>}
+              {block.data.headers.map((header, i) => (
+                <th key={i} className="border p-3 bg-muted font-semibold text-left">
+                  {header}
+                </th>
               ))}
             </tr>
-          </tfoot>
-        )}
-      </table>
+          </thead>
+          <tbody>
+            {block.data.rows.map((row, rowIndex) => (
+              <tr key={rowIndex} className={block.data.striped && rowIndex % 2 === 1 ? 'bg-muted/50' : ''}>
+                {block.data.showLeftHeaders && (
+                  <th className="border p-3 bg-muted font-semibold text-left">
+                    {block.data.leftHeaders?.[rowIndex] || ''}
+                  </th>
+                )}
+                {row.map((cell, cellIndex) => (
+                  <td key={cellIndex} className="border p-3">
+                    {cell}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+          {block.data.showFooter && block.data.footerRow && (
+            <tfoot>
+              <tr>
+                {block.data.showLeftHeaders && <td className="border p-3 bg-muted"></td>}
+                {block.data.footerRow.map((cell, i) => (
+                  <td key={i} className="border p-3 bg-muted font-semibold">
+                    {cell}
+                  </td>
+                ))}
+              </tr>
+            </tfoot>
+          )}
+        </table>
+      </div>
+      {block.data.caption && (
+        <p className="text-sm text-muted-foreground mt-2 text-left">
+          {block.data.caption}
+        </p>
+      )}
     </div>
   );
 }

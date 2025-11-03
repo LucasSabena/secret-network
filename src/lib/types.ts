@@ -215,6 +215,7 @@ export type TableBlock = {
     leftHeaders?: string[];
     showFooter?: boolean;
     footerRow?: string[];
+    caption?: string;
   };
   style?: BlockStyle;
 };

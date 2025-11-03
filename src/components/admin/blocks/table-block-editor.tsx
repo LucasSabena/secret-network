@@ -116,6 +116,16 @@ export function TableBlockEditor({ block, onChange }: TableBlockEditorProps) {
         </div>
       </div>
 
+      {/* Caption */}
+      <div>
+        <Label>Pie de tabla (opcional)</Label>
+        <Input
+          value={block.data.caption || ''}
+          onChange={(e) => onChange({ ...block, data: { ...block.data, caption: e.target.value } })}
+          placeholder="Descripción o aclaración de la tabla..."
+        />
+      </div>
+
       {/* Tabla */}
       <div className="overflow-x-auto">
         <table className="w-full border-collapse">
