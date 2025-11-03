@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 /**
  * API endpoint para intercambiar código de LinkedIn por access token
  * Evita problemas de CORS al hacer la llamada desde el servidor
+ * @route POST /api/linkedin/token
  */
 export async function POST(request: NextRequest) {
   try {
