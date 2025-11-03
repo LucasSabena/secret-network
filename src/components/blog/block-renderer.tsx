@@ -27,6 +27,17 @@ import {
   CTABannerBlockComponent,
   ProductShowcaseBlockComponent,
 } from './new-blocks-renderers-part3';
+import {
+  RedditPostBlockComponent,
+  TOCBlockComponent,
+  NewsletterBlockComponent,
+  GistBlockComponent,
+  MermaidBlockComponent,
+  MathBlockComponent,
+  SpotifyBlockComponent,
+  InstagramBlockComponent,
+  NotificationBlockComponent,
+} from './new-blocks-renderers-part4';
 import { Separator } from '@/components/ui/separator';
 import { Info, AlertTriangle, CheckCircle2, XCircle } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
@@ -1269,6 +1280,24 @@ export function BlockRenderer({ blocks }: BlockRendererProps) {
               return <CTABannerBlockComponent key={block.id} block={block} />;
             case 'product-showcase':
               return <ProductShowcaseBlockComponent key={block.id} block={block} />;
+            case 'reddit-post':
+              return <RedditPostBlockComponent key={block.id} block={block} />;
+            case 'toc':
+              return <TOCBlockComponent key={block.id} block={block} />;
+            case 'newsletter':
+              return <NewsletterBlockComponent key={block.id} block={block} />;
+            case 'gist':
+              return <GistBlockComponent key={block.id} block={block} />;
+            case 'mermaid':
+              return <MermaidBlockComponent key={block.id} block={block} />;
+            case 'math':
+              return <MathBlockComponent key={block.id} block={block} />;
+            case 'spotify':
+              return <SpotifyBlockComponent key={block.id} block={block} />;
+            case 'instagram':
+              return <InstagramBlockComponent key={block.id} block={block} />;
+            case 'notification':
+              return <NotificationBlockComponent key={block.id} block={block} />;
             default:
               console.warn('[BlockRenderer] Unknown block type:', (block as any).type);
               return null;

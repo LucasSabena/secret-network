@@ -413,6 +413,120 @@ export class BlockFactory {
           },
         };
 
+      case 'reddit-post':
+        return {
+          id,
+          type: 'reddit-post',
+          data: {
+            mode: 'manual',
+            username: '',
+            subreddit: '',
+            title: '',
+            content: '',
+            upvotes: 0,
+            comments: 0,
+            date: new Date().toISOString().split('T')[0],
+          },
+        };
+
+      case 'toc':
+        return {
+          id,
+          type: 'toc',
+          data: {
+            title: 'Tabla de Contenidos',
+            levels: [2, 3],
+            sticky: false,
+            collapsible: true,
+          },
+        };
+
+      case 'newsletter':
+        return {
+          id,
+          type: 'newsletter',
+          data: {
+            title: '📧 Suscríbete al Newsletter',
+            description: 'Recibe las últimas actualizaciones directamente en tu email',
+            placeholder: 'tu@email.com',
+            buttonText: 'Suscribirse',
+            successMessage: '¡Gracias por suscribirte!',
+            showName: false,
+            variant: 'card',
+          },
+        };
+
+      case 'gist':
+        return {
+          id,
+          type: 'gist',
+          data: {
+            gistUrl: '',
+            showLineNumbers: true,
+            theme: 'dark',
+          },
+        };
+
+      case 'mermaid':
+        return {
+          id,
+          type: 'mermaid',
+          data: {
+            code: `graph TD
+    A[Start] --> B[Process]
+    B --> C{Decision}
+    C -->|Yes| D[End]
+    C -->|No| B`,
+            theme: 'default',
+          },
+        };
+
+      case 'math':
+        return {
+          id,
+          type: 'math',
+          data: {
+            formula: 'E = mc^2',
+            display: 'block',
+          },
+        };
+
+      case 'spotify':
+        return {
+          id,
+          type: 'spotify',
+          data: {
+            spotifyUrl: '',
+            type: 'track',
+            height: 152,
+          },
+        };
+
+      case 'instagram':
+        return {
+          id,
+          type: 'instagram',
+          data: {
+            mode: 'manual',
+            username: '',
+            caption: '',
+            imageUrl: '',
+            likes: 0,
+            date: new Date().toISOString().split('T')[0],
+          },
+        };
+
+      case 'notification':
+        return {
+          id,
+          type: 'notification',
+          data: {
+            type: 'info',
+            message: 'Mensaje importante aquí',
+            dismissible: true,
+          },
+        };
+
       default:
         return {
           id,

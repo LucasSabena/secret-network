@@ -596,6 +596,137 @@ export type ProductShowcaseBlock = {
   style?: BlockStyle;
 };
 
+// Bloque de Reddit Post
+export type RedditPostBlock = {
+  id: string;
+  type: 'reddit-post';
+  data: {
+    mode: 'manual' | 'embed';
+    username?: string;
+    subreddit?: string;
+    title?: string;
+    content?: string;
+    upvotes?: number;
+    comments?: number;
+    date?: string;
+    avatarUrl?: string;
+    postUrl?: string;
+    embedUrl?: string;
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de Table of Contents
+export type TOCBlock = {
+  id: string;
+  type: 'toc';
+  data: {
+    title?: string;
+    levels?: number[]; // [2, 3] = H2 y H3
+    sticky?: boolean;
+    collapsible?: boolean;
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de Newsletter Signup
+export type NewsletterBlock = {
+  id: string;
+  type: 'newsletter';
+  data: {
+    title?: string;
+    description?: string;
+    placeholder?: string;
+    buttonText?: string;
+    successMessage?: string;
+    showName?: boolean;
+    variant?: 'default' | 'minimal' | 'card';
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de GitHub Gist
+export type GistBlock = {
+  id: string;
+  type: 'gist';
+  data: {
+    gistUrl: string;
+    file?: string; // Archivo específico del gist
+    showLineNumbers?: boolean;
+    theme?: 'light' | 'dark';
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de Mermaid Diagram
+export type MermaidBlock = {
+  id: string;
+  type: 'mermaid';
+  data: {
+    code: string;
+    caption?: string;
+    theme?: 'default' | 'dark' | 'forest' | 'neutral';
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de Math/LaTeX
+export type MathBlock = {
+  id: string;
+  type: 'math';
+  data: {
+    formula: string;
+    display?: 'inline' | 'block';
+    caption?: string;
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de Spotify Embed
+export type SpotifyBlock = {
+  id: string;
+  type: 'spotify';
+  data: {
+    spotifyUrl: string;
+    type?: 'track' | 'album' | 'playlist' | 'podcast';
+    height?: number;
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de Instagram Post
+export type InstagramBlock = {
+  id: string;
+  type: 'instagram';
+  data: {
+    mode: 'manual' | 'embed';
+    username?: string;
+    caption?: string;
+    imageUrl?: string;
+    likes?: number;
+    date?: string;
+    postUrl?: string;
+    embedUrl?: string;
+  };
+  style?: BlockStyle;
+};
+
+// Bloque de Notification Banner
+export type NotificationBlock = {
+  id: string;
+  type: 'notification';
+  data: {
+    type: 'info' | 'success' | 'warning' | 'error' | 'announcement';
+    title?: string;
+    message: string;
+    dismissible?: boolean;
+    icon?: string;
+    actionText?: string;
+    actionUrl?: string;
+  };
+  style?: BlockStyle;
+};
+
 // Unión de todos los tipos de bloques
 export type Block =
   | TextBlock
@@ -637,7 +768,16 @@ export type Block =
   | TestimonialBlock
   | TipBoxBlock
   | CTABannerBlock
-  | ProductShowcaseBlock;
+  | ProductShowcaseBlock
+  | RedditPostBlock
+  | TOCBlock
+  | NewsletterBlock
+  | GistBlock
+  | MermaidBlock
+  | MathBlock
+  | SpotifyBlock
+  | InstagramBlock
+  | NotificationBlock;
 
 // Tipo para posts del blog
 export type BlogPost = {
