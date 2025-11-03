@@ -922,7 +922,10 @@ function CalloutBlockComponent({ block }: { block: Extract<Block, { type: 'callo
             <Icon className="h-6 w-6" />
           </div>
         )}
-        <div className="flex-1 whitespace-pre-wrap">{block.data.content}</div>
+        <div 
+          className="flex-1 prose prose-sm dark:prose-invert max-w-none"
+          dangerouslySetInnerHTML={{ __html: block.data.content }}
+        />
       </div>
     </div>
   );
@@ -1052,7 +1055,10 @@ function TimelineBlockComponent({ block }: { block: Extract<Block, { type: 'time
           <div className="flex-1 pb-8">
             <div className="text-sm text-muted-foreground mb-1">{item.date}</div>
             <h4 className="font-semibold mb-2">{item.title}</h4>
-            <p className="text-muted-foreground">{item.description}</p>
+            <div 
+              className="text-muted-foreground prose prose-sm dark:prose-invert max-w-none"
+              dangerouslySetInnerHTML={{ __html: item.description }}
+            />
           </div>
         </div>
       ))}
@@ -1111,7 +1117,10 @@ function FileDownloadBlockComponent({ block }: { block: Extract<Block, { type: '
         <div className="flex-1">
           <div className="font-semibold">{block.data.fileName}</div>
           {block.data.description && (
-            <div className="text-sm text-muted-foreground">{block.data.description}</div>
+            <div 
+              className="text-sm text-muted-foreground prose prose-sm dark:prose-invert max-w-none"
+              dangerouslySetInnerHTML={{ __html: block.data.description }}
+            />
           )}
           <div className="text-xs text-muted-foreground mt-1">
             {block.data.fileType && <span>{block.data.fileType}</span>}
