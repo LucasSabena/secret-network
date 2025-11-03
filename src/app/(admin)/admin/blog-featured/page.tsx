@@ -6,6 +6,8 @@ export const metadata: Metadata = {
   description: 'Gestiona los posts destacados del blog',
 };
 
+export const dynamic = 'force-dynamic';
+
 export default function BlogFeaturedPage() {
   return (
     <div className="container mx-auto px-4 py-8">
