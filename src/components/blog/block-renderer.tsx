@@ -543,8 +543,9 @@ function AccordionBlockComponent({ block }: { block: Extract<Block, { type: 'acc
             <button
               onClick={() => toggleItem(item.id)}
               className="w-full flex items-center justify-between p-4 text-left font-medium hover:bg-muted/50 transition-colors"
+              aria-label={`Toggle ${item.title.replace(/<[^>]*>/g, '')}`}
             >
-              <span>{item.title}</span>
+              <span dangerouslySetInnerHTML={{ __html: item.title }} />
               <svg
                 className={`w-5 h-5 transition-transform ${isOpen ? 'rotate-180' : ''}`}
                 fill="none"
@@ -591,7 +592,9 @@ function AlertBlockComponent({ block }: { block: Extract<Block, { type: 'alert' 
   return (
     <Alert className={`my-8 ${config.className}`}>
       <Icon className="h-4 w-4" />
-      {block.data.title && <AlertTitle>{block.data.title}</AlertTitle>}
+      {block.data.title && (
+        <AlertTitle dangerouslySetInnerHTML={{ __html: block.data.title }} />
+      )}
       <AlertDescription>
         <div 
           className="prose prose-sm dark:prose-invert max-w-none"
@@ -856,9 +859,11 @@ function TableBlockComponent({ block }: { block: Extract<Block, { type: 'table' 
             <tr>
               {block.data.showLeftHeaders && <th className="border p-3 bg-muted"></th>}
               {block.data.headers.map((header, i) => (
-                <th key={i} className="border p-3 bg-muted font-semibold text-left">
-                  {header}
-                </th>
+                <th 
+                  key={i} 
+                  className="border p-3 bg-muted font-semibold text-left"
+                  dangerouslySetInnerHTML={{ __html: header }}
+                />
               ))}
             </tr>
           </thead>
@@ -866,14 +871,17 @@ function TableBlockComponent({ block }: { block: Extract<Block, { type: 'table' 
             {block.data.rows.map((row, rowIndex) => (
               <tr key={rowIndex} className={block.data.striped && rowIndex % 2 === 1 ? 'bg-muted/50' : ''}>
                 {block.data.showLeftHeaders && (
-                  <th className="border p-3 bg-muted font-semibold text-left">
-                    {block.data.leftHeaders?.[rowIndex] || ''}
-                  </th>
+                  <th 
+                    className="border p-3 bg-muted font-semibold text-left"
+                    dangerouslySetInnerHTML={{ __html: block.data.leftHeaders?.[rowIndex] || '' }}
+                  />
                 )}
                 {row.map((cell, cellIndex) => (
-                  <td key={cellIndex} className="border p-3">
-                    {cell}
-                  </td>
+                  <td 
+                    key={cellIndex} 
+                    className="border p-3"
+                    dangerouslySetInnerHTML={{ __html: cell }}
+                  />
                 ))}
               </tr>
             ))}
@@ -883,9 +891,11 @@ function TableBlockComponent({ block }: { block: Extract<Block, { type: 'table' 
               <tr>
                 {block.data.showLeftHeaders && <td className="border p-3 bg-muted"></td>}
                 {block.data.footerRow.map((cell, i) => (
-                  <td key={i} className="border p-3 bg-muted font-semibold">
-                    {cell}
-                  </td>
+                  <td 
+                    key={i} 
+                    className="border p-3 bg-muted font-semibold"
+                    dangerouslySetInnerHTML={{ __html: cell }}
+                  />
                 ))}
               </tr>
             </tfoot>
@@ -1001,7 +1011,12 @@ function QuoteBlockComponent({ block }: { block: Extract<Block, { type: 'quote' 
       <p className="text-lg">{block.data.quote}</p>
       {(block.data.author || block.data.role) && (
         <footer className="mt-4 text-sm text-muted-foreground">
-          {block.data.author && <cite className="font-semibold not-italic">{block.data.author}</cite>}
+          {block.data.author && (
+            <cite 
+              className="font-semibold not-italic"
+              dangerouslySetInnerHTML={{ __html: block.data.author }}
+            />
+          )}
           {block.data.role && <span className="ml-2">— {block.data.role}</span>}
         </footer>
       )}
@@ -1026,7 +1041,10 @@ function StatsBlockComponent({ block }: { block: Extract<Block, { type: 'stats' 
                 </div>
               )}
               <div className="text-3xl font-bold text-primary">{stat.value}</div>
-              <div className="text-sm text-muted-foreground mt-2">{stat.label}</div>
+              <div 
+                className="text-sm text-muted-foreground mt-2"
+                dangerouslySetInnerHTML={{ __html: stat.label }}
+              />
             </div>
           );
         } catch (error) {
@@ -1054,7 +1072,10 @@ function TimelineBlockComponent({ block }: { block: Extract<Block, { type: 'time
           </div>
           <div className="flex-1 pb-8">
             <div className="text-sm text-muted-foreground mb-1">{item.date}</div>
-            <h4 className="font-semibold mb-2">{item.title}</h4>
+            <h4 
+              className="font-semibold mb-2"
+              dangerouslySetInnerHTML={{ __html: item.title }}
+            />
             <div 
               className="text-muted-foreground prose prose-sm dark:prose-invert max-w-none"
               dangerouslySetInnerHTML={{ __html: item.description }}
@@ -1075,22 +1096,27 @@ function ComparisonBlockComponent({ block }: { block: Extract<Block, { type: 'co
           <tr>
             <th className="border p-3 bg-muted font-semibold text-left">Feature</th>
             {block.data.items.map((item, i) => (
-              <th key={i} className="border p-3 bg-muted font-semibold text-center">
-                {item.name}
-              </th>
+              <th 
+                key={i} 
+                className="border p-3 bg-muted font-semibold text-center"
+                dangerouslySetInnerHTML={{ __html: item.name }}
+              />
             ))}
           </tr>
         </thead>
         <tbody>
           {block.data.featureLabels.map((label, i) => (
             <tr key={i}>
-              <td className="border p-3 font-medium">{label}</td>
+              <td 
+                className="border p-3 font-medium"
+                dangerouslySetInnerHTML={{ __html: label }}
+              />
               {block.data.items.map((item, j) => (
                 <td key={j} className="border p-3 text-center">
                   {typeof item.features[label] === 'boolean' ? (
                     item.features[label] ? '✓' : '✗'
                   ) : (
-                    item.features[label]
+                    <span dangerouslySetInnerHTML={{ __html: item.features[label] }} />
                   )}
                 </td>
               ))}

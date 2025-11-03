@@ -55,7 +55,10 @@ export function PricingTableBlockComponent({ block }: { block: Extract<Block, { 
               Más Popular
             </div>
           )}
-          <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
+          <h3 
+            className="text-2xl font-bold mb-2"
+            dangerouslySetInnerHTML={{ __html: plan.name }}
+          />
           <div className="mb-4">
             <span className="text-4xl font-bold">{plan.price}</span>
             {plan.period && (
@@ -66,7 +69,7 @@ export function PricingTableBlockComponent({ block }: { block: Extract<Block, { 
             {plan.features.map((feature, index) => (
               <li key={index} className="flex items-start gap-2 text-sm">
                 <Check className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                <span>{feature}</span>
+                <span dangerouslySetInnerHTML={{ __html: feature }} />
               </li>
             ))}
           </ul>
@@ -123,7 +126,10 @@ export function TestimonialBlockComponent({ block }: { block: Extract<Block, { t
           </div>
           <p className="text-lg italic mb-4">"{block.data.quote}"</p>
           <div>
-            <p className="font-semibold">{block.data.author}</p>
+            <p 
+              className="font-semibold"
+              dangerouslySetInnerHTML={{ __html: block.data.author }}
+            />
             {block.data.role && (
               <p className="text-sm text-muted-foreground">
                 {block.data.role}
@@ -192,7 +198,10 @@ export function TipBoxBlockComponent({ block }: { block: Extract<Block, { type: 
         <IconComponent className={cn('h-6 w-6 flex-shrink-0', config.iconClassName)} />
         <div className="flex-1">
           {block.data.title && (
-            <h4 className="font-semibold mb-2">{block.data.title}</h4>
+            <h4 
+              className="font-semibold mb-2"
+              dangerouslySetInnerHTML={{ __html: block.data.title }}
+            />
           )}
           <div 
             className="text-sm prose prose-sm dark:prose-invert max-w-none"
@@ -223,7 +232,10 @@ export function CTABannerBlockComponent({ block }: { block: Extract<Block, { typ
       )}
       <div className="relative p-12 text-center text-white">
         <Megaphone className="h-12 w-12 mx-auto mb-4 opacity-90" />
-        <h2 className="text-3xl font-bold mb-3">{block.data.title}</h2>
+        <h2 
+          className="text-3xl font-bold mb-3"
+          dangerouslySetInnerHTML={{ __html: block.data.title }}
+        />
         {block.data.description && (
           <div 
             className="text-lg mb-6 opacity-90 max-w-2xl mx-auto prose prose-invert"

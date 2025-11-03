@@ -239,7 +239,10 @@ export function PollBlockComponent({ block }: { block: Extract<Block, { type: 'p
 
   return (
     <div className="my-8 border rounded-lg p-6 bg-card">
-      <h3 className="text-lg font-semibold mb-4">{poll.question}</h3>
+      <h3 
+        className="text-lg font-semibold mb-4"
+        dangerouslySetInnerHTML={{ __html: poll.question }}
+      />
       <div className="space-y-3">
         {poll.options.map((option: any) => {
           const votes = option.votes || 0;
@@ -266,7 +269,10 @@ export function PollBlockComponent({ block }: { block: Extract<Block, { type: 'p
                 />
               )}
               <div className="relative flex items-center justify-between">
-                <span className="font-medium">{option.text}</span>
+                <span 
+                  className="font-medium"
+                  dangerouslySetInnerHTML={{ __html: option.text }}
+                />
                 {hasVoted && (
                   <span className="text-sm text-muted-foreground">
                     {percentage.toFixed(1)}% ({votes})
@@ -295,7 +301,10 @@ export function ProgressBarBlockComponent({ block }: { block: Extract<Block, { t
       {block.data.items.map((item) => (
         <div key={item.id}>
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium">{item.label}</span>
+            <span 
+              className="text-sm font-medium"
+              dangerouslySetInnerHTML={{ __html: item.label }}
+            />
             <span className="text-sm text-muted-foreground">{item.value}%</span>
           </div>
           <div className="w-full h-3 bg-muted rounded-full overflow-hidden">
@@ -341,7 +350,10 @@ export function ChecklistBlockComponent({ block }: { block: Extract<Block, { typ
   return (
     <div className="my-8 border rounded-lg p-6 bg-card">
       {block.data.title && (
-        <h3 className="text-lg font-semibold mb-4">{block.data.title}</h3>
+        <h3 
+          className="text-lg font-semibold mb-4"
+          dangerouslySetInnerHTML={{ __html: block.data.title }}
+        />
       )}
       <div className="space-y-2">
         {block.data.items.map((item) => {

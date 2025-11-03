@@ -68,8 +68,12 @@ export function FAQBlockComponent({ block }: { block: Extract<Block, { type: 'fa
             <button
               onClick={() => toggleItem(item.id)}
               className="w-full flex items-center justify-between p-4 text-left font-medium hover:bg-muted/50 transition-colors"
+              aria-label={`Toggle ${item.question.replace(/<[^>]*>/g, '')}`}
             >
-              <span itemProp="name">{item.question}</span>
+              <span 
+                itemProp="name"
+                dangerouslySetInnerHTML={{ __html: item.question }}
+              />
               <ChevronDown
                 className={cn(
                   'h-5 w-5 transition-transform flex-shrink-0 ml-2',
@@ -105,7 +109,10 @@ export function ProsConsBlockComponent({ block }: { block: Extract<Block, { type
   return (
     <div className="my-8">
       {block.data.title && (
-        <h3 className="text-xl font-semibold mb-4 text-center">{block.data.title}</h3>
+        <h3 
+          className="text-xl font-semibold mb-4 text-center"
+          dangerouslySetInnerHTML={{ __html: block.data.title }}
+        />
       )}
       <div className="grid md:grid-cols-2 gap-6">
         {/* Pros */}
@@ -174,7 +181,10 @@ export function FeatureListBlockComponent({ block }: { block: Extract<Block, { t
               <Icon className="h-6 w-6 text-primary" />
             </div>
             <div className="flex-1">
-              <h4 className="font-semibold mb-1">{feature.title}</h4>
+              <h4 
+                className="font-semibold mb-1"
+                dangerouslySetInnerHTML={{ __html: feature.title }}
+              />
               {feature.description && (
                 <div 
                   className="text-sm text-muted-foreground prose prose-sm dark:prose-invert max-w-none"
@@ -290,7 +300,10 @@ export function IconGridBlockComponent({ block }: { block: Extract<Block, { type
             <div className="inline-flex w-16 h-16 rounded-full bg-primary/10 items-center justify-center mb-3">
               <Icon className="h-8 w-8 text-primary" />
             </div>
-            <h4 className="font-semibold mb-1">{item.title}</h4>
+            <h4 
+              className="font-semibold mb-1"
+              dangerouslySetInnerHTML={{ __html: item.title }}
+            />
             {item.description && (
               <div 
                 className="text-sm text-muted-foreground prose prose-sm dark:prose-invert max-w-none"
