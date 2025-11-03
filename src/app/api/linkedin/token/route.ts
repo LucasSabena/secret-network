@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 /**
  * API endpoint para intercambiar código de LinkedIn por access token
  * Evita problemas de CORS al hacer la llamada desde el servidor
