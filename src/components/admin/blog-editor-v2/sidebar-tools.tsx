@@ -6,15 +6,50 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { BLOCK_TOOLS, BLOCK_CATEGORIES } from './block-tools';
 import { cn } from '@/lib/utils';
-import { ChevronDown, Search, X } from 'lucide-react';
-import { useState, useMemo } from 'react';
+import { ChevronDown, Search, X, Heart } from 'lucide-react';
+import { useState, useMemo, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
+
+const FAVORITES_KEY = 'blog-editor-favorite-blocks';
 
 export function SidebarTools() {
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
-    new Set(Object.keys(BLOCK_CATEGORIES))
+    new Set(['favorites', ...Object.keys(BLOCK_CATEGORIES)])
   );
   const [searchQuery, setSearchQuery] = useState('');
+  const [favorites, setFavorites] = useState<Set<string>>(new Set());
+
+  // Cargar favoritos desde localStorage
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(FAVORITES_KEY);
+      if (stored) {
+        setFavorites(new Set(JSON.parse(stored)));
+      }
+    } catch (error) {
+      console.error('Error loading favorites:', error);
+    }
+  }, []);
+
+  // Guardar favoritos en localStorage
+  const saveFavorites = (newFavorites: Set<string>) => {
+    try {
+      localStorage.setItem(FAVORITES_KEY, JSON.stringify(Array.from(newFavorites)));
+      setFavorites(newFavorites);
+    } catch (error) {
+      console.error('Error saving favorites:', error);
+    }
+  };
+
+  const toggleFavorite = (blockId: string) => {
+    const newFavorites = new Set(favorites);
+    if (newFavorites.has(blockId)) {
+      newFavorites.delete(blockId);
+    } else {
+      newFavorites.add(blockId);
+    }
+    saveFavorites(newFavorites);
+  };
 
   const toggleCategory = (categoryKey: string) => {
     const newExpanded = new Set(expandedCategories);
@@ -26,17 +61,25 @@ export function SidebarTools() {
     setExpandedCategories(newExpanded);
   };
 
-  // Filtrar bloques según búsqueda
+  // Filtrar bloques según búsqueda y agregar favoritos
   const filteredTools = useMemo(() => {
-    if (!searchQuery.trim()) return BLOCK_TOOLS;
-    
-    const query = searchQuery.toLowerCase();
-    return BLOCK_TOOLS.filter(tool => 
-      tool.label.toLowerCase().includes(query) ||
-      tool.description.toLowerCase().includes(query) ||
-      tool.type.toLowerCase().includes(query)
-    );
-  }, [searchQuery]);
+    const tools = searchQuery.trim()
+      ? BLOCK_TOOLS.filter(tool => {
+          const query = searchQuery.toLowerCase();
+          return (
+            tool.label.toLowerCase().includes(query) ||
+            tool.description.toLowerCase().includes(query) ||
+            tool.type.toLowerCase().includes(query)
+          );
+        })
+      : BLOCK_TOOLS;
+
+    // Agregar bloques favoritos a la categoría 'favorites'
+    return tools.map(tool => ({
+      ...tool,
+      category: (favorites.has(tool.id) ? 'favorites' : tool.category) as typeof tool.category,
+    }));
+  }, [searchQuery, favorites]);
 
   // Auto-expandir categorías cuando hay búsqueda
   const displayCategories = useMemo(() => {
@@ -91,7 +134,7 @@ export function SidebarTools() {
           (tool) => tool.category === categoryKey
         );
 
-        if (categoryTools.length === 0) return null;
+        if (categoryTools.length === 0 && categoryKey !== 'favorites') return null;
 
         const isExpanded = displayCategories.has(categoryKey);
 
@@ -101,9 +144,12 @@ export function SidebarTools() {
               onClick={() => toggleCategory(categoryKey)}
               className="w-full flex items-center justify-between p-3 hover:bg-accent transition-colors"
             >
-              <h4 className={cn('text-xs font-medium', category.color)}>
-                {category.label} ({categoryTools.length})
-              </h4>
+              <div className="flex items-center gap-2">
+                <span className="text-base">{category.icon}</span>
+                <h4 className={cn('text-xs font-medium', category.color)}>
+                  {category.label} ({categoryTools.length})
+                </h4>
+              </div>
               <ChevronDown
                 className={cn(
                   'h-4 w-4 transition-transform',
@@ -113,9 +159,20 @@ export function SidebarTools() {
             </button>
             {isExpanded && (
               <div className="p-2 space-y-2 bg-muted/30">
-                {categoryTools.map((tool) => (
-                  <DraggableBlockTool key={tool.id} tool={tool} />
-                ))}
+                {categoryKey === 'favorites' && categoryTools.length === 0 ? (
+                  <p className="text-xs text-muted-foreground text-center py-4">
+                    Haz clic en el ❤️ de tus bloques favoritos para verlos aquí
+                  </p>
+                ) : (
+                  categoryTools.map((tool) => (
+                    <DraggableBlockTool
+                      key={tool.id}
+                      tool={tool}
+                      isFavorite={favorites.has(tool.id)}
+                      onToggleFavorite={toggleFavorite}
+                    />
+                  ))
+                )}
               </div>
             )}
           </div>
@@ -125,7 +182,15 @@ export function SidebarTools() {
   );
 }
 
-function DraggableBlockTool({ tool }: { tool: typeof BLOCK_TOOLS[0] }) {
+function DraggableBlockTool({
+  tool,
+  isFavorite,
+  onToggleFavorite,
+}: {
+  tool: typeof BLOCK_TOOLS[0];
+  isFavorite: boolean;
+  onToggleFavorite: (blockId: string) => void;
+}) {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: `tool-${tool.id}`,
     data: { type: tool.type, isNew: true },
@@ -136,15 +201,17 @@ function DraggableBlockTool({ tool }: { tool: typeof BLOCK_TOOLS[0] }) {
   return (
     <Card
       ref={setNodeRef}
-      {...listeners}
-      {...attributes}
       className={cn(
-        'p-3 cursor-grab active:cursor-grabbing transition-all hover:border-primary hover:shadow-md',
+        'p-3 transition-all hover:border-primary hover:shadow-md relative group',
         isDragging && 'opacity-50 scale-95'
       )}
     >
       <div className="flex items-start gap-3">
-        <div className="p-2 rounded-lg bg-primary/10 text-primary shrink-0">
+        <div
+          {...listeners}
+          {...attributes}
+          className="p-2 rounded-lg bg-primary/10 text-primary shrink-0 cursor-grab active:cursor-grabbing"
+        >
           <Icon className="h-4 w-4" />
         </div>
         <div className="flex-1 min-w-0">
@@ -153,6 +220,21 @@ function DraggableBlockTool({ tool }: { tool: typeof BLOCK_TOOLS[0] }) {
             {tool.description}
           </p>
         </div>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleFavorite(tool.id);
+          }}
+          className={cn(
+            'shrink-0 p-1 rounded transition-all',
+            isFavorite
+              ? 'text-rose-500 hover:text-rose-600'
+              : 'text-muted-foreground/40 hover:text-rose-500 opacity-0 group-hover:opacity-100'
+          )}
+          title={isFavorite ? 'Quitar de favoritos' : 'Agregar a favoritos'}
+        >
+          <Heart className={cn('h-4 w-4', isFavorite && 'fill-current')} />
+        </button>
       </div>
     </Card>
   );
