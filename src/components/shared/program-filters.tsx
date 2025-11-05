@@ -119,8 +119,6 @@ export function ProgramFilters({
   };
 
   const activeFiltersCount = [
-    filters.categoriaId,
-    filters.subcategoriaIds.length > 0,
     filters.modelosPrecioIds.length > 0,
     filters.dificultad,
     filters.esOpenSource !== null,
@@ -211,43 +209,6 @@ export function ProgramFilters({
           </div>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {/* Category Filter */}
-            <div className="space-y-2">
-              <label htmlFor="filter-categoria" className="text-sm font-medium">Categoría</label>
-              <select
-                id="filter-categoria"
-                value={filters.categoriaId || ''}
-                onChange={(e) => updateFilter('categoriaId', e.target.value ? Number(e.target.value) : null)}
-                className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-                aria-label="Filtrar por categoría"
-              >
-                <option value="">Todas las categorías</option>
-                {categorias.map(cat => (
-                  <option key={cat.id} value={cat.id}>{cat.nombre}</option>
-                ))}
-              </select>
-            </div>
-
-            {/* Subcategory Filter */}
-            {filters.categoriaId && subcategoriasDisponibles.length > 0 && (
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Subcategorías</label>
-                <div className="max-h-40 space-y-2 overflow-y-auto rounded-lg border border-border bg-background p-3">
-                  {subcategoriasDisponibles.map(sub => (
-                    <label key={sub.id} className="flex cursor-pointer items-center gap-2">
-                      <input
-                        type="checkbox"
-                        checked={filters.subcategoriaIds.includes(sub.id)}
-                        onChange={() => toggleSubcategoria(sub.id)}
-                        className="h-4 w-4 rounded border-border text-primary focus:ring-2 focus:ring-primary/20"
-                      />
-                      <span className="text-sm">{sub.nombre}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-            )}
-
             {/* Pricing Model Filter */}
             <div className="space-y-2">
               <label className="text-sm font-medium">Precio</label>
@@ -367,17 +328,6 @@ export function ProgramFilters({
       {/* Active Filters Tags */}
       {activeFiltersCount > 0 && (
         <div className="flex flex-wrap gap-2">
-          {filters.categoriaId && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-              Category: {categorias.find(c => c.id === filters.categoriaId)?.nombre}
-              <button 
-                onClick={() => updateFilter('categoriaId', null)}
-                aria-label="Quitar filtro de categoría"
-              >
-                <X className="h-3 w-3" aria-hidden="true" />
-              </button>
-            </span>
-          )}
           {filters.dificultad && (
             <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
               {filters.dificultad}

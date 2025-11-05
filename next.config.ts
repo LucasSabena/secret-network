@@ -50,8 +50,6 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['@/components', '@/lib'],
   },
-  // Minificación más agresiva
-  swcMinify: true,
   // Optimizar CSS y reducir bundle
   modularizeImports: {
     'lucide-react': {

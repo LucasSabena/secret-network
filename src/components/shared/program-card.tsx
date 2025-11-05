@@ -1,5 +1,3 @@
-// FILE: src/components/shared/program-card.tsx
-
 'use client';
 
 import { type Programa, type Categoria } from "@/lib/types";
@@ -11,6 +9,8 @@ import {
   CardContent,
   CardFooter 
 } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { ExternalLink, Github, Star, Info } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -50,6 +50,9 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
     }
   };
 
+  // ============================================
+  // VARIANT: SMALL
+  // ============================================
   if (variant === 'small') {
     return (
       <Link 
@@ -86,7 +89,18 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
                     {program.nombre}
                   </h3>
                   {program.es_recomendado && (
-                    <Star className="h-3 w-3 fill-warning text-warning flex-shrink-0" />
+                    <TooltipProvider delayDuration={200}>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <div className="flex-shrink-0">
+                            <Star className="h-3 w-3 fill-warning text-warning" />
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p className="text-xs">Recomendado por Secret Network</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   )}
                   {program.es_open_source && (
                     <Github className="h-3 w-3 text-muted-foreground flex-shrink-0" />
@@ -98,10 +112,10 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
                   {stripHtml(program.descripcion_corta || 'Sin descripción')}
                 </p>
                 
-                {/* Categoría */}
-                {program.categoria && (
+                {/* Subcategoría en lugar de categoría padre */}
+                {program.subcategorias && program.subcategorias.length > 0 && (
                   <span className="inline-block text-[10px] text-primary font-medium">
-                    #{stripHtml(program.categoria.nombre)}
+                    #{stripHtml(program.subcategorias[0].nombre)}
                   </span>
                 )}
               </div>
@@ -112,23 +126,25 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
     );
   }
 
-  // Large variant with 3D flip effect on hover
+  // ============================================
+  // VARIANT: LARGE (with 3D flip)
+  // ============================================
   if (variant === 'large') {
     const [isFlipped, setIsFlipped] = useState(false);
     
     return (
       <div className="w-full relative" style={{ perspective: '1000px' }}>
-        {/* Spacer invisible - define la altura real basada en el contenido */}
+        {/* Spacer invisible */}
         <div className="w-full invisible pointer-events-none">
           <div className="px-6 pt-4 pb-2">
-            <div className="h-12" /> {/* Icono */}
-            <div className="h-7 mt-1.5" /> {/* Categoría */}
+            <div className="h-12" />
+            <div className="h-7 mt-1.5" />
           </div>
-          <div className="w-full aspect-video" /> {/* Imagen 16:9 */}
-          <div className="h-4" /> {/* Bottom spacer */}
+          <div className="w-full aspect-video" />
+          <div className="h-4" />
         </div>
         
-        {/* Flip button - abajo a la derecha, sobre la imagen */}
+        {/* Flip button (mobile) */}
         <button
           onClick={(e) => {
             e.preventDefault();
@@ -155,14 +171,13 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
               className="absolute inset-0 overflow-hidden flex flex-col pb-0"
               style={{ backfaceVisibility: 'hidden' }}
             >
-              {/* Header */}
               <CardHeader className="pb-2 flex-shrink-0">
                 <div className="flex items-center gap-3">
                   {program.icono_url ? (
                     <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-muted">
                       <Image
                         src={program.icono_url}
-                        alt={`${program.nombre} - ${program.categoria?.nombre || 'Herramienta de diseño'}${program.es_open_source ? ' gratis y open source' : ''}`}
+                        alt={`${program.nombre} icono`}
                         title={program.nombre}
                         fill
                         className="object-contain p-1"
@@ -182,9 +197,18 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
                     
                     <div className="flex items-center gap-1.5 flex-shrink-0">
                       {program.es_recomendado && (
-                        <div className="flex items-center justify-center rounded-full bg-warning/10 p-1.5" title="Recomendado">
-                          <Star className="h-3.5 w-3.5 fill-warning text-warning" />
-                        </div>
+                        <TooltipProvider delayDuration={200}>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <div className="flex items-center justify-center rounded-full bg-warning/10 p-1.5">
+                                <Star className="h-3.5 w-3.5 fill-warning text-warning" />
+                              </div>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Recomendado por Secret Network</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
                       )}
                       {program.es_open_source && (
                         <div className="flex items-center justify-center rounded-full bg-muted p-1.5" title="Open Source">
@@ -195,21 +219,22 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
                   </div>
                 </div>
 
-                {program.categoria && (
+                {/* Subcategoría */}
+                {program.subcategorias && program.subcategorias.length > 0 && (
                   <div className="flex items-center gap-1 text-sm font-medium text-primary mt-1.5">
-                    <span>#{stripHtml(program.categoria.nombre)}</span>
+                    <span>#{stripHtml(program.subcategorias[0].nombre)}</span>
                   </div>
                 )}
               </CardHeader>
 
-              {/* Screenshot 16:9 - sin padding, llega a los bordes */}
+              {/* Screenshot */}
               <CardContent className="p-0 flex-1">
                 <div className="relative w-full h-full bg-muted">
                   {program.captura_url ? (
                     <Image
                       src={program.captura_url}
-                      alt={`Captura de pantalla de ${program.nombre} mostrando su interfaz y funcionalidades`}
-                      title={`Captura de pantalla de ${program.nombre}`}
+                      alt={`Captura de ${program.nombre}`}
+                      title={`Captura de ${program.nombre}`}
                       fill
                       className="object-cover"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -235,14 +260,13 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
                 transform: 'rotateY(180deg)'
               }}
             >
-              {/* Header - mismo que el frente */}
               <CardHeader className="pb-2 flex-shrink-0">
                 <div className="flex items-center gap-3">
                   {program.icono_url ? (
                     <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-muted">
                       <Image
                         src={program.icono_url}
-                        alt={`${program.nombre} - ${program.categoria?.nombre || 'Herramienta de diseño'}${program.es_open_source ? ' gratis y open source' : ''}`}
+                        alt={`${program.nombre} icono`}
                         title={program.nombre}
                         fill
                         className="object-contain p-1"
@@ -262,9 +286,18 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
                     
                     <div className="flex items-center gap-1.5 flex-shrink-0">
                       {program.es_recomendado && (
-                        <div className="flex items-center justify-center rounded-full bg-warning/10 p-1.5" title="Recomendado">
-                          <Star className="h-3.5 w-3.5 fill-warning text-warning" />
-                        </div>
+                        <TooltipProvider delayDuration={200}>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <div className="flex items-center justify-center rounded-full bg-warning/10 p-1.5">
+                                <Star className="h-3.5 w-3.5 fill-warning text-warning" />
+                              </div>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Recomendado por Secret Network</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
                       )}
                       {program.es_open_source && (
                         <div className="flex items-center justify-center rounded-full bg-muted p-1.5" title="Open Source">
@@ -275,9 +308,10 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
                   </div>
                 </div>
 
-                {program.categoria && (
+                {/* Subcategoría */}
+                {program.subcategorias && program.subcategorias.length > 0 && (
                   <div className="flex items-center gap-1 text-sm font-medium text-primary mt-1.5">
-                    <span>#{stripHtml(program.categoria.nombre)}</span>
+                    <span>#{stripHtml(program.subcategorias[0].nombre)}</span>
                   </div>
                 )}
               </CardHeader>
@@ -288,10 +322,11 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
                   {stripHtml(program.descripcion_corta || "No hay descripción disponible.")}
                 </CardDescription>
 
-                {program.subcategorias && program.subcategorias.length > 0 && (
+                {/* Subcategorías (si hay más de una) */}
+                {program.subcategorias && program.subcategorias.length > 1 && (
                   <div className="overflow-x-auto lg:overflow-x-visible -mx-6 px-6 lg:mx-0 lg:px-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                     <div className="flex lg:flex-wrap gap-1.5 min-w-max lg:min-w-0">
-                      {program.subcategorias.map((subcat) => (
+                      {program.subcategorias.slice(1).map((subcat) => (
                         <span
                           key={subcat.id}
                           className="inline-flex items-center rounded-md bg-accent/50 px-2 py-0.5 text-xs font-medium text-accent-foreground whitespace-nowrap"
@@ -303,17 +338,22 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
                   </div>
                 )}
 
-                {program.dificultad && (
+                {/* Usos en lugar de dificultad */}
+                {program.usos && program.usos.length > 0 && (
                   <div>
-                    <span className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ${
-                      program.dificultad === 'Facil' 
-                        ? 'bg-success/10 text-success' 
-                        : program.dificultad === 'Intermedio'
-                        ? 'bg-warning/10 text-warning'
-                        : 'bg-destructive/10 text-destructive'
-                    }`}>
-                      {program.dificultad}
-                    </span>
+                    <h4 className="text-xs font-semibold text-muted-foreground mb-1.5">Para qué sirve:</h4>
+                    <div className="flex flex-wrap gap-1.5">
+                      {program.usos.slice(0, 3).map((uso, idx) => (
+                        <Badge key={idx} variant="secondary" className="text-xs">
+                          {uso}
+                        </Badge>
+                      ))}
+                      {program.usos.length > 3 && (
+                        <Badge variant="outline" className="text-xs">
+                          +{program.usos.length - 3}
+                        </Badge>
+                      )}
+                    </div>
                   </div>
                 )}
               </CardContent>
@@ -331,9 +371,11 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
     );
   }
 
-  // Medium variant (default)
+  // ============================================
+  // VARIANT: MEDIUM (default)
+  // ============================================
   return (
-    <Link href={`/programas/${program.slug}`} className="block h-full" prefetch={false}>
+    <Link href={`/programas/${program.slug}`} className="block h-full" prefetch={false} onClick={handleClick}>
       <Card className="group relative h-full overflow-hidden transition-all duration-300 hover:border-primary hover:shadow-lg hover:shadow-primary/10 flex flex-col">
         <CardHeader className="pb-4">
           <div className="flex items-center gap-3 mb-3">
@@ -341,7 +383,7 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
               <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-muted">
                 <Image
                   src={program.icono_url}
-                  alt={`${program.nombre} - ${program.categoria?.nombre || 'Herramienta de diseño'}${program.es_open_source ? ' gratis y open source' : ''}`}
+                  alt={`${program.nombre} icono`}
                   title={program.nombre}
                   fill
                   className="object-contain p-1"
@@ -361,9 +403,18 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
               
               <div className="flex items-center gap-1.5 flex-shrink-0">
                 {program.es_recomendado && (
-                  <div className="flex items-center justify-center rounded-full bg-warning/10 p-1.5" title="Recomendado">
-                    <Star className="h-3.5 w-3.5 fill-warning text-warning" />
-                  </div>
+                  <TooltipProvider delayDuration={200}>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div className="flex items-center justify-center rounded-full bg-warning/10 p-1.5">
+                          <Star className="h-3.5 w-3.5 fill-warning text-warning" />
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Recomendado por Secret Network</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 )}
                 {program.es_open_source && (
                   <div className="flex items-center justify-center rounded-full bg-muted p-1.5" title="Open Source">
@@ -374,9 +425,10 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
             </div>
           </div>
 
-          {program.categoria && (
+          {/* Subcategoría */}
+          {program.subcategorias && program.subcategorias.length > 0 && (
             <div className="flex items-center gap-1 text-sm font-medium text-primary mb-2">
-              <span>#{stripHtml(program.categoria.nombre)}</span>
+              <span>#{stripHtml(program.subcategorias[0].nombre)}</span>
             </div>
           )}
         </CardHeader>
@@ -387,9 +439,10 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
           </CardDescription>
 
           <div className="space-y-3">
-            {program.subcategorias && program.subcategorias.length > 0 && (
+            {/* Subcategorías adicionales */}
+            {program.subcategorias && program.subcategorias.length > 1 && (
               <div className="flex flex-wrap gap-1.5">
-                {program.subcategorias.slice(0, 3).map((subcat) => (
+                {program.subcategorias.slice(1, 4).map((subcat) => (
                   <span
                     key={subcat.id}
                     className="inline-flex items-center rounded-md bg-accent/50 px-2 py-0.5 text-xs font-medium text-accent-foreground"
@@ -397,41 +450,40 @@ export function ProgramCard({ program, variant = 'medium' }: ProgramCardProps) {
                     #{stripHtml(subcat.nombre)}
                   </span>
                 ))}
-                {program.subcategorias.length > 3 && (
+                {program.subcategorias.length > 4 && (
                   <span className="inline-flex items-center rounded-md bg-accent/50 px-2 py-0.5 text-xs font-medium text-accent-foreground">
-                    +{program.subcategorias.length - 3}
+                    +{program.subcategorias.length - 4}
                   </span>
                 )}
               </div>
             )}
 
-            {program.dificultad && (
+            {/* Usos en lugar de dificultad */}
+            {program.usos && program.usos.length > 0 && (
               <div>
-                <span className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ${
-                  program.dificultad === 'Facil' 
-                    ? 'bg-success/10 text-success' 
-                    : program.dificultad === 'Intermedio'
-                    ? 'bg-warning/10 text-warning'
-                    : 'bg-destructive/10 text-destructive'
-                }`}>
-                  {program.dificultad}
-                </span>
+                <h4 className="text-xs font-semibold text-muted-foreground mb-1.5">Para qué sirve:</h4>
+                <div className="flex flex-wrap gap-1.5">
+                  {program.usos.slice(0, 3).map((uso, idx) => (
+                    <Badge key={idx} variant="secondary" className="text-xs">
+                      {uso}
+                    </Badge>
+                  ))}
+                  {program.usos.length > 3 && (
+                    <Badge variant="outline" className="text-xs">
+                      +{program.usos.length - 3}
+                    </Badge>
+                  )}
+                </div>
               </div>
             )}
           </div>
         </CardContent>
 
         <CardFooter className="pt-4 mt-auto">
-          {program.web_oficial_url ? (
-            <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary transition-colors group-hover:text-primary/80">
-              <span>Ver detalles</span>
-              <ExternalLink className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </span>
-          ) : (
-            <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary transition-colors group-hover:text-primary/80">
-              <span>Ver detalles</span>
-            </span>
-          )}
+          <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary transition-colors group-hover:text-primary/80">
+            <span>Ver detalles</span>
+            <ExternalLink className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </span>
         </CardFooter>
       </Card>
     </Link>

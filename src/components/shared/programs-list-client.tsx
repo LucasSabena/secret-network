@@ -3,6 +3,8 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { ProgramCard } from "@/components/shared/program-card";
 import { ProgramFilters, type FilterOptions } from "@/components/shared/program-filters";
+import { CategoryTabs } from "@/components/shared/category-tabs";
+import { SubcategoryFilter } from "@/components/shared/subcategory-filter";
 import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
 
 interface Programa {
@@ -38,6 +40,8 @@ interface Categoria {
   nombre: string;
   slug: string;
   id_categoria_padre?: number | null;
+  descripcion?: string | null;
+  icono?: string | null;
 }
 
 interface ModeloPrecio {
@@ -61,9 +65,22 @@ export function ProgramsListClient({
   modelosPrecios,
   programasModelosPrecios
 }: ProgramsListClientProps) {
+  // Encontrar "Programas de diseño" por defecto
+  const categoriasPrincipales = categorias.filter(c => !c.id_categoria_padre);
+  const programasDeDiseno = categoriasPrincipales.find(
+    c => c.slug === 'programas-de-diseno' || 
+         c.slug === 'diseno-grafico' || 
+         c.nombre.toLowerCase().includes('diseño')
+  );
+  
+  // Estado para CategoryTabs (filtro visual principal) - Seleccionar programas de diseño por defecto
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(programasDeDiseno?.id || null);
+  const [selectedSubcategoryIds, setSelectedSubcategoryIds] = useState<number[]>([]); // Cambiado a array
+  const [useAndOperator, setUseAndOperator] = useState(false); // false = OR, true = AND
+
   const [filters, setFilters] = useState<FilterOptions>({
     searchTerm: '',
-    categoriaId: null,
+    categoriaId: programasDeDiseno?.id || null, // Inicializar con la categoría seleccionada
     subcategoriaIds: [],
     modelosPrecioIds: [],
     dificultad: null,
@@ -75,6 +92,26 @@ export function ProgramsListClient({
   // Estado para infinite scroll
   const [displayCount, setDisplayCount] = useState(24); // Mostrar 24 inicialmente (3x8 grid)
   const ITEMS_PER_PAGE = 24; // Cargar de 24 en 24
+
+  // Sincronizar CategoryTabs con filtros
+  useEffect(() => {
+    setFilters(prev => ({
+      ...prev,
+      categoriaId: selectedCategoryId,
+      subcategoriaIds: selectedSubcategoryIds
+    }));
+  }, [selectedCategoryId, selectedSubcategoryIds]);
+
+  // Resetear displayCount cuando cambian los filtros
+  useEffect(() => {
+    setDisplayCount(ITEMS_PER_PAGE);
+  }, [filters]);
+
+  // Obtener subcategorías de la categoría seleccionada
+  const subcategoriasFiltered = useMemo(() => {
+    if (!selectedCategoryId) return [];
+    return subcategorias.filter(sub => sub.id_categoria_padre === selectedCategoryId);
+  }, [selectedCategoryId, subcategorias]);
 
   // Crear mapa de modelos de precio por programa
   const programaModelosMap = useMemo(() => {
@@ -112,13 +149,22 @@ export function ProgramsListClient({
       result = result.filter(p => p.categoria?.id === filters.categoriaId);
     }
 
-    // Filtro de subcategorías
+    // Filtro de subcategorías con operador AND/OR
     if (filters.subcategoriaIds.length > 0) {
-      result = result.filter(programa =>
-        programa.subcategorias?.some(sub =>
-          filters.subcategoriaIds.includes(sub.id)
-        )
-      );
+      if (useAndOperator) {
+        // AND: El programa debe tener TODAS las subcategorías seleccionadas
+        result = result.filter(programa => {
+          const programaSubcatIds = programa.subcategorias?.map(sub => sub.id) || [];
+          return filters.subcategoriaIds.every(id => programaSubcatIds.includes(id));
+        });
+      } else {
+        // OR: El programa debe tener AL MENOS UNA de las subcategorías seleccionadas
+        result = result.filter(programa =>
+          programa.subcategorias?.some(sub =>
+            filters.subcategoriaIds.includes(sub.id)
+          )
+        );
+      }
     }
 
     // Filtro de modelos de precio
@@ -173,7 +219,7 @@ export function ProgramsListClient({
     }
 
     return result;
-  }, [initialPrograms, filters, programaModelosMap]);
+  }, [initialPrograms, filters, programaModelosMap, useAndOperator]); // Agregado useAndOperator
 
   // Programas a mostrar (con infinite scroll)
   const displayedPrograms = useMemo(() => {
@@ -202,13 +248,34 @@ export function ProgramsListClient({
 
   return (
     <div className="space-y-8">
-      {/* Filters */}
+      {/* Filters avanzados (primero, arriba de todo) */}
       <ProgramFilters
-        categorias={categorias.filter(c => !c.id_categoria_padre)}
+        categorias={categoriasPrincipales}
         subcategorias={subcategorias}
         modelosPrecios={modelosPrecios}
         onFilterChange={setFilters}
       />
+
+      {/* CategoryTabs - Filtro visual principal */}
+      <CategoryTabs
+        categorias={categoriasPrincipales as any}
+        selectedId={selectedCategoryId}
+        onSelect={(id) => {
+          setSelectedCategoryId(id);
+          setSelectedSubcategoryIds([]); // Reset subcategorías al cambiar categoría
+        }}
+      />
+
+      {/* SubcategoryFilter - Aparece cuando hay categoría seleccionada */}
+      {selectedCategoryId && subcategoriasFiltered.length > 0 && (
+        <SubcategoryFilter
+          subcategorias={subcategoriasFiltered as any}
+          selectedSubIds={selectedSubcategoryIds}
+          onSelect={setSelectedSubcategoryIds}
+          useAndOperator={useAndOperator}
+          onToggleOperator={setUseAndOperator}
+        />
+      )}
 
       {/* Results Count */}
       <div className="flex items-center justify-between">

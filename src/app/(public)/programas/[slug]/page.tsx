@@ -463,19 +463,20 @@ export default async function ProgramPage({ params }: ProgramPageProps) {
                 <CardTitle className="text-lg">Detalles</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {/* Difficulty */}
-                {programaCompleto.dificultad && (
+                {/* Uses */}
+                {programaCompleto.usos && programaCompleto.usos.length > 0 && (
                   <div>
-                    <h3 className="mb-2 text-sm font-medium text-foreground">Dificultad</h3>
-                    <span className={`inline-flex items-center rounded-md px-2.5 py-1 text-sm font-medium ${
-                      programaCompleto.dificultad === 'Facil' 
-                        ? 'bg-success/10 text-success' 
-                        : programaCompleto.dificultad === 'Intermedio'
-                        ? 'bg-warning/10 text-warning'
-                        : 'bg-destructive/10 text-destructive'
-                    }`}>
-                      {programaCompleto.dificultad}
-                    </span>
+                    <h3 className="mb-2 text-sm font-medium text-foreground">Para qué sirve</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {programaCompleto.usos.map((uso: string, index: number) => (
+                        <span
+                          key={index}
+                          className="inline-flex items-center rounded-md bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary"
+                        >
+                          {uso}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 )}
 
@@ -551,19 +552,20 @@ export default async function ProgramPage({ params }: ProgramPageProps) {
                   <CardTitle className="text-lg">Detalles</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  {/* Difficulty */}
-                  {programaCompleto.dificultad && (
+                  {/* Uses */}
+                  {programaCompleto.usos && programaCompleto.usos.length > 0 && (
                     <div>
-                      <h3 className="mb-2 text-sm font-medium text-foreground">Dificultad</h3>
-                      <span className={`inline-flex items-center rounded-md px-2.5 py-1 text-sm font-medium ${
-                        programaCompleto.dificultad === 'Facil' 
-                          ? 'bg-success/10 text-success' 
-                          : programaCompleto.dificultad === 'Intermedio'
-                          ? 'bg-warning/10 text-warning'
-                          : 'bg-destructive/10 text-destructive'
-                      }`}>
-                        {programaCompleto.dificultad}
-                      </span>
+                      <h3 className="mb-2 text-sm font-medium text-foreground">Para qué sirve</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {programaCompleto.usos.map((uso: string, index: number) => (
+                          <span
+                            key={index}
+                            className="inline-flex items-center rounded-md bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary"
+                          >
+                            {uso}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   )}
 

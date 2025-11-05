@@ -15,6 +15,7 @@ export type Programa = {
   es_open_source: boolean;
   es_recomendado: boolean;
   web_oficial_url: string | null;
+  usos: string[] | null; // Nuevo campo: array de usos principales
 };
 
 // Ejemplo para la tabla 'categorias'
