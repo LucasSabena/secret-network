@@ -23,7 +23,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { BlogPost } from '@/lib/types';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { BlogPost, Block } from '@/lib/types';
 import { BlogCardModern } from './blog-card-modern';
 import { BlogQuickCreate } from './blog-editor-v2/blog-quick-create';
 import { BlogJsonImporter } from './blog-json-importer';
@@ -327,6 +333,90 @@ export default function BlogManagerV2() {
     }
   }
 
+  async function handleJsonImport(data: { metadata: any; blocks: Block[] }) {
+    try {
+      const supabase = supabaseBrowserClient;
+
+      console.log('=== INICIO IMPORTACIÓN ===');
+      console.log('Metadata recibida:', data.metadata);
+      console.log('Bloques recibidos:', data.blocks.length);
+
+      // Crear el post con SOLO los campos que existen en la tabla blog_posts
+      const newPost: any = {
+        // Campos requeridos
+        titulo: data.metadata.titulo,
+        slug: data.metadata.slug,
+        descripcion_corta: data.metadata.descripcion_corta || '',
+        contenido: '', // Legacy field, siempre vacío
+        contenido_bloques: data.blocks,
+        publicado: data.metadata.publicado || false,
+        fecha_publicacion: data.metadata.fecha_publicacion || new Date().toISOString(),
+        actualizado_en: new Date().toISOString(),
+        
+        // Campos opcionales con valores por defecto
+        imagen_portada_url: data.metadata.imagen_portada_url || null,
+        imagen_portada_alt: data.metadata.imagen_portada_alt || null,
+        autor: data.metadata.autor || 'Binary Studio',
+        autor_id: null, // Se puede asignar después manualmente
+        tags: Array.isArray(data.metadata.tags) ? data.metadata.tags : [],
+        
+        // Campos del sistema con valores por defecto
+        scheduled_for: null,
+        status: 'draft' as const,
+        meta_title: null,
+        meta_description: null,
+        og_image: null,
+        canonical_url: null,
+        keywords: null,
+        is_featured: false,
+        serie_order: 0,
+        is_featured_in_blog: false,
+        blog_featured_order: 0,
+      };
+
+      console.log('✅ Datos a insertar:', newPost);
+
+      const { data: insertedPost, error } = await supabase
+        .from('blog_posts')
+        .insert([newPost])
+        .select()
+        .single();
+
+      if (error) {
+        console.error('❌ Error de Supabase:', error);
+        console.error('Código:', error.code);
+        console.error('Mensaje:', error.message);
+        console.error('Detalles:', error.details);
+        console.error('Hint:', error.hint);
+        
+        toast({
+          title: 'Error de base de datos',
+          description: error.message || error.hint || 'Verifica la consola para más detalles',
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      console.log('✅ Post insertado exitosamente con ID:', insertedPost.id);
+
+      setPosts([insertedPost, ...posts]);
+      setIsJsonImporterOpen(false);
+
+      toast({
+        title: '✅ Blog importado',
+        description: `Post "${insertedPost.titulo}" creado correctamente`,
+      });
+    } catch (error: any) {
+      console.error('❌ Error crítico:', error);
+      
+      toast({
+        title: 'Error al importar',
+        description: error.message || 'Error desconocido. Revisa la consola.',
+        variant: 'destructive',
+      });
+    }
+  }
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-96">
@@ -427,7 +517,17 @@ export default function BlogManagerV2() {
         }}
       />
 
-      {/* JSON Importer - usar el componente existente si es necesario */}
+      <Dialog open={isJsonImporterOpen} onOpenChange={setIsJsonImporterOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto" aria-describedby="dialog-description">
+          <DialogHeader>
+            <DialogTitle>Importar Blog desde JSON</DialogTitle>
+            <p id="dialog-description" className="text-sm text-muted-foreground">
+              Sube un archivo JSON generado por IA para crear un nuevo post de blog
+            </p>
+          </DialogHeader>
+          <BlogJsonImporter onImport={handleJsonImport} />
+        </DialogContent>
+      </Dialog>
 
       <AlertDialog open={postToDelete !== null} onOpenChange={() => setPostToDelete(null)}>
         <AlertDialogContent>
