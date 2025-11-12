@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Plus, Search, Filter, SortAsc, Loader2, Upload as UploadIcon } from 'lucide-react';
+import { Plus, Search, Filter, SortAsc, Loader2, Upload as UploadIcon, MoreVertical, FolderOpen, Star, Tag, FileText, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
@@ -13,6 +13,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -436,14 +444,49 @@ export default function BlogManagerV2() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => setIsJsonImporterOpen(true)}>
-            <UploadIcon className="h-4 w-4 mr-2" />
-            Importar JSON
-          </Button>
-          <Button onClick={() => setIsQuickCreateOpen(true)}>
+          <Button onClick={() => setIsQuickCreateOpen(true)} className="bg-pink-500 hover:bg-pink-600">
             <Plus className="h-4 w-4 mr-2" />
             Nuevo Post
           </Button>
+          
+          {/* Menú de opciones secundarias */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="icon">
+                <MoreVertical className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel>Crear desde</DropdownMenuLabel>
+              <DropdownMenuItem onClick={() => setIsJsonImporterOpen(true)}>
+                <UploadIcon className="mr-2 h-4 w-4" />
+                Importar JSON con IA
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push('/admin/templates')}>
+                <Sparkles className="mr-2 h-4 w-4" />
+                Desde Template
+              </DropdownMenuItem>
+              
+              <DropdownMenuSeparator />
+              <DropdownMenuLabel>Gestionar</DropdownMenuLabel>
+              <DropdownMenuItem onClick={() => router.push('/admin/blog-series')}>
+                <FolderOpen className="mr-2 h-4 w-4" />
+                Series de Blogs
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push('/admin/blog-featured')}>
+                <Star className="mr-2 h-4 w-4" />
+                Posts Destacados
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push('/admin/blog-categorias')}>
+                <Tag className="mr-2 h-4 w-4" />
+                Categorías
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push('/admin/templates')}>
+                <FileText className="mr-2 h-4 w-4" />
+                Gestionar Templates
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
