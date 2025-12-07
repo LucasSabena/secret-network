@@ -1,0 +1,122 @@
+{
+    "descripcion": "Ejemplos de blogs bien estructurados. Observa cómo se combinan los bloques y se agrupan los textos.",
+    "ejemplos": [
+        {
+            "metadata": {
+                "titulo": "Figma vs Sketch: La batalla final por el diseño UI/UX",
+                "slug": "figma-vs-sketch-diseno-ui-ux",
+                "descripcion_corta": "Analizamos las diferencias clave entre Figma y Sketch. Descubre cuál es la mejor herramienta para tu flujo de trabajo en 2024.",
+                "imagen_portada_url": "[SEARCH: figma vs sketch comparison]",
+                "categoria_slug": "diseno",
+                "tags": [
+                    "ui",
+                    "ux",
+                    "herramientas"
+                ]
+            },
+            "bloques": [
+                {
+                    "type": "text",
+                    "data": {
+                        "format": "paragraph",
+                        "content": "<p>Hace unos años, Sketch era el rey indiscutible del diseño de interfaces en macOS. Sin embargo, la llegada de Figma con su enfoque basado en el navegador y colaboración en tiempo real cambió el juego por completo.</p><p>En este artículo, desglosaremos las diferencias fundamentales, rendimiento y características únicas de cada uno para ayudarte a decidir.</p>"
+                    }
+                },
+                {
+                    "type": "toc",
+                    "data": {
+                        "title": "Contenido del análisis"
+                    }
+                },
+                {
+                    "type": "text",
+                    "data": {
+                        "format": "h2",
+                        "content": "Colaboración: El factor decisivo"
+                    }
+                },
+                {
+                    "type": "text",
+                    "data": {
+                        "format": "paragraph",
+                        "content": "<p>La mayor diferencia radica en cómo manejan la colaboración. <strong>Figma</strong> nació en la web, permitiendo que múltiples diseñadores trabajen en el mismo archivo simultáneamente, como en Google Docs.</p>"
+                    }
+                },
+                {
+                    "type": "image",
+                    "data": {
+                        "url": "[SEARCH: figma multiplayer cursor demo]",
+                        "alt": "Demonstración de cursores múltiples en Figma",
+                        "caption": "La colaboración en tiempo real es el sello distintivo de Figma."
+                    }
+                },
+                {
+                    "type": "program-card",
+                    "data": {
+                        "programId": 456,
+                        "variant": "default"
+                    }
+                },
+                {
+                    "type": "text",
+                    "data": {
+                        "format": "h2",
+                        "content": "Comparativa Rápida"
+                    }
+                },
+                {
+                    "type": "comparison",
+                    "data": {
+                        "featureLabels": [
+                            "Plataforma",
+                            "Colaboración",
+                            "Precio Inicial",
+                            "Offline"
+                        ],
+                        "items": [
+                            {
+                                "name": "Figma",
+                                "features": {
+                                    "Plataforma": "Web, Win, Mac, Linux",
+                                    "Colaboración": "Nativa en tiempo real",
+                                    "Precio Inicial": "Gratis",
+                                    "Offline": "Limitado"
+                                }
+                            },
+                            {
+                                "name": "Sketch",
+                                "features": {
+                                    "Plataforma": "Mac Only",
+                                    "Colaboración": "Vía Cloud (Sync)",
+                                    "Precio Inicial": "$9/mes",
+                                    "Offline": "Completo"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "text",
+                    "data": {
+                        "format": "h2",
+                        "content": "Conclusión"
+                    }
+                },
+                {
+                    "type": "pros-cons",
+                    "data": {
+                        "title": "Por qué elegir Figma",
+                        "pros": [
+                            "Independiente del sistema operativo",
+                            "Plan gratuito generoso",
+                            "Comunidad de plugins inmensa"
+                        ],
+                        "cons": [
+                            "Requiere conexión para funciones clave"
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}

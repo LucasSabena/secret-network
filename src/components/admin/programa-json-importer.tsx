@@ -81,6 +81,7 @@ export default function ProgramaJsonImporter({ isOpen, onClose, onSuccess }: Pro
 
     const [isImporting, setIsImporting] = useState(false);
     const [isAutoCompleting, setIsAutoCompleting] = useState(false);
+    const [linkOnlyMode, setLinkOnlyMode] = useState(false); // Skip existing, only link alternatives
     const { toast } = useToast();
 
     const steps = [
@@ -131,6 +132,33 @@ export default function ProgramaJsonImporter({ isOpen, onClose, onSuccess }: Pro
                 const catId = catMap.get(p.categoria_slug);
                 if (!catId) throw new Error(`Categoría desconocida: ${p.categoria_slug}`);
 
+                // Check if program already exists
+                const { data: existingProgram } = await supabase
+                    .from('programas')
+                    .select('id')
+                    .eq('slug', p.slug)
+                    .single();
+
+                if (existingProgram) {
+                    // Program exists - skip creation, just store for linking
+                    console.log(`Program ${p.slug} already exists (ID: ${existingProgram.id}), skipping creation`);
+                    results.imported.push({
+                        nombre: p.nombre,
+                        slug: p.slug,
+                        url: p.web_oficial_url,
+                        status: 'skipped',
+                        programId: existingProgram.id,
+                        alternativos: p.programas_alternativos || []
+                    });
+                    continue; // Skip to next program
+                }
+
+                // In linkOnlyMode, don't create new programs
+                if (linkOnlyMode) {
+                    console.log(`[Link-Only Mode] Skipping new program: ${p.slug}`);
+                    continue;
+                }
+
                 // Sanitize usos - ensure it's an array of strings
                 let sanitizedUsos = null;
                 if (p.usos) {
@@ -180,8 +208,8 @@ export default function ProgramaJsonImporter({ isOpen, onClose, onSuccess }: Pro
             }
         }
 
-        // Link alternatives after all programs are created
-        if (results.success > 0) {
+        // Link alternatives after all programs are created or skipped
+        if (results.imported.length > 0) {
             console.log('Linking alternatives...');
             for (const item of results.imported) {
                 if (item.alternativos && item.alternativos.length > 0 && item.programId) {
@@ -348,15 +376,39 @@ export default function ProgramaJsonImporter({ isOpen, onClose, onSuccess }: Pro
                                             <div className="flex gap-1 mt-1">
                                                 {p.web_oficial_url && <Badge variant="outline" className="text-[10px]">URL</Badge>}
                                                 {p.usos && <Badge variant="outline" className="text-[10px]">{p.usos.length} usos</Badge>}
+                                                {p.programas_alternativos && p.programas_alternativos.length > 0 && (
+                                                    <Badge variant="outline" className="text-[10px] bg-purple-50 text-purple-700 border-purple-200">
+                                                        {p.programas_alternativos.length} alts
+                                                    </Badge>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
                                 ))}
                             </div>
 
+                            {/* Link-Only Mode Option */}
+                            <div className="p-4 rounded-lg border bg-muted/30">
+                                <label className="flex items-start gap-3 cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        checked={linkOnlyMode}
+                                        onChange={(e) => setLinkOnlyMode(e.target.checked)}
+                                        className="mt-1 h-4 w-4 rounded border-gray-300"
+                                    />
+                                    <div>
+                                        <div className="font-medium">Solo completar enlaces</div>
+                                        <div className="text-xs text-muted-foreground">
+                                            No crea programas nuevos. Solo linkea alternativas a programas existentes.
+                                            Ideal para re-importar un JSON sin duplicar.
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+
                             <div className="flex justify-end pt-4 border-t">
                                 <Button onClick={handleImport} className="bg-pink-600 hover:bg-pink-700 min-w-[150px]">
-                                    <Upload className="mr-2 h-4 w-4" /> Importar Todo
+                                    <Upload className="mr-2 h-4 w-4" /> {linkOnlyMode ? 'Solo Linkear' : 'Importar Todo'}
                                 </Button>
                             </div>
                         </div>

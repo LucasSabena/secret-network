@@ -1,0 +1,25 @@
+{
+    "reglas_seo": {
+        "titulo": {
+            "longitud": "50-60 caracteres",
+            "formato": "Debe incluir la Keyword Principal cerca del inicio. Debe ser 'clickbait' pero honesto.",
+            "ejemplos": [
+                "Figma vs Sketch: ¿Cuál es mejor para UI en 2024?",
+                "10 Plugins de VS Code que necesitas instalar hoy"
+            ]
+        },
+        "meta_descripcion": {
+            "longitud": "140-160 caracteres",
+            "contenido": "Un resumen persuasivo que incluya la Keyword Secundaria y una llamada a la acción implícita."
+        },
+        "estructura": {
+            "headings": "Usa H2 para secciones principales y H3 para subsecciones. NUNCA saltes de H2 a H4.",
+            "parrafos": "Párrafos cortos (3-4 líneas máximo) para facilitar la lectura en móviles.",
+            "featured_snippets": "Usa listas (ul/ol) y tablas (table/comparison) para intentar ganar el snippet 0 de Google.",
+            "keywords": "Distribuye la keyword principal en el primer párrafo, en al menos un H2 y en la conclusión."
+        },
+        "interlinking": {
+            "regla": "Siempre enlaza a 2-3 blogs relacionados y menciona 1-2 programas de la base de datos usando los bloques 'blog-card' o 'program-card'."
+        }
+    }
+}

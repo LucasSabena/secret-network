@@ -1,0 +1,2414 @@
+{
+  "descripcion": "Programas disponibles en la base de datos. Úsalos para los bloques 'program-card' y 'programs-grid'.",
+  "total": 301,
+  "programas": [
+    {
+      "id": 117,
+      "nombre": "7-Zip",
+      "slug": "7-zip",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "<p>Un archivador de ficheros de código abierto y gratuito con una alta tasa de compresión.</p>",
+      "url": "https://7-zip.org/"
+    },
+    {
+      "id": 75,
+      "nombre": "Abduzeedo",
+      "slug": "abduzeedo",
+      "categoria": "Inspiración y referencias",
+      "descripcion": "<p>Un blog de diseño legendario que comparte inspiración diaria en diseño gráfico, 3D, branding, ilustración y UI/UX.</p>",
+      "url": "abduzeedo.com"
+    },
+    {
+      "id": 192,
+      "nombre": "Adobe Acrobat Pro",
+      "slug": "adobe-acrobat-pro",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>El estándar mundial para crear, editar, firmar y proteger documentos PDF de forma fiable.</p>",
+      "url": "adobe.com/acrobat.html"
+    },
+    {
+      "id": 127,
+      "nombre": "Adobe Aero",
+      "slug": "adobe-aero",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una aplicación de Adobe que permite a los diseñadores crear y compartir experiencias de realidad aumentada inmersivas, sin necesidad de programar.</p>",
+      "url": "adobe.com/products/aero.html"
+    },
+    {
+      "id": 188,
+      "nombre": "Adobe After Effects",
+      "slug": "adobe-after-effects",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>El estándar de la industria para la creación de motion graphics y efectos visuales cinematográficos.</p>",
+      "url": "adobe.com/products/aftereffects.html"
+    },
+    {
+      "id": 141,
+      "nombre": "Adobe Bridge",
+      "slug": "adobe-bridge",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>El navegador de archivos creativos de Adobe que permite previsualizar, organizar, editar y publicar tus activos de forma centralizada.</p>",
+      "url": "adobe.com/products/bridge.html"
+    },
+    {
+      "id": 85,
+      "nombre": "Adobe Color",
+      "slug": "adobe-color",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "<p>Una potente herramienta web para crear, explorar y compartir paletas de colores armoniosas.</p>",
+      "url": "color.adobe.com"
+    },
+    {
+      "id": 143,
+      "nombre": "Adobe Express",
+      "slug": "adobe-express",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>La respuesta de Adobe a Canva. Una aplicación todo-en-uno para crear rápidamente contenido para redes sociales, videos y páginas web.</p>",
+      "url": "adobe.com/express/"
+    },
+    {
+      "id": 98,
+      "nombre": "Adobe Firefly",
+      "slug": "adobe-firefly",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>La familia de modelos de IA generativa de Adobe, diseñada para ser segura para uso comercial e integrada en el flujo de trabajo de Creative Cloud.</p>",
+      "url": "https://firefly.adobe.com/"
+    },
+    {
+      "id": 121,
+      "nombre": "Adobe Fonts",
+      "slug": "adobe-fonts",
+      "categoria": "Recursos y activos",
+      "descripcion": "<p>Un servicio de suscripción con miles de fuentes de alta calidad, incluido con todas las suscripciones de Adobe Creative Cloud.</p>",
+      "url": "fonts.adobe.com/"
+    },
+    {
+      "id": 228,
+      "nombre": "Adobe Fresco",
+      "slug": "adobe-fresco",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>La aplicación de dibujo y pintura digital de Adobe, diseñada para tablets y dispositivos táctiles, con pinceles vivos ultra-realistas.</p>",
+      "url": "https://www.adobe.com/products/fresco.html"
+    },
+    {
+      "id": 205,
+      "nombre": "Adobe Illustrator",
+      "slug": "adobe-illustrator",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>El software estándar de la industria para crear logotipos, iconos, dibujos, tipografías e ilustraciones complejas para cualquier medio.</p>",
+      "url": "adobe.com/products/illustrator.html"
+    },
+    {
+      "id": 197,
+      "nombre": "Adobe InDesign",
+      "slug": "adobe-indesign",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>El software líder mundial para el diseño de páginas y maquetación de documentos para medios impresos y digitales.</p>",
+      "url": "adobe.com/products/indesign.html"
+    },
+    {
+      "id": 226,
+      "nombre": "Adobe Lightroom",
+      "slug": "adobe-lightroom",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>La versión basada en la nube del potente editor de fotos de Adobe, para una edición y sincronización perfectas entre dispositivos.</p>",
+      "url": "https://www.adobe.com/products/photoshop-lightroom.html"
+    },
+    {
+      "id": 225,
+      "nombre": "Adobe Lightroom Classic",
+      "slug": "adobe-lightroom-classic",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>El estándar de la industria para la gestión y revelado de fotografías a nivel profesional, enfocado en un flujo de trabajo de escritorio.</p>",
+      "url": "https://www.adobe.com/products/photoshop-lightroom-classic.html"
+    },
+    {
+      "id": 178,
+      "nombre": "Adobe Photoshop",
+      "slug": "adobe-photoshop",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>El software de referencia mundial para la edición de imágenes, composición digital, pintura digital y retoque fotográfico.</p>",
+      "url": "https://www.adobe.com/products/photoshop.html"
+    },
+    {
+      "id": 172,
+      "nombre": "Adobe Premiere Pro",
+      "slug": "adobe-premiere-pro",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>El software de edición de vídeo no lineal líder en la industria, utilizado por profesionales de cine, televisión y web.</p>",
+      "url": "adobe.com/products/premiere.html"
+    },
+    {
+      "id": 227,
+      "nombre": "Adobe Substance 3D Painter",
+      "slug": "adobe-substance-3d-painter",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>El software estándar de la industria para pintar texturas 3D en tiempo real, a menudo descrito como el 'Photoshop del 3D'.</p>",
+      "url": "https://www.adobe.com/products/substance3d-painter.html"
+    },
+    {
+      "id": 216,
+      "nombre": "Adobe XD",
+      "slug": "adobe-xd",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>La solución de Adobe para el diseño UI/UX, que ofrece herramientas de diseño, prototipado y animación en una sola aplicación.</p>",
+      "url": "https://helpx.adobe.com/support/xd.html"
+    },
+    {
+      "id": 204,
+      "nombre": "Affinity Designer",
+      "slug": "affinity-designer",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>La alternativa más potente a Illustrator, aclamada por su velocidad, su precio de compra única y su capacidad para trabajar en modo vectorial y rasterizado.</p>",
+      "url": "affinity.serif.com/designer/"
+    },
+    {
+      "id": 175,
+      "nombre": "Affinity Photo",
+      "slug": "affinity-photo",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>La alternativa más seria a Photoshop, que ofrece una potencia y velocidad asombrosas con un único pago.</p>",
+      "url": "affinity.serif.com/photo/"
+    },
+    {
+      "id": 196,
+      "nombre": "Affinity Publisher",
+      "slug": "affinity-publisher",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una potente aplicación de maquetación profesional que ofrece una alternativa increíblemente fluida y asequible a InDesign, con un único pago.</p>",
+      "url": "affinity.serif.com/publisher/"
+    },
+    {
+      "id": 59,
+      "nombre": "Airtable",
+      "slug": "airtable",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>Una plataforma que combina la flexibilidad de una hoja de cálculo con la potencia de una base de datos, para organizar cualquier cosa.</p>",
+      "url": "airtable.com/"
+    },
+    {
+      "id": 198,
+      "nombre": "Amadine",
+      "slug": "amadine",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una aplicación de ilustración vectorial intuitiva y asequible para usuarios de Mac, iPad y iPhone.</p>",
+      "url": "amadine.com/"
+    },
+    {
+      "id": 61,
+      "nombre": "Anima App",
+      "slug": "anima-app",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una plataforma que convierte diseños de Figma, Sketch o XD en prototipos interactivos y código HTML, React o Vue listo para producción.</p>",
+      "url": "animaapp.com/"
+    },
+    {
+      "id": 245,
+      "nombre": "Anytype",
+      "slug": "anytype",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>Una herramienta local y p2p para crear tu propio 'segundo cerebro'. La alternativa de código abierto a Notion, enfocada en la privacidad.</p>",
+      "url": "https://anytype.io/"
+    },
+    {
+      "id": 282,
+      "nombre": "Appmotion",
+      "slug": "appmotion",
+      "categoria": "Inspiración y referencias",
+      "descripcion": "Una galería de inspiración que muestra las mejores animaciones e interacciones de UI de aplicaciones móviles reales.",
+      "url": "https://appmotion.design/"
+    },
+    {
+      "id": 164,
+      "nombre": "Artboard Studio",
+      "slug": "artboard-studio",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "<p>Un estudio de diseño gráfico online centrado en la creación de escenas de mockups personalizables y animadas.</p>",
+      "url": "artboard.studio/"
+    },
+    {
+      "id": 99,
+      "nombre": "Artivive",
+      "slug": "artivive",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una plataforma de realidad aumentada que permite a artistas y museos dar vida al arte tradicional, añadiendo capas de animación y video.</p>",
+      "url": "artivive.com/"
+    },
+    {
+      "id": 239,
+      "nombre": "Artlist",
+      "slug": "artlist-io",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Una popular plataforma de suscripción para obtener música y efectos de sonido de alta calidad y sin problemas de copyright.</p>",
+      "url": "https://artlist.io/"
+    },
+    {
+      "id": 103,
+      "nombre": "Audacity",
+      "slug": "audacity",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Un editor de audio multipista, gratuito y de código abierto, que también es excelente para convertir formatos de audio.</p>",
+      "url": "audacityteam.org/"
+    },
+    {
+      "id": 39,
+      "nombre": "AudioX",
+      "slug": "audiox",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Una plataforma emergente de IA para la generación de música y efectos de sonido.</p>",
+      "url": "https://zeyuet.github.io/AudioX/"
+    },
+    {
+      "id": 132,
+      "nombre": "Autodesk Maya",
+      "slug": "autodesk-maya",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>El estándar de la industria cinematográfica para animación de personajes 3D, modelado y efectos visuales complejos.</p>",
+      "url": "autodesk.com/products/maya"
+    },
+    {
+      "id": 78,
+      "nombre": "Awwwards",
+      "slug": "awwwards",
+      "categoria": "Inspiración y referencias",
+      "descripcion": "<p>La plataforma de premios más reconocida que celebra la excelencia en el diseño, la creatividad y la innovación en internet.</p>",
+      "url": "awwwards.com"
+    },
+    {
+      "id": 213,
+      "nombre": "Axure RP",
+      "slug": "axure-rp",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una herramienta profesional para crear prototipos funcionales complejos con lógica condicional, datos dinámicos y documentación detallada.</p>",
+      "url": "axure.com"
+    },
+    {
+      "id": 214,
+      "nombre": "Balsamiq",
+      "slug": "balsamiq",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una herramienta de wireframing rápido que simula la sensación de dibujar en una pizarra o un cuaderno.</p>",
+      "url": "balsamiq.com"
+    },
+    {
+      "id": 73,
+      "nombre": "Behance",
+      "slug": "behance",
+      "categoria": "Inspiración y referencias",
+      "descripcion": "<p>La plataforma líder de Adobe para mostrar y descubrir trabajos creativos en formato de portafolio.</p>",
+      "url": "behance.net"
+    },
+    {
+      "id": 309,
+      "nombre": "Bendito Mockup",
+      "slug": "bendito-mockup",
+      "categoria": "Recursos y activos",
+      "descripcion": "Tienda boutique de mockups de alta calidad con una estética minimalista, realista y cuidada.",
+      "url": "https://benditomockup.com/"
+    },
+    {
+      "id": 136,
+      "nombre": "Blender",
+      "slug": "blender",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>La suite de creación 3D gratuita y de código abierto que lo cubre todo: modelado, escultura, animación, renderizado y VFX.</p>",
+      "url": "blender.org"
+    },
+    {
+      "id": 292,
+      "nombre": "Bolt.new",
+      "slug": "bolt-new",
+      "categoria": "Creación con IA",
+      "descripcion": "Una potente plataforma de IA que construye aplicaciones y sitios web completos a través de conversaciones en lenguaje natural.",
+      "url": "https://bolt.new/"
+    },
+    {
+      "id": 199,
+      "nombre": "Boxy SVG",
+      "slug": "boxy-svg",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Un editor de SVG rápido y fácil de usar, enfocado en desarrolladores web y diseñadores que necesitan crear SVG limpios.</p>",
+      "url": "boxy-svg.com/"
+    },
+    {
+      "id": 74,
+      "nombre": "Branding Style Guides",
+      "slug": "branding-style-guides",
+      "categoria": "Inspiración y referencias",
+      "descripcion": "<p>Un archivo de manuales de identidad visual, guías de estilo y sistemas de diseño de marcas líderes.</p>",
+      "url": "brandingstyleguides.com/"
+    },
+    {
+      "id": 88,
+      "nombre": "Brands of the World",
+      "slug": "brands-of-the-world",
+      "categoria": "Recursos y activos",
+      "descripcion": "<p>La mayor colección de logotipos de marcas de todo el mundo en formato vectorial y de descarga gratuita.</p>",
+      "url": "brandsoftheworld.com"
+    },
+    {
+      "id": 301,
+      "nombre": "btw.so",
+      "slug": "btw-so",
+      "categoria": "Programas de diseño",
+      "descripcion": "Una plataforma open-source y minimalista para construir sitios web personales y blogs en minutos. No requiere habilidades de código o diseño.",
+      "url": "https://www.btw.so/"
+    },
+    {
+      "id": 138,
+      "nombre": "Bynder",
+      "slug": "bynder",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>Una plataforma DAM líder para empresas que ayuda a los equipos a crear, gestionar y distribuir contenido de marca a escala.</p>",
+      "url": "bynder.com/"
+    },
+    {
+      "id": 137,
+      "nombre": "Canto",
+      "slug": "canto",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>Una popular plataforma de gestión de activos digitales que facilita la organización, búsqueda y uso compartido de contenido visual.</p>",
+      "url": "canto.com/"
+    },
+    {
+      "id": 193,
+      "nombre": "Canva",
+      "slug": "canva",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>La plataforma de diseño visual todo-en-uno que permite a cualquiera crear fácilmente desde posts para redes sociales hasta presentaciones y videos.</p>",
+      "url": "canva.com"
+    },
+    {
+      "id": 169,
+      "nombre": "CapCut",
+      "slug": "capcut",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>El editor de video gratuito todo-en-uno, extremadamente popular para crear contenido para redes sociales como TikTok y Reels.</p>",
+      "url": "capcut.com"
+    },
+    {
+      "id": 185,
+      "nombre": "Cavalry",
+      "slug": "cavalry",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una aplicación de animación 2D y motion design de nueva generación, enfocada en la animación procedural y en tiempo real.</p>",
+      "url": "cavalry.scenegroup.co"
+    },
+    {
+      "id": 45,
+      "nombre": "ChatGPT",
+      "slug": "chatgpt",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>El asistente conversacional de IA de OpenAI que popularizó los modelos de lenguaje a gran escala, capaz de generar texto, código y mucho más.</p>",
+      "url": "chat.openai.com/"
+    },
+    {
+      "id": 135,
+      "nombre": "Cinema 4D",
+      "slug": "cinema-4d",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>La herramienta de referencia para motion graphics en 3D, conocida por su facilidad de uso y su potente conjunto de herramientas MoGraph.</p>",
+      "url": "maxon.net/cinema-4d"
+    },
+    {
+      "id": 261,
+      "nombre": "Claude",
+      "slug": "claude",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Un asistente de IA de Anthropic, conocido por su gran ventana de contexto, su seguridad y su tono de comunicación más 'humano'.</p>",
+      "url": "https://claude.ai/"
+    },
+    {
+      "id": 144,
+      "nombre": "ClickUp",
+      "slug": "clickup",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>Una plataforma de productividad todo-en-uno que incluye una potente función de pizarra para la ideación y planificación.</p>",
+      "url": "clickup.com"
+    },
+    {
+      "id": 168,
+      "nombre": "Clipchamp",
+      "slug": "clipchamp",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>El editor de video online de Microsoft, integrado en Windows 11, diseñado para ser rápido y fácil de usar.</p>",
+      "url": "clipchamp.com"
+    },
+    {
+      "id": 104,
+      "nombre": "CloudConvert",
+      "slug": "cloudconvert",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "<p>Un conversor de archivos online que soporta más de 200 formatos diferentes, incluyendo documentos, imágenes, videos y audio.</p>",
+      "url": "cloudconvert.com/"
+    },
+    {
+      "id": 277,
+      "nombre": "Cloudflare Pages",
+      "slug": "cloudflare-pages",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "Una plataforma de despliegue Jamstack que aprovecha la inmensa red global de Cloudflare para una velocidad y seguridad inigualables.",
+      "url": "https://pages.cloudflare.com/"
+    },
+    {
+      "id": 182,
+      "nombre": "Cloudinary",
+      "slug": "cloudinary",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "<p>Una plataforma completa para la gestión, optimización y entrega de imágenes y videos para sitios web y aplicaciones.</p>",
+      "url": "cloudinary.com/"
+    },
+    {
+      "id": 35,
+      "nombre": "Cofolios",
+      "slug": "cofolios",
+      "categoria": "Inspiración y referencias",
+      "descripcion": "<p>Una galería curada de portafolios de estudiantes de diseño y recién graduados de las mejores empresas y universidades.</p>",
+      "url": "cofolios.com/"
+    },
+    {
+      "id": 288,
+      "nombre": "Component Gallery",
+      "slug": "component-gallery",
+      "categoria": "Inspiración y referencias",
+      "descripcion": "Una galería de inspiración curada, enfocada específicamente en componentes de interfaz de usuario de sitios web reales y bien diseñados.",
+      "url": "https://component.gallery/"
+    },
+    {
+      "id": 147,
+      "nombre": "Conceptboard",
+      "slug": "conceptboard",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>Una pizarra online segura para la colaboración visual en equipo, popular en entornos corporativos.</p>",
+      "url": "conceptboard.com"
+    },
+    {
+      "id": 125,
+      "nombre": "Construct",
+      "slug": "construct",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Un potente motor de juegos 2D basado en HTML5 que funciona completamente en el navegador, sin necesidad de programar.</p>",
+      "url": "construct.net/"
+    },
+    {
+      "id": 102,
+      "nombre": "Convertio",
+      "slug": "convertio",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "<p>Un conversor de archivos online avanzado que soporta más de 300 formatos y tiene integración con servicios en la nube.</p>",
+      "url": "convertio.co/"
+    },
+    {
+      "id": 79,
+      "nombre": "Coolors",
+      "slug": "coolors",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "<p>Un generador de paletas de colores súper rápido y divertido, ideal para encontrar combinaciones de colores de forma rápida.</p>",
+      "url": "coolors.co/"
+    },
+    {
+      "id": 202,
+      "nombre": "CorelDRAW",
+      "slug": "coreldraw",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una suite de diseño gráfico profesional para ilustración vectorial, maquetación y edición de fotos, muy popular en la industria de la impresión y la señalización.</p>",
+      "url": "coreldraw.com"
+    },
+    {
+      "id": 283,
+      "nombre": "Craftwork Design",
+      "slug": "craftwork-design",
+      "categoria": "Recursos y activos",
+      "descripcion": "Un mercado de alta calidad con recursos de diseño listos para usar, como ilustraciones, kits de UI, mockups e iconos.",
+      "url": "https://craftwork.design/"
+    },
+    {
+      "id": 92,
+      "nombre": "Creatie.ai",
+      "slug": "creatie-ai",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Un asistente de IA enfocado en la creación y gestión de sistemas de diseño visual.</p>",
+      "url": "creatie.ai/"
+    },
+    {
+      "id": 25,
+      "nombre": "css.gg",
+      "slug": "css-gg",
+      "categoria": "Recursos y activos",
+      "descripcion": "<p>Una biblioteca de más de 700 iconos de interfaz construidos puramente con CSS, lo que los hace extremadamente ligeros y personalizables.</p>",
+      "url": "css.gg/"
+    },
+    {
+      "id": 287,
+      "nombre": "CTA Gallery",
+      "slug": "cta-gallery",
+      "categoria": "Inspiración y referencias",
+      "descripcion": "Una galería de inspiración de nicho, enfocada exclusivamente en los \"Call to Action\" (CTA) de páginas de destino y aplicaciones.",
+      "url": "https://www.cta.gallery/"
+    },
+    {
+      "id": 259,
+      "nombre": "Cursor",
+      "slug": "cursor-ai",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Un editor de código 'IA-first' diseñado desde cero para la programación en pareja con inteligencia artificial.</p>",
+      "url": "https://cursor.sh/"
+    },
+    {
+      "id": 260,
+      "nombre": "D-ID",
+      "slug": "d-id",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Una plataforma de IA que anima retratos y avatares a partir de un texto o un archivo de audio, creando 'humanos digitales'.</p>",
+      "url": "https://www.d-id.com/"
+    },
+    {
+      "id": 32,
+      "nombre": "Dark Mode Design",
+      "slug": "dark-mode-design",
+      "categoria": "Inspiración y referencias",
+      "descripcion": "<p>Una galería de inspiración dedicada exclusivamente a sitios web con un modo oscuro excelentemente ejecutado.</p>",
+      "url": "darkmodedesign.com/"
+    },
+    {
+      "id": 241,
+      "nombre": "darktable",
+      "slug": "darktable",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una potente aplicación de flujo de trabajo fotográfico y revelador RAW de código abierto. La alternativa libre a Lightroom Classic.</p>",
+      "url": "https://www.darktable.org/"
+    },
+    {
+      "id": 187,
+      "nombre": "DaVinci Resolve",
+      "slug": "davinci-resolve",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una solución todo en uno para edición de video que incluye Fusion, una potentísima herramienta de composición y VFX basada en nodos.</p>",
+      "url": "blackmagicdesign.com/products/davinciresolve"
+    },
+    {
+      "id": 43,
+      "nombre": "Deepseek",
+      "slug": "deepseek",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Un modelo de lenguaje de IA de código abierto, altamente reconocido por sus excepcionales capacidades en programación y razonamiento matemático.</p>",
+      "url": "chat.deepseek.com/"
+    },
+    {
+      "id": 69,
+      "nombre": "Descript",
+      "slug": "descript",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Un editor de audio y video todo-en-uno que funciona como un documento de texto.</p>",
+      "url": "descript.com/"
+    },
+    {
+      "id": 365,
+      "nombre": "Device Frames",
+      "slug": "device-frames",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una herramienta sencilla para envolver capturas de pantalla en marcos de dispositivos 3D realistas con opciones de personalización.</p>",
+      "url": "https://deviceframes.com/"
+    },
+    {
+      "id": 367,
+      "nombre": "Device Shots",
+      "slug": "device-shots",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Generador minimalista para crear mockups de dispositivos de alta resolución directamente en el navegador.</p>",
+      "url": "https://deviceshots.com/"
+    },
+    {
+      "id": 100,
+      "nombre": "Draw.io",
+      "slug": "draw-io",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>Una potente herramienta gratuita y de código abierto para crear todo tipo de diagramas, desde diagramas de flujo y de red hasta organigramas y wireframes.</p>",
+      "url": "diagrams.net/"
+    },
+    {
+      "id": 41,
+      "nombre": "Dreamina",
+      "slug": "dreamina",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Un generador de imágenes y video por IA de Meitu, enfocado en la creación de contenido para e-commerce, publicidad y diseño.</p>",
+      "url": "dreamina.com/"
+    },
+    {
+      "id": 52,
+      "nombre": "Dribbble",
+      "slug": "dribbble",
+      "categoria": "Inspiración y referencias",
+      "descripcion": "<p>La comunidad líder para que los creativos compartan, crezcan y consigan trabajo a través de pequeños \"shots\" de sus diseños.</p>",
+      "url": "dribbble.com/"
+    },
+    {
+      "id": 291,
+      "nombre": "Dropbase",
+      "slug": "dropbase",
+      "categoria": "Productividad y gestión",
+      "descripcion": "Una plataforma low-code que te permite construir aplicaciones web internas (como CRMs o paneles de admin) sobre tus propias bases de datos.",
+      "url": "https://www.dropbase.io/"
+    },
+    {
+      "id": 111,
+      "nombre": "Dropbox",
+      "slug": "dropbox",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>El pionero del almacenamiento en la nube, conocido por su fiabilidad y su excelente sincronización de archivos.</p>",
+      "url": "dropbox.com/"
+    },
+    {
+      "id": 299,
+      "nombre": "Drupal",
+      "slug": "drupal",
+      "categoria": "Programas de diseño",
+      "descripcion": "Un sistema de gestión de contenidos (CMS) open-source, robusto y altamente escalable. Conocido por su flexibilidad modular y su seguridad de nivel empresarial, utilizado para impulsar algunos de los sitios web más complejos del mundo.",
+      "url": "https://new.drupal.org/"
+    },
+    {
+      "id": 140,
+      "nombre": "Eagle",
+      "slug": "eagle",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>Una aplicación de escritorio para coleccionar, buscar y organizar todos tus archivos de inspiración y diseño en un solo lugar.</p>",
+      "url": "eagle.cool/"
+    },
+    {
+      "id": 48,
+      "nombre": "Easy Grid",
+      "slug": "easy-grid",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "<p>Una herramienta web que genera grillas editoriales automáticas a partir de parámetros simples para resolver la diagramación de forma rápida.</p>",
+      "url": "easygrid.vercel.app/"
+    },
+    {
+      "id": 63,
+      "nombre": "ElevenLabs",
+      "slug": "elevenlabs",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>La plataforma líder en generación de voz y clonación de voz con IA, con un realismo y una naturalidad sin precedentes.</p>",
+      "url": "elevenlabs.io/"
+    },
+    {
+      "id": 189,
+      "nombre": "Enfocus PitStop Pro",
+      "slug": "enfocus-pitstop-pro",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>El plugin indispensable para Adobe Acrobat, utilizado por profesionales de la imprenta para la validación y corrección avanzada de archivos PDF.</p>",
+      "url": "enfocus.com/en/pitstop-pro"
+    },
+    {
+      "id": 86,
+      "nombre": "Envato Elements",
+      "slug": "envato-elements",
+      "categoria": "Recursos y activos",
+      "descripcion": "<p>Un servicio de suscripción \"todo lo que puedas descargar\" con millones de activos creativos para cualquier tipo de proyecto.</p>",
+      "url": "elements.envato.com/"
+    },
+    {
+      "id": 240,
+      "nombre": "Epidemic Sound",
+      "slug": "epidemic-sound",
+      "categoria": "Recursos y activos",
+      "descripcion": "<p>Una gigantesca biblioteca de música y efectos de sonido libres de derechos, diseñada para creadores de contenido.</p>",
+      "url": "https://www.epidemicsound.com/"
+    },
+    {
+      "id": 153,
+      "nombre": "Excalidraw",
+      "slug": "excalidraw",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>Una herramienta de pizarra virtual de código abierto que crea diagramas con una sensación de dibujo a mano.</p>",
+      "url": "excalidraw.com"
+    },
+    {
+      "id": 145,
+      "nombre": "Explain Everything",
+      "slug": "explain-everything",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>Una pizarra interactiva diseñada para la enseñanza, que permite crear lecciones en video y colaborar en tiempo real.</p>",
+      "url": "explaineverything.com"
+    },
+    {
+      "id": 29,
+      "nombre": "Figcomponents",
+      "slug": "figcomponents",
+      "categoria": "Recursos y activos",
+      "descripcion": "<p>Una biblioteca de componentes, iconos y kits de UI gratuitos y de alta calidad para Figma.</p>",
+      "url": "figcomponents.com/"
+    },
+    {
+      "id": 155,
+      "nombre": "FigJam",
+      "slug": "figjam",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>La pizarra online de Figma, diseñada para que los equipos hagan lluvias de ideas, diagramas y se diviertan colaborando.</p>",
+      "url": "figma.com/figjam/"
+    },
+    {
+      "id": 218,
+      "nombre": "Figma",
+      "slug": "figma",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>La herramienta colaborativa líder para diseño de interfaces, prototipado interactivo y sistemas de diseño, todo en el navegador.</p>",
+      "url": "figma.com"
+    },
+    {
+      "id": 171,
+      "nombre": "Final Cut Pro",
+      "slug": "final-cut-pro",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>El potente y optimizado software de edición de video de Apple, conocido por su rendimiento y su innovadora línea de tiempo magnética.</p>",
+      "url": "apple.com/final-cut-pro/"
+    },
+    {
+      "id": 40,
+      "nombre": "Flow",
+      "slug": "flow",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Una herramienta experimental de Google Labs para crear videos con sonidos.</p>",
+      "url": "labs.google/fx/es/tools/flow"
+    },
+    {
+      "id": 56,
+      "nombre": "Folk",
+      "slug": "folk",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>Un CRM de nueva generación, más simple, personalizable y colaborativo, diseñado como una alternativa moderna a los CRM tradicionales.</p>",
+      "url": "folk.app/"
+    },
+    {
+      "id": 87,
+      "nombre": "Font Awesome",
+      "slug": "font-awesome",
+      "categoria": "Recursos y activos",
+      "descripcion": "<p>La biblioteca de iconos vectoriales más popular y utilizada en la web y en aplicaciones.</p>",
+      "url": "fontawesome.com"
+    },
+    {
+      "id": 233,
+      "nombre": "FontBase",
+      "slug": "fontbase",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "<p>Un gestor de tipografías moderno, rápido y multiplataforma, con un generoso plan gratuito.</p>",
+      "url": "https://fontba.se/"
+    },
+    {
+      "id": 122,
+      "nombre": "FontForge",
+      "slug": "fontforge",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Un editor de fuentes de contorno gratuito y de código abierto, con soporte para todos los formatos de fuentes comunes.</p>",
+      "url": "fontforge.org/"
+    },
+    {
+      "id": 123,
+      "nombre": "FontLab",
+      "slug": "fontlab",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Un editor de fuentes profesional y multiplataforma, utilizado por muchas de las fundiciones tipográficas más importantes del mundo.</p>",
+      "url": "fontlab.com/"
+    },
+    {
+      "id": 28,
+      "nombre": "Fontshare",
+      "slug": "fontshare",
+      "categoria": "Recursos y activos",
+      "descripcion": "<p>Un servicio de fuentes de alta calidad, creado por la prestigiosa fundición tipográfica Indian Type Foundry (ITF), de uso completamente gratuito.</p>",
+      "url": "fontshare.com/"
+    },
+    {
+      "id": 191,
+      "nombre": "Foxit PDF Editor",
+      "slug": "foxit-pdf-editor",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una de las alternativas más potentes y populares a Adobe Acrobat, con un conjunto completo de herramientas para la edición de PDF.</p>",
+      "url": "foxit.com/pdf-editor/"
+    },
+    {
+      "id": 219,
+      "nombre": "Framer",
+      "slug": "framer",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una herramienta todo en uno que permite diseñar prototipos interactivos y publicar sitios web reales sin escribir código.</p>",
+      "url": "framer.com"
+    },
+    {
+      "id": 298,
+      "nombre": "Frappe Builder",
+      "slug": "frappe-builder",
+      "categoria": "Programas de diseño",
+      "descripcion": "Un constructor de sitios web \"low-code\" de Frappe, diseñado para la simplicidad, velocidad y flexibilidad. Redefine la publicación web con un enfoque intuitivo.",
+      "url": "https://frappe.io/"
+    },
+    {
+      "id": 249,
+      "nombre": "FreeCAD",
+      "slug": "freecad",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Un modelador 3D paramétrico de código abierto hecho principalmente para diseñar objetos de la vida real de cualquier tamaño.</p>",
+      "url": "https://www.freecad.org/"
+    },
+    {
+      "id": 91,
+      "nombre": "Freepik",
+      "slug": "freepik",
+      "categoria": "Recursos y activos",
+      "descripcion": "<p>Un gigantesco banco de recursos gráficos con millones de vectores, fotos de stock, archivos PSD y plantillas.</p>",
+      "url": "freepik.com"
+    },
+    {
+      "id": 126,
+      "nombre": "GameMaker",
+      "slug": "gamemaker",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Un entorno de desarrollo de juegos 2D muy accesible, ideal para principiantes y para la creación rápida de prototipos.</p>",
+      "url": "gamemaker.io/"
+    },
+    {
+      "id": 254,
+      "nombre": "Gamma",
+      "slug": "gamma-app",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Una herramienta de IA que genera presentaciones, documentos y páginas web pulidas a partir de una simple descripción de texto.</p>",
+      "url": "https://gamma.app/"
+    },
+    {
+      "id": 44,
+      "nombre": "Gemini",
+      "slug": "gemini",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>La familia de modelos de IA multimodal de Google, diseñada para ser un asistente conversacional y creativo universal.</p>",
+      "url": null
+    },
+    {
+      "id": 177,
+      "nombre": "GIMP",
+      "slug": "gimp",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Un editor de imágenes multiplataforma, gratuito y de código abierto, conocido como la alternativa libre más potente a Photoshop.</p>",
+      "url": "gimp.org"
+    },
+    {
+      "id": 124,
+      "nombre": "Glyphs",
+      "slug": "glyphs",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>El editor de fuentes profesional para Mac, preferido por muchos diseñadores de tipografías por su interfaz intuitiva y sus potentes funciones.</p>",
+      "url": "glyphsapp.com/"
+    },
+    {
+      "id": 37,
+      "nombre": "Godly",
+      "slug": "godly",
+      "categoria": "Inspiración y referencias",
+      "descripcion": "<p>Una galería de los sitios web mejor diseñados de internet, con un enfoque en la estética limpia, moderna y minimalista.</p>",
+      "url": "godly.website/"
+    },
+    {
+      "id": 131,
+      "nombre": "Godot Engine",
+      "slug": "godot-engine",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Un motor de juegos 2D y 3D, multiplataforma, completamente gratuito y de código abierto.</p>",
+      "url": "godotengine.org/"
+    },
+    {
+      "id": 268,
+      "nombre": "Google AI Studio",
+      "slug": "google-ai-studio",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Una herramienta basada en web para que los desarrolladores creen prototipos y prompts con la familia de modelos Gemini.</p>",
+      "url": "https://aistudio.google.com/"
+    },
+    {
+      "id": 112,
+      "nombre": "Google Drive",
+      "slug": "google-drive",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>La popular solución de almacenamiento en la nube de Google, integrada con Docs, Sheets y Slides.</p>",
+      "url": "google.com/drive/"
+    },
+    {
+      "id": 89,
+      "nombre": "Google Fonts",
+      "slug": "google-fonts",
+      "categoria": "Recursos y activos",
+      "descripcion": "<p>Una biblioteca masiva de fuentes de código abierto y gratuitas para usar en la web y en proyectos de diseño.</p>",
+      "url": "fonts.google.com"
+    },
+    {
+      "id": 55,
+      "nombre": "Google Sheets",
+      "slug": "google-sheets",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>La omnipresente hoja de cálculo de Google, una herramienta increíblemente versátil para organizar datos y colaborar en tiempo real.</p>",
+      "url": "google.com/sheets/about/"
+    },
+    {
+      "id": 265,
+      "nombre": "Grok",
+      "slug": "grok",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>El chatbot de IA de xAI, integrado en X (Twitter), diseñado para responder con un toque de ingenio y acceso a información en tiempo real.</p>",
+      "url": "https://grok.x.ai/"
+    },
+    {
+      "id": 38,
+      "nombre": "Hailuo AI",
+      "slug": "hailuo-ai",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Hailuo AI es una plataforma de creación de videos impulsada por inteligencia artificial</p>",
+      "url": "hailuoai.video"
+    },
+    {
+      "id": 119,
+      "nombre": "HandBrake",
+      "slug": "handbrake",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "<p>El transcodificador de video de código abierto por excelencia. Reduce el tamaño de los archivos de video de forma drástica.</p>",
+      "url": "handbrake.fr/"
+    },
+    {
+      "id": 24,
+      "nombre": "Heroicons",
+      "slug": "heroicons",
+      "categoria": "Recursos y activos",
+      "descripcion": "<p>Un set de iconos SVG de alta calidad, creados por los diseñadores de Tailwind CSS, con un estilo limpio y profesional.</p>",
+      "url": "heroicons.com/"
+    },
+    {
+      "id": 230,
+      "nombre": "Houdini",
+      "slug": "houdini",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>El software 3D estándar para efectos visuales (VFX) basado en un flujo de trabajo procedural y de nodos.</p>",
+      "url": "https://www.sidefx.com/"
+    },
+    {
+      "id": 57,
+      "nombre": "HubSpot CRM",
+      "slug": "hubspot-crm",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>Una potente plataforma de CRM con un plan gratuito muy generoso, ideal para que freelancers y agencias gestionen sus clientes.</p>",
+      "url": "hubspot.com/"
+    },
+    {
+      "id": 64,
+      "nombre": "Huemint",
+      "slug": "huemint",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "<p>Un generador de paletas de color con IA que entiende el contexto de uso en interfaces de usuario reales.</p>",
+      "url": "huemint.com/"
+    },
+    {
+      "id": 280,
+      "nombre": "Hugeicons",
+      "slug": "hugeicons",
+      "categoria": "Recursos y activos",
+      "descripcion": "Una galería de inspiración curada, enfocada específicamente en componentes de interfaz de usuario de sitios web reales y bien diseñados.",
+      "url": "https://component.gallery/"
+    },
+    {
+      "id": 47,
+      "nombre": "Icon Lab",
+      "slug": "icon-lab",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "<p>Una utilidad web para visualizar, probar y optimizar archivos SVG de forma rápida y sencilla.</p>",
+      "url": "iconlab.vercel.app/"
+    },
+    {
+      "id": 96,
+      "nombre": "Ideogram",
+      "slug": "ideogram",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Un generador de imágenes por IA que destaca por su increíble capacidad para renderizar texto de forma coherente dentro de las imágenes.</p>",
+      "url": "ideogram.ai"
+    },
+    {
+      "id": 50,
+      "nombre": "iLovePDF",
+      "slug": "ilovepdf",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "<p>Una suite de herramientas online completamente gratuita para unir, dividir, comprimir, convertir y editar archivos PDF de forma sencilla.</p>",
+      "url": "ilovepdf.com/"
+    },
+    {
+      "id": 114,
+      "nombre": "ImageOptim",
+      "slug": "imageoptim",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "<p>Una aplicación gratuita y de código abierto para macOS que optimiza imágenes arrastrando y soltando.</p>",
+      "url": "imageoptim.com/mac"
+    },
+    {
+      "id": 181,
+      "nombre": "Imgix",
+      "slug": "imgix",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "<p>Un servicio de procesamiento y entrega de imágenes en tiempo real a través de una API.</p>",
+      "url": "imgix.com/"
+    },
+    {
+      "id": 203,
+      "nombre": "Inkscape",
+      "slug": "inkscape",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>La mejor alternativa gratuita y de código abierto para la ilustración vectorial, totalmente compatible con los estándares SVG.</p>",
+      "url": "inkscape.org"
+    },
+    {
+      "id": 244,
+      "nombre": "Joplin",
+      "slug": "joplin",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>Una aplicación de toma de notas y tareas de código abierto, con un fuerte enfoque en la privacidad y la sincronización entre dispositivos.</p>",
+      "url": "https://joplinapp.org/"
+    },
+    {
+      "id": 209,
+      "nombre": "Justinmind",
+      "slug": "justinmind",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una herramienta de creación de prototipos todo en uno para aplicaciones web y móviles, desde wireframes hasta prototipos de alta fidelidad.</p>",
+      "url": "justinmind.com"
+    },
+    {
+      "id": 252,
+      "nombre": "Kaiber",
+      "slug": "kaiber",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Una plataforma de generación de vídeo por IA, enfocada en crear videoclips musicales y visuales estilizados.</p>",
+      "url": "https://kaiber.ai/"
+    },
+    {
+      "id": 266,
+      "nombre": "Kimi",
+      "slug": "kimi-ai",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Un chatbot de IA de Moonshot AI, conocido en China por su enorme ventana de contexto para procesar documentos largos.</p>",
+      "url": "https://kimi.ai/"
+    },
+    {
+      "id": 310,
+      "nombre": "Kittl",
+      "slug": "kittl",
+      "categoria": "Programas de diseño",
+      "descripcion": "Plataforma de diseño basada en web que facilita la creación de gráficos complejos y logotipos con herramientas avanzadas.",
+      "url": "https://www.kittl.com/"
+    },
+    {
+      "id": 67,
+      "nombre": "Krea AI",
+      "slug": "krea-ai",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Un conjunto de herramientas de IA creativas, destacando por su capacidad de generar imágenes y patrones en tiempo real.</p>",
+      "url": "krea.ai/"
+    },
+    {
+      "id": 176,
+      "nombre": "Krita",
+      "slug": "krita",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una herramienta de pintura digital profesional, gratuita y de código abierto, creada por artistas para artistas.</p>",
+      "url": "krita.org"
+    },
+    {
+      "id": 284,
+      "nombre": "Landing Love",
+      "slug": "landing-love",
+      "categoria": "Inspiración y referencias",
+      "descripcion": "Una galería de inspiración con una cuidada selección de las mejores páginas de destino (landing pages) de la web.",
+      "url": "https://www.landing.love/"
+    },
+    {
+      "id": 36,
+      "nombre": "Layers",
+      "slug": "layers",
+      "categoria": "Inspiración y referencias",
+      "descripcion": "<p>Una publicación de diseño que presenta casos de estudio detallados de proyectos de branding, UI y diseño de producto.</p>",
+      "url": "layers.to/explore"
+    },
+    {
+      "id": 253,
+      "nombre": "Leonardo.Ai",
+      "slug": "leonardo-ai",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Una suite creativa completa de IA para generar assets de videojuegos, como personajes, entornos y texturas.</p>",
+      "url": "https://leonardo.ai/"
+    },
+    {
+      "id": 201,
+      "nombre": "Linearity Curve",
+      "slug": "linearity-curve",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una potente y gratuita herramienta de diseño gráfico e ilustración vectorial para el ecosistema de Apple.</p>",
+      "url": "linearity.io/curve"
+    },
+    {
+      "id": 234,
+      "nombre": "Logseq",
+      "slug": "logseq",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>Una potente plataforma de código abierto para la gestión del conocimiento y la toma de notas, centrada en la privacidad.</p>",
+      "url": "https://logseq.com/"
+    },
+    {
+      "id": 65,
+      "nombre": "Looka",
+      "slug": "looka",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Una plataforma de diseño impulsada por IA que te ayuda a diseñar un logo y crear una identidad de marca.</p>",
+      "url": "looka.com/"
+    },
+    {
+      "id": 54,
+      "nombre": "LottieFiles",
+      "slug": "lottiefiles",
+      "categoria": "Recursos y activos",
+      "descripcion": "<p>La plataforma central para todo lo relacionado con Lottie, el formato de animación vectorial basado en JSON para la web y las apps.</p>",
+      "url": "lottiefiles.com/"
+    },
+    {
+      "id": 289,
+      "nombre": "Lovable",
+      "slug": "lovable",
+      "categoria": "Creación con IA",
+      "descripcion": "Una plataforma de ingeniería de IA que te permite describir nuevas funcionalidades de producto en lenguaje natural y genera el código correspondiente.\nDescripción Larga:",
+      "url": "https://lovable.dev/"
+    },
+    {
+      "id": 372,
+      "nombre": "Ls.Graphics",
+      "slug": "ls-graphics",
+      "categoria": "Recursos y activos",
+      "descripcion": "<p>Una plataforma premium que ofrece mockups de diseño excepcionales, ilustraciones y generadores de escenas abstractas.</p>",
+      "url": "https://www.ls.graphics/"
+    },
+    {
+      "id": 26,
+      "nombre": "Lucide",
+      "slug": "lucide",
+      "categoria": "Recursos y activos",
+      "descripcion": "<p>Un set de iconos de código abierto, simple y consistente, mantenido por la comunidad como una continuación del popular set Feather Icons.</p>",
+      "url": "lucide.dev/"
+    },
+    {
+      "id": 149,
+      "nombre": "Lucidspark",
+      "slug": "lucidspark",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>Una pizarra virtual que ayuda a los equipos a organizar lluvias de ideas y actuar sobre ellas. Parte del ecosistema de Lucid.</p>",
+      "url": "lucidspark.com"
+    },
+    {
+      "id": 94,
+      "nombre": "Luma AI",
+      "slug": "luma-ai",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Una compañía de IA especializada en la captura y generación de contenido 3D a partir de videos o texto.</p>",
+      "url": "lumalabs.ai/"
+    },
+    {
+      "id": 276,
+      "nombre": "Lyssna",
+      "slug": "lyssna",
+      "categoria": "Programas de diseño",
+      "descripcion": "Una plataforma de investigación de usuario todo-en-uno que facilita la obtención de feedback claro en cada etapa del proceso de diseño.",
+      "url": "https://www.lyssna.com"
+    },
+    {
+      "id": 66,
+      "nombre": "Magnific AI",
+      "slug": "magnific-ai",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Una herramienta de IA para re-imaginar y escalar imágenes, añadiendo un nivel de detalle asombroso.</p>",
+      "url": "magnific.ai/"
+    },
+    {
+      "id": 212,
+      "nombre": "Marvel",
+      "slug": "marvel",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una plataforma de diseño todo en uno que simplifica la creación de prototipos y la colaboración entre equipos.</p>",
+      "url": "marvelapp.com"
+    },
+    {
+      "id": 22,
+      "nombre": "Material Symbols",
+      "slug": "material-symbols",
+      "categoria": "Recursos y activos",
+      "descripcion": "<p>La biblioteca de iconos oficial y más reciente de Google, ofrecida como una única fuente variable con un control sin precedentes.</p>",
+      "url": "fonts.google.com/icons"
+    },
+    {
+      "id": 272,
+      "nombre": "Maze",
+      "slug": "maze",
+      "categoria": "Programas de diseño",
+      "descripcion": "Una plataforma de pruebas rápidas que convierte prototipos en insights accionables de usuarios reales en cuestión de horas.",
+      "url": "https://maze.co"
+    },
+    {
+      "id": 368,
+      "nombre": "Medialoot",
+      "slug": "medialoot",
+      "categoria": "Recursos y activos",
+      "descripcion": "<p>Una biblioteca de recursos de diseño que incluye mockups, fuentes, iconos y plantillas gráficas para diseñadores.</p>",
+      "url": "https://medialoot.com/"
+    },
+    {
+      "id": 62,
+      "nombre": "Meshy.ai",
+      "slug": "meshy-ai",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Una suite de IA para generar modelos 3D y texturas a partir de texto o imágenes 2D.</p>",
+      "url": "meshy.ai/"
+    },
+    {
+      "id": 264,
+      "nombre": "Meta AI",
+      "slug": "meta-ai",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>El asistente de IA de Meta, impulsado por Llama 3, integrado en Facebook, Instagram, WhatsApp y Messenger.</p>",
+      "url": "https://www.meta.ai/"
+    },
+    {
+      "id": 142,
+      "nombre": "Microsoft Designer",
+      "slug": "microsoft-designer",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una aplicación de diseño gráfico de Microsoft impulsada por IA, incluyendo DALL-E 3, para crear diseños profesionales a partir de una simple descripción de texto.</p>",
+      "url": "designer.microsoft.com/"
+    },
+    {
+      "id": 154,
+      "nombre": "Microsoft Whiteboard",
+      "slug": "microsoft-whiteboard",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>El lienzo digital de forma libre de Microsoft, perfectamente integrado con el ecosistema de Microsoft 365 y Teams.</p>",
+      "url": "microsoft.com/microsoft-365/microsoft-whiteboard"
+    },
+    {
+      "id": 97,
+      "nombre": "Midjourney",
+      "slug": "midjourney",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Un laboratorio de investigación que produce el generador de imágenes por IA más popular y artísticamente aclamado, accesible a través de Discord.</p>",
+      "url": "https://www.midjourney.com/home"
+    },
+    {
+      "id": 150,
+      "nombre": "Milanote",
+      "slug": "milanote",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>Un tablero visual fácil de usar para organizar ideas y proyectos creativos en un solo lugar.</p>",
+      "url": "milanote.com"
+    },
+    {
+      "id": 30,
+      "nombre": "Minimal Gallery",
+      "slug": "minimal-gallery",
+      "categoria": "Inspiración y referencias",
+      "descripcion": "<p>Una galería de inspiración web con un fuerte enfoque en el diseño limpio, simple y minimalista.</p>",
+      "url": "minimal.gallery/"
+    },
+    {
+      "id": 373,
+      "nombre": "Minimal Mockups",
+      "slug": "minimal-mockups",
+      "categoria": "Recursos y activos",
+      "descripcion": "<p>Una colección boutique de mockups limpios y minimalistas, ideales para presentar diseños sin distracciones.</p>",
+      "url": "https://minimalmockups.com/"
+    },
+    {
+      "id": 157,
+      "nombre": "Miro",
+      "slug": "miro",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>La plataforma de pizarra colaborativa líder para equipos, ideal para talleres, diagramas y lluvias de ideas.</p>",
+      "url": "miro.com"
+    },
+    {
+      "id": 262,
+      "nombre": "Mistral AI",
+      "slug": "mistral-ai",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Una compañía europea de IA que produce modelos de lenguaje de alto rendimiento, tanto de código abierto como comerciales.</p>",
+      "url": "https://mistral.ai/"
+    },
+    {
+      "id": 77,
+      "nombre": "Mobbin",
+      "slug": "mobbin",
+      "categoria": "Inspiración y referencias",
+      "descripcion": "<p>Una inmensa biblioteca de capturas de pantalla de las mejores aplicaciones móviles del mundo, ideal para la investigación de UI/UX.</p>",
+      "url": "mobbin.com"
+    },
+    {
+      "id": 369,
+      "nombre": "Mock Magic",
+      "slug": "mock-magic",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una herramienta web ultrarrápida para crear mockups de dispositivos Apple simplemente pegando una captura de pantalla.</p>",
+      "url": "https://mockmagic.com/"
+    },
+    {
+      "id": 208,
+      "nombre": "MockFlow",
+      "slug": "mockflow",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una suite de herramientas para la planificación de UI, que incluye wireframing, creación de sitemaps y documentación de diseño.</p>",
+      "url": "mockflow.com"
+    },
+    {
+      "id": 363,
+      "nombre": "Mockoops",
+      "slug": "mockoops",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Un generador de mockups animados que convierte grabaciones de pantalla estáticas en vídeos de presentación dinámicos.</p>",
+      "url": "https://mockoops.mohitya.dev/"
+    },
+    {
+      "id": 364,
+      "nombre": "Mockup World",
+      "slug": "mockup-world",
+      "categoria": "Recursos y activos",
+      "descripcion": "<p>El mayor directorio y agregador de mockups fotorrealistas gratuitos disponibles en internet para diseñadores.</p>",
+      "url": "https://www.mockupworld.co/"
+    },
+    {
+      "id": 370,
+      "nombre": "MockUPhone",
+      "slug": "mockuphone",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Uno de los generadores de mockups más antiguos y fiables para envolver capturas de pantalla en dispositivos móviles.</p>",
+      "url": "https://mockuphone.com/"
+    },
+    {
+      "id": 374,
+      "nombre": "Mockupnest",
+      "slug": "mockupnest",
+      "categoria": "Recursos y activos",
+      "descripcion": "<p>Un motor de búsqueda dedicado a localizar los mejores mockups gratuitos de alta calidad en la web.</p>",
+      "url": "https://mockupnest.com/"
+    },
+    {
+      "id": 163,
+      "nombre": "Mockuuups Studio",
+      "slug": "mockuuups-studio",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "<p>Una aplicación web que coloca instantáneamente tus diseños en cientos de mockups de dispositivos a la vez.</p>",
+      "url": "mockuuups.studio"
+    },
+    {
+      "id": 377,
+      "nombre": "Mr.Mockup",
+      "slug": "mr-mockup",
+      "categoria": "Recursos y activos",
+      "descripcion": "<p>Una de las marcas más respetadas en la creación de mockups PSD profesionales para identidad de marca y packaging.</p>",
+      "url": "https://mrmockup.com/"
+    },
+    {
+      "id": 156,
+      "nombre": "Mural",
+      "slug": "mural",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>Un espacio de trabajo de inteligencia colaborativa que ayuda a los equipos a trabajar juntos de forma visual y efectiva.</p>",
+      "url": "mural.co"
+    },
+    {
+      "id": 184,
+      "nombre": "Natron",
+      "slug": "natron",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una alternativa gratuita y de código abierto a After Effects y Nuke para la composición de video basada en nodos.</p>",
+      "url": "natrongithub.github.io"
+    },
+    {
+      "id": 285,
+      "nombre": "Navbar Gallery",
+      "slug": "navbar-gallery",
+      "categoria": "Inspiración y referencias",
+      "descripcion": "Una galería de inspiración minimalista y muy específica, dedicada a mostrar ejemplos de barras de navegación de sitios web.",
+      "url": "https://www.navbar.gallery/"
+    },
+    {
+      "id": 279,
+      "nombre": "Netlify",
+      "slug": "netlify",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "Una potente plataforma para construir, desplegar y escalar sitios y aplicaciones web modernas (Jamstack).",
+      "url": "https://www.netlify.com"
+    },
+    {
+      "id": 109,
+      "nombre": "Nextcloud",
+      "slug": "nextcloud",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>La plataforma de colaboración y almacenamiento de archivos de código abierto líder, que puedes auto-alojar para tener control total.</p>",
+      "url": "nextcloud.com/"
+    },
+    {
+      "id": 60,
+      "nombre": "NocoDB",
+      "slug": "nocodb",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>La alternativa de código abierto a Airtable. Transforma cualquier base de datos SQL en una hoja de cálculo inteligente.</p>",
+      "url": "nocodb.com/"
+    },
+    {
+      "id": 297,
+      "nombre": "Nordcraft",
+      "slug": "nordcraft",
+      "categoria": "Programas de diseño",
+      "descripcion": "Un motor de desarrollo web (Web Development Engine) que combina una herramienta de diseño visual con un potente framework, enfocado en personas que aman HTML y CSS.",
+      "url": "https://nordcraft.com/"
+    },
+    {
+      "id": 21,
+      "nombre": "NotebookLM",
+      "slug": "notebooklm",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Un asistente de investigación y escritura de Google, impulsado por IA, que se basa en tus propios documentos y fuentes.</p>",
+      "url": "notebooklm.google.com/"
+    },
+    {
+      "id": 148,
+      "nombre": "Notion",
+      "slug": "notion",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>El espacio de trabajo todo-en-uno que puede funcionar como una pizarra flexible para conectar ideas, documentos y tareas.</p>",
+      "url": "notion.so"
+    },
+    {
+      "id": 186,
+      "nombre": "Nuke",
+      "slug": "nuke",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>El software de composición basado en nodos de referencia para la industria del cine y la televisión.</p>",
+      "url": "foundry.com/products/nuke-family"
+    },
+    {
+      "id": 53,
+      "nombre": "Obsidian",
+      "slug": "obsidian",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>Una potente base de conocimiento personal y herramienta de toma de notas que funciona sobre archivos Markdown locales.</p>",
+      "url": "obsidian.md/"
+    },
+    {
+      "id": 242,
+      "nombre": "Olive Video Editor",
+      "slug": "olive-video-editor",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Un editor de vídeo no lineal (NLE) de código abierto, gratuito y en desarrollo activo, con un enfoque en la velocidad y la estabilidad.</p>",
+      "url": "https://www.olivevideoeditor.org/"
+    },
+    {
+      "id": 76,
+      "nombre": "One Page Love",
+      "slug": "one-page-love",
+      "categoria": "Inspiración y referencias",
+      "descripcion": "<p>Una galería de inspiración especializada en los mejores sitios web de una sola página (One-Page).</p>",
+      "url": "onepagelove.com"
+    },
+    {
+      "id": 108,
+      "nombre": "OneDrive",
+      "slug": "onedrive",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>La solución de almacenamiento en la nube de Microsoft, profundamente integrada en Windows y Microsoft 365.</p>",
+      "url": "onedrive.live.com/"
+    },
+    {
+      "id": 302,
+      "nombre": "Onlook",
+      "slug": "onlook",
+      "categoria": "Creación con IA",
+      "descripcion": "Una plataforma de diseño web no-code de nueva generación que permite a los equipos crear sitios web y experiencias interactivas. Combina un editor visual avanzado con un potente asistente de IA (\"Cursor para Diseñadores\").",
+      "url": "https://www.onlook.com/"
+    },
+    {
+      "id": 247,
+      "nombre": "Open WebUI",
+      "slug": "open-web-ui",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Una interfaz de usuario web de código abierto, similar a ChatGPT, para interactuar con modelos de lenguaje grandes (LLMs) de forma local.</p>",
+      "url": "https://github.com/open-webui/open-webui"
+    },
+    {
+      "id": 275,
+      "nombre": "Optimal Workshop",
+      "slug": "optimal-workshop",
+      "categoria": "Programas de diseño",
+      "descripcion": "La suite de herramientas estándar de la industria para la investigación de la arquitectura de la información (IA).",
+      "url": "https://www.optimalworkshop.com"
+    },
+    {
+      "id": 211,
+      "nombre": "Origami Studio",
+      "slug": "origami-studio",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una herramienta de prototipado avanzada y gratuita, creada y utilizada por los diseñadores de Meta (Facebook).</p>",
+      "url": "origami.design"
+    },
+    {
+      "id": 231,
+      "nombre": "Overflow",
+      "slug": "overflow",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una herramienta para crear, presentar y compartir hermosos diagramas de flujo de usuario a partir de tus diseños.</p>",
+      "url": "https://overflow.io/"
+    },
+    {
+      "id": 166,
+      "nombre": "Pacdora",
+      "slug": "pacdora",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Un software de visualización 3D en tiempo real para el diseño de packaging, que permite crear prototipos virtuales fotorrealistas.</p>",
+      "url": "pacdora.com"
+    },
+    {
+      "id": 311,
+      "nombre": "Packaging of the World",
+      "slug": "packaging-of-the-world",
+      "categoria": "Inspiración y referencias",
+      "descripcion": "Uno de los blogs y archivos de diseño de packaging más importantes y activos de internet.",
+      "url": "https://packagingoftheworld.com/"
+    },
+    {
+      "id": 107,
+      "nombre": "pCloud",
+      "slug": "pcloud",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>Un servicio de almacenamiento en la nube seguro, que ofrece planes de por vida (pago único).</p>",
+      "url": "pcloud.com/"
+    },
+    {
+      "id": 190,
+      "nombre": "PDF-XChange Editor",
+      "slug": "pdf-xchange-editor",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Un editor de PDF para Windows muy rápido, ligero y sorprendentemente lleno de funciones, con una versión gratuita muy generosa.</p>",
+      "url": "tracker-software.com/product/pdf-xchange-editor"
+    },
+    {
+      "id": 120,
+      "nombre": "PDF24 Creator & Toolbox",
+      "slug": "pdf24-creator-toolbox",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "<p>Una suite de herramientas gratuitas y fáciles de usar, online y de escritorio, para resolver todos tus problemas con archivos PDF.</p>",
+      "url": "tools.pdf24.org/es/"
+    },
+    {
+      "id": 206,
+      "nombre": "Penpot",
+      "slug": "penpot",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>La primera plataforma de diseño y prototipado de código abierto, diseñada para la colaboración entre diseñadores y desarrolladores.</p>",
+      "url": "penpot.app"
+    },
+    {
+      "id": 263,
+      "nombre": "Perplexity",
+      "slug": "perplexity-ai",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Un 'motor de respuestas' conversacional que combina un chatbot con un motor de búsqueda, proporcionando respuestas precisas y citando sus fuentes.</p>",
+      "url": "https://www.perplexity.ai/"
+    },
+    {
+      "id": 51,
+      "nombre": "Pexels",
+      "slug": "pexels",
+      "categoria": "Recursos y activos",
+      "descripcion": "<p>Una popular biblioteca de fotos y videos de stock de alta calidad y completamente gratuitos.</p>",
+      "url": "pexels.com/"
+    },
+    {
+      "id": 27,
+      "nombre": "Phosphor",
+      "slug": "phosphor",
+      "categoria": "Recursos y activos",
+      "descripcion": "<p>Una biblioteca de iconos flexible y de código abierto para interfaces, con seis pesos diferentes para cada icono.</p>",
+      "url": "phosphoricons.com/"
+    },
+    {
+      "id": 306,
+      "nombre": "Photoleap",
+      "slug": "photoleap",
+      "categoria": "Programas de diseño",
+      "descripcion": "Potente editor de fotos móvil impulsado por IA de los creadores de Facetune (Lightricks).",
+      "url": "https://www.photoleapapp.com/"
+    },
+    {
+      "id": 173,
+      "nombre": "Photopea",
+      "slug": "photopea",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Un asombroso editor de imágenes avanzado que funciona completamente en el navegador y es compatible con archivos de Photoshop.</p>",
+      "url": "photopea.com"
+    },
+    {
+      "id": 139,
+      "nombre": "PhotoPrism",
+      "slug": "photoprism",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>Una aplicación de fotos personal y de código abierto que se puede auto-alojar, impulsada por IA.</p>",
+      "url": "photoprism.app/"
+    },
+    {
+      "id": 308,
+      "nombre": "Picsart",
+      "slug": "picsart",
+      "categoria": "Programas de diseño",
+      "descripcion": "Plataforma creativa todo en uno para edición de fotos y video, inmensamente popular en redes sociales.",
+      "url": "https://picsart.com/"
+    },
+    {
+      "id": 236,
+      "nombre": "Pika",
+      "slug": "pika-labs",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Una potente plataforma de IA para generar y editar vídeos a partir de texto, imágenes o clips existentes.</p>",
+      "url": "https://pika.art/"
+    },
+    {
+      "id": 72,
+      "nombre": "Pitch",
+      "slug": "pitch",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>El software de presentaciones colaborativas para equipos modernos, enfocado en un diseño impecable y un flujo de trabajo rápido.</p>",
+      "url": "pitch.com/"
+    },
+    {
+      "id": 167,
+      "nombre": "Placeit",
+      "slug": "placeit",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una enorme biblioteca online de mockups, plantillas de diseño y videos para crear materiales de marketing de forma rápida y sencilla.</p>",
+      "url": "placeit.net/"
+    },
+    {
+      "id": 158,
+      "nombre": "Plane",
+      "slug": "plane",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>Una plataforma de gestión de proyectos de código abierto y auto-alojable, alternativa a Jira y Asana.</p>",
+      "url": "plane.so"
+    },
+    {
+      "id": 296,
+      "nombre": "Plasmic",
+      "slug": "plasmic",
+      "categoria": "Programas de diseño",
+      "descripcion": "Un constructor visual open-source y plataforma de contenido para construir sitios web y aplicaciones. Se integra directamente con bases de código existentes (como React).",
+      "url": "https://www.plasmic.app/"
+    },
+    {
+      "id": 183,
+      "nombre": "Playbook",
+      "slug": "playbook",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>Un moderno DAM en la nube para diseñadores y creativos, con un generoso plan gratuito. Es como un Google Drive visualmente atractivo para tu trabajo de diseño.</p>",
+      "url": "playbook.com/"
+    },
+    {
+      "id": 258,
+      "nombre": "Poised",
+      "slug": "poised",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Un coach de comunicación por IA que te da feedback en tiempo real durante tus reuniones online para ayudarte a hablar con más confianza.</p>",
+      "url": "https://www.poised.com/"
+    },
+    {
+      "id": 362,
+      "nombre": "PostSpark",
+      "slug": "postspark",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Un editor de capturas de pantalla diseñado para convertir imágenes aburridas en contenido visual atractivo para redes sociales.</p>",
+      "url": "https://postspark.app/"
+    },
+    {
+      "id": 34,
+      "nombre": "Prettyfolio",
+      "slug": "prettyfolio",
+      "categoria": "Inspiración y referencias",
+      "descripcion": "<p>Una colección curada de los portafolios de diseño de producto más atractivos y bien estructurados.</p>",
+      "url": "prettyfolio.com/"
+    },
+    {
+      "id": 366,
+      "nombre": "Previewed",
+      "slug": "previewed",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Un generador avanzado de capturas para App Store y Google Play con modelos 3D y plantillas panorámicas.</p>",
+      "url": "https://previewed.app/"
+    },
+    {
+      "id": 207,
+      "nombre": "Principle",
+      "slug": "principle",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una herramienta para macOS enfocada en la creación rápida de animaciones e interacciones para interfaces.</p>",
+      "url": "principle.app"
+    },
+    {
+      "id": 174,
+      "nombre": "Procreate",
+      "slug": "procreate",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>La aplicación de pintura y dibujo digital líder en el iPad, amada por su simplicidad, potencia y su increíble motor de pinceles.</p>",
+      "url": "https://procreate.com/"
+    },
+    {
+      "id": 215,
+      "nombre": "ProtoPie",
+      "slug": "protopie",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>La herramienta líder para crear prototipos de alta fidelidad e interacciones complejas sin necesidad de código.</p>",
+      "url": "protopie.io"
+    },
+    {
+      "id": 290,
+      "nombre": "Pythagora",
+      "slug": "pythagora",
+      "categoria": "Creación con IA",
+      "descripcion": "Un agente de desarrollo de software de IA de código abierto que te ayuda a construir aplicaciones web completas a partir de descripciones en lenguaje natural.",
+      "url": "https://pythagora.ai/"
+    },
+    {
+      "id": 243,
+      "nombre": "QCAD",
+      "slug": "qcad",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una aplicación de código abierto para el diseño asistido por computadora (CAD) en dos dimensiones (2D).</p>",
+      "url": "https://qcad.org/"
+    },
+    {
+      "id": 194,
+      "nombre": "QuarkXPress",
+      "slug": "quarkxpress",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p> El software de diseño gráfico y maquetación de páginas que fue el estándar de la industria editorial durante décadas.</p>",
+      "url": "quark.com/products/quarkxpress/"
+    },
+    {
+      "id": 238,
+      "nombre": "Quixel Megascans",
+      "slug": "quixel-megascans",
+      "categoria": "Recursos y activos",
+      "descripcion": "<p>La biblioteca de assets 3D fotorrealistas más grande del mundo, basados en escaneos del mundo real.</p>",
+      "url": "https://quixel.com/megascans"
+    },
+    {
+      "id": 42,
+      "nombre": "Qwen",
+      "slug": "qwen",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>La potente familia de modelos de lenguaje de código abierto de Alibaba, con capacidades multimodales y un rendimiento excepcional.</p>",
+      "url": "https://chat.qwen.ai/"
+    },
+    {
+      "id": 23,
+      "nombre": "Radix",
+      "slug": "radix",
+      "categoria": "Recursos y activos",
+      "descripcion": "<p>Una colección de primitivas de UI de bajo nivel, sin estilo y accesibles para construir sistemas de diseño y aplicaciones web de alta calidad en React.</p>",
+      "url": "radix-ui.com"
+    },
+    {
+      "id": 307,
+      "nombre": "rawpixel",
+      "slug": "rawpixel",
+      "categoria": "Recursos y activos",
+      "descripcion": "Banco de recursos creativos famoso por su colección de dominio público y arte vintage digitalizado.",
+      "url": "https://www.rawpixel.com/"
+    },
+    {
+      "id": 84,
+      "nombre": "Realtime Colors",
+      "slug": "realtime-colors",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "<p>Una herramienta de visualización de colores que te permite probar paletas en una interfaz de usuario real en tiempo real.</p>",
+      "url": "realtimecolors.com"
+    },
+    {
+      "id": 281,
+      "nombre": "Rebrand Gallery",
+      "slug": "rebrand-gallery",
+      "categoria": "Inspiración y referencias",
+      "descripcion": "Una galería de inspiración que documenta y muestra el antes y el después de rediseños de marca (rebranding) de empresas conocidas.",
+      "url": "https://www.rebrand.gallery/"
+    },
+    {
+      "id": 257,
+      "nombre": "Recraft AI",
+      "slug": "recraft-ai",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Un generador de imágenes por IA que se especializa en la creación de gráficos vectoriales, ilustraciones e iconografía.</p>",
+      "url": "https://www.recraft.ai/"
+    },
+    {
+      "id": 305,
+      "nombre": "Refero",
+      "slug": "refero",
+      "categoria": "Inspiración y referencias",
+      "descripcion": "La colección más grande de referencias de diseño UI y UX de aplicaciones reales y pantallas web.",
+      "url": "https://refero.design/"
+    },
+    {
+      "id": 293,
+      "nombre": "Reflex",
+      "slug": "reflex",
+      "categoria": "Creación con IA",
+      "descripcion": "Un constructor de IA (AI Builder) que crea aplicaciones web de alto rendimiento a partir de un simple prompt, combinando la potencia de Python y la IA.",
+      "url": "https://reflex.dev/"
+    },
+    {
+      "id": 250,
+      "nombre": "RemNote",
+      "slug": "remnote",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>Una herramienta de toma de notas todo-en-uno que te ayuda a aprender y recordar, con flashcards y PDF integrados.</p>",
+      "url": "https://www.remnote.com/"
+    },
+    {
+      "id": 68,
+      "nombre": "Rive",
+      "slug": "rive",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una herramienta de diseño y animación para crear gráficos interactivos que se ejecutan en cualquier plataforma en tiempo real.</p>",
+      "url": "rive.app/"
+    },
+    {
+      "id": 95,
+      "nombre": "Runway",
+      "slug": "runway",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Una suite de herramientas de IA para creadores de video que permite generar clips a partir de texto o imágenes y editarlos en una plataforma todo-en-uno.</p>",
+      "url": "runwayml.com/"
+    },
+    {
+      "id": 31,
+      "nombre": "SaaS Landing Page",
+      "slug": "saas-landing-page",
+      "categoria": "Inspiración y referencias",
+      "descripcion": "<p>Una colección de las mejores páginas de destino (landing pages) de productos SaaS, ideal para la inspiración y el análisis.</p>",
+      "url": "saaslandingpage.com/"
+    },
+    {
+      "id": 286,
+      "nombre": "Saaspo",
+      "slug": "saaspo",
+      "categoria": "Inspiración y referencias",
+      "descripcion": "Una galería de inspiración curada que presenta los mejores y más recientes diseños de sitios web de la industria del software (SaaS).",
+      "url": "https://saaspo.com/"
+    },
+    {
+      "id": 376,
+      "nombre": "Screen",
+      "slug": "screen-guru",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una herramienta ultra-simple para crear capturas de pantalla de sitios web con marcos limpios y sombras automáticamente.</p>",
+      "url": "https://screen.guru/"
+    },
+    {
+      "id": 195,
+      "nombre": "Scribus",
+      "slug": "scribus",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>La principal alternativa de código abierto y gratuita para la autoedición y maquetación de páginas a nivel profesional.</p>",
+      "url": "scribus.net"
+    },
+    {
+      "id": 128,
+      "nombre": "ShapesXR",
+      "slug": "shapesxr",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una herramienta de diseño y prototipado colaborativo que se ejecuta directamente en realidad virtual.</p>",
+      "url": "shapesxr.com"
+    },
+    {
+      "id": 303,
+      "nombre": "Shapr3D",
+      "slug": "shapr3d",
+      "categoria": "Programas de diseño",
+      "descripcion": "Software CAD profesional pionero en el uso de iPad y Apple Pencil, ahora multiplataforma para modelado 3D intuitivo.",
+      "url": "https://www.shapr3d.com/"
+    },
+    {
+      "id": 170,
+      "nombre": "Shotcut",
+      "slug": "shotcut",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Un editor de vídeo gratuito, de código abierto y multiplataforma con un amplio soporte de formatos.</p>",
+      "url": "shotcut.org"
+    },
+    {
+      "id": 165,
+      "nombre": "shots.so",
+      "slug": "shots-so",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "<p>Una herramienta web súper simple y rápida para crear mockups de capturas de pantalla de aplicaciones y sitios web.</p>",
+      "url": "shots.so/"
+    },
+    {
+      "id": 116,
+      "nombre": "Shutter Encoder",
+      "slug": "shutter-encoder",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "<p>Una navaja suiza para la conversión y compresión de video, basada en FFmpeg, gratuita y muy potente.</p>",
+      "url": "shutterencoder.com/"
+    },
+    {
+      "id": 300,
+      "nombre": "Silex",
+      "slug": "silex",
+      "categoria": "Programas de diseño",
+      "descripcion": "Un constructor de sitios web \"no-code\" gratuito y open-source para quienes construyen la web. Permite crear y alojar sitios estáticos sin suscripciones ni restricciones.",
+      "url": "https://www.silex.me/"
+    },
+    {
+      "id": 217,
+      "nombre": "Sketch",
+      "slug": "sketch",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una potente herramienta de diseño vectorial para macOS, pionera en el diseño de interfaces de usuario y sistemas de diseño.</p>",
+      "url": "sketch.com"
+    },
+    {
+      "id": 237,
+      "nombre": "Sketchfab",
+      "slug": "sketchfab",
+      "categoria": "Recursos y activos",
+      "descripcion": "<p>La plataforma líder para publicar, compartir, descubrir, comprar y vender contenido 3D, VR y AR.</p>",
+      "url": "https://sketchfab.com/"
+    },
+    {
+      "id": 134,
+      "nombre": "SketchUp",
+      "slug": "sketchup",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Un software de modelado 3D increíblemente intuitivo, popular en arquitectura, diseño de interiores y planificación urbana.</p>",
+      "url": "sketchup.com"
+    },
+    {
+      "id": 133,
+      "nombre": "Spline",
+      "slug": "spline",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una herramienta de diseño 3D colaborativa y basada en la web que facilita la creación de escenas interactivas.</p>",
+      "url": "spline.design"
+    },
+    {
+      "id": 159,
+      "nombre": "Squarespace",
+      "slug": "squarespace",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una plataforma conocida por sus plantillas de diseño elegantes y su enfoque en sitios visualmente atractivos como portafolios y tiendas online.</p>",
+      "url": "squarespace.com"
+    },
+    {
+      "id": 118,
+      "nombre": "Squoosh",
+      "slug": "squoosh",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "<p> Una potente aplicación web de Google para la compresión avanzada de imágenes, con previsualización en tiempo real.</p>",
+      "url": "squoosh.app/"
+    },
+    {
+      "id": 304,
+      "nombre": "Standards",
+      "slug": "standards",
+      "categoria": "Programas de diseño",
+      "descripcion": "Plataforma moderna para construir, alojar y compartir manuales de marca y pautas de diseño interactivos.",
+      "url": "https://standards.site/"
+    },
+    {
+      "id": 80,
+      "nombre": "Stark",
+      "slug": "stark",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "<p>La suite de herramientas de accesibilidad líder para diseñadores, integrada directamente en Figma, Sketch y Adobe XD.</p>",
+      "url": "getstark.co/"
+    },
+    {
+      "id": 256,
+      "nombre": "Stich",
+      "slug": "stich",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Un asistente de IA que genera diseños de interfaz de usuario (UI) editables para Figma a partir de una simple descripción de texto.</p>",
+      "url": "https://www.usegalileo.ai/"
+    },
+    {
+      "id": 146,
+      "nombre": "Stormboard",
+      "slug": "stormboard",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>Un espacio de trabajo digital todo-en-uno que combina pizarras con planificación y seguimiento de tareas.</p>",
+      "url": "stormboard.com"
+    },
+    {
+      "id": 81,
+      "nombre": "Stylify Me",
+      "slug": "stylify-me",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "<p>Una herramienta online que extrae la guía de estilos de cualquier sitio web con solo introducir su URL.</p>",
+      "url": "stylifyme.com/"
+    },
+    {
+      "id": 93,
+      "nombre": "Suno AI",
+      "slug": "suno-ai",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Una herramienta de IA que crea canciones completas (música, voz y letra) a partir de una simple descripción de texto.</p>",
+      "url": "suno.ai/"
+    },
+    {
+      "id": 58,
+      "nombre": "Supabase",
+      "slug": "supabase",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>La alternativa de código abierto a Firebase. Proporciona un backend completo con una base de datos Postgres, autenticación, almacenamiento y APIs.</p>",
+      "url": "supabase.com/"
+    },
+    {
+      "id": 33,
+      "nombre": "Supahero",
+      "slug": "supahero",
+      "categoria": "Inspiración y referencias",
+      "descripcion": "<p>Una galería de inspiración para UI de páginas de inicio (hero sections), pantallas de login y otras secciones clave de una web.</p>",
+      "url": "supahero.io/"
+    },
+    {
+      "id": 106,
+      "nombre": "SwissTransfer",
+      "slug": "swisstransfer",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>Un servicio gratuito y seguro para enviar archivos grandes (hasta 50 GB) alojado en Suiza, garantizando la privacidad.</p>",
+      "url": "swisstransfer.com/es"
+    },
+    {
+      "id": 248,
+      "nombre": "Synfig Studio",
+      "slug": "synfig-studio",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Un software de animación 2D vectorial de código abierto, diseñado para crear animaciones de calidad cinematográfica con menos recursos.</p>",
+      "url": "https://www.synfig.org/"
+    },
+    {
+      "id": 20,
+      "nombre": "Tabler",
+      "slug": "tabler",
+      "categoria": "Recursos y activos",
+      "descripcion": "<p>Un kit de UI y sistema de diseño de código abierto, premium y gratuito, para crear paneles de administración y aplicaciones web atractivas.</p>",
+      "url": "tabler.io"
+    },
+    {
+      "id": 82,
+      "nombre": "The Good Line Height",
+      "slug": "the-good-line-height",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "<p>Una sencilla utilidad para calcular el interlineado (line-height) perfecto para cualquier tamaño de texto.</p>",
+      "url": "thegoodlineheight.com"
+    },
+    {
+      "id": 375,
+      "nombre": "The Mockup Club",
+      "slug": "the-mockup-club",
+      "categoria": "Recursos y activos",
+      "descripcion": "<p>Un directorio selecto de mockups gratuitos de primera calidad, probados y verificados para asegurar su usabilidad.</p>",
+      "url": "https://themockup.club/"
+    },
+    {
+      "id": 179,
+      "nombre": "thumbor.org",
+      "slug": "thumbor-org",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "<p>Un servicio de imágenes inteligente y de código abierto que se puede auto-alojar para recortar, redimensionar y optimizar imágenes sobre la marcha.</p>",
+      "url": "thumbor.org"
+    },
+    {
+      "id": 113,
+      "nombre": "TinyPNG / TinyJPG",
+      "slug": "tinypng-tinyjpg",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "<p>El servicio web más popular para comprimir imágenes PNG y JPG de forma inteligente sin apenas perder calidad visible.</p>",
+      "url": "tinypng.com/"
+    },
+    {
+      "id": 152,
+      "nombre": "tldraw",
+      "slug": "tldraw",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>Una pizarra colaborativa, de código abierto, sorprendentemente divertida y potente.</p>",
+      "url": "tldraw.com"
+    },
+    {
+      "id": 235,
+      "nombre": "Topaz Gigapixel AI",
+      "slug": "topaz-gigapixel-ai",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "<p>El software de escalado de imágenes con IA líder en el mercado para aumentar la resolución de las fotos sin perder detalle.</p>",
+      "url": "https://www.topazlabs.com/gigapixel-ai"
+    },
+    {
+      "id": 105,
+      "nombre": "Transfer.zip",
+      "slug": "transfer-zip",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>Un servicio de transferencia de archivos extremadamente simple y gratuito que permite enviar hasta 100 GB.</p>",
+      "url": "transfer.zip/"
+    },
+    {
+      "id": 101,
+      "nombre": "Transfonter",
+      "slug": "transfonter",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "<p>Una herramienta web gratuita para convertir fuentes de escritorio a fuentes web (@font-face).</p>",
+      "url": "transfonter.org/"
+    },
+    {
+      "id": 83,
+      "nombre": "Type Scale",
+      "slug": "type-scale",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "<p>Una calculadora visual para crear escalas tipográficas armoniosas para tus proyectos web.</p>",
+      "url": "typescale.com"
+    },
+    {
+      "id": 49,
+      "nombre": "Typewolf",
+      "slug": "typewolf",
+      "categoria": "Inspiración y referencias",
+      "descripcion": "<p>Un recurso tipográfico legendario que muestra las mejores tipografías en uso en sitios web reales.</p>",
+      "url": "typewolf.com/"
+    },
+    {
+      "id": 255,
+      "nombre": "Udio",
+      "slug": "udio",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Un potente generador de música por IA que crea canciones completas con voces de alta calidad en una enorme variedad de géneros.</p>",
+      "url": "https://www.udio.com/"
+    },
+    {
+      "id": 129,
+      "nombre": "Unity",
+      "slug": "unity",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>El motor de desarrollo de juegos y experiencias interactivas en tiempo real más popular del mundo.</p>",
+      "url": "unity.com/"
+    },
+    {
+      "id": 130,
+      "nombre": "Unreal Engine",
+      "slug": "unreal-engine",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Un motor de creación 3D en tiempo real extremadamente potente, conocido por sus gráficos fotorrealistas de vanguardia.</p>",
+      "url": "unrealengine.com/"
+    },
+    {
+      "id": 90,
+      "nombre": "Unsplash",
+      "slug": "unsplash",
+      "categoria": "Recursos y activos",
+      "descripcion": "<p>La plataforma de referencia para descargar imágenes de alta calidad, hermosas y completamente gratuitas para cualquier uso.</p>",
+      "url": "unsplash.com"
+    },
+    {
+      "id": 246,
+      "nombre": "Upscayl",
+      "slug": "upscayl",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "<p>Una aplicación de escritorio gratuita y de código abierto para escalar imágenes de baja resolución utilizando modelos de IA avanzados.</p>",
+      "url": "https://upscayl.org/"
+    },
+    {
+      "id": 273,
+      "nombre": "Useberry",
+      "slug": "useberry",
+      "categoria": "Programas de diseño",
+      "descripcion": "Una plataforma de investigación de experiencia de usuario que ofrece una suite completa de métodos de prueba para prototipos y sitios web en vivo.",
+      "url": "https://www.useberry.com"
+    },
+    {
+      "id": 46,
+      "nombre": "Utopia.fyi",
+      "slug": "utopia-fyi",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "<p>Una herramienta avanzada para generar escalas de tipografía y espaciado fluidas y verdaderamente responsivas.</p>",
+      "url": "utopia.fyi/"
+    },
+    {
+      "id": 210,
+      "nombre": "UXPin",
+      "slug": "uxpin",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una plataforma de diseño que permite crear prototipos con la misma fidelidad y funcionalidad que el producto final.</p>",
+      "url": "uxpin.com"
+    },
+    {
+      "id": 274,
+      "nombre": "UXtweak",
+      "slug": "uxtweak",
+      "categoria": "Programas de diseño",
+      "descripcion": "Una potente plataforma todo-en-uno para la investigación de UX que cubre todo el ciclo de vida del producto, desde prototipos hasta sitios en producción.",
+      "url": "https://www.uxtweak.com"
+    },
+    {
+      "id": 70,
+      "nombre": "v0.dev",
+      "slug": "v0-dev",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Una herramienta de IA que genera interfaces de usuario (UI) en React a partir de una simple descripción de texto o una imagen.</p>",
+      "url": "v0.dev"
+    },
+    {
+      "id": 200,
+      "nombre": "Vectr",
+      "slug": "vectr",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Un editor de gráficos vectoriales gratuito, simple y basado en la web, ideal para principiantes y tareas de diseño rápidas.</p>",
+      "url": "vectr.com"
+    },
+    {
+      "id": 278,
+      "nombre": "Vercel",
+      "slug": "vercel",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "La plataforma de despliegue por excelencia para frameworks de frontend como Next.js, ofreciendo un flujo de trabajo y un rendimiento inigualables.",
+      "url": "https://vercel.com"
+    },
+    {
+      "id": 180,
+      "nombre": "Vimeo",
+      "slug": "vimeo",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>La plataforma de alojamiento de video de alta calidad para profesionales y creativos.</p>",
+      "url": "vimeo.com/"
+    },
+    {
+      "id": 251,
+      "nombre": "Vizcom",
+      "slug": "vizcom",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Un asistente de IA que transforma bocetos rápidos en renders fotorrealistas en segundos. Ideal para el diseño industrial y de producto.</p>",
+      "url": "https://www.vizcom.ai/"
+    },
+    {
+      "id": 162,
+      "nombre": "Webflow",
+      "slug": "webflow",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una plataforma de desarrollo visual para diseñadores profesionales que desean construir sitios complejos sin escribir código.</p>",
+      "url": "webflow.com"
+    },
+    {
+      "id": 294,
+      "nombre": "Webstudio",
+      "slug": "webstudio",
+      "categoria": "Programas de diseño",
+      "descripcion": "Un constructor visual open-source para crear sitios web rápidos y mantenibles. Se enfoca en estándares web modernos y permite construir \"frontend\" personalizados sin código.",
+      "url": "https://webstudio.is/"
+    },
+    {
+      "id": 110,
+      "nombre": "WeTransfer",
+      "slug": "wetransfer",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>La forma más simple y elegante de enviar archivos grandes a otras personas a través de un enlace de descarga.</p>",
+      "url": "wetransfer.com/"
+    },
+    {
+      "id": 151,
+      "nombre": "Whimsical",
+      "slug": "whimsical",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>Una suite de herramientas de colaboración visual que combina diagramas de flujo, wireframes, notas adhesivas y documentos.</p>",
+      "url": "whimsical.com"
+    },
+    {
+      "id": 115,
+      "nombre": "WinRAR",
+      "slug": "winrar",
+      "categoria": "Utilidades de apoyo",
+      "descripcion": "<p>El clásico compresor y archivador de archivos para Windows, conocido por su formato .RAR.</p>",
+      "url": "win-rar.com/"
+    },
+    {
+      "id": 160,
+      "nombre": "Wix",
+      "slug": "wix",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Un constructor de sitios web muy fácil de usar con un editor de arrastrar y soltar, ideal para principiantes y pequeñas empresas.</p>",
+      "url": "wix.com"
+    },
+    {
+      "id": 161,
+      "nombre": "WordPress",
+      "slug": "wordpress",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>El sistema de gestión de contenidos más popular del mundo, que potencia más del 40% de la web.</p>",
+      "url": "wordpress.org"
+    },
+    {
+      "id": 295,
+      "nombre": "Ycode",
+      "slug": "ycode",
+      "categoria": "Programas de diseño",
+      "descripcion": "Una plataforma no-code para construir sitios web profesionales de forma fácil, rápida y asequible, ahora potenciada con IA.",
+      "url": "https://www.ycode.com/"
+    },
+    {
+      "id": 312,
+      "nombre": "Yesicon",
+      "slug": "yesicon",
+      "categoria": "Recursos y activos",
+      "descripcion": "Buscador de iconos vectoriales de alta calidad que agrega múltiples sets de código abierto.",
+      "url": "https://yesicon.app/"
+    },
+    {
+      "id": 267,
+      "nombre": "Z.ai (GLM)",
+      "slug": "z-ai",
+      "categoria": "Creación con IA",
+      "descripcion": "<p>Una plataforma china de IA desarrollada por Zhipu AI (Tsinghua University), ofreciendo modelos de lenguaje GLM de alto rendimiento y herramientas de IA generativa.</p>",
+      "url": "https://chat.z.ai/"
+    },
+    {
+      "id": 229,
+      "nombre": "ZBrush",
+      "slug": "zbrush",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>El estándar de la industria para la escultura digital y la pintura de modelos 3D de alta resolución.</p>",
+      "url": "https://www.maxon.net/zbrush"
+    },
+    {
+      "id": 71,
+      "nombre": "Zeplin",
+      "slug": "zeplin",
+      "categoria": "Productividad y gestión",
+      "descripcion": "<p>Una plataforma para facilitar el \"handoff\" (entrega) de diseños, conectando al equipo de diseño con el de desarrollo.</p>",
+      "url": "zeplin.io/"
+    },
+    {
+      "id": 232,
+      "nombre": "Zeroheight",
+      "slug": "zeroheight",
+      "categoria": "Programas de diseño",
+      "descripcion": "<p>Una plataforma para crear, documentar y mantener sistemas de diseño vivos y colaborativos.</p>",
+      "url": "https://zeroheight.com/"
+    },
+    {
+      "id": 371,
+      "nombre": "ZippyPixels",
+      "slug": "zippypixels",
+      "categoria": "Recursos y activos",
+      "descripcion": "<p>Un sitio de recursos de diseño conocido por sus mockups de alta calidad en PSD, logos y plantillas de branding.</p>",
+      "url": "https://zippypixels.com/"
+    }
+  ]
+}

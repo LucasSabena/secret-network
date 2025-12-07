@@ -1,0 +1,414 @@
+{
+    "descripcion": "Catálogo completo de los 42 tipos de bloques disponibles para construir blogs ricos y dinámicos.",
+    "reglas_generales": [
+        "No uses un bloque 'text' para títulos (h1-h6) si puedes usar el campo 'format' dentro del bloque text.",
+        "Agrupa párrafos consecutivos en un solo bloque 'text' (usando <p>...</p>) en lugar de crear múltiples bloques.",
+        "Para imágenes, si encuentras una URL real, úsala. Si no, usa '[SEARCH: query]' como placeholder.",
+        "Usa bloques específicos (program-card, quote, stats) en lugar de simularlos con texto."
+    ],
+    "categorias": {
+        "texto": [
+            {
+                "type": "text",
+                "uso": "Párrafos, títulos, listas simples.",
+                "data": {
+                    "format": "paragraph | h2 | h3 | ul | ol | quote",
+                    "content": "HTML simple (<p>, <strong>, <em>, <a>).",
+                    "textColor": "opcional (hex)",
+                    "backgroundColor": "opcional (hex)"
+                }
+            },
+            {
+                "type": "code",
+                "uso": "Bloques de código con resaltado de sintaxis.",
+                "data": {
+                    "language": "javascript | python | css | ...",
+                    "code": "El código...",
+                    "filename": "ejemplo.js",
+                    "showLineNumbers": true
+                }
+            },
+            {
+                "type": "math",
+                "uso": "Fórmulas matemáticas (LaTeX).",
+                "data": {
+                    "formula": "E = mc^2",
+                    "display": "block"
+                }
+            }
+        ],
+        "media": [
+            {
+                "type": "image",
+                "uso": "Imágenes individuales.",
+                "data": {
+                    "url": "URL_REAL o [SEARCH: query visual]",
+                    "alt": "Descripción SEO",
+                    "caption": "Pie de foto",
+                    "shadow": "md",
+                    "borderRadius": 8
+                }
+            },
+            {
+                "type": "images-grid",
+                "uso": "Galería de 2-4 imágenes.",
+                "data": {
+                    "columns": 2,
+                    "images": [
+                        {
+                            "url": "...",
+                            "alt": "..."
+                        },
+                        {
+                            "url": "...",
+                            "alt": "..."
+                        }
+                    ]
+                }
+            },
+            {
+                "type": "video",
+                "uso": "Embed de YouTube/Vimeo.",
+                "data": {
+                    "url": "https://youtube.com/watch?v=...",
+                    "platform": "youtube"
+                }
+            },
+            {
+                "type": "spotify",
+                "uso": "Embed de canción/album/playlist.",
+                "data": {
+                    "spotifyUrl": "https://open.spotify.com/track/..."
+                }
+            }
+        ],
+        "referencias_internas": [
+            {
+                "type": "program-card",
+                "uso": "Tarjeta destacada de un programa (usa ID de 03_programas_referenciables.json).",
+                "data": {
+                    "programId": 123,
+                    "variant": "default"
+                }
+            },
+            {
+                "type": "programs-grid",
+                "uso": "Grid de varios programas relacionados.",
+                "data": {
+                    "programIds": [
+                        123,
+                        456,
+                        789
+                    ],
+                    "columns": 3
+                }
+            },
+            {
+                "type": "blog-card",
+                "uso": "Referencia a otro blog (usa ID de 02_blogs_existentes.json).",
+                "data": {
+                    "blogId": 55
+                }
+            }
+        ],
+        "estructurales": [
+            {
+                "type": "container",
+                "uso": "NO IMPLEMENTADO - Usar secuencia lineal.",
+                "nota": "El sistema es lineal, no anidado."
+            },
+            {
+                "type": "separator",
+                "uso": "Línea divisoria simple.",
+                "data": {
+                    "style": "solid"
+                }
+            },
+            {
+                "type": "divider-text",
+                "uso": "Separador con texto en medio.",
+                "data": {
+                    "text": "Otras opciones",
+                    "style": "dashed"
+                }
+            },
+            {
+                "type": "accordion",
+                "uso": "Contenido colapsable (FAQs, detalles técnicos).",
+                "data": {
+                    "items": [
+                        {
+                            "title": "Pregunta",
+                            "content": "Respuesta HTML"
+                        }
+                    ]
+                }
+            },
+            {
+                "type": "tabs",
+                "uso": "Pestañas para organizar contenido alternativo.",
+                "data": {
+                    "tabs": [
+                        {
+                            "label": "Windows",
+                            "content": "Pasos para Windows..."
+                        },
+                        {
+                            "label": "Mac",
+                            "content": "Pasos para Mac..."
+                        }
+                    ]
+                }
+            },
+            {
+                "type": "toc",
+                "uso": "Tabla de contenidos automática (insertar al inicio).",
+                "data": {
+                    "title": "En este artículo",
+                    "sticky": true
+                }
+            }
+        ],
+        "comparacion": [
+            {
+                "type": "pros-cons",
+                "uso": "Lista de pros y contras.",
+                "data": {
+                    "pros": [
+                        "Ventaja 1",
+                        "Ventaja 2"
+                    ],
+                    "cons": [
+                        "Desventaja 1"
+                    ],
+                    "title": "Veredicto"
+                }
+            },
+            {
+                "type": "comparison",
+                "uso": "Tabla comparativa de features.",
+                "data": {
+                    "featureLabels": [
+                        "Precio",
+                        "Calidad"
+                    ],
+                    "items": [
+                        {
+                            "name": "Prod A",
+                            "features": {
+                                "Precio": "$10",
+                                "Calidad": "Alta"
+                            }
+                        },
+                        {
+                            "name": "Prod B",
+                            "features": {
+                                "Precio": "$5",
+                                "Calidad": "Media"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "type": "pricing-table",
+                "uso": "Tabla de precios.",
+                "data": {
+                    "plans": [
+                        {
+                            "name": "Free",
+                            "price": "$0",
+                            "features": [
+                                "A",
+                                "B"
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                "type": "before-after",
+                "uso": "Comparación visual deslizante.",
+                "data": {
+                    "beforeImage": "url",
+                    "afterImage": "url"
+                }
+            }
+        ],
+        "interactivos": [
+            {
+                "type": "faq",
+                "uso": "Preguntas frecuentes con Schema Markup implícito.",
+                "data": {
+                    "items": [
+                        {
+                            "question": "¿Es gratis?",
+                            "answer": "Sí, totalmente."
+                        }
+                    ]
+                }
+            },
+            {
+                "type": "poll",
+                "uso": "Encuesta simple.",
+                "data": {
+                    "question": "¿Qué prefieres?",
+                    "options": [
+                        {
+                            "text": "Opción A"
+                        },
+                        {
+                            "text": "Opción B"
+                        }
+                    ]
+                }
+            },
+            {
+                "type": "checklist",
+                "uso": "Lista de chequeo interactiva.",
+                "data": {
+                    "items": [
+                        {
+                            "text": "Paso 1",
+                            "checked": false
+                        }
+                    ]
+                }
+            }
+        ],
+        "social_proof": [
+            {
+                "type": "quote",
+                "uso": "Cita destacada.",
+                "data": {
+                    "quote": "El mejor software...",
+                    "author": "Elon Musk",
+                    "variant": "bordered"
+                }
+            },
+            {
+                "type": "testimonial",
+                "uso": "Testimonio con rating.",
+                "data": {
+                    "quote": "Increíble.",
+                    "author": "Usuario",
+                    "rating": 5,
+                    "avatar": "url"
+                }
+            },
+            {
+                "type": "tweet",
+                "uso": "Embed de X/Twitter.",
+                "data": {
+                    "tweetUrl": "https://twitter.com/..."
+                }
+            },
+            {
+                "type": "reddit-post",
+                "uso": "Embed de Reddit.",
+                "data": {
+                    "postUrl": "https://reddit.com/..."
+                }
+            }
+        ],
+        "destacados": [
+            {
+                "type": "alert",
+                "uso": "Aviso importante.",
+                "data": {
+                    "variant": "warning",
+                    "title": "Cuidado",
+                    "description": "Texto..."
+                }
+            },
+            {
+                "type": "tip-box",
+                "uso": "Consejo o Tip.",
+                "data": {
+                    "type": "tip",
+                    "content": "Sabías que..."
+                }
+            },
+            {
+                "type": "callout",
+                "uso": "Caja destacada con icono.",
+                "data": {
+                    "icon": "Zap",
+                    "content": "Dato rápido",
+                    "color": "blue"
+                }
+            }
+        ],
+        "datos": [
+            {
+                "type": "stats",
+                "uso": "Números grandes destacados.",
+                "data": {
+                    "stats": [
+                        {
+                            "label": "Usuarios",
+                            "value": "1M+"
+                        },
+                        {
+                            "label": "Rating",
+                            "value": "4.9"
+                        }
+                    ]
+                }
+            },
+            {
+                "type": "timeline",
+                "uso": "Línea de tiempo vertical.",
+                "data": {
+                    "items": [
+                        {
+                            "date": "2023",
+                            "title": "Inicio",
+                            "description": "..."
+                        }
+                    ]
+                }
+            },
+            {
+                "type": "progress-bar",
+                "uso": "Barra de progreso (skill bars).",
+                "data": {
+                    "items": [
+                        {
+                            "label": "Velocidad",
+                            "value": 90
+                        }
+                    ]
+                }
+            }
+        ],
+        "calls_to_action": [
+            {
+                "type": "button",
+                "uso": "Botón simple.",
+                "data": {
+                    "text": "Descargar",
+                    "url": "#",
+                    "variant": "primary"
+                }
+            },
+            {
+                "type": "cta-banner",
+                "uso": "Banner ancho con CTA.",
+                "data": {
+                    "title": "Prueba gratis",
+                    "ctaText": "Empezar",
+                    "ctaUrl": "#"
+                }
+            },
+            {
+                "type": "newsletter",
+                "uso": "Caja de suscripción.",
+                "data": {
+                    "title": "Suscríbete",
+                    "variant": "card"
+                }
+            }
+        ]
+    }
+}
