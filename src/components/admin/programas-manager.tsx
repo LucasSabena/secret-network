@@ -1,878 +1,301 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Plus, Search, Edit, Trash2, Loader2, Filter, X, Upload, Image as ImageIcon, CheckCircle2, XCircle, ExternalLink, Pencil, FileJson } from 'lucide-react';
+import {
+  Plus, Search, Edit2, Trash2, Loader2, Filter, X,
+  Image as ImageIcon, CheckCircle2, AlertCircle,
+  ExternalLink, MoreHorizontal, LayoutGrid, List as ListIcon,
+  Wand2, Download
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Switch } from '@/components/ui/switch';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuCheckboxItem,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator,
+  DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useToast } from '@/components/ui/use-toast';
-import { Programa, Categoria, Plataforma, ModeloDePrecio } from '@/lib/types';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
+import { Categoria, ModeloDePrecio, Plataforma, Programa } from '@/lib/types';
 import ProgramaForm from './programa-form';
 import BatchIconUpload from './batch-icon-upload';
 import ProgramaJsonImporter from './programa-json-importer';
-import QuickAssetEditor from './quick-asset-editor';
 import { supabaseBrowserClient } from '@/lib/supabase-browser';
-import { addUTMParams } from '@/lib/utm-tracker';
 
 export default function ProgramasManager() {
+  // Data State
   const [programas, setProgramas] = useState<Programa[]>([]);
   const [categorias, setCategorias] = useState<Categoria[]>([]);
-  const [plataformas, setPlataformas] = useState<Plataforma[]>([]);
-  const [modelosPrecios, setModelosPrecios] = useState<ModeloDePrecio[]>([]);
-  const [programasPlataformas, setProgramasPlataformas] = useState<Record<number, number[]>>({});
-  const [programasPrecios, setProgramasPrecios] = useState<Record<number, number[]>>({});
   const [filteredProgramas, setFilteredProgramas] = useState<Programa[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Filter State
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterCategoria, setFilterCategoria] = useState<string>('all');
-  const [filterOpenSource, setFilterOpenSource] = useState<string>('all');
-  const [filterRecomendado, setFilterRecomendado] = useState<string>('all');
-  const [filterSinIcono, setFilterSinIcono] = useState(false);
-  const [filterSinCaptura, setFilterSinCaptura] = useState(false);
-  const [sortBy, setSortBy] = useState<string>('nombre');
+  const [filterCategoria, setFilterCategoria] = useState('all');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
+
+  // Modal State
   const [selectedPrograma, setSelectedPrograma] = useState<Programa | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [isBatchUploadOpen, setIsBatchUploadOpen] = useState(false);
-  const [isJsonImportOpen, setIsJsonImportOpen] = useState(false);
-  const [quickAssetPrograma, setQuickAssetPrograma] = useState<Programa | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [showFilters, setShowFilters] = useState(false);
+  const [isImporterOpen, setIsImporterOpen] = useState(false);
+
   const { toast } = useToast();
 
   useEffect(() => {
-    loadProgramas();
-    loadCategorias();
-    loadPlataformas();
-    loadModelosPrecios();
+    loadData();
   }, []);
 
   useEffect(() => {
-    applyFilters();
-  }, [searchTerm, programas, filterCategoria, filterOpenSource, filterRecomendado, filterSinIcono, filterSinCaptura, sortBy]);
+    filterData();
+  }, [programas, searchTerm, filterCategoria]);
 
-  function applyFilters() {
-    let filtered = [...programas];
+  async function loadData() {
+    setIsLoading(true);
+    const supabase = supabaseBrowserClient;
 
-    // Filtro de búsqueda
+    const [progsRes, catsRes] = await Promise.all([
+      supabase.from('programas').select('*').order('created_at', { ascending: false }),
+      supabase.from('categorias').select('*').order('nombre')
+    ]);
+
+    if (progsRes.data) setProgramas(progsRes.data);
+    if (catsRes.data) setCategorias(catsRes.data);
+    setIsLoading(false);
+  }
+
+  function filterData() {
+    let result = programas;
+
     if (searchTerm) {
-      filtered = filtered.filter((p) =>
-        p.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+      const lower = searchTerm.toLowerCase();
+      result = result.filter(p =>
+        p.nombre.toLowerCase().includes(lower) ||
+        p.slug.includes(lower)
       );
     }
 
-    // Filtro por categoría
     if (filterCategoria !== 'all') {
-      filtered = filtered.filter((p) => p.categoria_id === parseInt(filterCategoria));
+      result = result.filter(p => p.categoria_id.toString() === filterCategoria);
     }
 
-    // Filtro por Open Source
-    if (filterOpenSource !== 'all') {
-      const isOpenSource = filterOpenSource === 'true';
-      filtered = filtered.filter((p) => p.es_open_source === isOpenSource);
-    }
-
-    // Filtro por Recomendado
-    if (filterRecomendado !== 'all') {
-      const isRecomendado = filterRecomendado === 'true';
-      filtered = filtered.filter((p) => p.es_recomendado === isRecomendado);
-    }
-
-    // Filtro por programas sin icono
-    if (filterSinIcono) {
-      filtered = filtered.filter((p) => !p.icono_url);
-    }
-
-    // Filtro por programas sin captura
-    if (filterSinCaptura) {
-      filtered = filtered.filter((p) => !p.captura_url);
-    }
-
-    // Ordenamiento
-    filtered.sort((a, b) => {
-      switch (sortBy) {
-        case 'nombre':
-          return a.nombre.localeCompare(b.nombre);
-        case 'nombre-desc':
-          return b.nombre.localeCompare(a.nombre);
-        case 'id-desc':
-          return b.id - a.id; // Más nuevo = ID mayor
-        case 'id-asc':
-          return a.id - b.id; // Más antiguo = ID menor
-        default:
-          return 0;
-      }
-    });
-
-    setFilteredProgramas(filtered);
-  }
-
-  function clearFilters() {
-    setSearchTerm('');
-    setFilterCategoria('all');
-    setFilterOpenSource('all');
-    setFilterRecomendado('all');
-    setFilterSinIcono(false);
-    setFilterSinCaptura(false);
-    setSortBy('nombre');
-  }
-
-  const hasActiveFilters =
-    searchTerm ||
-    filterCategoria !== 'all' ||
-    filterOpenSource !== 'all' ||
-    filterRecomendado !== 'all' ||
-    filterSinIcono ||
-    filterSinCaptura ||
-    sortBy !== 'nombre';
-
-  async function loadCategorias() {
-    try {
-      const supabase = supabaseBrowserClient;
-      const { data, error } = await supabase
-        .from('categorias')
-        .select('*')
-        .is('id_categoria_padre', null)
-        .order('nombre');
-
-      if (error) throw error;
-      setCategorias(data || []);
-    } catch (error) {
-      console.error('Error loading categorias:', error);
-    }
-  }
-
-  async function loadPlataformas() {
-    try {
-      const supabase = supabaseBrowserClient;
-      const { data, error } = await supabase
-        .from('Plataformas')
-        .select('*')
-        .order('nombre');
-
-      if (error) throw error;
-      setPlataformas(data || []);
-    } catch (error) {
-      console.error('Error loading plataformas:', error);
-    }
-  }
-
-  async function loadModelosPrecios() {
-    try {
-      const supabase = supabaseBrowserClient;
-      const { data, error } = await supabase
-        .from('Modelos de Precios')
-        .select('*')
-        .order('nombre');
-
-      if (error) throw error;
-      setModelosPrecios(data || []);
-    } catch (error) {
-      console.error('Error loading modelos de precio:', error);
-    }
-  }
-
-  async function loadProgramasRelaciones() {
-    try {
-      const supabase = supabaseBrowserClient;
-
-      // Cargar plataformas de programas
-      const { data: platData } = await supabase
-        .from('programas_plataformas')
-        .select('programa_id, plataforma_id');
-
-      const platMap: Record<number, number[]> = {};
-      platData?.forEach(rel => {
-        if (!platMap[rel.programa_id]) platMap[rel.programa_id] = [];
-        platMap[rel.programa_id].push(rel.plataforma_id);
-      });
-      setProgramasPlataformas(platMap);
-
-      // Cargar precios de programas
-      const { data: precioData } = await supabase
-        .from('programas_precios')
-        .select('programa_id, precio_id');
-
-      const precioMap: Record<number, number[]> = {};
-      precioData?.forEach(rel => {
-        if (!precioMap[rel.programa_id]) precioMap[rel.programa_id] = [];
-        precioMap[rel.programa_id].push(rel.precio_id);
-      });
-      setProgramasPrecios(precioMap);
-    } catch (error) {
-      console.error('Error loading relaciones:', error);
-    }
-  }
-
-  async function loadProgramas() {
-    try {
-      setIsLoading(true);
-      const supabase = supabaseBrowserClient;
-      const { data, error } = await supabase
-        .from('programas')
-        .select('*')
-        .order('nombre');
-
-      if (error) throw error;
-      setProgramas(data || []);
-      setFilteredProgramas(data || []);
-      await loadProgramasRelaciones();
-    } catch (error) {
-      console.error('Error loading programas:', error);
-      toast({
-        title: 'Error',
-        description: 'No se pudieron cargar los programas',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    setFilteredProgramas(result);
   }
 
   async function handleDelete(id: number) {
     if (!confirm('¿Estás seguro de eliminar este programa?')) return;
 
-    try {
-      const supabase = supabaseBrowserClient;
-      const { error } = await supabase.from('programas').delete().eq('id', id);
-
-      if (error) throw error;
-
-      toast({
-        title: 'Éxito',
-        description: 'Programa eliminado correctamente',
-      });
-      loadProgramas();
-    } catch (error) {
-      console.error('Error deleting programa:', error);
-      toast({
-        title: 'Error',
-        description: 'No se pudo eliminar el programa',
-        variant: 'destructive',
-      });
+    const { error } = await supabaseBrowserClient.from('programas').delete().eq('id', id);
+    if (error) {
+      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+    } else {
+      toast({ title: 'Programa eliminado' });
+      loadData();
     }
   }
 
-  function handleNew() {
+  function openNew() {
     setSelectedPrograma(null);
     setIsFormOpen(true);
   }
 
-  function handleEdit(programa: Programa) {
-    setSelectedPrograma(programa);
+  function openEdit(prog: Programa) {
+    setSelectedPrograma(prog);
     setIsFormOpen(true);
   }
 
-  function handleFormClose() {
-    setIsFormOpen(false);
-    setSelectedPrograma(null);
-    loadProgramas();
-  }
+  return (
+    <div className="space-y-6 animate-in fade-in duration-500">
+      {/* Header Premium */}
+      <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
+            Programas
+          </h1>
+          <p className="text-muted-foreground">
+            Gestiona el catálogo de software ({filteredProgramas.length})
+          </p>
+        </div>
+        <div className="flex gap-2 w-full md:w-auto">
+          <Button onClick={() => setIsImporterOpen(true)} variant="outline" className="gap-2">
+            <Wand2 className="h-4 w-4" /> Importar JSON
+          </Button>
+          <Button onClick={openNew} className="gap-2 bg-pink-600 hover:bg-pink-700 text-white shadow-lg shadow-pink-500/20">
+            <Plus className="h-4 w-4" /> Nuevo Programa
+          </Button>
+        </div>
+      </div>
 
-  async function updateDificultad(programaId: number, dificultad: 'Facil' | 'Intermedio' | 'Dificil') {
-    try {
-      const supabase = supabaseBrowserClient;
-      const { error } = await supabase
-        .from('programas')
-        .update({ dificultad })
-        .eq('id', programaId);
+      {/* Toolbar Flotante */}
+      <div className="sticky top-2 z-10 flex flex-wrap gap-3 items-center bg-background/80 backdrop-blur-md p-2 rounded-xl border shadow-sm">
+        <div className="relative flex-1 min-w-[200px]">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Buscar..."
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+            className="pl-9 bg-muted/50 border-transparent focus:bg-background transition-all"
+          />
+        </div>
 
-      if (error) throw error;
+        <Select value={filterCategoria} onValueChange={setFilterCategoria}>
+          <SelectTrigger className="w-[180px] bg-muted/50 border-transparent">
+            <SelectValue placeholder="Categoría" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Todas</SelectItem>
+            {categorias.map(c => <SelectItem key={c.id} value={c.id.toString()}>{c.nombre}</SelectItem>)}
+          </SelectContent>
+        </Select>
 
-      setProgramas(prev => prev.map(p =>
-        p.id === programaId ? { ...p, dificultad } : p
-      ));
+        <div className="flex bg-muted/50 p-1 rounded-lg border border-transparent">
+          <button
+            onClick={() => setViewMode('list')}
+            className={`p-1.5 rounded-md transition-all ${viewMode === 'list' ? 'bg-background shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+          >
+            <ListIcon className="h-4 w-4" />
+          </button>
+          <button
+            onClick={() => setViewMode('grid')}
+            className={`p-1.5 rounded-md transition-all ${viewMode === 'grid' ? 'bg-background shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+          >
+            <LayoutGrid className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
 
-      toast({
-        title: 'Actualizado',
-        description: 'Dificultad actualizada correctamente',
-      });
-    } catch (error) {
-      console.error('Error updating dificultad:', error);
-      toast({
-        title: 'Error',
-        description: 'No se pudo actualizar la dificultad',
-        variant: 'destructive',
-      });
-    }
-  }
+      {/* Content Area */}
+      {isLoading ? (
+        <div className="flex justify-center p-12">
+          <Loader2 className="h-8 w-8 animate-spin text-pink-500" />
+        </div>
+      ) : (
+        <div className={viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4' : 'space-y-2'}>
+          {filteredProgramas.map(prog => (
+            <ProgramCard
+              key={prog.id}
+              programa={prog}
+              viewMode={viewMode}
+              onEdit={() => openEdit(prog)}
+              onDelete={() => handleDelete(prog.id)}
+            />
+          ))}
+        </div>
+      )}
 
-  async function toggleRecomendado(programaId: number, currentValue: boolean) {
-    try {
-      const supabase = supabaseBrowserClient;
-      const { error } = await supabase
-        .from('programas')
-        .update({ es_recomendado: !currentValue })
-        .eq('id', programaId);
+      {/* Modals */}
+      {isFormOpen && (
+        <ProgramaForm
+          programa={selectedPrograma}
+          onClose={() => { setIsFormOpen(false); loadData(); }}
+        />
+      )}
 
-      if (error) throw error;
+      {isImporterOpen && (
+        <ProgramaJsonImporter
+          isOpen={isImporterOpen}
+          onClose={() => setIsImporterOpen(false)}
+          onSuccess={() => { loadData(); }}
+        />
+      )}
+    </div>
+  );
+}
 
-      setProgramas(prev => prev.map(p =>
-        p.id === programaId ? { ...p, es_recomendado: !currentValue } : p
-      ));
+// Subcomponente Card/Row
+function ProgramCard({ programa, viewMode, onEdit, onDelete }: {
+  programa: Programa;
+  viewMode: 'grid' | 'list';
+  onEdit: () => void;
+  onDelete: () => void;
+}) {
+  const hasIcon = !!programa.icono_url;
+  const hasScreen = !!programa.captura_url;
 
-      toast({
-        title: 'Actualizado',
-        description: `Programa ${!currentValue ? 'marcado como' : 'desmarcado de'} recomendado`,
-      });
-    } catch (error) {
-      console.error('Error toggling recomendado:', error);
-      toast({
-        title: 'Error',
-        description: 'No se pudo actualizar',
-        variant: 'destructive',
-      });
-    }
-  }
-
-  async function toggleOpenSource(programaId: number, currentValue: boolean) {
-    try {
-      const supabase = supabaseBrowserClient;
-      const { error } = await supabase
-        .from('programas')
-        .update({ es_open_source: !currentValue })
-        .eq('id', programaId);
-
-      if (error) throw error;
-
-      setProgramas(prev => prev.map(p =>
-        p.id === programaId ? { ...p, es_open_source: !currentValue } : p
-      ));
-
-      toast({
-        title: 'Actualizado',
-        description: `Programa ${!currentValue ? 'marcado como' : 'desmarcado de'} Open Source`,
-      });
-    } catch (error) {
-      console.error('Error toggling open source:', error);
-      toast({
-        title: 'Error',
-        description: 'No se pudo actualizar',
-        variant: 'destructive',
-      });
-    }
-  }
-
-  async function updatePlataformas(programaId: number, plataformaId: number, isChecked: boolean) {
-    try {
-      const supabase = supabaseBrowserClient;
-
-      if (isChecked) {
-        const { error } = await supabase
-          .from('programas_plataformas')
-          .insert({ programa_id: programaId, plataforma_id: plataformaId });
-        if (error) throw error;
-      } else {
-        const { error } = await supabase
-          .from('programas_plataformas')
-          .delete()
-          .eq('programa_id', programaId)
-          .eq('plataforma_id', plataformaId);
-        if (error) throw error;
-      }
-
-      await loadProgramasRelaciones();
-      toast({
-        title: 'Actualizado',
-        description: 'Plataformas actualizadas',
-      });
-    } catch (error) {
-      console.error('Error updating plataformas:', error);
-      toast({
-        title: 'Error',
-        description: 'No se pudo actualizar',
-        variant: 'destructive',
-      });
-    }
-  }
-
-  async function updatePrecios(programaId: number, precioId: number, isChecked: boolean) {
-    try {
-      const supabase = supabaseBrowserClient;
-
-      if (isChecked) {
-        const { error } = await supabase
-          .from('programas_precios')
-          .insert({ programa_id: programaId, precio_id: precioId });
-        if (error) throw error;
-      } else {
-        const { error } = await supabase
-          .from('programas_precios')
-          .delete()
-          .eq('programa_id', programaId)
-          .eq('precio_id', precioId);
-        if (error) throw error;
-      }
-
-      await loadProgramasRelaciones();
-      toast({
-        title: 'Actualizado',
-        description: 'Modelos de precio actualizados',
-      });
-    } catch (error) {
-      console.error('Error updating precios:', error);
-      toast({
-        title: 'Error',
-        description: 'No se pudo actualizar',
-        variant: 'destructive',
-      });
-    }
-  }
-
-  if (isLoading) {
+  if (viewMode === 'list') {
     return (
-      <div className="flex items-center justify-center py-12">
-        <Loader2 className="h-8 w-8 animate-spin text-pink-500" />
+      <div className="group flex items-center gap-4 p-3 rounded-lg border bg-card hover:shadow-md transition-all hover:border-pink-500/50">
+        <div className="h-10 w-10 rounded bg-muted/50 flex items-center justify-center shrink-0 overflow-hidden">
+          {hasIcon ? (
+            <img src={programa.icono_url!} alt="" className="h-full w-full object-contain p-1" />
+          ) : (
+            <ImageIcon className="h-4 w-4 text-muted-foreground opacity-30" />
+          )}
+        </div>
+
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <h3 className="font-semibold truncate">{programa.nombre}</h3>
+            {programa.es_recomendado && (
+              <Badge variant="secondary" className="text-[10px] h-5 bg-pink-500/10 text-pink-600 border-pink-200">
+                Top
+              </Badge>
+            )}
+          </div>
+          <div className="flex items-center gap-3 text-xs text-muted-foreground">
+            <span className="truncate">{programa.slug}</span>
+            <span className="w-px h-3 bg-border" />
+            <div className="flex gap-2">
+              <span className={hasIcon ? "text-green-600" : "text-orange-400"}>
+                {hasIcon ? "Icono OK" : "Sin icono"}
+              </span>
+              <span className={hasScreen ? "text-green-600" : "text-orange-400"}>
+                {hasScreen ? "Captura OK" : "Sin captura"}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <Button size="icon" variant="ghost" className="h-8 w-8" onClick={onEdit}>
+            <Edit2 className="h-4 w-4" />
+          </Button>
+          <Button size="icon" variant="ghost" className="h-8 w-8 text-destructive hover:text-destructive" onClick={onDelete}>
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
     );
   }
 
+  // Grid View
   return (
-    <div className="space-y-6">
-      {/* Header con búsqueda y botones */}
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Buscar programas..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
-            />
-          </div>
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              onClick={() => setShowFilters(!showFilters)}
-              className="gap-2"
-            >
-              <Filter className="h-4 w-4" />
-              Filtros
-              {hasActiveFilters && (
-                <Badge variant="default" className="ml-1 h-5 w-5 p-0 text-xs bg-pink-500">
-                  •
-                </Badge>
-              )}
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => setIsBatchUploadOpen(true)}
-              className="gap-2 border-primary text-primary hover:bg-primary/10"
-            >
-              <Upload className="h-4 w-4" />
-              Subida por Lote
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => setIsJsonImportOpen(true)}
-              className="gap-2"
-            >
-              <FileJson className="h-4 w-4" />
-              Importar JSON
-            </Button>
-            <Button onClick={handleNew} className="gap-2 bg-pink-500 hover:bg-pink-600">
-              <Plus className="h-4 w-4" />
-              Nuevo Programa
-            </Button>
-          </div>
+    <div className="group relative flex flex-col p-4 rounded-xl border bg-card hover:shadow-lg transition-all hover:-translate-y-1">
+      <div className="flex justify-between items-start mb-3">
+        <div className="h-12 w-12 rounded-lg bg-muted/50 flex items-center justify-center overflow-hidden border">
+          {hasIcon ? (
+            <img src={programa.icono_url!} alt="" className="h-full w-full object-contain p-1.5" />
+          ) : (
+            <ImageIcon className="h-5 w-5 text-muted-foreground opacity-30" />
+          )}
         </div>
-
-        {/* Panel de filtros colapsable */}
-        {showFilters && (
-          <Card className="p-4">
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="font-semibold">Filtros</h3>
-                {hasActiveFilters && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={clearFilters}
-                    className="gap-2 text-muted-foreground"
-                  >
-                    <X className="h-4 w-4" />
-                    Limpiar filtros
-                  </Button>
-                )}
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {/* Filtro por categoría */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Categoría</label>
-                  <Select value={filterCategoria} onValueChange={setFilterCategoria}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Todas" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Todas las categorías</SelectItem>
-                      {categorias.map((cat) => (
-                        <SelectItem key={cat.id} value={cat.id.toString()}>
-                          {cat.icono && `${cat.icono} `}
-                          {cat.nombre}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Filtro por Open Source */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Tipo</label>
-                  <Select value={filterOpenSource} onValueChange={setFilterOpenSource}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Todos" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Todos los tipos</SelectItem>
-                      <SelectItem value="true">Open Source</SelectItem>
-                      <SelectItem value="false">Propietario</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Filtro por Recomendado */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Estado</label>
-                  <Select value={filterRecomendado} onValueChange={setFilterRecomendado}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Todos" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Todos</SelectItem>
-                      <SelectItem value="true">Recomendados</SelectItem>
-                      <SelectItem value="false">No recomendados</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Ordenamiento */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Ordenar por</label>
-                  <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Nombre A-Z" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="nombre">Nombre (A-Z)</SelectItem>
-                      <SelectItem value="nombre-desc">Nombre (Z-A)</SelectItem>
-                      <SelectItem value="id-desc">Más nuevos primero</SelectItem>
-                      <SelectItem value="id-asc">Más antiguos primero</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              {/* Filtros de recursos faltantes */}
-              <div className="space-y-3 pt-4 border-t">
-                <label className="text-sm font-medium">Filtrar por recursos faltantes</label>
-                <div className="flex flex-wrap gap-3">
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <Switch
-                      checked={filterSinIcono}
-                      onCheckedChange={setFilterSinIcono}
-                    />
-                    <span className="text-sm">Sin icono</span>
-                    {filterSinIcono && (
-                      <Badge variant="destructive" className="text-xs">
-                        {programas.filter(p => !p.icono_url).length}
-                      </Badge>
-                    )}
-                  </label>
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <Switch
-                      checked={filterSinCaptura}
-                      onCheckedChange={setFilterSinCaptura}
-                    />
-                    <span className="text-sm">Sin captura</span>
-                    {filterSinCaptura && (
-                      <Badge variant="destructive" className="text-xs">
-                        {programas.filter(p => !p.captura_url).length}
-                      </Badge>
-                    )}
-                  </label>
-                </div>
-              </div>
-
-              {/* Contador de resultados */}
-              <div className="text-sm text-muted-foreground pt-2 border-t">
-                Mostrando <strong>{filteredProgramas.length}</strong> de{' '}
-                <strong>{programas.length}</strong> programas
-                {(filterSinIcono || filterSinCaptura) && (
-                  <span className="ml-2 text-destructive">
-                    (filtrado por recursos faltantes)
-                  </span>
-                )}
-              </div>
-            </div>
-          </Card>
-        )}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="h-8 w-8 -mr-2">
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={onEdit}>Editar</DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={onDelete} className="text-destructive">Eliminar</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
-      {/* Grid de programas */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filteredProgramas.map((programa) => {
-          const plataformasPrograma = programasPlataformas[programa.id] || [];
-          const preciosPrograma = programasPrecios[programa.id] || [];
+      <h3 className="font-bold text-lg leading-tight mb-1 truncate">{programa.nombre}</h3>
+      <p className="text-xs text-muted-foreground mb-4 truncate">{programa.slug}</p>
 
-          return (
-            <Card key={programa.id} className="p-4 space-y-3">
-              {/* Header con título e indicadores de imágenes */}
-              <div className="flex items-start gap-3">
-                <div className="relative">
-                  {programa.icono_url ? (
-                    <img
-                      src={programa.icono_url}
-                      alt={programa.nombre}
-                      className="w-12 h-12 rounded object-cover border"
-                    />
-                  ) : (
-                    <div className="w-12 h-12 rounded border-2 border-dashed border-muted-foreground/30 flex items-center justify-center">
-                      <ImageIcon className="w-5 h-5 text-muted-foreground/50" />
-                    </div>
-                  )}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <h3 className="font-semibold truncate">{programa.nombre}</h3>
-                    <span className="text-xs text-muted-foreground shrink-0">#{programa.id}</span>
-                  </div>
-                  <p className="text-sm text-muted-foreground truncate">
-                    {programa.slug}
-                  </p>
-                  {/* Indicadores de imágenes - clickeable para editar */}
-                  <div
-                    className="flex items-center gap-2 mt-1 cursor-pointer hover:bg-muted/50 rounded px-1 py-0.5 -mx-1"
-                    onClick={() => setQuickAssetPrograma(programa)}
-                    title="Click para cambiar icono/captura"
-                  >
-                    <div className="flex items-center gap-1 text-xs">
-                      {programa.icono_url ? (
-                        <CheckCircle2 className="w-3 h-3 text-green-500" />
-                      ) : (
-                        <XCircle className="w-3 h-3 text-muted-foreground/50" />
-                      )}
-                      <span className="text-muted-foreground">Icono</span>
-                    </div>
-                    <div className="flex items-center gap-1 text-xs">
-                      {programa.captura_url ? (
-                        <CheckCircle2 className="w-3 h-3 text-green-500" />
-                      ) : (
-                        <XCircle className="w-3 h-3 text-muted-foreground/50" />
-                      )}
-                      <span className="text-muted-foreground">Captura</span>
-                    </div>
-                    <Pencil className="w-3 h-3 text-muted-foreground ml-auto" />
-                  </div>
-                </div>
-              </div>
-
-              {/* Descripción corta */}
-              {programa.descripcion_corta && (
-                <p className="text-sm line-clamp-2 text-muted-foreground">
-                  {programa.descripcion_corta.replace(/<[^>]*>/g, '')}
-                </p>
-              )}
-
-              {/* Controles rápidos */}
-              <div className="space-y-2 pt-2 border-t">
-                {/* Dificultad */}
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Dificultad</span>
-                  <Select
-                    value={programa.dificultad || undefined}
-                    onValueChange={(value) => updateDificultad(programa.id, value as any)}
-                  >
-                    <SelectTrigger className="w-32 h-8">
-                      <SelectValue placeholder="Seleccionar" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Facil">Fácil</SelectItem>
-                      <SelectItem value="Intermedio">Intermedio</SelectItem>
-                      <SelectItem value="Dificil">Difícil</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Toggles */}
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Recomendado</span>
-                  <Switch
-                    checked={programa.es_recomendado}
-                    onCheckedChange={() => toggleRecomendado(programa.id, programa.es_recomendado)}
-                  />
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Open Source</span>
-                  <Switch
-                    checked={programa.es_open_source}
-                    onCheckedChange={() => toggleOpenSource(programa.id, programa.es_open_source)}
-                  />
-                </div>
-
-                {/* Plataformas */}
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Plataformas</span>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="outline" size="sm" className="h-8">
-                        {plataformasPrograma.length > 0 ? (
-                          <span className="text-xs">{plataformasPrograma.length} seleccionadas</span>
-                        ) : (
-                          <span className="text-xs text-muted-foreground">Ninguna</span>
-                        )}
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-56">
-                      <DropdownMenuLabel>Sistemas Operativos</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      {plataformas.map((plat) => (
-                        <DropdownMenuCheckboxItem
-                          key={plat.id}
-                          checked={plataformasPrograma.includes(plat.id)}
-                          onCheckedChange={(checked) => updatePlataformas(programa.id, plat.id, checked)}
-                        >
-                          {plat.nombre}
-                        </DropdownMenuCheckboxItem>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-
-                {/* Modelos de Precio */}
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Precio</span>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="outline" size="sm" className="h-8">
-                        {preciosPrograma.length > 0 ? (
-                          <span className="text-xs">{preciosPrograma.length} seleccionados</span>
-                        ) : (
-                          <span className="text-xs text-muted-foreground">Ninguno</span>
-                        )}
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-56">
-                      <DropdownMenuLabel>Modelos de Precio</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      {modelosPrecios.map((precio) => (
-                        <DropdownMenuCheckboxItem
-                          key={precio.id}
-                          checked={preciosPrograma.includes(precio.id)}
-                          onCheckedChange={(checked) => updatePrecios(programa.id, precio.id, checked)}
-                        >
-                          {precio.nombre}
-                        </DropdownMenuCheckboxItem>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-              </div>
-
-              {/* Link del sitio web */}
-              {programa.web_oficial_url && (
-                <div className="flex items-center gap-2 pt-2 border-t">
-                  <a
-                    href={addUTMParams(programa.web_oficial_url.startsWith('http') ? programa.web_oficial_url : `https://${programa.web_oficial_url}`)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 flex items-center gap-2 px-3 py-2 text-sm rounded-md border hover:bg-accent transition-colors"
-                  >
-                    <ExternalLink className="h-4 w-4" />
-                    <span className="truncate">{programa.web_oficial_url}</span>
-                  </a>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      // Aquí podrías abrir un modal para editar solo el URL
-                      handleEdit(programa);
-                    }}
-                    className="shrink-0"
-                  >
-                    <Pencil className="h-4 w-4" />
-                  </Button>
-                </div>
-              )}
-
-              {/* Botones de acción */}
-              <div className="flex gap-2 pt-2 border-t">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleEdit(programa)}
-                  className="flex-1 gap-2"
-                >
-                  <Edit className="h-4 w-4" />
-                  Editar
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleDelete(programa.id)}
-                  className="gap-2 text-destructive hover:text-destructive"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
-            </Card>
-          );
-        })}
+      <div className="mt-auto flex gap-2">
+        <div className={`flex-1 h-1.5 rounded-full ${hasIcon ? 'bg-green-500' : 'bg-orange-200'}`} />
+        <div className={`flex-1 h-1.5 rounded-full ${hasScreen ? 'bg-green-500' : 'bg-orange-200'}`} />
       </div>
-
-      {filteredProgramas.length === 0 && (
-        <div className="text-center py-12">
-          <p className="text-muted-foreground">No se encontraron programas</p>
-        </div>
-      )}
-
-      {isFormOpen && (
-        <ProgramaForm
-          programa={selectedPrograma}
-          onClose={handleFormClose}
-        />
-      )}
-
-      {isBatchUploadOpen && (
-        <BatchIconUpload
-          onClose={() => setIsBatchUploadOpen(false)}
-          onSuccess={loadProgramas}
-        />
-      )}
-
-      {isJsonImportOpen && (
-        <ProgramaJsonImporter
-          isOpen={isJsonImportOpen}
-          onClose={() => setIsJsonImportOpen(false)}
-          onSuccess={loadProgramas}
-        />
-      )}
-
-      {quickAssetPrograma && (
-        <QuickAssetEditor
-          programa={quickAssetPrograma}
-          isOpen={!!quickAssetPrograma}
-          onClose={() => setQuickAssetPrograma(null)}
-          onUpdate={loadProgramas}
-        />
-      )}
     </div>
   );
 }
