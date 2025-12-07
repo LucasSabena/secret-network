@@ -22,8 +22,10 @@ function extractDomain(url: string): string {
 
 /**
  * Fetch screenshot using Microlink API (free tier: 50/day)
+ * @param url - The URL to screenshot
+ * @param delay - Delay in seconds before capture (for animations)
  */
-async function fetchScreenshot(url: string): Promise<string | null> {
+async function fetchScreenshot(url: string, delay: number = 3): Promise<string | null> {
     try {
         const microlinkUrl = new URL('https://api.microlink.io');
         microlinkUrl.searchParams.set('url', url);
@@ -32,6 +34,10 @@ async function fetchScreenshot(url: string): Promise<string | null> {
         microlinkUrl.searchParams.set('viewport.width', '1280');
         microlinkUrl.searchParams.set('viewport.height', '800');
         microlinkUrl.searchParams.set('viewport.deviceScaleFactor', '1');
+        // Wait for page animations before capture
+        if (delay > 0) {
+            microlinkUrl.searchParams.set('waitForTimeout', String(delay * 1000));
+        }
 
         const response = await fetch(microlinkUrl.toString(), {
             headers: {
@@ -246,7 +252,7 @@ async function processLogoWithSafeSpace(logoBuffer: Buffer): Promise<Buffer> {
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-        const { url, slug, type = 'all' } = body;
+        const { url, slug, type = 'all', delay = 3 } = body;
 
         if (!url || typeof url !== 'string') {
             return NextResponse.json(
@@ -274,8 +280,8 @@ export async function POST(request: NextRequest) {
 
         // Fetch screenshot
         if (type === 'all' || type === 'screenshot') {
-            console.log('Fetching screenshot for:', url);
-            const screenshotUrl = await fetchScreenshot(url);
+            console.log('Fetching screenshot for:', url, 'with delay:', delay, 'seconds');
+            const screenshotUrl = await fetchScreenshot(url, delay);
 
             if (screenshotUrl) {
                 try {
