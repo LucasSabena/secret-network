@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { X, Upload, Loader2, Image as ImageIcon, Search, FolderTree, Tag, Monitor, DollarSign, Repeat, Lightbulb } from 'lucide-react';
+import { X, Upload, Loader2, Image as ImageIcon, Search, FolderTree, Tag, Monitor, DollarSign, Repeat, Lightbulb, Wand2 } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -28,7 +28,7 @@ import { Programa, Categoria, Plataforma, ModeloDePrecio } from '@/lib/types';
 // Lazy load del editor pesado (solo se carga cuando se necesita)
 const RichTextEditor = dynamic(
   () => import('./rich-text-editor'),
-  { 
+  {
     ssr: false,
     loading: () => (
       <div className="h-96 bg-muted rounded animate-pulse" />
@@ -77,8 +77,11 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
     programa?.descripcion_larga || ''
   );
   const [isPasteAreaFocused, setIsPasteAreaFocused] = useState(false);
+  const [isAutoFetching, setIsAutoFetching] = useState(false);
+  const [autoFetchedIconUrl, setAutoFetchedIconUrl] = useState<string | null>(null);
+  const [autoFetchedCapturaUrl, setAutoFetchedCapturaUrl] = useState<string | null>(null);
   const { toast } = useToast();
-  
+
   const { register, handleSubmit, watch, setValue, reset } = useForm<FormData>({
     defaultValues: {
       nombre: programa?.nombre || '',
@@ -101,6 +104,88 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
     loadModelosPrecios();
   }, []);
 
+  // Handler para auto-completar assets desde URL
+  async function handleAutoFetchAssets() {
+    const webUrl = watch('web_oficial_url');
+    const slug = watch('slug');
+
+    if (!webUrl) {
+      toast({
+        title: 'URL requerida',
+        description: 'Primero ingresa la URL del sitio oficial',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    // Normalizar URL
+    let normalizedUrl = webUrl.trim();
+    if (!normalizedUrl.startsWith('http://') && !normalizedUrl.startsWith('https://')) {
+      normalizedUrl = `https://${normalizedUrl}`;
+    }
+
+    setIsAutoFetching(true);
+    toast({
+      title: '🔄 Obteniendo assets...',
+      description: 'Capturando screenshot y buscando logo del sitio',
+    });
+
+    try {
+      const response = await fetch('/api/auto-assets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: normalizedUrl, slug }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Error al obtener assets');
+      }
+
+      let successParts: string[] = [];
+      let errorParts: string[] = [];
+
+      if (data.screenshotUrl) {
+        setAutoFetchedCapturaUrl(data.screenshotUrl);
+        setCapturaFile(null); // Clear any manually uploaded file
+        successParts.push('Screenshot capturado');
+      }
+
+      if (data.logoUrl) {
+        setAutoFetchedIconUrl(data.logoUrl);
+        setIconFile(null); // Clear any manually uploaded file
+        successParts.push('Logo procesado (1000x1000)');
+      }
+
+      if (data.errors && data.errors.length > 0) {
+        errorParts = data.errors;
+      }
+
+      if (successParts.length > 0) {
+        toast({
+          title: '✅ Assets obtenidos',
+          description: successParts.join(' • ') + (errorParts.length > 0 ? `. Advertencias: ${errorParts.join(', ')}` : ''),
+        });
+      } else {
+        toast({
+          title: '⚠️ No se pudieron obtener assets',
+          description: errorParts.join('. ') || 'Error desconocido',
+          variant: 'destructive',
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching assets:', error);
+      toast({
+        title: 'Error',
+        description: (error as Error).message || 'No se pudieron obtener los assets',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsAutoFetching(false);
+    }
+  }
+
   async function loadProgramas() {
     try {
       const supabase = supabaseBrowserClient;
@@ -110,7 +195,7 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
         .order('nombre');
 
       if (error) throw error;
-      
+
       // Cargar subcategorías de cada programa
       const programasConSubcats = await Promise.all(
         (data || []).map(async (prog) => {
@@ -118,14 +203,14 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
             .from('programas_subcategorias')
             .select('subcategoria_id')
             .eq('programa_id', prog.id);
-          
+
           return {
             ...prog,
             subcategorias: subsData?.map(s => s.subcategoria_id) || []
           };
         })
       );
-      
+
       setProgramasDisponibles(programasConSubcats);
     } catch (error) {
       console.error('Error loading programas:', error);
@@ -139,9 +224,9 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
         cat => cat.id_categoria_padre && categoriasSeleccionadas.includes(cat.id_categoria_padre)
       );
       setSubcategoriasDisponibles(subs);
-      
+
       // Limpiar subcategorías que ya no son válidas
-      const subsValidas = subcategoriasSeleccionadas.filter(subId => 
+      const subsValidas = subcategoriasSeleccionadas.filter(subId =>
         subs.some(sub => sub.id === subId)
       );
       if (subsValidas.length !== subcategoriasSeleccionadas.length) {
@@ -177,8 +262,8 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
           const blob = items[i].getAsFile();
           if (blob) {
             // Crear un archivo con nombre descriptivo
-            const file = new File([blob], `captura-${Date.now()}.png`, { 
-              type: blob.type 
+            const file = new File([blob], `captura-${Date.now()}.png`, {
+              type: blob.type
             });
             setCapturaFile(file);
             toast({
@@ -193,7 +278,7 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
 
     // Agregar el listener solo cuando el formulario está abierto
     document.addEventListener('paste', handlePaste);
-    
+
     return () => {
       document.removeEventListener('paste', handlePaste);
     };
@@ -208,14 +293,14 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
         .order('nombre');
 
       if (error) throw error;
-      
+
       const todas = data || [];
       setTodasCategorias(todas);
-      
+
       // Separar categorías principales (sin padre)
       const principales = todas.filter(cat => !cat.id_categoria_padre);
       setCategoriasPrincipales(principales);
-      
+
       // Si estamos editando, cargar la categoría principal
       if (programa?.categoria_id) {
         setCategoriasSeleccionadas([programa.categoria_id]);
@@ -259,7 +344,7 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
   useEffect(() => {
     const cargarDatosPrograma = async () => {
       if (!programa) return;
-      
+
       const supabase = supabaseBrowserClient;
 
       // Cargar subcategorías
@@ -342,8 +427,9 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
       setIsSaving(true);
       const supabase = supabaseBrowserClient;
 
-      let iconUrl = programa?.icono_url;
-      let capturaUrl = programa?.captura_url;
+      // Priority: manually uploaded file > auto-fetched URL > existing URL from programa
+      let iconUrl = autoFetchedIconUrl || programa?.icono_url;
+      let capturaUrl = autoFetchedCapturaUrl || programa?.captura_url;
 
       // Validate and upload icon if changed (opcional, no bloquea guardado)
       if (iconFile) {
@@ -403,7 +489,7 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
       const categoriaPrincipal = categoriasPrincipales.find(
         cat => cat.id === categoriasSeleccionadas[0]
       );
-      
+
       if (!categoriaPrincipal) {
         toast({
           title: 'Error',
@@ -810,8 +896,8 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
                     const categoriaPadre = categoriasPrincipales.find(c => c.id === catId);
                     const subcatsDeCategoria = subcategoriasDisponibles.filter(
                       sub => sub.id_categoria_padre === catId &&
-                      (busquedaSubcategorias === '' || 
-                       sub.nombre.toLowerCase().includes(busquedaSubcategorias.toLowerCase()))
+                        (busquedaSubcategorias === '' ||
+                          sub.nombre.toLowerCase().includes(busquedaSubcategorias.toLowerCase()))
                     );
 
                     if (subcatsDeCategoria.length === 0) return null;
@@ -967,7 +1053,7 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
             <p className="text-xs text-muted-foreground">
               Los programas con subcategorías similares aparecen primero. Selecciona las alternativas relevantes.
             </p>
-            
+
             {/* Buscador de alternativas */}
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -979,15 +1065,15 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
                 className="pl-10"
               />
             </div>
-            
+
             {programasDisponibles.length > 0 ? (
               <div className="space-y-3 max-h-96 overflow-y-auto p-2">
                 {(() => {
                   // Filtrar programas (excluir el actual)
                   const programasFiltrados = programasDisponibles
                     .filter(p => p.id !== programa?.id)
-                    .filter(p => 
-                      busquedaAlternativas === '' || 
+                    .filter(p =>
+                      busquedaAlternativas === '' ||
                       p.nombre.toLowerCase().includes(busquedaAlternativas.toLowerCase())
                     );
 
@@ -996,7 +1082,7 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
                     const subcatsCompartidas = (prog.subcategorias || []).filter(
                       subId => subcategoriasSeleccionadas.includes(subId)
                     ).length;
-                    
+
                     return {
                       ...prog,
                       relevancia: subcatsCompartidas
@@ -1053,7 +1139,7 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
                           </div>
                         </div>
                       )}
-                      
+
                       {otros.length > 0 && (
                         <div className="space-y-2">
                           {relevantes.length > 0 && (
@@ -1096,7 +1182,7 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
             ) : (
               <p className="text-sm text-muted-foreground">Cargando programas...</p>
             )}
-            
+
             {alternativasSeleccionadas.length > 0 && (
               <p className="text-xs text-muted-foreground">
                 Seleccionadas: {alternativasSeleccionadas.length} alternativas
@@ -1144,14 +1230,36 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
 
           <div className="space-y-2">
             <Label htmlFor="web_oficial_url">URL Sitio Oficial</Label>
-            <Input
-              id="web_oficial_url"
-              {...register('web_oficial_url')}
-              placeholder="ejemplo.com o https://ejemplo.com"
-              type="text"
-            />
+            <div className="flex gap-2">
+              <Input
+                id="web_oficial_url"
+                {...register('web_oficial_url')}
+                placeholder="ejemplo.com o https://ejemplo.com"
+                type="text"
+                className="flex-1"
+              />
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleAutoFetchAssets}
+                disabled={isAutoFetching}
+                className="shrink-0"
+              >
+                {isAutoFetching ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                    Obteniendo...
+                  </>
+                ) : (
+                  <>
+                    <Wand2 className="h-4 w-4 mr-2" />
+                    Auto-completar
+                  </>
+                )}
+              </Button>
+            </div>
             <p className="text-xs text-muted-foreground">
-              Puedes escribir con o sin https://
+              Ingresa la URL y haz clic en "Auto-completar" para obtener screenshot y logo automáticamente
             </p>
           </div>
 
@@ -1183,12 +1291,12 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
                 }}
                 className="flex items-center gap-4 p-4 border-2 border-dashed rounded-lg transition-colors hover:border-primary/50"
               >
-                {(programa?.icono_url || iconFile) && (
+                {(programa?.icono_url || iconFile || autoFetchedIconUrl) && (
                   <img
                     src={
                       iconFile
                         ? URL.createObjectURL(iconFile)
-                        : programa?.icono_url || ''
+                        : autoFetchedIconUrl || programa?.icono_url || ''
                     }
                     alt="Icon preview"
                     className="w-16 h-16 rounded object-cover border"
@@ -1246,16 +1354,15 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
                 onFocus={() => setIsPasteAreaFocused(true)}
                 onBlur={() => setIsPasteAreaFocused(false)}
                 tabIndex={0}
-                className={`flex items-center gap-4 p-4 border-2 rounded-lg transition-colors ${
-                  isPasteAreaFocused ? 'border-primary bg-primary/5' : 'border-dashed hover:border-primary/50'
-                }`}
+                className={`flex items-center gap-4 p-4 border-2 rounded-lg transition-colors ${isPasteAreaFocused ? 'border-primary bg-primary/5' : 'border-dashed hover:border-primary/50'
+                  }`}
               >
-                {(programa?.captura_url || capturaFile) && (
+                {(programa?.captura_url || capturaFile || autoFetchedCapturaUrl) && (
                   <img
                     src={
                       capturaFile
                         ? URL.createObjectURL(capturaFile)
-                        : programa?.captura_url || ''
+                        : autoFetchedCapturaUrl || programa?.captura_url || ''
                     }
                     alt="Capture preview"
                     className="w-32 h-20 rounded object-cover border"

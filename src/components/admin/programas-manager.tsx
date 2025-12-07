@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Plus, Search, Edit, Trash2, Loader2, Filter, X, Upload, Image as ImageIcon, CheckCircle2, XCircle, ExternalLink, Pencil } from 'lucide-react';
+import { Plus, Search, Edit, Trash2, Loader2, Filter, X, Upload, Image as ImageIcon, CheckCircle2, XCircle, ExternalLink, Pencil, FileJson } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
@@ -26,6 +26,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { Programa, Categoria, Plataforma, ModeloDePrecio } from '@/lib/types';
 import ProgramaForm from './programa-form';
 import BatchIconUpload from './batch-icon-upload';
+import ProgramaJsonImporter from './programa-json-importer';
 import { supabaseBrowserClient } from '@/lib/supabase-browser';
 import { addUTMParams } from '@/lib/utm-tracker';
 
@@ -47,6 +48,7 @@ export default function ProgramasManager() {
   const [selectedPrograma, setSelectedPrograma] = useState<Programa | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isBatchUploadOpen, setIsBatchUploadOpen] = useState(false);
+  const [isJsonImportOpen, setIsJsonImportOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
   const { toast } = useToast();
@@ -128,11 +130,11 @@ export default function ProgramasManager() {
     setSortBy('nombre');
   }
 
-  const hasActiveFilters = 
-    searchTerm || 
-    filterCategoria !== 'all' || 
-    filterOpenSource !== 'all' || 
-    filterRecomendado !== 'all' || 
+  const hasActiveFilters =
+    searchTerm ||
+    filterCategoria !== 'all' ||
+    filterOpenSource !== 'all' ||
+    filterRecomendado !== 'all' ||
     filterSinIcono ||
     filterSinCaptura ||
     sortBy !== 'nombre';
@@ -186,12 +188,12 @@ export default function ProgramasManager() {
   async function loadProgramasRelaciones() {
     try {
       const supabase = supabaseBrowserClient;
-      
+
       // Cargar plataformas de programas
       const { data: platData } = await supabase
         .from('programas_plataformas')
         .select('programa_id, plataforma_id');
-      
+
       const platMap: Record<number, number[]> = {};
       platData?.forEach(rel => {
         if (!platMap[rel.programa_id]) platMap[rel.programa_id] = [];
@@ -203,7 +205,7 @@ export default function ProgramasManager() {
       const { data: precioData } = await supabase
         .from('programas_precios')
         .select('programa_id, precio_id');
-      
+
       const precioMap: Record<number, number[]> = {};
       precioData?.forEach(rel => {
         if (!precioMap[rel.programa_id]) precioMap[rel.programa_id] = [];
@@ -290,7 +292,7 @@ export default function ProgramasManager() {
 
       if (error) throw error;
 
-      setProgramas(prev => prev.map(p => 
+      setProgramas(prev => prev.map(p =>
         p.id === programaId ? { ...p, dificultad } : p
       ));
 
@@ -318,7 +320,7 @@ export default function ProgramasManager() {
 
       if (error) throw error;
 
-      setProgramas(prev => prev.map(p => 
+      setProgramas(prev => prev.map(p =>
         p.id === programaId ? { ...p, es_recomendado: !currentValue } : p
       ));
 
@@ -346,7 +348,7 @@ export default function ProgramasManager() {
 
       if (error) throw error;
 
-      setProgramas(prev => prev.map(p => 
+      setProgramas(prev => prev.map(p =>
         p.id === programaId ? { ...p, es_open_source: !currentValue } : p
       ));
 
@@ -473,6 +475,14 @@ export default function ProgramasManager() {
             >
               <Upload className="h-4 w-4" />
               Subida por Lote
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => setIsJsonImportOpen(true)}
+              className="gap-2"
+            >
+              <FileJson className="h-4 w-4" />
+              Importar JSON
             </Button>
             <Button onClick={handleNew} className="gap-2 bg-pink-500 hover:bg-pink-600">
               <Plus className="h-4 w-4" />
@@ -836,6 +846,14 @@ export default function ProgramasManager() {
       {isBatchUploadOpen && (
         <BatchIconUpload
           onClose={() => setIsBatchUploadOpen(false)}
+          onSuccess={loadProgramas}
+        />
+      )}
+
+      {isJsonImportOpen && (
+        <ProgramaJsonImporter
+          isOpen={isJsonImportOpen}
+          onClose={() => setIsJsonImportOpen(false)}
           onSuccess={loadProgramas}
         />
       )}
