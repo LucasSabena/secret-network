@@ -34,6 +34,8 @@ interface ProgramaJsonInput {
     modelos_precio?: string[];
     usos?: string[];
     es_recomendado?: boolean;
+    es_open_source?: boolean;
+    dificultad?: 'Facil' | 'Intermedio' | 'Dificil';
 }
 
 const AI_PROMPT = `Actúa como un experto curador de software para una base de datos de alta calidad.
@@ -128,18 +130,37 @@ export default function ProgramaJsonImporter({ isOpen, onClose, onSuccess }: Pro
                 const catId = catMap.get(p.categoria_slug);
                 if (!catId) throw new Error(`Categoría desconocida: ${p.categoria_slug}`);
 
-                const { data: prog, error } = await supabase.from('programas').insert({
+                // Sanitize usos - ensure it's an array of strings
+                let sanitizedUsos = null;
+                if (p.usos) {
+                    if (Array.isArray(p.usos)) {
+                        sanitizedUsos = p.usos.filter((u: any) => typeof u === 'string');
+                    } else if (typeof p.usos === 'string') {
+                        sanitizedUsos = [p.usos];
+                    }
+                }
+
+                const insertData = {
                     nombre: p.nombre,
                     slug: p.slug,
-                    web_oficial_url: p.web_oficial_url,
-                    descripcion_corta: p.descripcion_corta,
-                    descripcion_larga: p.descripcion_larga,
+                    web_oficial_url: p.web_oficial_url || null,
+                    descripcion_corta: p.descripcion_corta || null,
+                    descripcion_larga: p.descripcion_larga || null,
                     categoria_id: catId,
-                    usos: p.usos,
-                    es_recomendado: p.es_recomendado || false
-                }).select().single();
+                    usos: sanitizedUsos,
+                    es_recomendado: Boolean(p.es_recomendado),
+                    es_open_source: Boolean(p.es_open_source),
+                    dificultad: p.dificultad && ['Facil', 'Intermedio', 'Dificil'].includes(p.dificultad) ? p.dificultad : null
+                };
 
-                if (error) throw error;
+                console.log('Inserting program:', p.nombre, insertData);
+
+                const { data: prog, error } = await supabase.from('programas').insert(insertData).select().single();
+
+                if (error) {
+                    console.error('Insert error for', p.nombre, ':', error);
+                    throw error;
+                }
 
                 // Aquí iría la lógica de relaciones si el JSON las incluye bien
                 // Por brevedad y robustez, nos enfocamos en el core program primero
@@ -152,7 +173,8 @@ export default function ProgramaJsonImporter({ isOpen, onClose, onSuccess }: Pro
                     status: 'success'
                 });
             } catch (e: any) {
-                results.errors.push(`${p.nombre}: ${e.message}`);
+                console.error('Error importing', p.nombre, ':', e);
+                results.errors.push(`${p.nombre}: ${e.message || JSON.stringify(e)}`);
             }
         }
 
