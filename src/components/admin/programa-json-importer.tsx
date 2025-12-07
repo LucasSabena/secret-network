@@ -25,6 +25,7 @@ interface ProgramaJsonInput {
     subcategorias?: string[];
     plataformas?: string[];
     modelos_precio?: string[];
+    usos?: string[];
     dificultad?: 'Facil' | 'Intermedio' | 'Dificil';
     es_open_source?: boolean;
     es_recomendado?: boolean;
@@ -45,8 +46,10 @@ const AI_PROMPT = `Necesito que generes un JSON con información de programas/so
     "slug": "nombre-del-programa",
     "web_oficial_url": "https://ejemplo.com",
     "descripcion_corta": "Descripción breve de 1-2 líneas",
+    "descripcion_larga": "Descripción más detallada del programa y sus características principales",
     "categoria_slug": "slug-de-la-categoria",
     "subcategorias": ["subcategoria1", "subcategoria2"],
+    "usos": ["Edición de fotos", "Retoque digital", "Diseño gráfico"],
     "plataformas": ["windows", "macos", "linux", "web", "android", "ios"],
     "modelos_precio": ["gratis", "freemium", "pago-unico", "suscripcion"],
     "dificultad": "Facil|Intermedio|Dificil",
@@ -59,6 +62,7 @@ const AI_PROMPT = `Necesito que generes un JSON con información de programas/so
 Reglas:
 - El slug debe ser lowercase, sin espacios, usando guiones
 - descripcion_corta máximo 200 caracteres
+- usos: lista de 3-5 funcionalidades principales (ej: "Edición de PDFs", "Firmas digitales")
 - dificultad solo puede ser: "Facil", "Intermedio", o "Dificil"
 - plataformas disponibles: windows, macos, linux, web, android, ios
 - modelos_precio: gratis, freemium, pago-unico, suscripcion
@@ -125,6 +129,7 @@ export default function ProgramaJsonImporter({ isOpen, onClose, onSuccess }: Pro
                     subcategorias: prog.subcategorias || [],
                     plataformas: prog.plataformas || [],
                     modelos_precio: prog.modelos_precio || [],
+                    usos: prog.usos || [],
                     dificultad: prog.dificultad || 'Intermedio',
                     es_open_source: prog.es_open_source || false,
                     es_recomendado: prog.es_recomendado || false,
@@ -190,6 +195,7 @@ export default function ProgramaJsonImporter({ isOpen, onClose, onSuccess }: Pro
                             dificultad: prog.dificultad,
                             es_open_source: prog.es_open_source,
                             es_recomendado: prog.es_recomendado,
+                            usos: prog.usos && prog.usos.length > 0 ? prog.usos : null,
                         })
                         .select()
                         .single();
