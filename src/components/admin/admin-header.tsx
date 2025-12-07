@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/layout/theme-toggle';
 import { useToast } from '@/components/ui/use-toast';
 import { supabaseBrowserClient } from '@/lib/supabase-browser';
+import ApiUsageIndicator from './api-usage-indicator';
 
 export default function AdminHeader() {
   const router = useRouter();
@@ -16,12 +17,12 @@ export default function AdminHeader() {
     try {
       const supabase = supabaseBrowserClient;
       await supabase.auth.signOut();
-      
+
       toast({
         title: 'Sesión cerrada',
         description: 'Has salido del panel de administración',
       });
-      
+
       router.push('/admin/login');
       router.refresh();
     } catch (error) {
@@ -42,7 +43,7 @@ export default function AdminHeader() {
             <Shield className="h-6 w-6 text-pink-500" />
             <span className="font-bold text-xl">Admin Panel</span>
           </div>
-          
+
           {/* Quick Links */}
           <nav className="hidden md:flex items-center gap-2">
             <Link href="/admin/blog-series">
@@ -64,6 +65,7 @@ export default function AdminHeader() {
         </div>
 
         <div className="flex items-center gap-4">
+          <ApiUsageIndicator />
           <ThemeToggle />
           <Link href="/">
             <Button variant="outline" size="sm" className="gap-2">
@@ -71,9 +73,9 @@ export default function AdminHeader() {
               <span className="hidden sm:inline">Volver al sitio</span>
             </Button>
           </Link>
-          <Button 
-            variant="outline" 
-            size="sm" 
+          <Button
+            variant="outline"
+            size="sm"
             className="gap-2 text-destructive hover:text-destructive"
             onClick={handleLogout}
           >

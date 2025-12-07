@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import sharp from 'sharp';
 import { uploadBufferToCloudinary, uploadUrlToCloudinary } from '@/lib/cloudinary-server';
+import { supabaseRouteClient } from '@/lib/supabase-server';
 
 interface AutoAssetsResult {
     screenshotUrl?: string;
@@ -292,6 +293,14 @@ export async function POST(request: NextRequest) {
                     );
                     result.screenshotUrl = uploaded.secure_url;
                     console.log('Screenshot uploaded:', result.screenshotUrl);
+
+                    // Increment usage counter
+                    try {
+                        const supabase = supabaseRouteClient();
+                        await supabase.rpc('increment_api_usage', { p_api_name: 'microlink', p_daily_limit: 50 });
+                    } catch (e) {
+                        console.log('Could not track usage (table may not exist yet)');
+                    }
                 } catch (error) {
                     console.error('Error uploading screenshot:', error);
                     result.errors.push('No se pudo subir el screenshot a Cloudinary');
