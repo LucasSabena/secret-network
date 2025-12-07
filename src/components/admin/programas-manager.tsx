@@ -5,11 +5,12 @@ import {
   Plus, Search, Edit2, Trash2, Loader2, Filter, X,
   Image as ImageIcon, CheckCircle2, AlertCircle,
   ExternalLink, MoreHorizontal, LayoutGrid, List as ListIcon,
-  Wand2, Download
+  Wand2, Download, Star, Code
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import {
   DropdownMenu,
@@ -41,6 +42,7 @@ export default function ProgramasManager() {
   const [filterCategoria, setFilterCategoria] = useState('all');
   const [filterIcon, setFilterIcon] = useState<'all' | 'yes' | 'no'>('all');
   const [filterCaptura, setFilterCaptura] = useState<'all' | 'yes' | 'no'>('all');
+  const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'name-asc' | 'name-desc'>('newest');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
 
   // Modal State
@@ -56,7 +58,7 @@ export default function ProgramasManager() {
 
   useEffect(() => {
     filterData();
-  }, [programas, searchTerm, filterCategoria, filterIcon, filterCaptura]);
+  }, [programas, searchTerm, filterCategoria, filterIcon, filterCaptura, sortBy]);
 
   async function loadData() {
     setIsLoading(true);
@@ -64,7 +66,7 @@ export default function ProgramasManager() {
 
     try {
       const [progsRes, catsRes] = await Promise.all([
-        supabase.from('programas').select('*').order('created_at', { ascending: false }),
+        supabase.from('programas').select('*').order('id', { ascending: false }),
         supabase.from('categorias').select('*').order('nombre')
       ]);
 
@@ -113,7 +115,38 @@ export default function ProgramasManager() {
       result = result.filter(p => !p.captura_url);
     }
 
+    // Sorting
+    switch (sortBy) {
+      case 'newest':
+        result.sort((a, b) => b.id - a.id);
+        break;
+      case 'oldest':
+        result.sort((a, b) => a.id - b.id);
+        break;
+      case 'name-asc':
+        result.sort((a, b) => a.nombre.localeCompare(b.nombre));
+        break;
+      case 'name-desc':
+        result.sort((a, b) => b.nombre.localeCompare(a.nombre));
+        break;
+    }
+
     setFilteredProgramas(result);
+  }
+
+  async function handleQuickToggle(id: number, field: 'es_recomendado' | 'es_open_source', value: boolean) {
+    const { error } = await supabaseBrowserClient
+      .from('programas')
+      .update({ [field]: value })
+      .eq('id', id);
+
+    if (error) {
+      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+    } else {
+      // Update local state
+      setProgramas(prev => prev.map(p => p.id === id ? { ...p, [field]: value } : p));
+      toast({ title: 'Actualizado' });
+    }
   }
 
   async function handleDelete(id: number) {
@@ -125,6 +158,48 @@ export default function ProgramasManager() {
     } else {
       toast({ title: 'Programa eliminado' });
       loadData();
+    }
+  }
+
+  async function handleAutoFetch(programa: Programa, type: 'all' | 'icon' | 'screenshot') {
+    if (!programa.web_oficial_url) {
+      toast({ title: 'URL requerida', description: 'El programa no tiene URL oficial.', variant: 'destructive' });
+      return;
+    }
+
+    toast({ title: 'Buscando...', description: `Obteniendo ${type === 'icon' ? 'icono' : type === 'screenshot' ? 'captura' : 'assets'}...` });
+
+    try {
+      const res = await fetch('/api/auto-assets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: programa.web_oficial_url, slug: programa.slug, type })
+      });
+      const data = await res.json();
+
+      // Update in database
+      const updateData: any = {};
+      if (data.logoUrl) updateData.icono_url = data.logoUrl;
+      if (data.screenshotUrl) updateData.captura_url = data.screenshotUrl;
+
+      if (Object.keys(updateData).length > 0) {
+        const { error } = await supabaseBrowserClient
+          .from('programas')
+          .update(updateData)
+          .eq('id', programa.id);
+
+        if (error) {
+          toast({ title: 'Error guardando', description: error.message, variant: 'destructive' });
+        } else {
+          // Update local state
+          setProgramas(prev => prev.map(p => p.id === programa.id ? { ...p, ...updateData } : p));
+          toast({ title: 'Asset actualizado', description: `${data.logoUrl ? 'Icono' : ''} ${data.screenshotUrl ? 'Captura' : ''} completado.` });
+        }
+      } else {
+        toast({ title: 'No encontrado', description: 'No se pudo obtener el asset.', variant: 'destructive' });
+      }
+    } catch (e) {
+      toast({ title: 'Error', description: 'Fallo la conexion.', variant: 'destructive' });
     }
   }
 
@@ -230,6 +305,18 @@ export default function ProgramasManager() {
           </SelectContent>
         </Select>
 
+        <Select value={sortBy} onValueChange={(v: 'newest' | 'oldest' | 'name-asc' | 'name-desc') => setSortBy(v)}>
+          <SelectTrigger className="w-[130px] bg-muted/50 border-transparent">
+            <SelectValue placeholder="Ordenar" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="newest">Más nuevos</SelectItem>
+            <SelectItem value="oldest">Más antiguos</SelectItem>
+            <SelectItem value="name-asc">A → Z</SelectItem>
+            <SelectItem value="name-desc">Z → A</SelectItem>
+          </SelectContent>
+        </Select>
+
         <div className="flex bg-muted/50 p-1 rounded-lg border border-transparent">
           <button
             onClick={() => setViewMode('list')}
@@ -265,6 +352,8 @@ export default function ProgramasManager() {
               viewMode={viewMode}
               onEdit={() => openEdit(prog)}
               onDelete={() => handleDelete(prog.id)}
+              onQuickToggle={(field, value) => handleQuickToggle(prog.id, field, value)}
+              onAutoFetch={(type) => handleAutoFetch(prog, type)}
             />
           ))}
         </div>
@@ -290,11 +379,13 @@ export default function ProgramasManager() {
 }
 
 // Subcomponente Card/Row
-function ProgramCard({ programa, viewMode, onEdit, onDelete }: {
+function ProgramCard({ programa, viewMode, onEdit, onDelete, onQuickToggle, onAutoFetch }: {
   programa: Programa;
   viewMode: 'grid' | 'list';
   onEdit: () => void;
   onDelete: () => void;
+  onQuickToggle: (field: 'es_recomendado' | 'es_open_source', value: boolean) => void;
+  onAutoFetch: (type: 'all' | 'icon' | 'screenshot') => void;
 }) {
   const hasIcon = !!programa.icono_url;
   const hasScreen = !!programa.captura_url;
@@ -302,38 +393,70 @@ function ProgramCard({ programa, viewMode, onEdit, onDelete }: {
   if (viewMode === 'list') {
     return (
       <div className="group flex items-center gap-4 p-3 rounded-lg border bg-card hover:shadow-md transition-all hover:border-pink-500/50">
-        <div className="h-10 w-10 rounded bg-muted/50 flex items-center justify-center shrink-0 overflow-hidden">
+        {/* Icon */}
+        <div className="h-12 w-12 rounded-lg bg-muted/50 flex items-center justify-center shrink-0 overflow-hidden border">
           {hasIcon ? (
             <img src={programa.icono_url!} alt="" className="h-full w-full object-contain p-1" />
           ) : (
-            <ImageIcon className="h-4 w-4 text-muted-foreground opacity-30" />
+            <ImageIcon className="h-5 w-5 text-muted-foreground opacity-30" />
           )}
         </div>
 
+        {/* Info */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
             <h3 className="font-semibold truncate">{programa.nombre}</h3>
             {programa.es_recomendado && (
-              <Badge variant="secondary" className="text-[10px] h-5 bg-pink-500/10 text-pink-600 border-pink-200">
-                Top
+              <Badge className="text-[10px] h-5 bg-yellow-500 text-yellow-900 border-0 gap-0.5">
+                <Star className="h-2.5 w-2.5 fill-yellow-900" /> Top
+              </Badge>
+            )}
+            {programa.es_open_source && (
+              <Badge variant="outline" className="text-[10px] h-5 text-green-600 border-green-300">
+                OSS
               </Badge>
             )}
           </div>
-          <div className="flex items-center gap-3 text-xs text-muted-foreground">
-            <span className="truncate">{programa.slug}</span>
+          <div className="flex items-center gap-3 text-xs text-muted-foreground mt-0.5">
+            <span className="font-mono truncate">{programa.slug}</span>
             <span className="w-px h-3 bg-border" />
             <div className="flex gap-2">
-              <span className={hasIcon ? "text-green-600" : "text-orange-400"}>
-                {hasIcon ? "Icono OK" : "Sin icono"}
+              <span className={`flex items-center gap-0.5 ${hasIcon ? "text-green-600" : "text-orange-400"}`}>
+                <CheckCircle2 className={`h-3 w-3 ${hasIcon ? '' : 'opacity-0'}`} />
+                <AlertCircle className={`h-3 w-3 ${hasIcon ? 'opacity-0 hidden' : ''}`} />
+                Icono
               </span>
-              <span className={hasScreen ? "text-green-600" : "text-orange-400"}>
-                {hasScreen ? "Captura OK" : "Sin captura"}
+              <span className={`flex items-center gap-0.5 ${hasScreen ? "text-green-600" : "text-orange-400"}`}>
+                <CheckCircle2 className={`h-3 w-3 ${hasScreen ? '' : 'opacity-0'}`} />
+                <AlertCircle className={`h-3 w-3 ${hasScreen ? 'opacity-0 hidden' : ''}`} />
+                Captura
               </span>
             </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+        {/* Quick Toggles */}
+        <div className="flex items-center gap-3 px-3 border-l">
+          <div className="flex items-center gap-1.5" title="Recomendado">
+            <Star className={`h-3.5 w-3.5 ${programa.es_recomendado ? 'text-yellow-500 fill-yellow-500' : 'text-muted-foreground'}`} />
+            <Switch
+              checked={programa.es_recomendado || false}
+              onCheckedChange={(v) => onQuickToggle('es_recomendado', v)}
+              className="scale-75"
+            />
+          </div>
+          <div className="flex items-center gap-1.5" title="Open Source">
+            <Code className={`h-3.5 w-3.5 ${programa.es_open_source ? 'text-green-500' : 'text-muted-foreground'}`} />
+            <Switch
+              checked={programa.es_open_source || false}
+              onCheckedChange={(v) => onQuickToggle('es_open_source', v)}
+              className="scale-75"
+            />
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className="flex items-center gap-1">
           <Button size="icon" variant="ghost" className="h-8 w-8" onClick={onEdit}>
             <Edit2 className="h-4 w-4" />
           </Button>
@@ -345,37 +468,138 @@ function ProgramCard({ programa, viewMode, onEdit, onDelete }: {
     );
   }
 
-  // Grid View
+  // Grid View - Functional Card Design
   return (
-    <div className="group relative flex flex-col p-4 rounded-xl border bg-card hover:shadow-lg transition-all hover:-translate-y-1">
-      <div className="flex justify-between items-start mb-3">
-        <div className="h-12 w-12 rounded-lg bg-muted/50 flex items-center justify-center overflow-hidden border">
+    <div className="group relative flex flex-col rounded-xl border bg-card overflow-hidden hover:shadow-lg transition-all">
+      {/* Header with Icon */}
+      <div className="p-4 pb-3 flex gap-3">
+        {/* Icon Box */}
+        <div className={`relative h-14 w-14 rounded-xl flex items-center justify-center overflow-hidden shrink-0 ${hasIcon ? 'bg-muted/30 border' : 'bg-orange-100 dark:bg-orange-900/30 border-2 border-dashed border-orange-300'}`}>
           {hasIcon ? (
             <img src={programa.icono_url!} alt="" className="h-full w-full object-contain p-1.5" />
           ) : (
-            <ImageIcon className="h-5 w-5 text-muted-foreground opacity-30" />
+            <ImageIcon className="h-6 w-6 text-orange-400" />
           )}
         </div>
+
+        {/* Title + Badges */}
+        <div className="flex-1 min-w-0">
+          <h3 className="font-bold text-sm leading-tight truncate mb-1">{programa.nombre}</h3>
+          <p className="text-[11px] text-muted-foreground truncate font-mono mb-1.5">{programa.slug}</p>
+          <div className="flex gap-1">
+            {programa.es_recomendado && (
+              <Badge className="h-4 text-[9px] px-1.5 bg-yellow-500/20 text-yellow-600 border-yellow-300">
+                <Star className="h-2 w-2 mr-0.5 fill-current" /> Top
+              </Badge>
+            )}
+            {programa.es_open_source && (
+              <Badge variant="outline" className="h-4 text-[9px] px-1.5 text-green-600 border-green-300">
+                <Code className="h-2 w-2 mr-0.5" /> OSS
+              </Badge>
+            )}
+          </div>
+        </div>
+
+        {/* Menu */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="h-8 w-8 -mr-2">
+            <Button variant="ghost" size="icon" className="h-7 w-7 shrink-0">
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={onEdit}>Editar</DropdownMenuItem>
+            <DropdownMenuItem onClick={onEdit} className="gap-2">
+              <Edit2 className="h-4 w-4" /> Editar completo
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={onDelete} className="text-destructive">Eliminar</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onQuickToggle('es_recomendado', !programa.es_recomendado)} className="gap-2">
+              <Star className="h-4 w-4" /> {programa.es_recomendado ? 'Quitar Top' : 'Marcar Top'}
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onQuickToggle('es_open_source', !programa.es_open_source)} className="gap-2">
+              <Code className="h-4 w-4" /> {programa.es_open_source ? 'Quitar OSS' : 'Marcar OSS'}
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={onDelete} className="text-destructive gap-2">
+              <Trash2 className="h-4 w-4" /> Eliminar
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
 
-      <h3 className="font-bold text-lg leading-tight mb-1 truncate">{programa.nombre}</h3>
-      <p className="text-xs text-muted-foreground mb-4 truncate">{programa.slug}</p>
+      {/* Asset Status Section */}
+      <div className="px-4 pb-3 space-y-2">
+        {/* Icon Status */}
+        <div className={`flex items-center justify-between p-2 rounded-lg text-xs ${hasIcon ? 'bg-green-50 dark:bg-green-900/20' : 'bg-orange-50 dark:bg-orange-900/20'}`}>
+          <div className="flex items-center gap-2">
+            {hasIcon ? (
+              <CheckCircle2 className="h-4 w-4 text-green-600" />
+            ) : (
+              <AlertCircle className="h-4 w-4 text-orange-500" />
+            )}
+            <span className={hasIcon ? 'text-green-700 dark:text-green-400' : 'text-orange-700 dark:text-orange-400'}>
+              {hasIcon ? 'Icono listo' : 'Sin icono'}
+            </span>
+          </div>
+          {!hasIcon && programa.web_oficial_url && (
+            <Button
+              size="sm"
+              variant="ghost"
+              className="h-6 px-2 text-[10px] text-orange-600 hover:text-orange-700 hover:bg-orange-100"
+              onClick={() => onAutoFetch('icon')}
+            >
+              <Wand2 className="h-3 w-3 mr-1" /> Completar
+            </Button>
+          )}
+        </div>
 
-      <div className="mt-auto flex gap-2">
-        <div className={`flex-1 h-1.5 rounded-full ${hasIcon ? 'bg-green-500' : 'bg-orange-200'}`} />
-        <div className={`flex-1 h-1.5 rounded-full ${hasScreen ? 'bg-green-500' : 'bg-orange-200'}`} />
+        {/* Screenshot Status */}
+        <div className={`flex items-center justify-between p-2 rounded-lg text-xs ${hasScreen ? 'bg-green-50 dark:bg-green-900/20' : 'bg-orange-50 dark:bg-orange-900/20'}`}>
+          <div className="flex items-center gap-2">
+            {hasScreen ? (
+              <CheckCircle2 className="h-4 w-4 text-green-600" />
+            ) : (
+              <AlertCircle className="h-4 w-4 text-orange-500" />
+            )}
+            <span className={hasScreen ? 'text-green-700 dark:text-green-400' : 'text-orange-700 dark:text-orange-400'}>
+              {hasScreen ? 'Captura lista' : 'Sin captura'}
+            </span>
+          </div>
+          {!hasScreen && programa.web_oficial_url && (
+            <Button
+              size="sm"
+              variant="ghost"
+              className="h-6 px-2 text-[10px] text-orange-600 hover:text-orange-700 hover:bg-orange-100"
+              onClick={() => onAutoFetch('screenshot')}
+            >
+              <Wand2 className="h-3 w-3 mr-1" /> Completar
+            </Button>
+          )}
+        </div>
+      </div>
+
+      {/* Quick Actions Footer */}
+      <div className="mt-auto border-t p-2 flex gap-1">
+        <Button size="sm" variant="ghost" className="flex-1 h-7 text-xs" onClick={onEdit}>
+          <Edit2 className="h-3 w-3 mr-1" /> Editar
+        </Button>
+        <Button
+          size="sm"
+          variant={programa.es_recomendado ? "secondary" : "ghost"}
+          className={`h-7 w-7 p-0 ${programa.es_recomendado ? 'text-yellow-600' : ''}`}
+          onClick={() => onQuickToggle('es_recomendado', !programa.es_recomendado)}
+          title={programa.es_recomendado ? 'Quitar Top' : 'Marcar Top'}
+        >
+          <Star className={`h-3.5 w-3.5 ${programa.es_recomendado ? 'fill-current' : ''}`} />
+        </Button>
+        <Button
+          size="sm"
+          variant={programa.es_open_source ? "secondary" : "ghost"}
+          className={`h-7 w-7 p-0 ${programa.es_open_source ? 'text-green-600' : ''}`}
+          onClick={() => onQuickToggle('es_open_source', !programa.es_open_source)}
+          title={programa.es_open_source ? 'Quitar OSS' : 'Marcar OSS'}
+        >
+          <Code className="h-3.5 w-3.5" />
+        </Button>
       </div>
     </div>
   );

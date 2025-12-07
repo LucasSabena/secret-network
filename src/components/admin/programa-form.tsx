@@ -3,8 +3,8 @@
 import { useEffect, useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import {
-  X, Save, Loader2, Image as ImageIcon, Video,
-  Globe, Link as LinkIcon, AlertCircle, Check,
+  X, Loader2, Image as ImageIcon,
+  Globe, AlertCircle, Check,
   Upload, Wand2, Tag, Layers, CreditCard, Plus
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -20,8 +20,6 @@ import {
   SheetHeader,
   SheetTitle,
   SheetDescription,
-  SheetFooter,
-  SheetClose
 } from '@/components/ui/sheet';
 import {
   Select,
@@ -45,7 +43,7 @@ interface Props {
 
 export default function ProgramaForm({ programa, onClose }: Props) {
   // Form State
-  const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<any>({
+  const { register, handleSubmit, setValue, watch } = useForm<any>({
     defaultValues: {
       nombre: '',
       slug: '',
@@ -61,7 +59,7 @@ export default function ProgramaForm({ programa, onClose }: Props) {
   const [isOpen, setIsOpen] = useState(true);
   const [activeTab, setActiveTab] = useState('general');
   const [isSaving, setIsSaving] = useState(false);
-  const [isAutoFetching, setIsAutoFetching] = useState(false);
+
 
   // Data State
   const [categorias, setCategorias] = useState<Categoria[]>([]);
@@ -188,32 +186,7 @@ export default function ProgramaForm({ programa, onClose }: Props) {
     if (alts.data) setAlternativasSeleccionadas(alts.data.map(x => x.programa_alternativa_id));
   }
 
-  async function handleAutoFetch(type: 'all' | 'icon' | 'screenshot' = 'all') {
-    const url = watch('web_oficial_url');
-    if (!url) return toast({ title: 'URL requerida', variant: 'destructive' });
 
-    setIsAutoFetching(true);
-    try {
-      const res = await fetch('/api/auto-assets', {
-        method: 'POST',
-        body: JSON.stringify({ url, slug: watch('slug'), type })
-      });
-      const data = await res.json();
-
-      if (data.logoUrl) setIconPreview(data.logoUrl);
-      if (data.screenshotUrl) setCapturaPreview(data.screenshotUrl);
-
-      let msg = 'Assets encontrados';
-      if (type === 'icon' && data.logoUrl) msg = 'Icono actualizado';
-      if (type === 'screenshot' && data.screenshotUrl) msg = 'Captura actualizada';
-
-      toast({ title: msg });
-    } catch (e) {
-      toast({ title: 'Error fetching', variant: 'destructive' });
-    } finally {
-      setIsAutoFetching(false);
-    }
-  }
 
   function handleFileSelect(file: File, type: 'icono' | 'captura') {
     const valid = validateImageFile(file);
