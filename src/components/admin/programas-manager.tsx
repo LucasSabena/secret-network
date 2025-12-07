@@ -110,6 +110,29 @@ export default function ProgramasManager() {
     setIsFormOpen(true);
   }
 
+  function downloadProgramasJson() {
+    const exportData = {
+      descripcion: "Programas ya cargados en la base de datos (para evitar duplicados)",
+      total: programas.length,
+      programas: programas.map(p => ({
+        id: p.id,
+        nombre: p.nombre,
+        slug: p.slug
+      }))
+    };
+
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = '04_programas_existentes.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toast({ title: 'JSON Descargado', description: 'Actualiza el archivo en gemini-context' });
+  }
+
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       {/* Header Premium */}
@@ -123,6 +146,9 @@ export default function ProgramasManager() {
           </p>
         </div>
         <div className="flex gap-2 w-full md:w-auto">
+          <Button onClick={downloadProgramasJson} variant="outline" className="gap-2" title="Descargar lista para actualizar IA">
+            <Download className="h-4 w-4" /> JSON Context
+          </Button>
           <Button onClick={() => setIsImporterOpen(true)} variant="outline" className="gap-2">
             <Wand2 className="h-4 w-4" /> Importar JSON
           </Button>
