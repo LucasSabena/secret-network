@@ -1,0 +1,30 @@
+{
+  "descripcion": "Modelos de precio con sus IDs",
+  "modelos_precio": [
+    {
+      "id": 2,
+      "nombre": "Compra Única",
+      "slug": "compra-única"
+    },
+    {
+      "id": 4,
+      "nombre": "Freemium",
+      "slug": "freemium"
+    },
+    {
+      "id": 5,
+      "nombre": "Gratis",
+      "slug": "gratis"
+    },
+    {
+      "id": 1,
+      "nombre": "Prueba Gratuita",
+      "slug": "prueba-gratuita"
+    },
+    {
+      "id": 3,
+      "nombre": "Suscripción",
+      "slug": "suscripción"
+    }
+  ]
+}

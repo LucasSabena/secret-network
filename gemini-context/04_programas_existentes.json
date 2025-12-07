@@ -1,0 +1,1381 @@
+{
+  "descripcion": "Programas ya cargados en la base de datos (para evitar duplicados)",
+  "total": 275,
+  "programas": [
+    {
+      "id": 117,
+      "nombre": "7-Zip",
+      "slug": "7-zip"
+    },
+    {
+      "id": 75,
+      "nombre": "Abduzeedo",
+      "slug": "abduzeedo"
+    },
+    {
+      "id": 192,
+      "nombre": "Adobe Acrobat Pro",
+      "slug": "adobe-acrobat-pro"
+    },
+    {
+      "id": 127,
+      "nombre": "Adobe Aero",
+      "slug": "adobe-aero"
+    },
+    {
+      "id": 188,
+      "nombre": "Adobe After Effects",
+      "slug": "adobe-after-effects"
+    },
+    {
+      "id": 141,
+      "nombre": "Adobe Bridge",
+      "slug": "adobe-bridge"
+    },
+    {
+      "id": 85,
+      "nombre": "Adobe Color",
+      "slug": "adobe-color"
+    },
+    {
+      "id": 143,
+      "nombre": "Adobe Express",
+      "slug": "adobe-express"
+    },
+    {
+      "id": 98,
+      "nombre": "Adobe Firefly",
+      "slug": "adobe-firefly"
+    },
+    {
+      "id": 121,
+      "nombre": "Adobe Fonts",
+      "slug": "adobe-fonts"
+    },
+    {
+      "id": 228,
+      "nombre": "Adobe Fresco",
+      "slug": "adobe-fresco"
+    },
+    {
+      "id": 205,
+      "nombre": "Adobe Illustrator",
+      "slug": "adobe-illustrator"
+    },
+    {
+      "id": 197,
+      "nombre": "Adobe InDesign",
+      "slug": "adobe-indesign"
+    },
+    {
+      "id": 226,
+      "nombre": "Adobe Lightroom",
+      "slug": "adobe-lightroom"
+    },
+    {
+      "id": 225,
+      "nombre": "Adobe Lightroom Classic",
+      "slug": "adobe-lightroom-classic"
+    },
+    {
+      "id": 178,
+      "nombre": "Adobe Photoshop",
+      "slug": "adobe-photoshop"
+    },
+    {
+      "id": 172,
+      "nombre": "Adobe Premiere Pro",
+      "slug": "adobe-premiere-pro"
+    },
+    {
+      "id": 227,
+      "nombre": "Adobe Substance 3D Painter",
+      "slug": "adobe-substance-3d-painter"
+    },
+    {
+      "id": 216,
+      "nombre": "Adobe XD",
+      "slug": "adobe-xd"
+    },
+    {
+      "id": 204,
+      "nombre": "Affinity Designer",
+      "slug": "affinity-designer"
+    },
+    {
+      "id": 175,
+      "nombre": "Affinity Photo",
+      "slug": "affinity-photo"
+    },
+    {
+      "id": 196,
+      "nombre": "Affinity Publisher",
+      "slug": "affinity-publisher"
+    },
+    {
+      "id": 59,
+      "nombre": "Airtable",
+      "slug": "airtable"
+    },
+    {
+      "id": 198,
+      "nombre": "Amadine",
+      "slug": "amadine"
+    },
+    {
+      "id": 61,
+      "nombre": "Anima App",
+      "slug": "anima-app"
+    },
+    {
+      "id": 245,
+      "nombre": "Anytype",
+      "slug": "anytype"
+    },
+    {
+      "id": 282,
+      "nombre": "Appmotion",
+      "slug": "appmotion"
+    },
+    {
+      "id": 164,
+      "nombre": "Artboard Studio",
+      "slug": "artboard-studio"
+    },
+    {
+      "id": 99,
+      "nombre": "Artivive",
+      "slug": "artivive"
+    },
+    {
+      "id": 239,
+      "nombre": "Artlist",
+      "slug": "artlist-io"
+    },
+    {
+      "id": 103,
+      "nombre": "Audacity",
+      "slug": "audacity"
+    },
+    {
+      "id": 39,
+      "nombre": "AudioX",
+      "slug": "audiox"
+    },
+    {
+      "id": 132,
+      "nombre": "Autodesk Maya",
+      "slug": "autodesk-maya"
+    },
+    {
+      "id": 78,
+      "nombre": "Awwwards",
+      "slug": "awwwards"
+    },
+    {
+      "id": 213,
+      "nombre": "Axure RP",
+      "slug": "axure-rp"
+    },
+    {
+      "id": 214,
+      "nombre": "Balsamiq",
+      "slug": "balsamiq"
+    },
+    {
+      "id": 73,
+      "nombre": "Behance",
+      "slug": "behance"
+    },
+    {
+      "id": 136,
+      "nombre": "Blender",
+      "slug": "blender"
+    },
+    {
+      "id": 292,
+      "nombre": "Bolt.new",
+      "slug": "bolt-new"
+    },
+    {
+      "id": 199,
+      "nombre": "Boxy SVG",
+      "slug": "boxy-svg"
+    },
+    {
+      "id": 74,
+      "nombre": "Branding Style Guides",
+      "slug": "branding-style-guides"
+    },
+    {
+      "id": 88,
+      "nombre": "Brands of the World",
+      "slug": "brands-of-the-world"
+    },
+    {
+      "id": 301,
+      "nombre": "btw.so",
+      "slug": "btw-so"
+    },
+    {
+      "id": 138,
+      "nombre": "Bynder",
+      "slug": "bynder"
+    },
+    {
+      "id": 137,
+      "nombre": "Canto",
+      "slug": "canto"
+    },
+    {
+      "id": 193,
+      "nombre": "Canva",
+      "slug": "canva"
+    },
+    {
+      "id": 169,
+      "nombre": "CapCut",
+      "slug": "capcut"
+    },
+    {
+      "id": 185,
+      "nombre": "Cavalry",
+      "slug": "cavalry"
+    },
+    {
+      "id": 45,
+      "nombre": "ChatGPT",
+      "slug": "chatgpt"
+    },
+    {
+      "id": 135,
+      "nombre": "Cinema 4D",
+      "slug": "cinema-4d"
+    },
+    {
+      "id": 261,
+      "nombre": "Claude",
+      "slug": "claude"
+    },
+    {
+      "id": 144,
+      "nombre": "ClickUp",
+      "slug": "clickup"
+    },
+    {
+      "id": 168,
+      "nombre": "Clipchamp",
+      "slug": "clipchamp"
+    },
+    {
+      "id": 104,
+      "nombre": "CloudConvert",
+      "slug": "cloudconvert"
+    },
+    {
+      "id": 277,
+      "nombre": "Cloudflare Pages",
+      "slug": "cloudflare-pages"
+    },
+    {
+      "id": 182,
+      "nombre": "Cloudinary",
+      "slug": "cloudinary"
+    },
+    {
+      "id": 35,
+      "nombre": "Cofolios",
+      "slug": "cofolios"
+    },
+    {
+      "id": 288,
+      "nombre": "Component Gallery",
+      "slug": "component-gallery"
+    },
+    {
+      "id": 147,
+      "nombre": "Conceptboard",
+      "slug": "conceptboard"
+    },
+    {
+      "id": 125,
+      "nombre": "Construct",
+      "slug": "construct"
+    },
+    {
+      "id": 102,
+      "nombre": "Convertio",
+      "slug": "convertio"
+    },
+    {
+      "id": 79,
+      "nombre": "Coolors",
+      "slug": "coolors"
+    },
+    {
+      "id": 202,
+      "nombre": "CorelDRAW",
+      "slug": "coreldraw"
+    },
+    {
+      "id": 283,
+      "nombre": "Craftwork Design",
+      "slug": "craftwork-design"
+    },
+    {
+      "id": 92,
+      "nombre": "Creatie.ai",
+      "slug": "creatie-ai"
+    },
+    {
+      "id": 25,
+      "nombre": "css.gg",
+      "slug": "css-gg"
+    },
+    {
+      "id": 287,
+      "nombre": "CTA Gallery",
+      "slug": "cta-gallery"
+    },
+    {
+      "id": 259,
+      "nombre": "Cursor",
+      "slug": "cursor-ai"
+    },
+    {
+      "id": 260,
+      "nombre": "D-ID",
+      "slug": "d-id"
+    },
+    {
+      "id": 32,
+      "nombre": "Dark Mode Design",
+      "slug": "dark-mode-design"
+    },
+    {
+      "id": 241,
+      "nombre": "darktable",
+      "slug": "darktable"
+    },
+    {
+      "id": 187,
+      "nombre": "DaVinci Resolve",
+      "slug": "davinci-resolve"
+    },
+    {
+      "id": 43,
+      "nombre": "Deepseek",
+      "slug": "deepseek"
+    },
+    {
+      "id": 69,
+      "nombre": "Descript",
+      "slug": "descript"
+    },
+    {
+      "id": 100,
+      "nombre": "Draw.io",
+      "slug": "draw-io"
+    },
+    {
+      "id": 41,
+      "nombre": "Dreamina",
+      "slug": "dreamina"
+    },
+    {
+      "id": 52,
+      "nombre": "Dribbble",
+      "slug": "dribbble"
+    },
+    {
+      "id": 291,
+      "nombre": "Dropbase",
+      "slug": "dropbase"
+    },
+    {
+      "id": 111,
+      "nombre": "Dropbox",
+      "slug": "dropbox"
+    },
+    {
+      "id": 299,
+      "nombre": "Drupal",
+      "slug": "drupal"
+    },
+    {
+      "id": 140,
+      "nombre": "Eagle",
+      "slug": "eagle"
+    },
+    {
+      "id": 48,
+      "nombre": "Easy Grid",
+      "slug": "easy-grid"
+    },
+    {
+      "id": 63,
+      "nombre": "ElevenLabs",
+      "slug": "elevenlabs"
+    },
+    {
+      "id": 189,
+      "nombre": "Enfocus PitStop Pro",
+      "slug": "enfocus-pitstop-pro"
+    },
+    {
+      "id": 86,
+      "nombre": "Envato Elements",
+      "slug": "envato-elements"
+    },
+    {
+      "id": 240,
+      "nombre": "Epidemic Sound",
+      "slug": "epidemic-sound"
+    },
+    {
+      "id": 153,
+      "nombre": "Excalidraw",
+      "slug": "excalidraw"
+    },
+    {
+      "id": 145,
+      "nombre": "Explain Everything",
+      "slug": "explain-everything"
+    },
+    {
+      "id": 29,
+      "nombre": "Figcomponents",
+      "slug": "figcomponents"
+    },
+    {
+      "id": 155,
+      "nombre": "FigJam",
+      "slug": "figjam"
+    },
+    {
+      "id": 218,
+      "nombre": "Figma",
+      "slug": "figma"
+    },
+    {
+      "id": 171,
+      "nombre": "Final Cut Pro",
+      "slug": "final-cut-pro"
+    },
+    {
+      "id": 40,
+      "nombre": "Flow",
+      "slug": "flow"
+    },
+    {
+      "id": 56,
+      "nombre": "Folk",
+      "slug": "folk"
+    },
+    {
+      "id": 87,
+      "nombre": "Font Awesome",
+      "slug": "font-awesome"
+    },
+    {
+      "id": 233,
+      "nombre": "FontBase",
+      "slug": "fontbase"
+    },
+    {
+      "id": 122,
+      "nombre": "FontForge",
+      "slug": "fontforge"
+    },
+    {
+      "id": 123,
+      "nombre": "FontLab",
+      "slug": "fontlab"
+    },
+    {
+      "id": 28,
+      "nombre": "Fontshare",
+      "slug": "fontshare"
+    },
+    {
+      "id": 191,
+      "nombre": "Foxit PDF Editor",
+      "slug": "foxit-pdf-editor"
+    },
+    {
+      "id": 219,
+      "nombre": "Framer",
+      "slug": "framer"
+    },
+    {
+      "id": 298,
+      "nombre": "Frappe Builder",
+      "slug": "frappe-builder"
+    },
+    {
+      "id": 249,
+      "nombre": "FreeCAD",
+      "slug": "freecad"
+    },
+    {
+      "id": 91,
+      "nombre": "Freepik",
+      "slug": "freepik"
+    },
+    {
+      "id": 126,
+      "nombre": "GameMaker",
+      "slug": "gamemaker"
+    },
+    {
+      "id": 254,
+      "nombre": "Gamma",
+      "slug": "gamma-app"
+    },
+    {
+      "id": 44,
+      "nombre": "Gemini",
+      "slug": "gemini"
+    },
+    {
+      "id": 177,
+      "nombre": "GIMP",
+      "slug": "gimp"
+    },
+    {
+      "id": 124,
+      "nombre": "Glyphs",
+      "slug": "glyphs"
+    },
+    {
+      "id": 37,
+      "nombre": "Godly",
+      "slug": "godly"
+    },
+    {
+      "id": 131,
+      "nombre": "Godot Engine",
+      "slug": "godot-engine"
+    },
+    {
+      "id": 268,
+      "nombre": "Google AI Studio",
+      "slug": "google-ai-studio"
+    },
+    {
+      "id": 112,
+      "nombre": "Google Drive",
+      "slug": "google-drive"
+    },
+    {
+      "id": 89,
+      "nombre": "Google Fonts",
+      "slug": "google-fonts"
+    },
+    {
+      "id": 55,
+      "nombre": "Google Sheets",
+      "slug": "google-sheets"
+    },
+    {
+      "id": 265,
+      "nombre": "Grok",
+      "slug": "grok"
+    },
+    {
+      "id": 38,
+      "nombre": "Hailuo AI",
+      "slug": "hailuo-ai"
+    },
+    {
+      "id": 119,
+      "nombre": "HandBrake",
+      "slug": "handbrake"
+    },
+    {
+      "id": 24,
+      "nombre": "Heroicons",
+      "slug": "heroicons"
+    },
+    {
+      "id": 230,
+      "nombre": "Houdini",
+      "slug": "houdini"
+    },
+    {
+      "id": 57,
+      "nombre": "HubSpot CRM",
+      "slug": "hubspot-crm"
+    },
+    {
+      "id": 64,
+      "nombre": "Huemint",
+      "slug": "huemint"
+    },
+    {
+      "id": 280,
+      "nombre": "Hugeicons",
+      "slug": "hugeicons"
+    },
+    {
+      "id": 47,
+      "nombre": "Icon Lab",
+      "slug": "icon-lab"
+    },
+    {
+      "id": 96,
+      "nombre": "Ideogram",
+      "slug": "ideogram"
+    },
+    {
+      "id": 50,
+      "nombre": "iLovePDF",
+      "slug": "ilovepdf"
+    },
+    {
+      "id": 114,
+      "nombre": "ImageOptim",
+      "slug": "imageoptim"
+    },
+    {
+      "id": 181,
+      "nombre": "Imgix",
+      "slug": "imgix"
+    },
+    {
+      "id": 203,
+      "nombre": "Inkscape",
+      "slug": "inkscape"
+    },
+    {
+      "id": 244,
+      "nombre": "Joplin",
+      "slug": "joplin"
+    },
+    {
+      "id": 209,
+      "nombre": "Justinmind",
+      "slug": "justinmind"
+    },
+    {
+      "id": 252,
+      "nombre": "Kaiber",
+      "slug": "kaiber"
+    },
+    {
+      "id": 266,
+      "nombre": "Kimi",
+      "slug": "kimi-ai"
+    },
+    {
+      "id": 67,
+      "nombre": "Krea AI",
+      "slug": "krea-ai"
+    },
+    {
+      "id": 176,
+      "nombre": "Krita",
+      "slug": "krita"
+    },
+    {
+      "id": 284,
+      "nombre": "Landing Love",
+      "slug": "landing-love"
+    },
+    {
+      "id": 36,
+      "nombre": "Layers",
+      "slug": "layers"
+    },
+    {
+      "id": 253,
+      "nombre": "Leonardo.Ai",
+      "slug": "leonardo-ai"
+    },
+    {
+      "id": 201,
+      "nombre": "Linearity Curve",
+      "slug": "linearity-curve"
+    },
+    {
+      "id": 234,
+      "nombre": "Logseq",
+      "slug": "logseq"
+    },
+    {
+      "id": 65,
+      "nombre": "Looka",
+      "slug": "looka"
+    },
+    {
+      "id": 54,
+      "nombre": "LottieFiles",
+      "slug": "lottiefiles"
+    },
+    {
+      "id": 289,
+      "nombre": "Lovable",
+      "slug": "lovable"
+    },
+    {
+      "id": 26,
+      "nombre": "Lucide",
+      "slug": "lucide"
+    },
+    {
+      "id": 149,
+      "nombre": "Lucidspark",
+      "slug": "lucidspark"
+    },
+    {
+      "id": 94,
+      "nombre": "Luma AI",
+      "slug": "luma-ai"
+    },
+    {
+      "id": 276,
+      "nombre": "Lyssna",
+      "slug": "lyssna"
+    },
+    {
+      "id": 66,
+      "nombre": "Magnific AI",
+      "slug": "magnific-ai"
+    },
+    {
+      "id": 212,
+      "nombre": "Marvel",
+      "slug": "marvel"
+    },
+    {
+      "id": 22,
+      "nombre": "Material Symbols",
+      "slug": "material-symbols"
+    },
+    {
+      "id": 272,
+      "nombre": "Maze",
+      "slug": "maze"
+    },
+    {
+      "id": 62,
+      "nombre": "Meshy.ai",
+      "slug": "meshy-ai"
+    },
+    {
+      "id": 264,
+      "nombre": "Meta AI",
+      "slug": "meta-ai"
+    },
+    {
+      "id": 142,
+      "nombre": "Microsoft Designer",
+      "slug": "microsoft-designer"
+    },
+    {
+      "id": 154,
+      "nombre": "Microsoft Whiteboard",
+      "slug": "microsoft-whiteboard"
+    },
+    {
+      "id": 97,
+      "nombre": "Midjourney",
+      "slug": "midjourney"
+    },
+    {
+      "id": 150,
+      "nombre": "Milanote",
+      "slug": "milanote"
+    },
+    {
+      "id": 30,
+      "nombre": "Minimal Gallery",
+      "slug": "minimal-gallery"
+    },
+    {
+      "id": 157,
+      "nombre": "Miro",
+      "slug": "miro"
+    },
+    {
+      "id": 262,
+      "nombre": "Mistral AI",
+      "slug": "mistral-ai"
+    },
+    {
+      "id": 77,
+      "nombre": "Mobbin",
+      "slug": "mobbin"
+    },
+    {
+      "id": 208,
+      "nombre": "MockFlow",
+      "slug": "mockflow"
+    },
+    {
+      "id": 163,
+      "nombre": "Mockuuups Studio",
+      "slug": "mockuuups-studio"
+    },
+    {
+      "id": 156,
+      "nombre": "Mural",
+      "slug": "mural"
+    },
+    {
+      "id": 184,
+      "nombre": "Natron",
+      "slug": "natron"
+    },
+    {
+      "id": 285,
+      "nombre": "Navbar Gallery",
+      "slug": "navbar-gallery"
+    },
+    {
+      "id": 279,
+      "nombre": "Netlify",
+      "slug": "netlify"
+    },
+    {
+      "id": 109,
+      "nombre": "Nextcloud",
+      "slug": "nextcloud"
+    },
+    {
+      "id": 60,
+      "nombre": "NocoDB",
+      "slug": "nocodb"
+    },
+    {
+      "id": 297,
+      "nombre": "Nordcraft",
+      "slug": "nordcraft"
+    },
+    {
+      "id": 21,
+      "nombre": "NotebookLM",
+      "slug": "notebooklm"
+    },
+    {
+      "id": 148,
+      "nombre": "Notion",
+      "slug": "notion"
+    },
+    {
+      "id": 186,
+      "nombre": "Nuke",
+      "slug": "nuke"
+    },
+    {
+      "id": 53,
+      "nombre": "Obsidian",
+      "slug": "obsidian"
+    },
+    {
+      "id": 242,
+      "nombre": "Olive Video Editor",
+      "slug": "olive-video-editor"
+    },
+    {
+      "id": 76,
+      "nombre": "One Page Love",
+      "slug": "one-page-love"
+    },
+    {
+      "id": 108,
+      "nombre": "OneDrive",
+      "slug": "onedrive"
+    },
+    {
+      "id": 302,
+      "nombre": "Onlook",
+      "slug": "onlook"
+    },
+    {
+      "id": 247,
+      "nombre": "Open WebUI",
+      "slug": "open-web-ui"
+    },
+    {
+      "id": 275,
+      "nombre": "Optimal Workshop",
+      "slug": "optimal-workshop"
+    },
+    {
+      "id": 211,
+      "nombre": "Origami Studio",
+      "slug": "origami-studio"
+    },
+    {
+      "id": 231,
+      "nombre": "Overflow",
+      "slug": "overflow"
+    },
+    {
+      "id": 166,
+      "nombre": "Pacdora",
+      "slug": "pacdora"
+    },
+    {
+      "id": 107,
+      "nombre": "pCloud",
+      "slug": "pcloud"
+    },
+    {
+      "id": 190,
+      "nombre": "PDF-XChange Editor",
+      "slug": "pdf-xchange-editor"
+    },
+    {
+      "id": 120,
+      "nombre": "PDF24 Creator & Toolbox",
+      "slug": "pdf24-creator-toolbox"
+    },
+    {
+      "id": 206,
+      "nombre": "Penpot",
+      "slug": "penpot"
+    },
+    {
+      "id": 263,
+      "nombre": "Perplexity",
+      "slug": "perplexity-ai"
+    },
+    {
+      "id": 51,
+      "nombre": "Pexels",
+      "slug": "pexels"
+    },
+    {
+      "id": 27,
+      "nombre": "Phosphor",
+      "slug": "phosphor"
+    },
+    {
+      "id": 173,
+      "nombre": "Photopea",
+      "slug": "photopea"
+    },
+    {
+      "id": 139,
+      "nombre": "PhotoPrism",
+      "slug": "photoprism"
+    },
+    {
+      "id": 236,
+      "nombre": "Pika",
+      "slug": "pika-labs"
+    },
+    {
+      "id": 72,
+      "nombre": "Pitch",
+      "slug": "pitch"
+    },
+    {
+      "id": 167,
+      "nombre": "Placeit",
+      "slug": "placeit"
+    },
+    {
+      "id": 158,
+      "nombre": "Plane",
+      "slug": "plane"
+    },
+    {
+      "id": 296,
+      "nombre": "Plasmic",
+      "slug": "plasmic"
+    },
+    {
+      "id": 183,
+      "nombre": "Playbook",
+      "slug": "playbook"
+    },
+    {
+      "id": 258,
+      "nombre": "Poised",
+      "slug": "poised"
+    },
+    {
+      "id": 34,
+      "nombre": "Prettyfolio",
+      "slug": "prettyfolio"
+    },
+    {
+      "id": 207,
+      "nombre": "Principle",
+      "slug": "principle"
+    },
+    {
+      "id": 174,
+      "nombre": "Procreate",
+      "slug": "procreate"
+    },
+    {
+      "id": 215,
+      "nombre": "ProtoPie",
+      "slug": "protopie"
+    },
+    {
+      "id": 290,
+      "nombre": "Pythagora",
+      "slug": "pythagora"
+    },
+    {
+      "id": 243,
+      "nombre": "QCAD",
+      "slug": "qcad"
+    },
+    {
+      "id": 194,
+      "nombre": "QuarkXPress",
+      "slug": "quarkxpress"
+    },
+    {
+      "id": 238,
+      "nombre": "Quixel Megascans",
+      "slug": "quixel-megascans"
+    },
+    {
+      "id": 42,
+      "nombre": "Qwen",
+      "slug": "qwen"
+    },
+    {
+      "id": 23,
+      "nombre": "Radix",
+      "slug": "radix"
+    },
+    {
+      "id": 84,
+      "nombre": "Realtime Colors",
+      "slug": "realtime-colors"
+    },
+    {
+      "id": 281,
+      "nombre": "Rebrand Gallery",
+      "slug": "rebrand-gallery"
+    },
+    {
+      "id": 257,
+      "nombre": "Recraft AI",
+      "slug": "recraft-ai"
+    },
+    {
+      "id": 293,
+      "nombre": "Reflex",
+      "slug": "reflex"
+    },
+    {
+      "id": 250,
+      "nombre": "RemNote",
+      "slug": "remnote"
+    },
+    {
+      "id": 68,
+      "nombre": "Rive",
+      "slug": "rive"
+    },
+    {
+      "id": 95,
+      "nombre": "Runway",
+      "slug": "runway"
+    },
+    {
+      "id": 31,
+      "nombre": "SaaS Landing Page",
+      "slug": "saas-landing-page"
+    },
+    {
+      "id": 286,
+      "nombre": "Saaspo",
+      "slug": "saaspo"
+    },
+    {
+      "id": 195,
+      "nombre": "Scribus",
+      "slug": "scribus"
+    },
+    {
+      "id": 128,
+      "nombre": "ShapesXR",
+      "slug": "shapesxr"
+    },
+    {
+      "id": 170,
+      "nombre": "Shotcut",
+      "slug": "shotcut"
+    },
+    {
+      "id": 165,
+      "nombre": "shots.so",
+      "slug": "shots-so"
+    },
+    {
+      "id": 116,
+      "nombre": "Shutter Encoder",
+      "slug": "shutter-encoder"
+    },
+    {
+      "id": 300,
+      "nombre": "Silex",
+      "slug": "silex"
+    },
+    {
+      "id": 217,
+      "nombre": "Sketch",
+      "slug": "sketch"
+    },
+    {
+      "id": 237,
+      "nombre": "Sketchfab",
+      "slug": "sketchfab"
+    },
+    {
+      "id": 134,
+      "nombre": "SketchUp",
+      "slug": "sketchup"
+    },
+    {
+      "id": 133,
+      "nombre": "Spline",
+      "slug": "spline"
+    },
+    {
+      "id": 159,
+      "nombre": "Squarespace",
+      "slug": "squarespace"
+    },
+    {
+      "id": 118,
+      "nombre": "Squoosh",
+      "slug": "squoosh"
+    },
+    {
+      "id": 80,
+      "nombre": "Stark",
+      "slug": "stark"
+    },
+    {
+      "id": 256,
+      "nombre": "Stich",
+      "slug": "stich"
+    },
+    {
+      "id": 146,
+      "nombre": "Stormboard",
+      "slug": "stormboard"
+    },
+    {
+      "id": 81,
+      "nombre": "Stylify Me",
+      "slug": "stylify-me"
+    },
+    {
+      "id": 93,
+      "nombre": "Suno AI",
+      "slug": "suno-ai"
+    },
+    {
+      "id": 58,
+      "nombre": "Supabase",
+      "slug": "supabase"
+    },
+    {
+      "id": 33,
+      "nombre": "Supahero",
+      "slug": "supahero"
+    },
+    {
+      "id": 106,
+      "nombre": "SwissTransfer",
+      "slug": "swisstransfer"
+    },
+    {
+      "id": 248,
+      "nombre": "Synfig Studio",
+      "slug": "synfig-studio"
+    },
+    {
+      "id": 20,
+      "nombre": "Tabler",
+      "slug": "tabler"
+    },
+    {
+      "id": 82,
+      "nombre": "The Good Line Height",
+      "slug": "the-good-line-height"
+    },
+    {
+      "id": 179,
+      "nombre": "thumbor.org",
+      "slug": "thumbor-org"
+    },
+    {
+      "id": 113,
+      "nombre": "TinyPNG / TinyJPG",
+      "slug": "tinypng-tinyjpg"
+    },
+    {
+      "id": 152,
+      "nombre": "tldraw",
+      "slug": "tldraw"
+    },
+    {
+      "id": 235,
+      "nombre": "Topaz Gigapixel AI",
+      "slug": "topaz-gigapixel-ai"
+    },
+    {
+      "id": 105,
+      "nombre": "Transfer.zip",
+      "slug": "transfer-zip"
+    },
+    {
+      "id": 101,
+      "nombre": "Transfonter",
+      "slug": "transfonter"
+    },
+    {
+      "id": 83,
+      "nombre": "Type Scale",
+      "slug": "type-scale"
+    },
+    {
+      "id": 49,
+      "nombre": "Typewolf",
+      "slug": "typewolf"
+    },
+    {
+      "id": 255,
+      "nombre": "Udio",
+      "slug": "udio"
+    },
+    {
+      "id": 129,
+      "nombre": "Unity",
+      "slug": "unity"
+    },
+    {
+      "id": 130,
+      "nombre": "Unreal Engine",
+      "slug": "unreal-engine"
+    },
+    {
+      "id": 90,
+      "nombre": "Unsplash",
+      "slug": "unsplash"
+    },
+    {
+      "id": 246,
+      "nombre": "Upscayl",
+      "slug": "upscayl"
+    },
+    {
+      "id": 273,
+      "nombre": "Useberry",
+      "slug": "useberry"
+    },
+    {
+      "id": 46,
+      "nombre": "Utopia.fyi",
+      "slug": "utopia-fyi"
+    },
+    {
+      "id": 210,
+      "nombre": "UXPin",
+      "slug": "uxpin"
+    },
+    {
+      "id": 274,
+      "nombre": "UXtweak",
+      "slug": "uxtweak"
+    },
+    {
+      "id": 70,
+      "nombre": "v0.dev",
+      "slug": "v0-dev"
+    },
+    {
+      "id": 200,
+      "nombre": "Vectr",
+      "slug": "vectr"
+    },
+    {
+      "id": 278,
+      "nombre": "Vercel",
+      "slug": "vercel"
+    },
+    {
+      "id": 180,
+      "nombre": "Vimeo",
+      "slug": "vimeo"
+    },
+    {
+      "id": 251,
+      "nombre": "Vizcom",
+      "slug": "vizcom"
+    },
+    {
+      "id": 162,
+      "nombre": "Webflow",
+      "slug": "webflow"
+    },
+    {
+      "id": 294,
+      "nombre": "Webstudio",
+      "slug": "webstudio"
+    },
+    {
+      "id": 110,
+      "nombre": "WeTransfer",
+      "slug": "wetransfer"
+    },
+    {
+      "id": 151,
+      "nombre": "Whimsical",
+      "slug": "whimsical"
+    },
+    {
+      "id": 115,
+      "nombre": "WinRAR",
+      "slug": "winrar"
+    },
+    {
+      "id": 160,
+      "nombre": "Wix",
+      "slug": "wix"
+    },
+    {
+      "id": 161,
+      "nombre": "WordPress",
+      "slug": "wordpress"
+    },
+    {
+      "id": 295,
+      "nombre": "Ycode",
+      "slug": "ycode"
+    },
+    {
+      "id": 267,
+      "nombre": "Z.ai (GLM)",
+      "slug": "z-ai"
+    },
+    {
+      "id": 229,
+      "nombre": "ZBrush",
+      "slug": "zbrush"
+    },
+    {
+      "id": 71,
+      "nombre": "Zeplin",
+      "slug": "zeplin"
+    },
+    {
+      "id": 232,
+      "nombre": "Zeroheight",
+      "slug": "zeroheight"
+    }
+  ]
+}

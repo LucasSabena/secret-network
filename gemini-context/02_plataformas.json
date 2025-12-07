@@ -1,0 +1,50 @@
+{
+  "descripcion": "Plataformas disponibles con sus IDs",
+  "plataformas": [
+    {
+      "id": 4,
+      "nombre": "Android",
+      "slug": "android"
+    },
+    {
+      "id": 2,
+      "nombre": "ChromeOS",
+      "slug": "chromeos"
+    },
+    {
+      "id": 5,
+      "nombre": "iOS",
+      "slug": "ios"
+    },
+    {
+      "id": 3,
+      "nombre": "iPadOS",
+      "slug": "ipados"
+    },
+    {
+      "id": 6,
+      "nombre": "Linux",
+      "slug": "linux"
+    },
+    {
+      "id": 8,
+      "nombre": "macOS",
+      "slug": "macos"
+    },
+    {
+      "id": 1,
+      "nombre": "VR",
+      "slug": "vr"
+    },
+    {
+      "id": 9,
+      "nombre": "Web",
+      "slug": "web"
+    },
+    {
+      "id": 7,
+      "nombre": "Windows",
+      "slug": "windows"
+    }
+  ]
+}

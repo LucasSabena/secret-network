@@ -1,0 +1,419 @@
+{
+  "descripcion": "Categorias y subcategorias. Las principales tienen id_categoria_padre null.",
+  "categorias": [
+    {
+      "id": 7,
+      "nombre": "Almacenamiento y transferencia de archivos",
+      "slug": "productividad-y-gestion-almacenamiento-y-transferencia-de-archivos",
+      "id_categoria_padre": 2
+    },
+    {
+      "id": 9,
+      "nombre": "Alojamiento de vídeo y media",
+      "slug": "productividad-y-gestion-alojamiento-de-video-y-media",
+      "id_categoria_padre": 2
+    },
+    {
+      "id": 24,
+      "nombre": "Análisis y extracción de estilos",
+      "slug": "utilidades-de-apoyo-analisis-y-extraccion-de-estilos",
+      "id_categoria_padre": 20
+    },
+    {
+      "id": 47,
+      "nombre": "Asistentes de diseño y UI",
+      "slug": "creacion-con-ia-asistentes-de-diseo-y-ui",
+      "id_categoria_padre": 44
+    },
+    {
+      "id": 54,
+      "nombre": "Bancos de imágenes y vídeo",
+      "slug": "recursos-y-activos-bancos-de-imagenes-y-video",
+      "id_categoria_padre": 53
+    },
+    {
+      "id": 11,
+      "nombre": "Bases de datos no-code",
+      "slug": "productividad-y-gestion-bases-de-datos-no-code",
+      "id_categoria_padre": 2
+    },
+    {
+      "id": 18,
+      "nombre": "Blogs y publicaciones de diseño",
+      "slug": "inspiracion-y-referencias-blogs-y-publicaciones-de-diseo",
+      "id_categoria_padre": 13
+    },
+    {
+      "id": 16,
+      "nombre": "Branding y manuales de marca",
+      "slug": "inspiracion-y-referencias-branding-y-manuales-de-marca",
+      "id_categoria_padre": 13
+    },
+    {
+      "id": 25,
+      "nombre": "Compresión y optimización de archivos",
+      "slug": "utilidades-de-apoyo-compresion-y-optimizacion-de-archivos",
+      "id_categoria_padre": 20
+    },
+    {
+      "id": 8,
+      "nombre": "Control de versiones para diseño",
+      "slug": "productividad-y-gestion-control-de-versiones-para-diseo",
+      "id_categoria_padre": 2
+    },
+    {
+      "id": 26,
+      "nombre": "Conversores de formatos",
+      "slug": "utilidades-de-apoyo-conversores-de-formatos",
+      "id_categoria_padre": 20
+    },
+    {
+      "id": 44,
+      "nombre": "Creación con IA",
+      "slug": "creacion-con-ia",
+      "id_categoria_padre": null
+    },
+    {
+      "id": 12,
+      "nombre": "CRM y gestión de clientes",
+      "slug": "productividad-y-gestion-crm-y-gestion-de-clientes",
+      "id_categoria_padre": 2
+    },
+    {
+      "id": 10,
+      "nombre": "Diagramación",
+      "slug": "productividad-y-gestion-diagramacion",
+      "id_categoria_padre": 2
+    },
+    {
+      "id": 73,
+      "nombre": "Diagramas de flujo de usuario",
+      "slug": "diagramas-de-flujo-de-usuario",
+      "id_categoria_padre": 29
+    },
+    {
+      "id": 79,
+      "nombre": "Dibujo",
+      "slug": "dibujo",
+      "id_categoria_padre": 29
+    },
+    {
+      "id": 38,
+      "nombre": "Diseño AR/VR y videojuegos",
+      "slug": "programas-de-diseo-diseo-ar-vr-y-videojuegos",
+      "id_categoria_padre": 29
+    },
+    {
+      "id": 17,
+      "nombre": "Diseño gráfico y editorial",
+      "slug": "inspiracion-y-referencias-diseo-grafico-y-editorial",
+      "id_categoria_padre": 13
+    },
+    {
+      "id": 43,
+      "nombre": "Diseño rápido y para marketing",
+      "slug": "programas-de-diseo-diseo-rapido-y-para-marketing",
+      "id_categoria_padre": 29
+    },
+    {
+      "id": 32,
+      "nombre": "Diseño UI/UX y prototipado",
+      "slug": "programas-de-diseo-diseo-ui-ux-y-prototipado",
+      "id_categoria_padre": 29
+    },
+    {
+      "id": 40,
+      "nombre": "Diseño y edición de tipografías",
+      "slug": "programas-de-diseo-diseo-y-edicion-de-tipografias",
+      "id_categoria_padre": 29
+    },
+    {
+      "id": 74,
+      "nombre": "Documentación de sistemas de diseño",
+      "slug": "documentacion-de-sistemas-de-diseño",
+      "id_categoria_padre": 29
+    },
+    {
+      "id": 39,
+      "nombre": "Edición de audio",
+      "slug": "programas-de-diseo-edicion-de-audio",
+      "id_categoria_padre": 29
+    },
+    {
+      "id": 35,
+      "nombre": "Edición de vídeo",
+      "slug": "programas-de-diseo-edicion-de-video",
+      "id_categoria_padre": 29
+    },
+    {
+      "id": 70,
+      "nombre": "Editor de imágenes",
+      "slug": "editor-de-imagenes",
+      "id_categoria_padre": 29
+    },
+    {
+      "id": 31,
+      "nombre": "Editores de gráficos rasterizados",
+      "slug": "programas-de-diseo-editores-de-graficos-rasterizados",
+      "id_categoria_padre": 29
+    },
+    {
+      "id": 30,
+      "nombre": "Editores de gráficos vectoriales",
+      "slug": "programas-de-diseo-editores-de-graficos-vectoriales",
+      "id_categoria_padre": 29
+    },
+    {
+      "id": 42,
+      "nombre": "Editores de PDF y preimpresión",
+      "slug": "programas-de-diseo-editores-de-pdf-y-preimpresion",
+      "id_categoria_padre": 29
+    },
+    {
+      "id": 71,
+      "nombre": "Escultura digital",
+      "slug": "escultura-digital",
+      "id_categoria_padre": 29
+    },
+    {
+      "id": 14,
+      "nombre": "Galerías de diseño web",
+      "slug": "inspiracion-y-referencias-galerias-de-diseo-web",
+      "id_categoria_padre": 13
+    },
+    {
+      "id": 15,
+      "nombre": "Galerías de UI/UX (apps)",
+      "slug": "inspiracion-y-referencias-galerias-de-ui-ux-apps",
+      "id_categoria_padre": 13
+    },
+    {
+      "id": 41,
+      "nombre": "Generación de mockups",
+      "slug": "programas-de-diseo-generacion-de-mockups",
+      "id_categoria_padre": 29
+    },
+    {
+      "id": 48,
+      "nombre": "Generadores de 3D y texturas",
+      "slug": "creacion-con-ia-generadores-de-3d-y-texturas",
+      "id_categoria_padre": 44
+    },
+    {
+      "id": 50,
+      "nombre": "Generadores de audio y música",
+      "slug": "creacion-con-ia-generadores-de-audio-y-musica",
+      "id_categoria_padre": 44
+    },
+    {
+      "id": 51,
+      "nombre": "Generadores de código",
+      "slug": "creacion-con-ia-generadores-de-codigo",
+      "id_categoria_padre": 44
+    },
+    {
+      "id": 23,
+      "nombre": "Generadores de grillas y layouts",
+      "slug": "utilidades-de-apoyo-generadores-de-grillas-y-layouts",
+      "id_categoria_padre": 20
+    },
+    {
+      "id": 45,
+      "nombre": "Generadores de imagen",
+      "slug": "creacion-con-ia-generadores-de-imagen",
+      "id_categoria_padre": 44
+    },
+    {
+      "id": 52,
+      "nombre": "Generadores de logos y branding",
+      "slug": "creacion-con-ia-generadores-de-logos-y-branding",
+      "id_categoria_padre": 44
+    },
+    {
+      "id": 49,
+      "nombre": "Generadores de texto",
+      "slug": "creacion-con-ia-generadores-de-texto",
+      "id_categoria_padre": 44
+    },
+    {
+      "id": 46,
+      "nombre": "Generadores de vídeo",
+      "slug": "creacion-con-ia-generadores-de-video",
+      "id_categoria_padre": 44
+    },
+    {
+      "id": 6,
+      "nombre": "Gestión de activos digitales (DAM)",
+      "slug": "productividad-y-gestion-gestion-de-activos-digitales-dam",
+      "id_categoria_padre": 2
+    },
+    {
+      "id": 3,
+      "nombre": "Gestión de proyectos y tareas",
+      "slug": "productividad-y-gestion-gestion-de-proyectos-y-tareas",
+      "id_categoria_padre": 2
+    },
+    {
+      "id": 75,
+      "nombre": "Gestión de tipografías",
+      "slug": "gestion-de-tipografias",
+      "id_categoria_padre": 20
+    },
+    {
+      "id": 36,
+      "nombre": "Gráficos en movimiento y VFX",
+      "slug": "programas-de-diseo-graficos-en-movimiento-y-vfx",
+      "id_categoria_padre": 29
+    },
+    {
+      "id": 22,
+      "nombre": "Guías de tipografía",
+      "slug": "utilidades-de-apoyo-guias-de-tipografia",
+      "id_categoria_padre": 20
+    },
+    {
+      "id": 56,
+      "nombre": "Iconos",
+      "slug": "recursos-y-activos-iconos",
+      "id_categoria_padre": 53
+    },
+    {
+      "id": 13,
+      "nombre": "Inspiración y referencias",
+      "slug": "inspiracion-y-referencias",
+      "id_categoria_padre": null
+    },
+    {
+      "id": 57,
+      "nombre": "Logos y vectores",
+      "slug": "recursos-y-activos-logos-y-vectores",
+      "id_categoria_padre": 53
+    },
+    {
+      "id": 33,
+      "nombre": "Maquetación y diseño editorial",
+      "slug": "programas-de-diseo-maquetacion-y-diseo-editorial",
+      "id_categoria_padre": 29
+    },
+    {
+      "id": 76,
+      "nombre": "Mejora y escalado de imagen",
+      "slug": "mejora-y-escalado-de-imagen",
+      "id_categoria_padre": 20
+    },
+    {
+      "id": 37,
+      "nombre": "Modelado 3D y renderizado",
+      "slug": "programas-de-diseo-modelado-3d-y-renderizado",
+      "id_categoria_padre": 29
+    },
+    {
+      "id": 78,
+      "nombre": "Modelos y activos 3D",
+      "slug": "modelos-y-activos-3d",
+      "id_categoria_padre": 53
+    },
+    {
+      "id": 27,
+      "nombre": "Optimización y entrega de media",
+      "slug": "utilidades-de-apoyo-optimizacion-y-entrega-de-media",
+      "id_categoria_padre": 20
+    },
+    {
+      "id": 21,
+      "nombre": "Paletas de color",
+      "slug": "utilidades-de-apoyo-paletas-de-color",
+      "id_categoria_padre": 20
+    },
+    {
+      "id": 5,
+      "nombre": "Pizarras virtuales y colaboración",
+      "slug": "productividad-y-gestion-pizarras-virtuales-y-colaboracion",
+      "id_categoria_padre": 2
+    },
+    {
+      "id": 58,
+      "nombre": "Plantillas y archivos editables",
+      "slug": "recursos-y-activos-plantillas-y-archivos-editables",
+      "id_categoria_padre": 53
+    },
+    {
+      "id": 19,
+      "nombre": "Portafolios de diseño",
+      "slug": "inspiracion-y-referencias-portafolios-de-diseo",
+      "id_categoria_padre": 13
+    },
+    {
+      "id": 2,
+      "nombre": "Productividad y gestión",
+      "slug": "productividad-y-gestion",
+      "id_categoria_padre": null
+    },
+    {
+      "id": 29,
+      "nombre": "Programas de diseño",
+      "slug": "programas-de-diseo",
+      "id_categoria_padre": null
+    },
+    {
+      "id": 53,
+      "nombre": "Recursos y activos",
+      "slug": "recursos-y-activos",
+      "id_categoria_padre": null
+    },
+    {
+      "id": 80,
+      "nombre": "Research",
+      "slug": "research",
+      "id_categoria_padre": 29
+    },
+    {
+      "id": 4,
+      "nombre": "Software de presentaciones",
+      "slug": "productividad-y-gestion-software-de-presentaciones",
+      "id_categoria_padre": 2
+    },
+    {
+      "id": 59,
+      "nombre": "Sonidos y música de stock",
+      "slug": "recursos-y-activos-sonidos-y-musica-de-stock",
+      "id_categoria_padre": 53
+    },
+    {
+      "id": 72,
+      "nombre": "Texturizado 3D",
+      "slug": "texturizado-3d",
+      "id_categoria_padre": 29
+    },
+    {
+      "id": 55,
+      "nombre": "Tipografías y fuentes",
+      "slug": "recursos-y-activos-tipografias-y-fuentes",
+      "id_categoria_padre": 53
+    },
+    {
+      "id": 77,
+      "nombre": "Toma de notas y conocimiento",
+      "slug": "toma-de-notas-y-conocimiento",
+      "id_categoria_padre": 2
+    },
+    {
+      "id": 20,
+      "nombre": "Utilidades de apoyo",
+      "slug": "utilidades-de-apoyo",
+      "id_categoria_padre": null
+    },
+    {
+      "id": 28,
+      "nombre": "Utilitarios de PDF",
+      "slug": "utilidades-de-apoyo-utilitarios-de-pdf",
+      "id_categoria_padre": 20
+    },
+    {
+      "id": 34,
+      "nombre": "Web no-code / low-code",
+      "slug": "programas-de-diseo-web-no-code-low-code",
+      "id_categoria_padre": 29
+    }
+  ]
+}
