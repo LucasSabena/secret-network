@@ -30,6 +30,12 @@ CRITERIOS DE CAMPOS (MANDATORIO SEGUIR AL PIE DE LA LETRA):
 12. **es_recomendado**: 
     - Marca `true` SI Y SOLO SI el programa es un "Estándar de Industria" (ej: Photoshop, Blender, Slack) o "Best in Class" en su nicho.
     - Sé selectivo. Si es una herramienta genérica más, es `false`.
+13. **programas_alternativos**: 
+    - Array de slugs de programas que son ALTERNATIVAS DIRECTAS a este programa.
+    - IMPORTANTE: Consulta `04_programas_existentes.json` para obtener los slugs válidos de programas ya cargados.
+    - Solo incluye programas que realmente compiten en el mismo espacio funcional.
+    - Ej: Si es "davinci-resolve", podrías incluir ["adobe-premiere", "final-cut-pro"].
+    - Si no hay alternativas cargadas en la BD, deja un array vacío [].
 
 FORMATO DE SALIDA (JSON ARRAY):
 ```json
@@ -46,9 +52,15 @@ FORMATO DE SALIDA (JSON ARRAY):
     "modelos_precio": ["..."],
     "usos": ["..."],
     "es_open_source": boolean,
-    "es_recomendado": boolean
+    "es_recomendado": boolean,
+    "programas_alternativos": ["slug-alternativa-1", "slug-alternativa-2"]
   }
 ]
 ```
+
+FLUJO DE TRABAJO:
+1. Consulta `04_programas_existentes.json` para ver qué programas ya están cargados (evitar duplicados y encontrar alternativas).
+2. Consulta `03_categorias.json` para los slugs de categorías válidos.
+3. Genera el JSON completo para cada programa solicitado.
 
 Si el usuario te da una lista, procésala TODA. No omitas ninguno.

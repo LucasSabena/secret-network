@@ -35,6 +35,7 @@ import { supabaseBrowserClient } from '@/lib/supabase-browser';
 import { uploadToCloudinary } from '@/lib/cloudinary-upload';
 import { validateImageFile } from '@/lib/cloudinary-config';
 import { Categoria, ModeloDePrecio, Plataforma, Programa } from '@/lib/types';
+import AutoAssetFetcher from './auto-asset-fetcher';
 
 interface Props {
   programa: Programa | null;
@@ -344,9 +345,14 @@ export default function ProgramaForm({ programa, onClose }: Props) {
                     <Globe className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input {...register('web_oficial_url')} className="pl-9 bg-muted/30" placeholder="https://..." />
                   </div>
-                  <Button type="button" variant="outline" size="icon" onClick={() => handleAutoFetch('all')} disabled={isAutoFetching} title="Auto-detectar TODO">
-                    {isAutoFetching ? <Loader2 className="h-4 w-4 animate-spin" /> : <Wand2 className="h-4 w-4 text-pink-500" />}
-                  </Button>
+                  <AutoAssetFetcher
+                    url={watch('web_oficial_url') || ''}
+                    slug={watch('slug') || ''}
+                    onIconFetched={setIconPreview}
+                    onScreenshotFetched={setCapturaPreview}
+                    variant="dropdown"
+                    size="default"
+                  />
                 </div>
               </div>
 
@@ -478,9 +484,14 @@ export default function ProgramaForm({ programa, onClose }: Props) {
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
                     <Label>Icono (Cuadrado)</Label>
-                    <Button type="button" size="sm" variant="ghost" className="h-6 text-xs text-pink-500" onClick={() => handleAutoFetch('icon')} disabled={isAutoFetching}>
-                      <Wand2 className="mr-1 h-3 w-3" /> Auto Icono
-                    </Button>
+                    <AutoAssetFetcher
+                      url={watch('web_oficial_url') || ''}
+                      slug={watch('slug') || ''}
+                      onIconFetched={setIconPreview}
+                      variant="button"
+                      size="sm"
+                      className="h-6 text-xs"
+                    />
                   </div>
                   <div className="flex gap-4 items-start">
                     <div className="w-24 h-24 border-2 border-dashed rounded-xl flex items-center justify-center bg-muted/30 relative overflow-hidden group">
@@ -504,9 +515,14 @@ export default function ProgramaForm({ programa, onClose }: Props) {
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
                     <Label>Captura de Pantalla (Landscape)</Label>
-                    <Button type="button" size="sm" variant="ghost" className="h-6 text-xs text-pink-500" onClick={() => handleAutoFetch('screenshot')} disabled={isAutoFetching}>
-                      <Wand2 className="mr-1 h-3 w-3" /> Auto Captura
-                    </Button>
+                    <AutoAssetFetcher
+                      url={watch('web_oficial_url') || ''}
+                      slug={watch('slug') || ''}
+                      onScreenshotFetched={setCapturaPreview}
+                      variant="button"
+                      size="sm"
+                      className="h-6 text-xs"
+                    />
                   </div>
                   <div className="w-full aspect-video border-2 border-dashed rounded-xl flex items-center justify-center bg-muted/30 relative overflow-hidden group">
                     {capturaPreview ? (
@@ -588,13 +604,13 @@ export default function ProgramaForm({ programa, onClose }: Props) {
           </form>
         </Tabs>
 
-        <SheetFooter className="absolute bottom-0 left-0 right-0 p-6 bg-background/80 backdrop-blur-md border-t flex items-center justify-between gap-4">
+        <div className="sticky bottom-0 left-0 right-0 p-4 bg-background/95 backdrop-blur-md border-t flex items-center justify-between gap-4 mt-6">
           <Button variant="ghost" onClick={handleInternalClose}>Cancelar</Button>
           <Button type="submit" form="prog-form" disabled={isSaving} className="flex-1 bg-pink-600 hover:bg-pink-700">
             {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Guardar Cambios
           </Button>
-        </SheetFooter>
+        </div>
       </SheetContent>
     </Sheet>
   );

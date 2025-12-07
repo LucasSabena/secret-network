@@ -62,14 +62,28 @@ export default function ProgramasManager() {
     setIsLoading(true);
     const supabase = supabaseBrowserClient;
 
-    const [progsRes, catsRes] = await Promise.all([
-      supabase.from('programas').select('*').order('created_at', { ascending: false }),
-      supabase.from('categorias').select('*').order('nombre')
-    ]);
+    try {
+      const [progsRes, catsRes] = await Promise.all([
+        supabase.from('programas').select('*').order('created_at', { ascending: false }),
+        supabase.from('categorias').select('*').order('nombre')
+      ]);
 
-    if (progsRes.data) setProgramas(progsRes.data);
-    if (catsRes.data) setCategorias(catsRes.data);
-    setIsLoading(false);
+      if (progsRes.error) {
+        console.error('Error loading programas:', progsRes.error);
+        toast({ title: 'Error', description: progsRes.error.message, variant: 'destructive' });
+      }
+      if (catsRes.error) {
+        console.error('Error loading categorias:', catsRes.error);
+      }
+
+      setProgramas(progsRes.data || []);
+      setCategorias(catsRes.data || []);
+    } catch (e) {
+      console.error('loadData error:', e);
+      toast({ title: 'Error de conexión', variant: 'destructive' });
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   function filterData() {
@@ -236,6 +250,11 @@ export default function ProgramasManager() {
       {isLoading ? (
         <div className="flex justify-center p-12">
           <Loader2 className="h-8 w-8 animate-spin text-pink-500" />
+        </div>
+      ) : filteredProgramas.length === 0 ? (
+        <div className="text-center py-12 text-muted-foreground">
+          <p className="text-lg font-medium">No se encontraron programas</p>
+          <p className="text-sm">Total en BD: {programas.length} | Prueba cambiar los filtros</p>
         </div>
       ) : (
         <div className={viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4' : 'space-y-2'}>
