@@ -1,0 +1,476 @@
+[
+  {
+    "nombre": "PostSpark",
+    "slug": "postspark",
+    "web_oficial_url": "https://postspark.app/",
+    "descripcion_corta": "<p>Un editor de capturas de pantalla diseñado para convertir imágenes aburridas en contenido visual atractivo para redes sociales.</p>",
+    "descripcion_larga": "<p>PostSpark es una herramienta web enfocada en transformar capturas de pantalla simples en gráficos pulidos listos para compartir en redes sociales. Su objetivo es eliminar la fricción de abrir herramientas de diseño complejas para tareas sencillas como añadir fondos, márgenes o sombras a una imagen.</p><p><strong>Características Principales:</strong></p><ul><li><p><strong>Edición Rápida:</strong> Añade fondos de colores, degradados o imágenes, ajusta el radio de los bordes y aplica sombras con controles deslizantes simples.</p></li><li><p><strong>Formatos Predefinidos:</strong> Incluye tamaños optimizados para Twitter, Instagram, LinkedIn y otras plataformas sociales.</p></li><li><p><strong>Privacidad:</strong> El procesamiento se realiza en el navegador, por lo que las imágenes no se suben a servidores externos innecesariamente.</p></li></ul>",
+    "categoria_slug": "programas-de-diseo",
+    "subcategorias": [
+      "programas-de-diseo-generacion-de-mockups",
+      "programas-de-diseo-diseo-rapido-y-para-marketing"
+    ],
+    "plataformas": [
+      "web"
+    ],
+    "modelos_precio": [
+      "Gratis",
+      "Pro"
+    ],
+    "usos": [
+      "embellecer screenshots",
+      "imágenes para redes sociales",
+      "marketing de contenidos"
+    ],
+    "es_open_source": false,
+    "es_recomendado": false,
+    "programas_alternativos": [
+      "shots-so",
+      "pika-labs"
+    ]
+  },
+  {
+    "nombre": "Mockoops",
+    "slug": "mockoops",
+    "web_oficial_url": "https://mockoops.mohitya.dev/",
+    "descripcion_corta": "<p>Un generador de mockups animados que convierte grabaciones de pantalla estáticas en vídeos de presentación dinámicos.</p>",
+    "descripcion_larga": "<p>Mockoops se diferencia de la mayoría de generadores de mockups al centrarse exclusivamente en la animación. Permite a los usuarios subir grabaciones de pantalla y envolverlas en marcos de dispositivos que se mueven, rotan y hacen zoom, creando presentaciones de vídeo profesionales ideales para demos de productos y redes sociales.</p><p><strong>Características Principales:</strong></p><ul><li><p><strong>Animaciones Predefinidas:</strong> Ofrece una variedad de plantillas con movimientos de cámara suaves y transiciones elegantes.</p></li><li><p><strong>Exportación de Vídeo:</strong> Genera archivos de vídeo (MP4) listos para usar, en lugar de imágenes estáticas.</p></li><li><p><strong>Personalización:</strong> Permite ajustar el fondo, la duración y la escala del dispositivo dentro de la animación.</p></li></ul>",
+    "categoria_slug": "programas-de-diseo",
+    "subcategorias": [
+      "programas-de-diseo-generacion-de-mockups",
+      "programas-de-diseo-graficos-en-movimiento-y-vfx"
+    ],
+    "plataformas": [
+      "web"
+    ],
+    "modelos_precio": [
+      "Gratis"
+    ],
+    "usos": [
+      "mockups animados",
+      "vídeos promocionales",
+      "demos de apps"
+    ],
+    "es_open_source": true,
+    "es_recomendado": false,
+    "programas_alternativos": [
+      "placeit",
+      "rotato"
+    ]
+  },
+  {
+    "nombre": "Mockup World",
+    "slug": "mockup-world",
+    "web_oficial_url": "https://www.mockupworld.co/",
+    "descripcion_corta": "<p>El mayor directorio y agregador de mockups fotorrealistas gratuitos disponibles en internet para diseñadores.</p>",
+    "descripcion_larga": "<p>Mockup World funciona como un motor de búsqueda curado para mockups de alta calidad. No aloja los archivos directamente, sino que rastrea y cataloga los mejores recursos gratuitos (generalmente archivos PSD) de diseñadores y agencias de todo el mundo, ofreciendo un punto centralizado para encontrar activos de presentación profesional.</p><p><strong>Características Principales:</strong></p><ul><li><p><strong>Curación Manual:</strong> Cada mockup listado es revisado para asegurar que cumple con estándares de calidad y es realmente gratuito.</p></li><li><p><strong>Categorización Exhaustiva:</strong> Filtra fácilmente por tipo de dispositivo (iPhone, MacBook, Packaging), material (Papel, Tela) o contexto.</p></li><li><p><strong>Enlaces Directos:</strong> Redirige directamente a la fuente original de descarga, apoyando a los creadores originales.</p></li></ul>",
+    "categoria_slug": "recursos-y-activos",
+    "subcategorias": [
+      "recursos-y-activos-plantillas-y-archivos-editables",
+      "programas-de-diseo-generacion-de-mockups"
+    ],
+    "plataformas": [
+      "web"
+    ],
+    "modelos_precio": [
+      "Gratis"
+    ],
+    "usos": [
+      "descarga de psd",
+      "mockups gratuitos",
+      "presentación de diseño"
+    ],
+    "es_open_source": false,
+    "es_recomendado": true,
+    "programas_alternativos": [
+      "bendito-mockup",
+      "freepik",
+      "unblast"
+    ]
+  },
+  {
+    "nombre": "Device Frames",
+    "slug": "device-frames",
+    "web_oficial_url": "https://deviceframes.com/",
+    "descripcion_corta": "<p>Una herramienta sencilla para envolver capturas de pantalla en marcos de dispositivos 3D realistas con opciones de personalización.</p>",
+    "descripcion_larga": "<p>Device Frames es un generador web que permite presentar diseños de interfaces dentro del contexto de dispositivos reales. Se destaca por ofrecer modelos 3D de alta fidelidad de los últimos dispositivos (iPhone, Pixel, MacBook) y permitir ajustar la perspectiva y la iluminación.</p><p><strong>Características Principales:</strong></p><ul><li><p><strong>Modelos 3D Renderizados:</strong> Utiliza renders de alta calidad en lugar de vectores planos, dando un aspecto más premium.</p></li><li><p><strong>Personalización de Escena:</strong> Permite cambiar el color del dispositivo, la sombra y el fondo.</p></li><li><p><strong>Facilidad de Uso:</strong> Simplemente arrastra y suelta tu captura de pantalla para que se ajuste automáticamente a la pantalla del dispositivo.</p></li></ul>",
+    "categoria_slug": "programas-de-diseo",
+    "subcategorias": [
+      "programas-de-diseo-generacion-de-mockups"
+    ],
+    "plataformas": [
+      "web"
+    ],
+    "modelos_precio": [
+      "Gratis",
+      "Freemium"
+    ],
+    "usos": [
+      "mockups de dispositivos",
+      "presentación ui",
+      "marketing de apps"
+    ],
+    "es_open_source": false,
+    "es_recomendado": false,
+    "programas_alternativos": [
+      "shots-so",
+      "mockuuups-studio",
+      "artboard-studio"
+    ]
+  },
+  {
+    "nombre": "Previewed",
+    "slug": "previewed",
+    "web_oficial_url": "https://previewed.app/",
+    "descripcion_corta": "<p>Un generador avanzado de capturas para App Store y Google Play con modelos 3D y plantillas panorámicas.</p>",
+    "descripcion_larga": "<p>Previewed está diseñado específicamente para desarrolladores y diseñadores de productos que necesitan crear materiales de marketing para tiendas de aplicaciones. Ofrece un control granular sobre la composición 3D de los dispositivos, permitiendo crear escenas complejas con múltiples teléfonos o tablets.</p><p><strong>Características Principales:</strong></p><ul><li><p><strong>Escenas 3D Completas:</strong> A diferencia de los generadores 2D, aquí puedes rotar y posicionar dispositivos en un espacio tridimensional.</p></li><li><p><strong>Plantillas de Tienda:</strong> Incluye layouts optimizados para las capturas de pantalla de iOS App Store y Google Play Store.</p></li><li><p><strong>Alta Resolución:</strong> Permite exportar imágenes en resoluciones aptas para impresión o web de alta densidad.</p></li></ul>",
+    "categoria_slug": "programas-de-diseo",
+    "subcategorias": [
+      "programas-de-diseo-generacion-de-mockups",
+      "programas-de-diseo-diseo-rapido-y-para-marketing"
+    ],
+    "plataformas": [
+      "web"
+    ],
+    "modelos_precio": [
+      "Freemium",
+      "De pago"
+    ],
+    "usos": [
+      "screenshots para app store",
+      "mockups 3d",
+      "marketing móvil"
+    ],
+    "es_open_source": false,
+    "es_recomendado": false,
+    "programas_alternativos": [
+      "mockuuups-studio",
+      "shots-so",
+      "rotato"
+    ]
+  },
+  {
+    "nombre": "Device Shots",
+    "slug": "device-shots",
+    "web_oficial_url": "https://deviceshots.com/",
+    "descripcion_corta": "<p>Generador minimalista para crear mockups de dispositivos de alta resolución directamente en el navegador.</p>",
+    "descripcion_larga": "<p>Device Shots es una utilidad web directa y sin complicaciones para 'enmarcar' capturas de pantalla. Su filosofía es la simplicidad: subir una imagen, elegir un dispositivo y descargar el resultado. Es ideal para compartir diseños rápidos en Twitter, Slack o presentaciones.</p><p><strong>Características Principales:</strong></p><ul><li><p><strong>Amplia Biblioteca de Dispositivos:</strong> Cubre desde smartphones y laptops hasta monitores y relojes inteligentes.</p></li><li><p><strong>Configuración de Fondo:</strong> Permite usar colores sólidos, imágenes personalizadas o fondos transparentes.</p></li><li><p><strong>Ajuste Automático:</strong> Detecta la resolución de la imagen subida y sugiere el dispositivo más adecuado.</p></li></ul>",
+    "categoria_slug": "programas-de-diseo",
+    "subcategorias": [
+      "programas-de-diseo-generacion-de-mockups"
+    ],
+    "plataformas": [
+      "web"
+    ],
+    "modelos_precio": [
+      "Gratis"
+    ],
+    "usos": [
+      "redes sociales",
+      "presentación rápida",
+      "marcos de dispositivos"
+    ],
+    "es_open_source": false,
+    "es_recomendado": false,
+    "programas_alternativos": [
+      "shots-so",
+      "mockuphone"
+    ]
+  },
+  {
+    "nombre": "Medialoot",
+    "slug": "medialoot",
+    "web_oficial_url": "https://medialoot.com/",
+    "descripcion_corta": "<p>Una biblioteca de recursos de diseño que incluye mockups, fuentes, iconos y plantillas gráficas para diseñadores.</p>",
+    "descripcion_larga": "<p>Medialoot es un mercado y repositorio de activos digitales creado para hacer el diseño más accesible. Aunque ofrece una amplia variedad de recursos, destaca por sus colecciones de kits de interfaz de usuario (UI Kits) y mockups de productos que pueden editarse fácilmente en Photoshop o Illustrator.</p><p><strong>Características Principales:</strong></p><ul><li><p><strong>Recursos Diversos:</strong> No se limita a mockups; incluye texturas, pinceles, fuentes y vectores.</p></li><li><p><strong>Acceso Freemium:</strong> Muchos recursos son gratuitos con atribución, mientras que la suscripción ofrece acceso ilimitado y licencias extendidas.</p></li><li><p><strong>Calidad Consistente:</strong> Los recursos son creados o curados por un equipo interno para mantener un estándar visual.</p></li></ul>",
+    "categoria_slug": "recursos-y-activos",
+    "subcategorias": [
+      "recursos-y-activos-plantillas-y-archivos-editables",
+      "recursos-y-activos-iconos",
+      "recursos-y-activos-bancos-de-imagenes-y-video"
+    ],
+    "plataformas": [
+      "web"
+    ],
+    "modelos_precio": [
+      "Freemium",
+      "Suscripción"
+    ],
+    "usos": [
+      "descarga de recursos",
+      "plantillas de diseño",
+      "ui kits"
+    ],
+    "es_open_source": false,
+    "es_recomendado": false,
+    "programas_alternativos": [
+      "envato-elements",
+      "freepik",
+      "bendito-mockup"
+    ]
+  },
+  {
+    "nombre": "Mock Magic",
+    "slug": "mock-magic",
+    "web_oficial_url": "https://mockmagic.com/",
+    "descripcion_corta": "<p>Una herramienta web ultrarrápida para crear mockups de dispositivos Apple simplemente pegando una captura de pantalla.</p>",
+    "descripcion_larga": "<p>Mock Magic se centra en la velocidad y la simplicidad. Elimina cualquier paso innecesario: no hay cuentas, ni configuraciones complejas. Está diseñado específicamente para envolver capturas de pantalla en los marcos de dispositivos Apple (iPhone, iPad, Mac) más recientes con un acabado limpio.</p><p><strong>Características Principales:</strong></p><ul><li><p><strong>Procesamiento Local:</strong> Las imágenes se procesan en el navegador del usuario para mayor rapidez y privacidad.</p></li><li><p><strong>Soporte para Atajos:</strong> Diseñado para funcionar fluidamente con flujos de trabajo rápidos de copiar y pegar.</p></li><li><p><strong>Enfoque en Apple:</strong> Mantiene una biblioteca actualizada de los últimos hardwares de Apple.</p></li></ul>",
+    "categoria_slug": "programas-de-diseo",
+    "subcategorias": [
+      "programas-de-diseo-generacion-de-mockups"
+    ],
+    "plataformas": [
+      "web"
+    ],
+    "modelos_precio": [
+      "Gratis"
+    ],
+    "usos": [
+      "dispositivos apple",
+      "mockups rápidos",
+      "screenshots"
+    ],
+    "es_open_source": false,
+    "es_recomendado": false,
+    "programas_alternativos": [
+      "shots-so",
+      "mockuphone"
+    ]
+  },
+  {
+    "nombre": "MockUPhone",
+    "slug": "mockuphone",
+    "web_oficial_url": "https://mockuphone.com/",
+    "descripcion_corta": "<p>Uno de los generadores de mockups más antiguos y fiables para envolver capturas de pantalla en dispositivos móviles.</p>",
+    "descripcion_larga": "<p>MockUPhone es una herramienta clásica en el arsenal de los desarrolladores de apps. Permite subir una captura de pantalla y descargarla envuelta en una amplia variedad de dispositivos iOS y Android con fondo transparente, facilitando su integración en cualquier diseño o presentación.</p><p><strong>Características Principales:</strong></p><ul><li><p><strong>Gran Variedad de Dispositivos:</strong> Incluye una extensa lista de dispositivos, incluyendo modelos antiguos y menos comunes.</p></li><li><p><strong>Salida Transparente:</strong> Entrega archivos PNG con fondo transparente y, a menudo, incluye diferentes orientaciones en un archivo ZIP.</p></li><li><p><strong>Gratuito:</strong> Es completamente gratuito y no requiere registro.</p></li></ul>",
+    "categoria_slug": "programas-de-diseo",
+    "subcategorias": [
+      "programas-de-diseo-generacion-de-mockups"
+    ],
+    "plataformas": [
+      "web"
+    ],
+    "modelos_precio": [
+      "Gratis"
+    ],
+    "usos": [
+      "desarrollo móvil",
+      "marcos de dispositivos",
+      "presentación de apps"
+    ],
+    "es_open_source": false,
+    "es_recomendado": false,
+    "programas_alternativos": [
+      "shots-so",
+      "device-shots"
+    ]
+  },
+  {
+    "nombre": "ZippyPixels",
+    "slug": "zippypixels",
+    "web_oficial_url": "https://zippypixels.com/",
+    "descripcion_corta": "<p>Un sitio de recursos de diseño conocido por sus mockups de alta calidad en PSD, logos y plantillas de branding.</p>",
+    "descripcion_larga": "<p>ZippyPixels ofrece una mezcla de recursos gratuitos y premium, destacando especialmente en la categoría de mockups de branding, packaging y publicidad exterior. Sus archivos PSD suelen estar muy bien organizados, con capas inteligentes y efectos de iluminación realistas.</p><p><strong>Características Principales:</strong></p><ul><li><p><strong>Calidad Fotorrealista:</strong> Los mockups se basan en fotografía real o renderizado 3D de alta gama.</p></li><li><p><strong>Categorías Variadas:</strong> Cubre desde papelería corporativa y ropa hasta vallas publicitarias y dispositivos.</p></li><li><p><strong>Opción Gratuita:</strong> Ofrece versiones gratuitas de baja resolución para uso personal, con opciones de pago para uso comercial y alta resolución.</p></li></ul>",
+    "categoria_slug": "recursos-y-activos",
+    "subcategorias": [
+      "recursos-y-activos-plantillas-y-archivos-editables",
+      "programas-de-diseo-generacion-de-mockups"
+    ],
+    "plataformas": [
+      "web"
+    ],
+    "modelos_precio": [
+      "Freemium",
+      "Compra Única"
+    ],
+    "usos": [
+      "branding",
+      "packaging",
+      "archivos psd"
+    ],
+    "es_open_source": false,
+    "es_recomendado": false,
+    "programas_alternativos": [
+      "bendito-mockup",
+      "mr-mockup",
+      "envato-elements"
+    ]
+  },
+  {
+    "nombre": "Ls.Graphics",
+    "slug": "ls-graphics",
+    "web_oficial_url": "https://www.ls.graphics/",
+    "descripcion_corta": "<p>Una plataforma premium que ofrece mockups de diseño excepcionales, ilustraciones y generadores de escenas abstractas.</p>",
+    "descripcion_larga": "<p>Ls.Graphics es sinónimo de calidad visual extrema. Es el recurso favorito de muchos estudios de diseño de alto nivel para obtener mockups que se alejan de lo genérico. Sus colecciones suelen tener una dirección de arte muy cuidada, con iluminación dramática, texturas ricas y composiciones modernas.</p><p><strong>Características Principales:</strong></p><ul><li><p><strong>Estética de Vanguardia:</strong> Los recursos siguen las últimas tendencias visuales (vidrio, arcilla, minimalismo).</p></li><li><p><strong>Generadores de Escenas:</strong> Ofrece paquetes donde los elementos se pueden mover y recombinar para crear composiciones únicas.</p></li><li><p><strong>Acceso Total:</strong> Funciona con un modelo de suscripción que da acceso a una biblioteca masiva de activos exclusivos.</p></li></ul>",
+    "categoria_slug": "recursos-y-activos",
+    "subcategorias": [
+      "recursos-y-activos-plantillas-y-archivos-editables",
+      "programas-de-diseo-generacion-de-mockups"
+    ],
+    "plataformas": [
+      "web"
+    ],
+    "modelos_precio": [
+      "Suscripción",
+      "Compra Única"
+    ],
+    "usos": [
+      "mockups premium",
+      "ilustración abstracta",
+      "identidad visual"
+    ],
+    "es_open_source": false,
+    "es_recomendado": true,
+    "programas_alternativos": [
+      "mr-mockup",
+      "bendito-mockup",
+      "artboard-studio"
+    ]
+  },
+  {
+    "nombre": "Minimal Mockups",
+    "slug": "minimal-mockups",
+    "web_oficial_url": "https://minimalmockups.com/",
+    "descripcion_corta": "<p>Una colección boutique de mockups limpios y minimalistas, ideales para presentar diseños sin distracciones.</p>",
+    "descripcion_larga": "<p>Como su nombre indica, Minimal Mockups se especializa en una estética reduccionista. Evita los entornos desordenados y los fondos complejos para centrar toda la atención en el diseño que se está presentando. Es ideal para portafolios de diseñadores UI/UX que buscan elegancia y claridad.</p><p><strong>Características Principales:</strong></p><ul><li><p><strong>Estilo 'Clean':</strong> Fondos neutros, sombras suaves y luz natural.</p></li><li><p><strong>Alta Resolución:</strong> Archivos PSD preparados para pantallas retina y de alta densidad.</p></li><li><p><strong>Fácil Edición:</strong> Estructura de capas simplificada para una edición rápida mediante objetos inteligentes.</p></li></ul>",
+    "categoria_slug": "recursos-y-activos",
+    "subcategorias": [
+      "recursos-y-activos-plantillas-y-archivos-editables",
+      "programas-de-diseo-generacion-de-mockups"
+    ],
+    "plataformas": [
+      "web"
+    ],
+    "modelos_precio": [
+      "Compra Única",
+      "Gratis"
+    ],
+    "usos": [
+      "estética minimalista",
+      "presentación de ui",
+      "portafolios"
+    ],
+    "es_open_source": false,
+    "es_recomendado": false,
+    "programas_alternativos": [
+      "bendito-mockup",
+      "mrmockup"
+    ]
+  },
+  {
+    "nombre": "Mockupnest",
+    "slug": "mockupnest",
+    "web_oficial_url": "https://mockupnest.com/",
+    "descripcion_corta": "<p>Un motor de búsqueda dedicado a localizar los mejores mockups gratuitos de alta calidad en la web.</p>",
+    "descripcion_larga": "<p>Mockupnest rastrea Internet para indexar miles de mockups gratuitos disponibles para diseñadores. Actúa como un punto de acceso centralizado, ahorrando a los creativos horas de búsqueda en diferentes blogs y sitios de recursos. Su enfoque está en la cantidad y variedad de opciones disponibles.</p><p><strong>Características Principales:</strong></p><ul><li><p><strong>Índice Masivo:</strong> Conecta con recursos de Behance, Dribbble y sitios independientes.</p></li><li><p><strong>Variedad de Categorías:</strong> Desde tecnología y ropa hasta packaging y publicidad exterior.</p></li><li><p><strong>Gratuidad:</strong> Se enfoca principalmente en recursos que se pueden descargar sin coste.</p></li></ul>",
+    "categoria_slug": "recursos-y-activos",
+    "subcategorias": [
+      "recursos-y-activos-plantillas-y-archivos-editables"
+    ],
+    "plataformas": [
+      "web"
+    ],
+    "modelos_precio": [
+      "Gratis"
+    ],
+    "usos": [
+      "buscador de mockups",
+      "recursos gratuitos",
+      "psd"
+    ],
+    "es_open_source": false,
+    "es_recomendado": false,
+    "programas_alternativos": [
+      "mockup-world",
+      "freepik"
+    ]
+  },
+  {
+    "nombre": "The Mockup Club",
+    "slug": "the-mockup-club",
+    "web_oficial_url": "https://themockup.club/",
+    "descripcion_corta": "<p>Un directorio selecto de mockups gratuitos de primera calidad, probados y verificados para asegurar su usabilidad.</p>",
+    "descripcion_larga": "<p>The Mockup Club se distingue por su enfoque en la calidad sobre la cantidad. A diferencia de los agregadores masivos, aquí cada archivo ha sido probado para asegurar que las capas funcionan, la resolución es buena y el diseño es actual. Es una solución 'libre de spam' para encontrar recursos rápidos.</p><p><strong>Características Principales:</strong></p><ul><li><p><strong>Selección Manual:</strong> Solo se publican los mejores mockups de la comunidad de diseño.</p></li><li><p><strong>Garantía de Calidad:</strong> Se verifica que los archivos no estén corruptos y sean fáciles de usar.</p></li><li><p><strong>Interfaz Limpia:</strong> Navegación sencilla sin publicidad intrusiva ni descargas engañosas.</p></li></ul>",
+    "categoria_slug": "recursos-y-activos",
+    "subcategorias": [
+      "recursos-y-activos-plantillas-y-archivos-editables"
+    ],
+    "plataformas": [
+      "web"
+    ],
+    "modelos_precio": [
+      "Gratis"
+    ],
+    "usos": [
+      "mockups curados",
+      "recursos de diseño",
+      "descarga segura"
+    ],
+    "es_open_source": false,
+    "es_recomendado": true,
+    "programas_alternativos": [
+      "mockup-world",
+      "bendito-mockup"
+    ]
+  },
+  {
+    "nombre": "Screen",
+    "slug": "screen-guru",
+    "web_oficial_url": "https://screen.guru/",
+    "descripcion_corta": "<p>Una herramienta ultra-simple para crear capturas de pantalla de sitios web con marcos limpios y sombras automáticamente.</p>",
+    "descripcion_larga": "<p>Screen (screen.guru) es una utilidad diseñada para compartir capturas de sitios web de forma instantánea y bonita. En lugar de tomar un screenshot manual y editarlo, simplemente introduces la URL y la herramienta genera una imagen del sitio enmarcada en una ventana de navegador minimalista con fondo de color.</p><p><strong>Características Principales:</strong></p><ul><li><p><strong>Captura desde URL:</strong> No necesitas subir imágenes, la herramienta renderiza el sitio web en vivo.</p></li><li><p><strong>Estética Limpia:</strong> Añade automáticamente una barra de título de navegador y sombras suaves.</p></li><li><p><strong>Color Adaptativo:</strong> Elige automáticamente un color de fondo que complementa el diseño del sitio web, aunque es personalizable.</p></li></ul>",
+    "categoria_slug": "programas-de-diseo",
+    "subcategorias": [
+      "programas-de-diseo-generacion-de-mockups",
+      "programas-de-diseo-diseo-rapido-y-para-marketing"
+    ],
+    "plataformas": [
+      "web"
+    ],
+    "modelos_precio": [
+      "Gratis"
+    ],
+    "usos": [
+      "captura de webs",
+      "presentación de landing pages",
+      "screenshots automáticos"
+    ],
+    "es_open_source": false,
+    "es_recomendado": false,
+    "programas_alternativos": [
+      "shots-so",
+      "screely"
+    ]
+  },
+  {
+    "nombre": "Mr.Mockup",
+    "slug": "mr-mockup",
+    "web_oficial_url": "https://mrmockup.com/",
+    "descripcion_corta": "<p>Una de las marcas más respetadas en la creación de mockups PSD profesionales para identidad de marca y packaging.</p>",
+    "descripcion_larga": "<p>Mr.Mockup (parte de Noeeko Studio) crea recursos que son utilizados por agencias de branding de primer nivel. Sus productos destacan por un realismo fotográfico excepcional y una atención al detalle en texturas de papel, acabados de impresión (foil, relieve) y sombras naturales.</p><p><strong>Características Principales:</strong></p><ul><li><p><strong>Especialización en Papelería y Packaging:</strong> Sus kits de identidad corporativa son un estándar en la industria.</p></li><li><p><strong>Freebies de Alta Calidad:</strong> Ofrece una sección rotativa de mockups gratuitos que mantienen la misma calidad que sus productos de pago.</p></li><li><p><strong>Showcase en Instagram:</strong> Gestionan una comunidad muy activa que cura y muestra los mejores trabajos realizados con sus mockups.</p></li></ul>",
+    "categoria_slug": "recursos-y-activos",
+    "subcategorias": [
+      "recursos-y-activos-plantillas-y-archivos-editables",
+      "inspiracion-y-referencias-branding-y-manuales-de-marca"
+    ],
+    "plataformas": [
+      "web"
+    ],
+    "modelos_precio": [
+      "Compra Única",
+      "Gratis"
+    ],
+    "usos": [
+      "branding premium",
+      "packaging",
+      "identidad corporativa"
+    ],
+    "es_open_source": false,
+    "es_recomendado": true,
+    "programas_alternativos": [
+      "bendito-mockup",
+      "ls-graphics",
+      "zippypixels"
+    ]
+  }
+]

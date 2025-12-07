@@ -147,6 +147,7 @@ export default function ProgramaJsonImporter({ isOpen, onClose, onSuccess }: Pro
                     descripcion_corta: p.descripcion_corta || null,
                     descripcion_larga: p.descripcion_larga || null,
                     categoria_id: catId,
+                    categoria_slug: p.categoria_slug, // Required NOT NULL field
                     usos: sanitizedUsos,
                     es_recomendado: Boolean(p.es_recomendado),
                     es_open_source: Boolean(p.es_open_source),
