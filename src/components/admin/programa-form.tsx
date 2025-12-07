@@ -51,7 +51,8 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
   const [subcategorias, setSubcategorias] = useState<Categoria[]>([]);
   const [plataformas, setPlataformas] = useState<Plataforma[]>([]);
   const [modelosPrecios, setModelosPrecios] = useState<ModeloDePrecio[]>([]);
-  const [programasDisponibles, setProgramasDisponibles] = useState<{ id: number; nombre: string }[]>([]);
+  const [programasDisponibles, setProgramasDisponibles] = useState<{ id: number; nombre: string; subcategorias?: number[] }[]>([]);
+  const [busquedaAlternativas, setBusquedaAlternativas] = useState('');
 
   // Selection states
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState<number | null>(null);
@@ -151,7 +152,19 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
 
   async function loadProgramas() {
     const { data } = await supabaseBrowserClient.from('programas').select('id, nombre').order('nombre');
-    if (data) setProgramasDisponibles(data.filter(p => p.id !== programa?.id));
+    if (data) {
+      // Cargar subcategorías de cada programa
+      const conSubcats = await Promise.all(
+        data.filter(p => p.id !== programa?.id).map(async (prog) => {
+          const { data: subs } = await supabaseBrowserClient
+            .from('programas_subcategorias')
+            .select('subcategoria_id')
+            .eq('programa_id', prog.id);
+          return { ...prog, subcategorias: subs?.map(s => s.subcategoria_id) || [] };
+        })
+      );
+      setProgramasDisponibles(conSubcats);
+    }
   }
 
   async function loadProgramaRelaciones() {
@@ -555,24 +568,71 @@ export default function ProgramaForm({ programa, onClose }: ProgramaFormProps) {
 
               {/* TAB: Relaciones */}
               <TabsContent value="relaciones" className="space-y-4 mt-0">
-                <div className="space-y-2">
-                  <Label>Alternativas</Label>
-                  <p className="text-xs text-muted-foreground">Selecciona programas similares o alternativos</p>
-                  <div className="flex flex-wrap gap-2 p-3 border rounded-lg bg-muted/30 max-h-60 overflow-y-auto">
-                    {programasDisponibles.map(prog => (
-                      <Badge
-                        key={prog.id}
-                        variant={alternativasSeleccionadas.includes(prog.id) ? 'default' : 'outline'}
-                        className="cursor-pointer"
-                        onClick={() => toggleSelection(prog.id, alternativasSeleccionadas, setAlternativasSeleccionadas)}
-                      >
-                        {prog.nombre}
-                      </Badge>
-                    ))}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <Label>Alternativas</Label>
+                      <p className="text-xs text-muted-foreground">Programas similares o alternativos</p>
+                    </div>
+                    {alternativasSeleccionadas.length > 0 && (
+                      <Badge variant="secondary">{alternativasSeleccionadas.length} seleccionadas</Badge>
+                    )}
                   </div>
-                  {alternativasSeleccionadas.length > 0 && (
-                    <p className="text-xs text-muted-foreground">{alternativasSeleccionadas.length} seleccionadas</p>
+
+                  {/* Buscador */}
+                  <Input
+                    placeholder="Buscar programas..."
+                    value={busquedaAlternativas}
+                    onChange={(e) => setBusquedaAlternativas(e.target.value)}
+                    className="h-9"
+                  />
+
+                  {/* Auto-recomendados */}
+                  {subcategoriasSeleccionadas.length > 0 && (
+                    <div className="space-y-2">
+                      <p className="text-xs font-medium text-pink-500">✨ Recomendados (mismas subcategorías)</p>
+                      <div className="flex flex-wrap gap-2 p-2 border rounded-lg border-pink-200 bg-pink-50 dark:bg-pink-950/20 dark:border-pink-800">
+                        {programasDisponibles
+                          .filter(p =>
+                            !alternativasSeleccionadas.includes(p.id) &&
+                            p.subcategorias?.some(s => subcategoriasSeleccionadas.includes(s))
+                          )
+                          .slice(0, 10)
+                          .map(prog => (
+                            <Badge
+                              key={prog.id}
+                              variant="outline"
+                              className="cursor-pointer hover:bg-pink-100 dark:hover:bg-pink-900"
+                              onClick={() => toggleSelection(prog.id, alternativasSeleccionadas, setAlternativasSeleccionadas)}
+                            >
+                              + {prog.nombre}
+                            </Badge>
+                          ))}
+                        {programasDisponibles.filter(p =>
+                          !alternativasSeleccionadas.includes(p.id) &&
+                          p.subcategorias?.some(s => subcategoriasSeleccionadas.includes(s))
+                        ).length === 0 && (
+                            <span className="text-xs text-muted-foreground">No hay más programas en estas subcategorías</span>
+                          )}
+                      </div>
+                    </div>
                   )}
+
+                  {/* Lista filtrada */}
+                  <div className="flex flex-wrap gap-2 p-3 border rounded-lg bg-muted/30 max-h-48 overflow-y-auto">
+                    {programasDisponibles
+                      .filter(p => p.nombre.toLowerCase().includes(busquedaAlternativas.toLowerCase()))
+                      .map(prog => (
+                        <Badge
+                          key={prog.id}
+                          variant={alternativasSeleccionadas.includes(prog.id) ? 'default' : 'outline'}
+                          className="cursor-pointer"
+                          onClick={() => toggleSelection(prog.id, alternativasSeleccionadas, setAlternativasSeleccionadas)}
+                        >
+                          {prog.nombre}
+                        </Badge>
+                      ))}
+                  </div>
                 </div>
               </TabsContent>
             </div>
