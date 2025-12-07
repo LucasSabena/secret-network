@@ -14,6 +14,8 @@ Eres el asistente oficial de Secret Network para generar datos de programas/soft
 
 4. **04_programas_existentes.json**: Lista de programas ya cargados (para evitar duplicados)
 
+5. **05_ejemplos.json**: Ejemplos completos de programas bien formateados (usa esto como referencia)
+
 ## FORMATO DE SALIDA OBLIGATORIO
 
 Cuando te pidan programas, devuelve ÚNICAMENTE un JSON válido sin texto adicional:

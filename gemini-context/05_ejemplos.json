@@ -1,0 +1,137 @@
+{
+  "descripcion": "Ejemplos de programas bien formateados para que la IA entienda el formato esperado",
+  "ejemplos": [
+    {
+      "nombre": "Descript",
+      "slug": "descript",
+      "web_oficial_url": "descript.com/",
+      "descripcion_corta": "<p>Un editor de audio y video todo-en-uno que funciona como un documento de texto.</p>",
+      "descripcion_larga": "<p>Descript es un editor de audio y vídeo todo-en-uno que ha cambiado por completo el paradigma de la edición de contenido hablado. Su innovador enfoque funciona como un documento de texto: en lugar de manipular una compleja línea de tiempo, editas la transcripción automática del audio, y los cambios se reflejan directamente en el vídeo o el audio.<br>Puntos Fuertes y Características Clave:</p><ul><li data-preset-tag=\"p\"><p>Edición Basada en Texto: Su principal revolución. Para eliminar una parte del vídeo, simplemente borras el texto correspondiente en la transcripción. Para mover una frase, cortas y pegas el texto. Esto hace que la edición sea tan fácil como usar un procesador de textos.</p></li><li data-preset-tag=\"p\"><p>Overdub (Clonación de Voz con IA): Permite crear una réplica de tu propia voz. Si te equivocaste en una palabra, puedes simplemente escribir la corrección y Descript generará el audio con tu voz, sin necesidad de volver a grabar.</p></li><li data-preset-tag=\"p\"><p>Eliminación de Palabras de Relleno: Con un solo clic, puede encontrar y eliminar todas las palabras de relleno (\"uh\", \"um\", \"sabes\") de una grabación, limpiando el audio al instante.</p></li><li data-preset-tag=\"p\"><p>Herramientas de Estudio Completas: Incluye grabación multipista de pantalla y cámara, subtitulado automático, y un conjunto de herramientas de mejora de audio (\"Studio Sound\") que eliminan el ruido de fondo y mejoran la calidad de la voz.</p></li></ul>",
+      "categoria_slug": "programas-de-diseo",
+      "subcategorias": [
+        "programas-de-diseo-edicion-de-video",
+        "programas-de-diseo-edicion-de-audio",
+        "creacion-con-ia-asistentes-de-diseo-y-ui"
+      ],
+      "usos": [
+        "Edición de Audio y Video Basada en Texto",
+        "Clonación de Voz (Overdub) con IA",
+        "Eliminación Automática de Palabras de Relleno"
+      ],
+      "plataformas": [
+        "windows",
+        "macos"
+      ],
+      "modelos_precio": [],
+      "dificultad": "Facil",
+      "es_open_source": false,
+      "es_recomendado": false
+    },
+    {
+      "nombre": "Draw.io",
+      "slug": "draw-io",
+      "web_oficial_url": "diagrams.net/",
+      "descripcion_corta": "<p>Una potente herramienta gratuita y de código abierto para crear todo tipo de diagramas, desde diagramas de flujo y de red hasta organigramas y wireframes.</p>",
+      "descripcion_larga": "<p>Draw.io (ahora oficialmente diagrams.net) es una de las herramientas de diagramación más potentes, robustas y accesibles del mundo. Es completamente gratuita, de código abierto y permite a los usuarios crear una inmensa variedad de diagramas, desde diagramas de flujo y de red hasta organigramas, wireframes y mapas mentales.<br>Puntos Fuertes y Características Clave:</p><ul><li data-preset-tag=\"p\"><p>Completamente Gratuito y Sin Límites: A diferencia de sus competidores, Draw.io es gratuito para todo tipo de uso, sin limitaciones en el número de diagramas o colaboradores.</p></li><li data-preset-tag=\"p\"><p>Enfoque en la Seguridad y la Privacidad: Permite a los usuarios elegir dónde guardar sus archivos: localmente en su ordenador, en servicios en la nube como Google Drive o Dropbox, o incluso en repositorios de GitHub, dando un control total sobre los datos.</p></li><li data-preset-tag=\"p\"><p>Biblioteca de Formas Exhaustiva: Incluye una vasta biblioteca de formas y plantillas para todo tipo de diagramas técnicos y de negocio, incluyendo UML, BPMN, diagramas de arquitectura de AWS y mucho más.</p></li><li data-preset-tag=\"p\"><p>Integración Profunda: Se integra a la perfección con herramientas de productividad como Confluence, Jira y Google Workspace, lo que la convierte en la opción por defecto para muchos equipos de desarrollo y producto.</p></li></ul>",
+      "categoria_slug": "productividad-y-gestion",
+      "subcategorias": [
+        "productividad-y-gestion-diagramacion",
+        "productividad-y-gestion-pizarras-virtuales-y-colaboracion"
+      ],
+      "usos": [
+        "Creación de Diagramas de Flujo",
+        "Diseño de Wireframes de Baja Fidelidad",
+        "Diagramación Técnica y de Negocio (Gratuito)"
+      ],
+      "plataformas": [
+        "linux",
+        "windows",
+        "macos",
+        "web"
+      ],
+      "modelos_precio": [],
+      "dificultad": "Facil",
+      "es_open_source": true,
+      "es_recomendado": false
+    },
+    {
+      "nombre": "Recraft AI",
+      "slug": "recraft-ai",
+      "web_oficial_url": "https://www.recraft.ai/",
+      "descripcion_corta": "<p>Un generador de imágenes por IA que se especializa en la creación de gráficos vectoriales, ilustraciones e iconografía.</p>",
+      "descripcion_larga": "<p>Recraft AI se diferencia de otros generadores de imágenes por su fuerte enfoque en la creación de gráficos de estilo vectorial, ilustraciones y sets de iconos. Ofrece modelos de IA específicamente entrenados para producir imágenes con un estilo gráfico limpio, ideal para branding, marketing y diseño de UI.</p><p><strong>Puntos Fuertes y Características Clave:</strong></p><ul><li><p><strong>Generación de Arte Vectorial:</strong> Es uno de los mejores generadores para crear imágenes que parecen arte vectorial. El resultado puede ser exportado como SVG, un formato vectorial editable.</p></li><li><p><strong>Consistencia de Estilo:</strong> Permite crear un 'Estilo de Marca' subiendo un logo o imágenes de referencia, y luego generar nuevas imágenes e iconos que sigan esa misma paleta de colores y estética.</p></li><li><p><strong>Sets de Iconos:</strong> Es excelente para generar sets de iconos completos y coherentes a partir de una descripción.</p></li><li><p><strong>Lienzo de Composición:</strong> Ofrece un lienzo para componer y editar las imágenes generadas, incluyendo la eliminación de fondos.</p></li></ul><p></p>",
+      "categoria_slug": "creacion-con-ia",
+      "subcategorias": [
+        "creacion-con-ia-generadores-de-imagen"
+      ],
+      "usos": [
+        "Generación de Gráficos Vectoriales (SVG)",
+        "Creación de Ilustraciones con IA",
+        "Generación de Iconografía Consistente"
+      ],
+      "plataformas": [],
+      "modelos_precio": [],
+      "dificultad": "Facil",
+      "es_open_source": false,
+      "es_recomendado": true
+    },
+    {
+      "nombre": "Figma",
+      "slug": "figma",
+      "web_oficial_url": "figma.com",
+      "descripcion_corta": "<p>La herramienta colaborativa líder para diseño de interfaces, prototipado interactivo y sistemas de diseño, todo en el navegador.</p>",
+      "descripcion_larga": "<p>Figma es la herramienta de diseño de productos digitales líder en la industria, que ha revolucionado el sector al ofrecer una plataforma colaborativa basada en la nube para el diseño de interfaces, el prototipado interactivo y los sistemas de diseño, todo directamente en el navegador.<br>Puntos Fuertes y Características Clave:</p><ul><li data-preset-tag=\"p\"><p>Colaboración en Tiempo Real: Es su característica definitoria. Permite a equipos enteros de diseñadores, desarrolladores y gestores de producto trabajar simultáneamente en el mismo archivo, agilizando radicalmente el flujo de trabajo y la comunicación.</p></li><li data-preset-tag=\"p\"><p>Plataforma Todo en Uno: Combina diseño vectorial, prototipado avanzado, entrega a desarrolladores (Handoff) y una pizarra online (FigJam) en un único ecosistema, cubriendo todo el proceso de diseño de producto.</p></li><li data-preset-tag=\"p\"><p>Auto Layout y Variables: Sus funciones de Auto Layout (para crear diseños adaptables) y Variables (para gestionar tokens de diseño como colores, espaciado o texto) la convierten en la herramienta más potente para crear y mantener sistemas de diseño complejos.</p></li><li data-preset-tag=\"p\"><p>Ecosistema Masivo de Plugins y Comunidad: Cuenta con un ecosistema gigantesco de plugins y archivos de la comunidad que extienden su funcionalidad hasta límites insospechados, permitiendo automatizar tareas y personalizar el flujo de trabajo.</p></li></ul><p><br></p><p>¿Para quién es ideal Figma?</p><p>Es el estándar de la industria y la herramienta indispensable para la mayoría de los equipos de producto digital, desde startups hasta grandes corporaciones. Es esencial para diseñadores de UI/UX, diseñadores de producto y cualquier equipo que necesite colaborar en la creación de interfaces.</p>",
+      "categoria_slug": "programas-de-diseo",
+      "subcategorias": [
+        "programas-de-diseo-diseo-ui-ux-y-prototipado",
+        "programas-de-diseo-editores-de-graficos-vectoriales",
+        "productividad-y-gestion-pizarras-virtuales-y-colaboracion",
+        "creacion-con-ia-asistentes-de-diseo-y-ui",
+        "programas-de-diseo-web-no-code-low-code"
+      ],
+      "usos": [
+        "Diseño UI/UX",
+        "Prototipos colaborativos",
+        "Design systems",
+        "Wireframes"
+      ],
+      "plataformas": [
+        "linux",
+        "windows",
+        "macos",
+        "web"
+      ],
+      "modelos_precio": [],
+      "dificultad": "Intermedio",
+      "es_open_source": false,
+      "es_recomendado": true
+    },
+    {
+      "nombre": "Adobe Firefly",
+      "slug": "adobe-firefly",
+      "web_oficial_url": "https://firefly.adobe.com/",
+      "descripcion_corta": "<p>La familia de modelos de IA generativa de Adobe, diseñada para ser segura para uso comercial e integrada en el flujo de trabajo de Creative Cloud.</p>",
+      "descripcion_larga": "<p>Adobe Firefly es la familia de modelos de inteligencia artificial generativa de Adobe, diseñada desde cero para ser segura para uso comercial e integrarse profundamente en los flujos de trabajo de Creative Cloud. A diferencia de otros modelos, Firefly se entrena principalmente con la vasta biblioteca de Adobe Stock y contenido de licencia abierta, lo que lo hace ético y comercialmente seguro.<br>Puntos Fuertes y Características Clave:</p><ul><li><p>Seguridad para Uso Comercial: Su entrenamiento con datos licenciados mitiga los riesgos de infracción de derechos de autor, dando a los profesionales y a las empresas la confianza para utilizar el contenido generado en proyectos comerciales.</p></li><li><p>Integración Profunda en Creative Cloud: Sus capacidades están directamente integradas en aplicaciones como Photoshop, Illustrator y Adobe Express. Funciones como el \"Relleno Generativo\" en Photoshop permiten editar y expandir imágenes de forma no destructiva dentro del flujo de trabajo existente.</p></li><li><p>Enfoque en el Flujo de Trabajo del Diseñador: Las herramientas están diseñadas para potenciar y acelerar el trabajo de los creativos, no para reemplazarlo. Permite generar vectores, imágenes, plantillas y efectos de texto de forma contextual.</p></li><li><p>Modelo Multimodal: Firefly no solo genera imágenes, sino que también está expandiendo sus capacidades a la generación de vectores, plantillas, vídeo y 3D, todo dentro del ecosistema de Adobe.</p></li></ul><p></p>",
+      "categoria_slug": "creacion-con-ia",
+      "subcategorias": [
+        "creacion-con-ia-generadores-de-imagen",
+        "creacion-con-ia-generadores-de-video",
+        "creacion-con-ia-generadores-de-audio-y-musica",
+        "creacion-con-ia-asistentes-de-diseo-y-ui"
+      ],
+      "usos": [
+        "IA generativa",
+        "Creación de imágenes",
+        "Efectos de texto",
+        "Relleno generativo"
+      ],
+      "plataformas": [
+        "web"
+      ],
+      "modelos_precio": [],
+      "dificultad": "Facil",
+      "es_open_source": false,
+      "es_recomendado": false
+    }
+  ]
+}
