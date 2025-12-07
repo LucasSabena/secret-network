@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Copy, Check, FileJson, Upload, Loader2, AlertCircle, X, ChevronRight, ChevronLeft } from 'lucide-react';
+import { Copy, Check, FileJson, Upload, Loader2, AlertCircle, X, ChevronRight, ChevronLeft, Wand2, Image } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -77,7 +77,9 @@ export default function ProgramaJsonImporter({ isOpen, onClose, onSuccess }: Pro
     const [parseError, setParseError] = useState<string | null>(null);
     const [copied, setCopied] = useState(false);
     const [isImporting, setIsImporting] = useState(false);
-    const [importResults, setImportResults] = useState<{ success: number; errors: string[] }>({ success: 0, errors: [] });
+    const [importResults, setImportResults] = useState<{ success: number; errors: string[]; importedPrograms: { nombre: string; slug: string; web_oficial_url?: string }[] }>({ success: 0, errors: [], importedPrograms: [] });
+    const [isAutoCompleting, setIsAutoCompleting] = useState(false);
+    const [autoCompleteProgress, setAutoCompleteProgress] = useState({ current: 0, total: 0, completed: 0, failed: 0 });
     const { toast } = useToast();
 
     function handleCopyPrompt() {
@@ -155,7 +157,7 @@ export default function ProgramaJsonImporter({ isOpen, onClose, onSuccess }: Pro
 
     async function handleImport() {
         setIsImporting(true);
-        const results = { success: 0, errors: [] as string[] };
+        const results = { success: 0, errors: [] as string[], importedPrograms: [] as { nombre: string; slug: string; web_oficial_url?: string }[] };
 
         try {
             const supabase = supabaseBrowserClient;
@@ -254,6 +256,11 @@ export default function ProgramaJsonImporter({ isOpen, onClose, onSuccess }: Pro
                     }
 
                     results.success++;
+                    results.importedPrograms.push({
+                        nombre: prog.nombre,
+                        slug: prog.slug,
+                        web_oficial_url: prog.web_oficial_url
+                    });
                 } catch (e) {
                     results.errors.push(`${prog.nombre}: ${(e as Error).message}`);
                 }
@@ -279,12 +286,69 @@ export default function ProgramaJsonImporter({ isOpen, onClose, onSuccess }: Pro
         }
     }
 
+    async function handleAutoCompleteAssets() {
+        const programs = importResults.importedPrograms.filter(p => p.web_oficial_url);
+        if (programs.length === 0) {
+            toast({ title: 'Sin URLs', description: 'Ningún programa tiene URL para auto-completar', variant: 'destructive' });
+            return;
+        }
+
+        setIsAutoCompleting(true);
+        setAutoCompleteProgress({ current: 0, total: programs.length, completed: 0, failed: 0 });
+
+        for (let i = 0; i < programs.length; i++) {
+            const prog = programs[i];
+            setAutoCompleteProgress(prev => ({ ...prev, current: i + 1 }));
+
+            try {
+                let url = prog.web_oficial_url || '';
+                if (!url.startsWith('http')) url = `https://${url}`;
+
+                const response = await fetch('/api/auto-assets', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url, slug: prog.slug }),
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    // Actualizar programa en DB con las URLs obtenidas
+                    if (data.logoUrl || data.screenshotUrl) {
+                        await supabaseBrowserClient
+                            .from('programas')
+                            .update({
+                                ...(data.logoUrl && { icono_url: data.logoUrl }),
+                                ...(data.screenshotUrl && { captura_url: data.screenshotUrl }),
+                            })
+                            .eq('slug', prog.slug);
+                        setAutoCompleteProgress(prev => ({ ...prev, completed: prev.completed + 1 }));
+                    } else {
+                        setAutoCompleteProgress(prev => ({ ...prev, failed: prev.failed + 1 }));
+                    }
+                } else {
+                    setAutoCompleteProgress(prev => ({ ...prev, failed: prev.failed + 1 }));
+                }
+            } catch (e) {
+                setAutoCompleteProgress(prev => ({ ...prev, failed: prev.failed + 1 }));
+            }
+
+            // Pequeño delay para no saturar la API
+            await new Promise(r => setTimeout(r, 500));
+        }
+
+        setIsAutoCompleting(false);
+        toast({
+            title: '✅ Assets completados',
+            description: `${autoCompleteProgress.completed} exitosos, ${autoCompleteProgress.failed} fallidos`,
+        });
+    }
+
     function handleClose() {
         setStep(1);
         setJsonInput('');
         setParsedPrograms([]);
         setParseError(null);
-        setImportResults({ success: 0, errors: [] });
+        setImportResults({ success: 0, errors: [], importedPrograms: [] });
         onClose();
         if (importResults.success > 0) {
             onSuccess();
@@ -493,6 +557,60 @@ export default function ProgramaJsonImporter({ isOpen, onClose, onSuccess }: Pro
                                     </ul>
                                 </AlertDescription>
                             </Alert>
+                        )}
+
+                        {/* Auto-complete Assets */}
+                        {importResults.importedPrograms.length > 0 && (
+                            <div className="border rounded-lg p-4 bg-muted/30 space-y-3">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <h4 className="font-medium flex items-center gap-2">
+                                            <Wand2 className="h-4 w-4 text-pink-500" />
+                                            Auto-completar assets
+                                        </h4>
+                                        <p className="text-xs text-muted-foreground">
+                                            Descargar iconos y capturas automáticamente
+                                        </p>
+                                    </div>
+                                    <Button
+                                        onClick={handleAutoCompleteAssets}
+                                        disabled={isAutoCompleting}
+                                        variant="outline"
+                                        className="gap-2"
+                                    >
+                                        {isAutoCompleting ? (
+                                            <>
+                                                <Loader2 className="h-4 w-4 animate-spin" />
+                                                {autoCompleteProgress.current}/{autoCompleteProgress.total}
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Image className="h-4 w-4" />
+                                                Iniciar
+                                            </>
+                                        )}
+                                    </Button>
+                                </div>
+                                {isAutoCompleting && (
+                                    <div className="space-y-2">
+                                        <div className="h-2 bg-muted rounded-full overflow-hidden">
+                                            <div
+                                                className="h-full bg-pink-500 transition-all"
+                                                style={{ width: `${(autoCompleteProgress.current / autoCompleteProgress.total) * 100}%` }}
+                                            />
+                                        </div>
+                                        <div className="flex justify-between text-xs text-muted-foreground">
+                                            <span>✅ {autoCompleteProgress.completed} exitosos</span>
+                                            <span>❌ {autoCompleteProgress.failed} fallidos</span>
+                                        </div>
+                                    </div>
+                                )}
+                                {!isAutoCompleting && autoCompleteProgress.total > 0 && (
+                                    <div className="text-sm text-center py-2">
+                                        ✅ {autoCompleteProgress.completed} iconos/capturas obtenidos
+                                    </div>
+                                )}
+                            </div>
                         )}
 
                         <div className="flex justify-end">
