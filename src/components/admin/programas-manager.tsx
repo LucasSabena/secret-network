@@ -27,6 +27,7 @@ import { Programa, Categoria, Plataforma, ModeloDePrecio } from '@/lib/types';
 import ProgramaForm from './programa-form';
 import BatchIconUpload from './batch-icon-upload';
 import ProgramaJsonImporter from './programa-json-importer';
+import QuickAssetEditor from './quick-asset-editor';
 import { supabaseBrowserClient } from '@/lib/supabase-browser';
 import { addUTMParams } from '@/lib/utm-tracker';
 
@@ -49,6 +50,7 @@ export default function ProgramasManager() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isBatchUploadOpen, setIsBatchUploadOpen] = useState(false);
   const [isJsonImportOpen, setIsJsonImportOpen] = useState(false);
+  const [quickAssetPrograma, setQuickAssetPrograma] = useState<Programa | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
   const { toast } = useToast();
@@ -654,8 +656,12 @@ export default function ProgramasManager() {
                   <p className="text-sm text-muted-foreground truncate">
                     {programa.slug}
                   </p>
-                  {/* Indicadores de imágenes */}
-                  <div className="flex items-center gap-2 mt-1">
+                  {/* Indicadores de imágenes - clickeable para editar */}
+                  <div
+                    className="flex items-center gap-2 mt-1 cursor-pointer hover:bg-muted/50 rounded px-1 py-0.5 -mx-1"
+                    onClick={() => setQuickAssetPrograma(programa)}
+                    title="Click para cambiar icono/captura"
+                  >
                     <div className="flex items-center gap-1 text-xs">
                       {programa.icono_url ? (
                         <CheckCircle2 className="w-3 h-3 text-green-500" />
@@ -672,6 +678,7 @@ export default function ProgramasManager() {
                       )}
                       <span className="text-muted-foreground">Captura</span>
                     </div>
+                    <Pencil className="w-3 h-3 text-muted-foreground ml-auto" />
                   </div>
                 </div>
               </div>
@@ -855,6 +862,15 @@ export default function ProgramasManager() {
           isOpen={isJsonImportOpen}
           onClose={() => setIsJsonImportOpen(false)}
           onSuccess={loadProgramas}
+        />
+      )}
+
+      {quickAssetPrograma && (
+        <QuickAssetEditor
+          programa={quickAssetPrograma}
+          isOpen={!!quickAssetPrograma}
+          onClose={() => setQuickAssetPrograma(null)}
+          onUpdate={loadProgramas}
         />
       )}
     </div>
