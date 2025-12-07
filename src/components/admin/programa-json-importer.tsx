@@ -36,6 +36,7 @@ interface ProgramaJsonInput {
     es_recomendado?: boolean;
     es_open_source?: boolean;
     dificultad?: 'Facil' | 'Intermedio' | 'Dificil';
+    programas_alternativos?: string[];
 }
 
 const AI_PROMPT = `Actúa como un experto curador de software para una base de datos de alta calidad.
@@ -163,19 +164,54 @@ export default function ProgramaJsonImporter({ isOpen, onClose, onSuccess }: Pro
                     throw error;
                 }
 
-                // Aquí iría la lógica de relaciones si el JSON las incluye bien
-                // Por brevedad y robustez, nos enfocamos en el core program primero
-
+                // Store program ID and alternatives for linking later
                 results.success++;
                 results.imported.push({
                     nombre: p.nombre,
                     slug: p.slug,
                     url: p.web_oficial_url,
-                    status: 'success'
+                    status: 'success',
+                    programId: prog.id,
+                    alternativos: p.programas_alternativos || []
                 });
             } catch (e: any) {
                 console.error('Error importing', p.nombre, ':', e);
                 results.errors.push(`${p.nombre}: ${e.message || JSON.stringify(e)}`);
+            }
+        }
+
+        // Link alternatives after all programs are created
+        if (results.success > 0) {
+            console.log('Linking alternatives...');
+            for (const item of results.imported) {
+                if (item.alternativos && item.alternativos.length > 0 && item.programId) {
+                    for (const altSlug of item.alternativos) {
+                        // Look up the alternative program by slug
+                        const { data: altProgram } = await supabase
+                            .from('programas')
+                            .select('id')
+                            .eq('slug', altSlug)
+                            .single();
+
+                        if (altProgram) {
+                            // Create the relationship (ignore errors for duplicates)
+                            const { error: linkError } = await supabase
+                                .from('programas_alternativas')
+                                .upsert({
+                                    programa_original_id: item.programId,
+                                    programa_alternativa_id: altProgram.id
+                                }, { onConflict: 'programa_original_id,programa_alternativa_id', ignoreDuplicates: true });
+
+                            if (linkError) {
+                                console.log(`Could not link ${item.slug} -> ${altSlug}:`, linkError.message);
+                            } else {
+                                console.log(`Linked ${item.slug} -> ${altSlug}`);
+                            }
+                        } else {
+                            console.log(`Alternative not found: ${altSlug} (for ${item.slug})`);
+                        }
+                    }
+                }
             }
         }
 
