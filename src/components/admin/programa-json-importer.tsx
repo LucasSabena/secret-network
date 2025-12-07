@@ -301,10 +301,10 @@ export default function ProgramaJsonImporter({ isOpen, onClose, onSuccess }: Pro
                         <div
                             key={s}
                             className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${step === s
-                                    ? 'bg-pink-500 text-white'
-                                    : step > s
-                                        ? 'bg-green-500 text-white'
-                                        : 'bg-muted text-muted-foreground'
+                                ? 'bg-pink-500 text-white'
+                                : step > s
+                                    ? 'bg-green-500 text-white'
+                                    : 'bg-muted text-muted-foreground'
                                 }`}
                         >
                             {step > s ? '✓' : s}
@@ -341,17 +341,51 @@ export default function ProgramaJsonImporter({ isOpen, onClose, onSuccess }: Pro
                     </div>
                 )}
 
-                {/* Step 2: Paste JSON */}
+                {/* Step 2: Paste JSON or Upload File */}
                 {step === 2 && (
                     <div className="space-y-4">
                         <p className="text-sm text-muted-foreground">
-                            Pegá el JSON que te devolvió la IA. Puede ser un solo programa o un array de varios.
+                            Pegá el JSON o subí un archivo <code>.json</code>
                         </p>
+
+                        {/* File upload */}
+                        <div className="flex items-center gap-2">
+                            <label className="flex-1">
+                                <div className="flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed rounded-lg cursor-pointer hover:border-pink-500 hover:bg-pink-50 dark:hover:bg-pink-950/20 transition-colors">
+                                    <Upload className="h-5 w-5 text-muted-foreground" />
+                                    <span className="text-sm text-muted-foreground">
+                                        Subir archivo .json
+                                    </span>
+                                </div>
+                                <input
+                                    type="file"
+                                    accept=".json,application/json"
+                                    className="hidden"
+                                    onChange={(e) => {
+                                        const file = e.target.files?.[0];
+                                        if (file) {
+                                            const reader = new FileReader();
+                                            reader.onload = (event) => {
+                                                setJsonInput(event.target?.result as string || '');
+                                            };
+                                            reader.readAsText(file);
+                                        }
+                                    }}
+                                />
+                            </label>
+                        </div>
+
+                        <div className="relative flex items-center">
+                            <div className="flex-grow border-t border-muted"></div>
+                            <span className="flex-shrink mx-3 text-xs text-muted-foreground">o pegá el texto</span>
+                            <div className="flex-grow border-t border-muted"></div>
+                        </div>
+
                         <Textarea
-                            placeholder='Pegá el JSON aquí... Ejemplo: [{"nombre": "Figma", "slug": "figma", ...}]'
+                            placeholder='[{"nombre": "Figma", "slug": "figma", ...}]'
                             value={jsonInput}
                             onChange={(e) => setJsonInput(e.target.value)}
-                            className="min-h-[200px] font-mono text-sm"
+                            className="min-h-[160px] font-mono text-sm"
                         />
                         {parseError && (
                             <Alert variant="destructive">
