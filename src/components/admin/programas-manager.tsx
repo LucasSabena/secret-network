@@ -39,6 +39,8 @@ export default function ProgramasManager() {
   // Filter State
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategoria, setFilterCategoria] = useState('all');
+  const [filterIcon, setFilterIcon] = useState<'all' | 'yes' | 'no'>('all');
+  const [filterCaptura, setFilterCaptura] = useState<'all' | 'yes' | 'no'>('all');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
 
   // Modal State
@@ -54,7 +56,7 @@ export default function ProgramasManager() {
 
   useEffect(() => {
     filterData();
-  }, [programas, searchTerm, filterCategoria]);
+  }, [programas, searchTerm, filterCategoria, filterIcon, filterCaptura]);
 
   async function loadData() {
     setIsLoading(true);
@@ -83,6 +85,18 @@ export default function ProgramasManager() {
 
     if (filterCategoria !== 'all') {
       result = result.filter(p => p.categoria_id.toString() === filterCategoria);
+    }
+
+    if (filterIcon === 'yes') {
+      result = result.filter(p => !!p.icono_url);
+    } else if (filterIcon === 'no') {
+      result = result.filter(p => !p.icono_url);
+    }
+
+    if (filterCaptura === 'yes') {
+      result = result.filter(p => !!p.captura_url);
+    } else if (filterCaptura === 'no') {
+      result = result.filter(p => !p.captura_url);
     }
 
     setFilteredProgramas(result);
@@ -171,12 +185,34 @@ export default function ProgramasManager() {
         </div>
 
         <Select value={filterCategoria} onValueChange={setFilterCategoria}>
-          <SelectTrigger className="w-[180px] bg-muted/50 border-transparent">
+          <SelectTrigger className="w-[140px] bg-muted/50 border-transparent">
             <SelectValue placeholder="Categoría" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todas</SelectItem>
             {categorias.map(c => <SelectItem key={c.id} value={c.id.toString()}>{c.nombre}</SelectItem>)}
+          </SelectContent>
+        </Select>
+
+        <Select value={filterIcon} onValueChange={(v: 'all' | 'yes' | 'no') => setFilterIcon(v)}>
+          <SelectTrigger className="w-[110px] bg-muted/50 border-transparent">
+            <SelectValue placeholder="Icono" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Icono: Todos</SelectItem>
+            <SelectItem value="yes">Con icono</SelectItem>
+            <SelectItem value="no">Sin icono</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select value={filterCaptura} onValueChange={(v: 'all' | 'yes' | 'no') => setFilterCaptura(v)}>
+          <SelectTrigger className="w-[120px] bg-muted/50 border-transparent">
+            <SelectValue placeholder="Captura" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Captura: Todos</SelectItem>
+            <SelectItem value="yes">Con captura</SelectItem>
+            <SelectItem value="no">Sin captura</SelectItem>
           </SelectContent>
         </Select>
 
