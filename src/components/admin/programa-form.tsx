@@ -187,7 +187,7 @@ export default function ProgramaForm({ programa, onClose }: Props) {
     if (alts.data) setAlternativasSeleccionadas(alts.data.map(x => x.programa_alternativa_id));
   }
 
-  async function handleAutoFetch() {
+  async function handleAutoFetch(type: 'all' | 'icon' | 'screenshot' = 'all') {
     const url = watch('web_oficial_url');
     if (!url) return toast({ title: 'URL requerida', variant: 'destructive' });
 
@@ -195,13 +195,18 @@ export default function ProgramaForm({ programa, onClose }: Props) {
     try {
       const res = await fetch('/api/auto-assets', {
         method: 'POST',
-        body: JSON.stringify({ url, slug: watch('slug') })
+        body: JSON.stringify({ url, slug: watch('slug'), type })
       });
       const data = await res.json();
 
       if (data.logoUrl) setIconPreview(data.logoUrl);
       if (data.screenshotUrl) setCapturaPreview(data.screenshotUrl);
-      toast({ title: 'Assets encontrados' });
+
+      let msg = 'Assets encontrados';
+      if (type === 'icon' && data.logoUrl) msg = 'Icono actualizado';
+      if (type === 'screenshot' && data.screenshotUrl) msg = 'Captura actualizada';
+
+      toast({ title: msg });
     } catch (e) {
       toast({ title: 'Error fetching', variant: 'destructive' });
     } finally {
@@ -339,7 +344,7 @@ export default function ProgramaForm({ programa, onClose }: Props) {
                     <Globe className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input {...register('web_oficial_url')} className="pl-9 bg-muted/30" placeholder="https://..." />
                   </div>
-                  <Button type="button" variant="outline" size="icon" onClick={handleAutoFetch} disabled={isAutoFetching} title="Auto-detectar datos">
+                  <Button type="button" variant="outline" size="icon" onClick={() => handleAutoFetch('all')} disabled={isAutoFetching} title="Auto-detectar TODO">
                     {isAutoFetching ? <Loader2 className="h-4 w-4 animate-spin" /> : <Wand2 className="h-4 w-4 text-pink-500" />}
                   </Button>
                 </div>
@@ -348,6 +353,11 @@ export default function ProgramaForm({ programa, onClose }: Props) {
               <div className="space-y-2">
                 <Label>Descripción Corta (SEO) *</Label>
                 <Textarea {...register('descripcion_corta')} maxLength={200} className="bg-muted/30 resize-none h-20" />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Descripción Larga (Markdown)</Label>
+                <Textarea {...register('descripcion_larga')} className="bg-muted/30 resize-none h-40 font-mono text-sm" placeholder="Descripción detallada del programa. Soporta **Markdown**..." />
               </div>
 
               <div className="space-y-2">
@@ -379,6 +389,14 @@ export default function ProgramaForm({ programa, onClose }: Props) {
                   <p className="text-xs text-muted-foreground">¿Es software libre?</p>
                 </div>
                 <Switch checked={watch('es_open_source')} onCheckedChange={v => setValue('es_open_source', v)} />
+              </div>
+
+              <div className="flex justify-between items-center p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-xl border border-yellow-200 dark:border-yellow-800">
+                <div className="space-y-0.5">
+                  <Label className="text-yellow-700 dark:text-yellow-400">⭐ Recomendado</Label>
+                  <p className="text-xs text-yellow-600 dark:text-yellow-500">Marcar como Top Pick / Best in Class</p>
+                </div>
+                <Switch checked={watch('es_recomendado')} onCheckedChange={v => setValue('es_recomendado', v)} />
               </div>
             </TabsContent>
 
@@ -431,6 +449,22 @@ export default function ProgramaForm({ programa, onClose }: Props) {
                   ))}
                 </div>
               </div>
+
+              <div className="space-y-3">
+                <Label className="text-base font-semibold flex items-center gap-2"><Globe className="h-4 w-4" /> Plataformas</Label>
+                <div className="flex flex-wrap gap-2">
+                  {plataformas.map(p => (
+                    <Badge
+                      key={p.id}
+                      variant={plataformasSeleccionadas.includes(p.id) ? 'default' : 'outline'}
+                      className={`cursor-pointer px-3 py-1.5 transition-all ${plataformasSeleccionadas.includes(p.id) ? 'bg-green-500 hover:bg-green-600' : 'hover:bg-muted'}`}
+                      onClick={() => toggleSelection(p.id, plataformasSeleccionadas, setPlataformasSeleccionadas)}
+                    >
+                      {p.nombre}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
             </TabsContent>
 
             {/* TAB: MEDIA */}
@@ -442,7 +476,12 @@ export default function ProgramaForm({ programa, onClose }: Props) {
 
               <div className="grid gap-6">
                 <div className="space-y-2">
-                  <Label>Icono (Cuadrado)</Label>
+                  <div className="flex justify-between items-center">
+                    <Label>Icono (Cuadrado)</Label>
+                    <Button type="button" size="sm" variant="ghost" className="h-6 text-xs text-pink-500" onClick={() => handleAutoFetch('icon')} disabled={isAutoFetching}>
+                      <Wand2 className="mr-1 h-3 w-3" /> Auto Icono
+                    </Button>
+                  </div>
                   <div className="flex gap-4 items-start">
                     <div className="w-24 h-24 border-2 border-dashed rounded-xl flex items-center justify-center bg-muted/30 relative overflow-hidden group">
                       {iconPreview ? (
@@ -463,7 +502,12 @@ export default function ProgramaForm({ programa, onClose }: Props) {
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Captura de Pantalla (Landscape)</Label>
+                  <div className="flex justify-between items-center">
+                    <Label>Captura de Pantalla (Landscape)</Label>
+                    <Button type="button" size="sm" variant="ghost" className="h-6 text-xs text-pink-500" onClick={() => handleAutoFetch('screenshot')} disabled={isAutoFetching}>
+                      <Wand2 className="mr-1 h-3 w-3" /> Auto Captura
+                    </Button>
+                  </div>
                   <div className="w-full aspect-video border-2 border-dashed rounded-xl flex items-center justify-center bg-muted/30 relative overflow-hidden group">
                     {capturaPreview ? (
                       <img src={capturaPreview} className="w-full h-full object-cover" />
@@ -485,18 +529,60 @@ export default function ProgramaForm({ programa, onClose }: Props) {
 
             {/* TAB: RELACIONES */}
             <TabsContent value="relaciones" className="space-y-4 animate-in slide-in-from-right-4 duration-300">
-              <Label>Programas Alternativos</Label>
-              <div className="p-4 border rounded-xl bg-muted/10 h-64 overflow-y-auto space-y-2">
-                {programasDisponibles.map(p => (
-                  <div
-                    key={p.id}
-                    className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition-colors ${alternativasSeleccionadas.includes(p.id) ? 'bg-pink-100 dark:bg-pink-900/30 border-pink-200' : 'hover:bg-muted'}`}
-                    onClick={() => toggleSelection(p.id, alternativasSeleccionadas, setAlternativasSeleccionadas)}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label className="text-base font-semibold">Programas Alternativos</Label>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    className="h-7 text-xs"
+                    onClick={() => {
+                      // Auto-recomendation: Select programs in the same subcategories
+                      const matchingIds = programasDisponibles
+                        .filter(p => p.subcategorias?.some((subId: number) => subcategoriasSeleccionadas.includes(subId)))
+                        .map(p => p.id);
+                      setAlternativasSeleccionadas(matchingIds);
+                    }}
                   >
-                    <span className="text-sm font-medium">{p.nombre}</span>
-                    {alternativasSeleccionadas.includes(p.id) && <Check className="h-4 w-4 text-pink-500" />}
-                  </div>
-                ))}
+                    <Wand2 className="mr-1 h-3 w-3" /> Auto-Sugerir
+                  </Button>
+                </div>
+
+                <Input
+                  placeholder="Buscar programas..."
+                  className="bg-muted/30"
+                  onChange={e => {
+                    const term = e.target.value.toLowerCase();
+                    // Filter is applied visually below
+                    (document.querySelectorAll('[data-alt-item]') as NodeListOf<HTMLElement>).forEach(el => {
+                      el.style.display = el.dataset.nombre?.toLowerCase().includes(term) ? '' : 'none';
+                    });
+                  }}
+                />
+
+                <div className="p-3 border rounded-xl bg-muted/10 max-h-72 overflow-y-auto space-y-1">
+                  {programasDisponibles.length === 0 ? (
+                    <p className="text-center text-sm text-muted-foreground py-4">No hay programas disponibles</p>
+                  ) : (
+                    programasDisponibles.map(p => (
+                      <div
+                        key={p.id}
+                        data-alt-item
+                        data-nombre={p.nombre}
+                        className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition-colors ${alternativasSeleccionadas.includes(p.id) ? 'bg-pink-100 dark:bg-pink-900/30 border border-pink-300 dark:border-pink-700' : 'hover:bg-muted border border-transparent'}`}
+                        onClick={() => toggleSelection(p.id, alternativasSeleccionadas, setAlternativasSeleccionadas)}
+                      >
+                        <span className="text-sm font-medium">{p.nombre}</span>
+                        {alternativasSeleccionadas.includes(p.id) && <Check className="h-4 w-4 text-pink-500" />}
+                      </div>
+                    ))
+                  )}
+                </div>
+
+                <p className="text-xs text-muted-foreground">
+                  {alternativasSeleccionadas.length} seleccionados
+                </p>
               </div>
             </TabsContent>
           </form>

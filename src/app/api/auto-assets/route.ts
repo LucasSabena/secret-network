@@ -246,7 +246,7 @@ async function processLogoWithSafeSpace(logoBuffer: Buffer): Promise<Buffer> {
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-        const { url, slug } = body;
+        const { url, slug, type = 'all' } = body;
 
         if (!url || typeof url !== 'string') {
             return NextResponse.json(
@@ -273,46 +273,50 @@ export async function POST(request: NextRequest) {
         const publicIdBase = slug || domain.replace(/\./g, '-');
 
         // Fetch screenshot
-        console.log('Fetching screenshot for:', url);
-        const screenshotUrl = await fetchScreenshot(url);
+        if (type === 'all' || type === 'screenshot') {
+            console.log('Fetching screenshot for:', url);
+            const screenshotUrl = await fetchScreenshot(url);
 
-        if (screenshotUrl) {
-            try {
-                const uploaded = await uploadUrlToCloudinary(
-                    screenshotUrl,
-                    'programas/screenshots',
-                    `${publicIdBase}-screenshot`
-                );
-                result.screenshotUrl = uploaded.secure_url;
-                console.log('Screenshot uploaded:', result.screenshotUrl);
-            } catch (error) {
-                console.error('Error uploading screenshot:', error);
-                result.errors.push('No se pudo subir el screenshot a Cloudinary');
+            if (screenshotUrl) {
+                try {
+                    const uploaded = await uploadUrlToCloudinary(
+                        screenshotUrl,
+                        'programas/screenshots',
+                        `${publicIdBase}-screenshot`
+                    );
+                    result.screenshotUrl = uploaded.secure_url;
+                    console.log('Screenshot uploaded:', result.screenshotUrl);
+                } catch (error) {
+                    console.error('Error uploading screenshot:', error);
+                    result.errors.push('No se pudo subir el screenshot a Cloudinary');
+                }
+            } else {
+                result.errors.push('No se pudo capturar el screenshot del sitio');
             }
-        } else {
-            result.errors.push('No se pudo capturar el screenshot del sitio');
         }
 
         // Fetch and process logo
-        console.log('Fetching logo for:', url);
-        const logoBuffer = await fetchLogo(url);
+        if (type === 'all' || type === 'icon') {
+            console.log('Fetching logo for:', url);
+            const logoBuffer = await fetchLogo(url);
 
-        if (logoBuffer) {
-            try {
-                const processedLogo = await processLogoWithSafeSpace(logoBuffer);
-                const uploaded = await uploadBufferToCloudinary(
-                    processedLogo,
-                    'programas/icons',
-                    `${publicIdBase}-icon`
-                );
-                result.logoUrl = uploaded.secure_url;
-                console.log('Logo uploaded:', result.logoUrl);
-            } catch (error) {
-                console.error('Error processing/uploading logo:', error);
-                result.errors.push('No se pudo procesar el logo');
+            if (logoBuffer) {
+                try {
+                    const processedLogo = await processLogoWithSafeSpace(logoBuffer);
+                    const uploaded = await uploadBufferToCloudinary(
+                        processedLogo,
+                        'programas/icons',
+                        `${publicIdBase}-icon`
+                    );
+                    result.logoUrl = uploaded.secure_url;
+                    console.log('Logo uploaded:', result.logoUrl);
+                } catch (error) {
+                    console.error('Error processing/uploading logo:', error);
+                    result.errors.push('No se pudo procesar el logo');
+                }
+            } else {
+                result.errors.push('No se encontró el logo del sitio');
             }
-        } else {
-            result.errors.push('No se encontró el logo del sitio');
         }
 
         return NextResponse.json(result);
