@@ -18,7 +18,7 @@ export const revalidate = 3600; // 1 hora
 // Generar rutas estáticas para ISR
 export async function generateStaticParams() {
   const supabase = createStaticClient();
-  
+
   const { data: posts } = await supabase
     .from('blog_posts')
     .select('slug')
@@ -32,8 +32,8 @@ export async function generateStaticParams() {
 // Generar metadata dinámica
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const supabase = await createClient();
-  
+  const supabase = createStaticClient();
+
   const { data: post } = await supabase
     .from('blog_posts')
     .select('*')
@@ -44,6 +44,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!post) {
     return {
       title: 'Post no encontrado | Secret Network',
+      robots: 'noindex, nofollow',
     };
   }
 
@@ -67,7 +68,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   // Usar imagen de portada si existe, sino generar OG image dinámica
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://secretnetwork.co';
-  const imageUrl = post.imagen_portada_url || 
+  const imageUrl = post.imagen_portada_url ||
     `${baseUrl}/api/og-blog?title=${encodeURIComponent(post.titulo)}&author=${encodeURIComponent(post.autor || 'Binary Studio')}&date=${encodeURIComponent(post.fecha_publicacion)}&category=${encodeURIComponent(categoryName)}`;
 
   return {
@@ -97,34 +98,34 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-export default async function BlogPostPage({ 
+export default async function BlogPostPage({
   params,
-  searchParams 
-}: { 
+  searchParams
+}: {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ preview?: string }>;
 }) {
   const { slug } = await params;
   const { preview } = await searchParams;
   const supabase = await createClient();
-  
+
   // Si es modo preview, no filtrar por publicado
   const query = supabase
     .from('blog_posts')
     .select('*')
     .eq('slug', slug);
-  
+
   // Solo filtrar por publicado si NO es preview
   if (preview !== 'true') {
     query.eq('publicado', true);
   }
-  
+
   const { data: post, error } = await query.single();
 
   if (error || !post) {
     notFound();
   }
-  
+
   // Mostrar banner de preview si no está publicado
   const isPreview = preview === 'true' && !post.publicado;
 
@@ -140,21 +141,21 @@ export default async function BlogPostPage({
     <>
       {/* Barra de progreso de lectura */}
       <ReadingProgressBar />
-      
+
       {/* Tracking de analytics - solo si está publicado */}
       {!isPreview && <BlogAnalyticsTracker postId={post.id} />}
-      
+
       {/* Banner de preview */}
       {isPreview && (
         <div className="bg-yellow-500 text-yellow-950 py-3 px-4 text-center font-medium">
           🔍 Modo Preview - Este post no está publicado aún
         </div>
       )}
-      
+
       <div className="container mx-auto px-4 py-8">
         {/* JSON-LD Structured Data */}
         <JsonLdArticle post={post as BlogPost} />
-        <JsonLdBreadcrumb 
+        <JsonLdBreadcrumb
           items={[
             { name: 'Inicio', url: '/' },
             { name: 'Blog', url: '/blog' },
@@ -162,25 +163,25 @@ export default async function BlogPostPage({
           ]}
         />
 
-      <article className="max-w-4xl mx-auto">
-        <BlogPostHeader post={post as BlogPost} />
-        <BlogContent content={post.contenido} blocks={post.contenido_bloques} />
-        
-        {/* Botones de Compartir */}
-        <div className="mt-12 pt-8 border-t border-border">
-          <BlogShareButtons 
-            postId={post.id}
-            title={post.titulo}
-            url={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://secretnetwork.co'}/blog/${post.slug}`}
-          />
-        </div>
-      </article>
-      
-      {relatedPosts && relatedPosts.length > 0 && (
-        <div className="max-w-6xl mx-auto mt-16">
-          <RelatedPosts posts={relatedPosts as BlogPost[]} />
-        </div>
-      )}
+        <article className="max-w-4xl mx-auto">
+          <BlogPostHeader post={post as BlogPost} />
+          <BlogContent content={post.contenido} blocks={post.contenido_bloques} />
+
+          {/* Botones de Compartir */}
+          <div className="mt-12 pt-8 border-t border-border">
+            <BlogShareButtons
+              postId={post.id}
+              title={post.titulo}
+              url={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://secretnetwork.co'}/blog/${post.slug}`}
+            />
+          </div>
+        </article>
+
+        {relatedPosts && relatedPosts.length > 0 && (
+          <div className="max-w-6xl mx-auto mt-16">
+            <RelatedPosts posts={relatedPosts as BlogPost[]} />
+          </div>
+        )}
       </div>
     </>
   );

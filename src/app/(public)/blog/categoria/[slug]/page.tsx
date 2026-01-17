@@ -1,6 +1,6 @@
 // FILE: src/app/blog/categoria/[slug]/page.tsx
 // Next.js 15 compatible - params as Promise
-import { createClient } from '@/lib/supabase';
+import { createClient, createStaticClient } from '@/lib/supabase';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import Link from 'next/link';
@@ -15,8 +15,8 @@ interface CategoryPageProps {
 
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const supabase = await createClient();
-  
+  const supabase = createStaticClient();
+
   const { data: category } = await supabase
     .from('blog_categories')
     .select('*')

@@ -20,7 +20,7 @@ export const revalidate = 3600; // 1 hora
 // Generar rutas estáticas para ISR
 export async function generateStaticParams() {
   const supabase = createStaticClient();
-  
+
   const { data: programas } = await supabase
     .from('programas')
     .select('slug');
@@ -33,8 +33,8 @@ export async function generateStaticParams() {
 // Generar metadata dinámica
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const supabase = await createClient();
-  
+  const supabase = createStaticClient();
+
   const { data: programa } = await supabase
     .from('programas')
     .select('*')
@@ -59,7 +59,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function AlternativasDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const supabase = await createClient();
-  
+
   // Obtener el programa original
   const { data: programa, error: programaError } = await supabase
     .from('programas')
@@ -78,10 +78,10 @@ export default async function AlternativasDetailPage({ params }: { params: Promi
     .eq('programa_original_id', programa.id);
 
   let alternativas: Programa[] = [];
-  
+
   if (relacionesAlternativas && relacionesAlternativas.length > 0) {
     const alternativasIds = relacionesAlternativas.map(rel => rel.programa_alternativa_id);
-    
+
     const { data: alternativasData } = await supabase
       .from('programas')
       .select('*')
@@ -112,9 +112,9 @@ export default async function AlternativasDetailPage({ params }: { params: Promi
       </Breadcrumb>
 
       <AlternativeHero program={programa as Programa} />
-      
-      <AlternativesList 
-        alternatives={alternativas} 
+
+      <AlternativesList
+        alternatives={alternativas}
         originalProgram={programa as Programa}
       />
     </div>

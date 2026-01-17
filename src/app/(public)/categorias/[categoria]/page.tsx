@@ -1,17 +1,17 @@
-import { createClient } from "@/lib/supabase";
+import { createClient, createStaticClient } from "@/lib/supabase";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import Link from "next/link";
-import { 
-  ChevronRight, 
-  Home, 
-  Tag, 
-  Image as ImageIcon, 
-  Video, 
-  Smile, 
-  Shapes, 
-  FileText, 
-  Music, 
+import {
+  ChevronRight,
+  Home,
+  Tag,
+  Image as ImageIcon,
+  Video,
+  Smile,
+  Shapes,
+  FileText,
+  Music,
   Type,
   Palette,
   Wand2,
@@ -39,7 +39,7 @@ function getSubcategoryIcon(slug: string) {
     'plantillas-y-archivos-editables': FileText,
     'sonidos-y-musica-de-stock': Music,
     'tipografias-y-fuentes': Type,
-    
+
     // Herramientas generales
     'paletas-de-colores': Palette,
     'editores': PenTool,
@@ -49,20 +49,20 @@ function getSubcategoryIcon(slug: string) {
     'ilustracion': Brush,
     'fotografia': Camera,
     'video-edicion': Film,
-    
+
     // IA
     'generacion-de-imagenes': Wand2,
     'generacion-de-video': Sparkles,
     'procesamiento-de-texto': Type,
     'asistentes': Sparkles,
-    
+
     // Web/Desarrollo
     'frameworks': Code,
     'cms': Database,
     'hosting': Globe,
     'diseno-web': Layout,
   };
-  
+
   return iconMap[slug] || Tag;
 }
 
@@ -98,7 +98,7 @@ type Programa = {
  */
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { categoria: categoriaSlug } = await params;
-  const supabase = await createClient();
+  const supabase = createStaticClient();
 
   const { data: categoria } = await supabase
     .from("categorias")
@@ -154,7 +154,7 @@ export default async function CategoriaPage({ params }: Props) {
 
   // Obtener todos los programas de esta categoría (de todas sus subcategorías)
   const subcategoriaIds = subcategorias?.map((s: Subcategoria) => s.id) || [];
-  
+
   let programas: any[] = [];
   if (subcategoriaIds.length > 0) {
     // Obtener relaciones programa-subcategoria
@@ -276,7 +276,7 @@ export default async function CategoriaPage({ params }: Props) {
               {subcategorias.map((subcategoria: Subcategoria) => {
                 const numProgramas = programasPorSubcategoria.get(subcategoria.id) || 0;
                 const IconComponent = getSubcategoryIcon(subcategoria.slug);
-                
+
                 return (
                   <Link
                     key={subcategoria.id}

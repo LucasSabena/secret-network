@@ -5,10 +5,10 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
-import { 
-  ExternalLink, 
-  ArrowLeft, 
-  Github, 
+import {
+  ExternalLink,
+  ArrowLeft,
+  Github,
   Star,
   Tag,
   Download,
@@ -61,8 +61,8 @@ interface ProgramPageProps {
  */
 export async function generateMetadata({ params }: ProgramPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const supabase = await createClient();
-  
+  const supabase = createStaticClient();
+
   const { data: programa } = await supabase
     .from('programas')
     .select('nombre, descripcion_corta, descripcion_larga, icono_url, captura_url, es_open_source, es_recomendado, categoria_id')
@@ -83,10 +83,10 @@ export async function generateMetadata({ params }: ProgramPageProps): Promise<Me
     .single();
 
   const description = stripHtml(programa.descripcion_corta || programa.descripcion_larga) || `Descubre ${programa.nombre}, una herramienta de diseño profesional.`;
-  
+
   // Usar imagen de captura si existe, sino generar OG image dinámica
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://secretnetwork.co';
-  const imageUrl = programa.captura_url || 
+  const imageUrl = programa.captura_url ||
     `${baseUrl}/api/og-programa?nombre=${encodeURIComponent(programa.nombre)}&categoria=${encodeURIComponent(categoria?.nombre || 'Herramienta de Diseño')}&icon=${encodeURIComponent(programa.icono_url || '')}&opensource=${programa.es_open_source}&recommended=${programa.es_recomendado}`;
 
   return {
@@ -135,7 +135,7 @@ export async function generateMetadata({ params }: ProgramPageProps): Promise<Me
 export default async function ProgramPage({ params }: ProgramPageProps) {
   const { slug } = await params;
   const supabase = await createClient();
-  
+
   // Fetch the basic program data
   const { data: programa, error: programaError } = await supabase
     .from('programas')
@@ -217,7 +217,7 @@ export default async function ProgramPage({ params }: ProgramPageProps) {
   let alternativas: any[] = [];
   if (altRelations && altRelations.length > 0) {
     const altIds = altRelations.map(r => r.programa_alternativa_id);
-    
+
     // Fetch alternative programs
     const { data: altPrograms } = await supabase
       .from('programas')
@@ -271,7 +271,7 @@ export default async function ProgramPage({ params }: ProgramPageProps) {
   const faqs: FAQ[] = [
     {
       question: `¿Es gratis ${programaCompleto.nombre}?`,
-      answer: programaCompleto.es_open_source 
+      answer: programaCompleto.es_open_source
         ? `Sí, ${programaCompleto.nombre} es completamente gratuito y de código abierto.`
         : `${programaCompleto.nombre} ofrece diferentes modelos de precios. Consulta su sitio oficial para más detalles.`
     },
@@ -290,8 +290,8 @@ export default async function ProgramPage({ params }: ProgramPageProps) {
       answer: programaCompleto.dificultad === 'Facil'
         ? `${programaCompleto.nombre} es considerado fácil de aprender, ideal para principiantes.`
         : programaCompleto.dificultad === 'Intermedio'
-        ? `${programaCompleto.nombre} tiene una curva de aprendizaje moderada, adecuado para usuarios con algo de experiencia.`
-        : `${programaCompleto.nombre} es una herramienta avanzada que requiere tiempo y práctica para dominar.`
+          ? `${programaCompleto.nombre} tiene una curva de aprendizaje moderada, adecuado para usuarios con algo de experiencia.`
+          : `${programaCompleto.nombre} es una herramienta avanzada que requiere tiempo y práctica para dominar.`
     }] : [])
   ];
 
@@ -299,12 +299,12 @@ export default async function ProgramPage({ params }: ProgramPageProps) {
     <main className="min-h-screen">
       {/* JSON-LD Structured Data */}
       <JsonLdSoftware programa={programaCompleto} />
-      <JsonLdBreadcrumb 
+      <JsonLdBreadcrumb
         items={[
           { name: 'Inicio', url: '/' },
-          ...(programaCompleto.categoria ? [{ 
-            name: stripHtml(programaCompleto.categoria.nombre), 
-            url: `/categorias/${programaCompleto.categoria.slug}` 
+          ...(programaCompleto.categoria ? [{
+            name: stripHtml(programaCompleto.categoria.nombre),
+            url: `/categorias/${programaCompleto.categoria.slug}`
           }] : []),
           { name: programaCompleto.nombre, url: `/programas/${programaCompleto.slug}` },
         ]}
@@ -369,7 +369,7 @@ export default async function ProgramPage({ params }: ProgramPageProps) {
                 <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
                   {programaCompleto.nombre}
                 </h1>
-                
+
                 {/* Badges */}
                 <div className="flex flex-wrap gap-2">
                   {programaCompleto.es_recomendado && (
@@ -449,7 +449,7 @@ export default async function ProgramPage({ params }: ProgramPageProps) {
                   <CardTitle>Acerca de {programaCompleto.nombre}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div 
+                  <div
                     className="prose prose-neutral dark:prose-invert max-w-none prose-p:text-foreground/90 prose-headings:text-foreground prose-strong:text-foreground prose-ul:text-foreground/90 prose-li:text-foreground/90"
                     dangerouslySetInnerHTML={{ __html: programaCompleto.descripcion_larga }}
                   />
@@ -680,7 +680,7 @@ export default async function ProgramPage({ params }: ProgramPageProps) {
  */
 export async function generateStaticParams() {
   const supabase = createStaticClient();
-  
+
   const { data: programas } = await supabase
     .from('programas')
     .select('slug');
