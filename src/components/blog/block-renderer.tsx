@@ -1188,16 +1188,24 @@ function EmbedBlockComponent({ block }: { block: Extract<Block, { type: 'embed' 
 
 // Componente principal que renderiza todos los bloques
 export function BlockRenderer({ blocks }: BlockRendererProps) {
-  if (!blocks || blocks.length === 0) {
+  const safeBlocks = Array.isArray(blocks) ? blocks.filter(Boolean) : [];
+
+  if (safeBlocks.length === 0) {
     return <p className="text-muted-foreground">No hay contenido para mostrar.</p>;
   }
 
-  console.log('[BlockRenderer] Rendering', blocks.length, 'blocks');
+  // Keep logs minimal in production; these help during debugging.
+  console.log('[BlockRenderer] Rendering', safeBlocks.length, 'blocks');
 
   return (
     <div className="space-y-6">
-      {blocks.map((block, index) => {
+      {safeBlocks.map((block: any, index) => {
         try {
+          if (!block || typeof block !== 'object') {
+            console.warn('[BlockRenderer] Skipping invalid block at index', index, block);
+            return null;
+          }
+
           console.log(`[BlockRenderer] Block ${index}:`, { type: block.type, id: block.id, data: block.data });
           switch (block.type) {
             case 'text':
