@@ -80,25 +80,34 @@ export function calculateReadingTimeFromBlocks(
   let totalWords = 0;
 
   blocks.forEach((block) => {
+    // n8n/imports can occasionally leave nulls inside the array
+    if (!block || typeof block !== 'object' || !(block as any).type) return;
+
     if (block.type === 'text') {
-      const text = block.data.content.replace(/<[^>]*>/g, ''); // Remove HTML
+      const html = (block as any).data?.content || '';
+      const text = String(html).replace(/<[^>]*>/g, ''); // Remove HTML
       totalWords += text.split(/\s+/).filter((word) => word.length > 0).length;
     } else if (block.type === 'tabs') {
-      block.data.tabs.forEach((tab) => {
-        const text = tab.content.replace(/<[^>]*>/g, '');
+      const tabs = (block as any).data?.tabs;
+      if (!Array.isArray(tabs)) return;
+      tabs.forEach((tab: any) => {
+        const text = String(tab?.content || '').replace(/<[^>]*>/g, '');
         totalWords += text.split(/\s+/).filter((word) => word.length > 0).length;
       });
     } else if (block.type === 'accordion') {
-      block.data.items.forEach((item) => {
-        const text = item.content.replace(/<[^>]*>/g, '');
+      const items = (block as any).data?.items;
+      if (!Array.isArray(items)) return;
+      items.forEach((item: any) => {
+        const text = String(item?.content || '').replace(/<[^>]*>/g, '');
         totalWords += text.split(/\s+/).filter((word) => word.length > 0).length;
       });
     } else if (block.type === 'alert') {
-      const text = block.data.description.replace(/<[^>]*>/g, '');
+      const text = String((block as any).data?.description || '').replace(/<[^>]*>/g, '');
       totalWords += text.split(/\s+/).filter((word) => word.length > 0).length;
     } else if (block.type === 'code') {
       // Código cuenta como palabras también
-      totalWords += block.data.code.split(/\s+/).filter((word) => word.length > 0).length;
+      const code = String((block as any).data?.code || '');
+      totalWords += code.split(/\s+/).filter((word) => word.length > 0).length;
     }
   });
 
