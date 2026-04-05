@@ -41,6 +41,97 @@ export function BlogJsonImporter({ onImport }: BlogJsonImporterProps) {
   const [validation, setValidation] = useState<ValidationResult | null>(null);
   const [importedData, setImportedData] = useState<ImportedBlog | null>(null);
   const { toast } = useToast();
+  const [processingImages, setProcessingImages] = useState(false);
+  const [progress, setProgress] = useState({ current: 0, total: 0, currentQuery: '' });
+
+  const processAutoImages = async (data: ImportedBlog): Promise<ImportedBlog> => {
+    let newData = JSON.parse(JSON.stringify(data)); // Deep copy
+    const imageReplacements: { path: string[], query: string }[] = [];
+
+    // 1. Scan for [SEARCH: ...] in Metadata
+    if (newData.metadata?.imagen_portada_url?.startsWith('[SEARCH:')) {
+      const match = newData.metadata.imagen_portada_url.match(/\[SEARCH:\s*(.*?)\]/);
+      if (match) {
+        imageReplacements.push({
+          path: ['metadata', 'imagen_portada_url'],
+          query: match[1].trim()
+        });
+      }
+    }
+
+    // 2. Scan in Blocks
+    newData.bloques.forEach((block: any, blockIndex: number) => {
+      // Direct image block
+      if (block.type === 'image' && block.data?.url?.startsWith('[SEARCH:')) {
+        const match = block.data.url.match(/\[SEARCH:\s*(.*?)\]/);
+        if (match) {
+          imageReplacements.push({
+            path: ['bloques', blockIndex.toString(), 'data', 'url'],
+            query: match[1].trim()
+          });
+        }
+      }
+      // Image within Comparison (Before/After) - TO DO if needed
+      // Image within Gallery - TO DO
+      if (block.type === 'images-grid' && Array.isArray(block.data?.images)) {
+        block.data.images.forEach((img: any, imgIndex: number) => {
+          if (img.url?.startsWith('[SEARCH:')) {
+            const match = img.url.match(/\[SEARCH:\s*(.*?)\]/);
+            if (match) {
+              imageReplacements.push({
+                path: ['bloques', blockIndex.toString(), 'data', 'images', imgIndex.toString(), 'url'],
+                query: match[1].trim()
+              });
+            }
+          }
+        });
+      }
+    });
+
+    if (imageReplacements.length === 0) return data;
+
+    setProcessingImages(true);
+    setProgress({ current: 0, total: imageReplacements.length, currentQuery: '' });
+
+    // 3. Process Queue
+    for (let i = 0; i < imageReplacements.length; i++) {
+      const item = imageReplacements[i];
+      setProgress({
+        current: i + 1,
+        total: imageReplacements.length,
+        currentQuery: item.query
+      });
+
+      try {
+        const response = await fetch('/api/admin/auto-image', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: item.query })
+        });
+
+        const result = await response.json();
+
+        if (result.success && result.url) {
+          // Apply update by path traversal
+          let current = newData;
+          for (let k = 0; k < item.path.length - 1; k++) {
+            current = current[item.path[k]];
+          }
+          const lastKey = item.path[item.path.length - 1];
+          current[lastKey] = result.url;
+
+          // Add credit to caption if possible (optional enhancement)
+        } else {
+          console.warn(`Failed to auto-generate image for: ${item.query}`);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    setProcessingImages(false);
+    return newData;
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -271,14 +362,28 @@ export function BlogJsonImporter({ onImport }: BlogJsonImporterProps) {
     }
   };
 
-  const handleImport = () => {
+  const handleImport = async () => {
     if (!importedData || !validation?.valid) return;
 
     try {
-      const blocks = processBlocks(importedData.bloques);
+      // Process images first
+      let finalData = importedData;
+
+      // Check for SEARCH placeholders
+      const hasSearchPlaceholders = JSON.stringify(importedData).includes('[SEARCH:');
+
+      if (hasSearchPlaceholders) {
+        toast({
+          title: "Procesando imágenes automática...",
+          description: "Esto puede tomar unos segundos por imagen.",
+        });
+        finalData = await processAutoImages(importedData);
+      }
+
+      const blocks = processBlocks(finalData.bloques);
       const metadata = {
-        ...importedData.metadata,
-        imagen_portada_url: importedData.metadata.imagen_portada_url?.replace('[MANUAL] ', ''),
+        ...finalData.metadata,
+        imagen_portada_url: finalData.metadata.imagen_portada_url?.replace('[MANUAL] ', ''),
       };
 
       onImport({ metadata, blocks });
@@ -314,6 +419,30 @@ export function BlogJsonImporter({ onImport }: BlogJsonImporterProps) {
             Sube un archivo JSON generado por IA siguiendo la especificación
           </p>
         </div>
+
+        {/* Image Processing Progress */}
+        {processingImages && (
+          <div className="space-y-2 p-4 bg-muted/50 rounded-lg border border-border">
+            <div className="flex justify-between text-sm">
+              <span className="font-medium flex items-center gap-2">
+                <Upload className="w-4 h-4 animate-bounce" />
+                Generando imágenes con IA...
+              </span>
+              <span className="text-muted-foreground">
+                {progress.current} / {progress.total}
+              </span>
+            </div>
+            <div className="h-2 bg-secondary rounded-full overflow-hidden">
+              <div
+                className="h-full bg-primary transition-all duration-500 ease-out"
+                style={{ width: `${(progress.current / progress.total) * 100}%` }}
+              />
+            </div>
+            <p className="text-xs text-muted-foreground italic">
+              Buscando en Google/DDG: {progress.currentQuery}...
+            </p>
+          </div>
+        )}
 
         {/* File Upload */}
         <div className="space-y-2">
@@ -406,9 +535,9 @@ export function BlogJsonImporter({ onImport }: BlogJsonImporterProps) {
 
         {/* Import Button */}
         {validation?.valid && (
-          <Button onClick={handleImport} className="w-full" size="lg">
+          <Button onClick={handleImport} className="w-full" size="lg" disabled={importing || processingImages}>
             <Upload className="mr-2 h-4 w-4" />
-            Importar Blog
+            {processingImages ? 'Generando Imágenes...' : 'Importar Blog'}
           </Button>
         )}
 

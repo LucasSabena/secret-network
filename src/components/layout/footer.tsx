@@ -74,10 +74,10 @@ export function Footer() {
               </li>
               <li>
                 <Link 
-                  href="/blog" 
+                  href="/inspiracion" 
                   className="text-muted-foreground transition-colors hover:text-foreground"
                 >
-                  Blog
+                  Inspiración
                 </Link>
               </li>
               <li>

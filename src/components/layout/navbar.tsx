@@ -12,7 +12,7 @@ const navLinks = [
   { href: "/categorias", label: "Categorías" },
   { href: "/open-source", label: "Open Source" },
   { href: "/alternativas", label: "Alternativas" },
-  { href: "/blog", label: "Blog" },
+  { href: "/inspiracion", label: "Inspiración" },
   { href: "/sobre-nosotros", label: "Sobre Nosotros" },
   { href: "/contacto", label: "Contacto" },
 ];

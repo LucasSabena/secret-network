@@ -1,0 +1,34 @@
+{
+  "logo": {
+    "path": null,
+    "alt": "UI Playbook",
+    "notes": "No custom logo detected — text-based branding using site name"
+  },
+  "favicon": {
+    "path": null,
+    "url": "https://uiplaybook.dev/favicon.ico",
+    "notes": "404 error — favicon not found at standard location. May need to check /favicon.png or root"
+  },
+  "images": [],
+  "videos": [],
+  "social": [
+    {
+      "platform": "GitHub",
+      "url": "https://github.com/raunofreiberg/ui-playbook",
+      "followers": "1.4k stars"
+    }
+  ],
+  "screenshots": {
+    "homepage": {
+      "path": null,
+      "notes": "No screenshots captured — site is minimal with text-based components"
+    }
+  },
+  "missing": [
+    "Favicon file (404 at /favicon.ico)",
+    "Logo file (text-based branding only)",
+    "Hero image (none present)",
+    "Team photos (single developer)",
+    "Product screenshots"
+  ]
+}

@@ -23,7 +23,7 @@ const CONTEXT_DIR = path.join(process.cwd(), 'gemini-context-blog');
 async function exportBlogs() {
     console.log('Fetching blogs...');
     const { data: blogs, error } = await supabase
-        .from('blogs')
+        .from('blog_posts')
         .select('id, titulo, slug, descripcion_corta')
         .order('created_at', { ascending: false });
 
