@@ -1,15 +1,41 @@
 
 import { NextRequest, NextResponse } from 'next/server';
-import { v2 as cloudinary } from 'cloudinary';
-import { GoogleImgScrap } from 'google-img-scrap';
-import * as cheerio from 'cheerio';
+import { createHash } from 'crypto';
 
-// Configure Cloudinary
-cloudinary.config({
-    cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+function cloudinarySignature(params: Record<string, string>): string {
+    const sorted = Object.keys(params).sort().map(k => `${k}=${params[k]}`).join('&');
+    return createHash('sha1').update(sorted + process.env.CLOUDINARY_API_SECRET).digest('hex');
+}
+
+async function uploadToCloudinary(imageUrl: string): Promise<string> {
+    const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME!;
+    const apiKey = process.env.CLOUDINARY_API_KEY!;
+    const timestamp = String(Math.floor(Date.now() / 1000));
+    const params: Record<string, string> = {
+        folder: 'blog-auto-images',
+        timestamp,
+        transformation: 'w_1200,c_limit,q_auto,f_auto',
+    };
+    const signature = cloudinarySignature(params);
+
+    const form = new FormData();
+    form.append('file', imageUrl);
+    form.append('folder', params.folder);
+    form.append('timestamp', timestamp);
+    form.append('transformation', params.transformation);
+    form.append('api_key', apiKey);
+    form.append('signature', signature);
+
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+        method: 'POST',
+        body: form,
+    });
+    const data = await res.json();
+    if (!res.ok || !data.secure_url) {
+        throw new Error(data.error?.message || 'Cloudinary upload failed');
+    }
+    return data.secure_url;
+}
 
 // Priority 1: Google Custom Search API (Official)
 async function searchGoogleCSE(query: string): Promise<string | null> {
@@ -33,48 +59,25 @@ async function searchGoogleCSE(query: string): Promise<string | null> {
     }
 }
 
-// Priority 2: Google Images Scraper (Library)
-async function searchGoogleScraper(query: string): Promise<string | null> {
-    try {
-        console.log(`[AutoImage] Trying Google Scraper Lib for "${query}"`);
-        const result = await GoogleImgScrap({
-            keyword: query,
-            limit: 5,
-            userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        });
-
-        if (result && result.length > 0) {
-            // Find first valid high-res URL
-            const valid = result.find((item: any) => item.url && !item.url.includes('lookaside'));
-            return valid ? valid.url : result[0].url;
-        }
-        return null;
-    } catch (e) {
-        console.error('[AutoImage] Google Scraper Lib Error:', e);
-        return null;
-    }
-}
-
-// Priority 3: DuckDuckGo Scraper (Fallback)
+// Priority 2: DuckDuckGo Scraper (Fallback)
 async function searchDuckDuckGo(query: string): Promise<string | null> {
     try {
         console.log(`[AutoImage] Fallback to DDG for "${query}"`);
-        // Simple HTML scraping for "Lite" connectivity
         const simpleUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}&tbm=isch&gbv=1`;
         const simpleRes = await fetch(simpleUrl, {
             headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0" }
         });
         const simpleHtml = await simpleRes.text();
-        const $ = cheerio.load(simpleHtml);
 
-        let firstImg: string | null = null;
-        $('img').each((i, el) => {
-            const src = $(el).attr('src');
-            if (src && src.startsWith('http') && !src.includes('logos') && !firstImg) {
-                firstImg = src;
+        const imgRegex = /<img[^>]+src=["']([^"']+)["']/gi;
+        let match: RegExpExecArray | null;
+        while ((match = imgRegex.exec(simpleHtml)) !== null) {
+            const src = match[1];
+            if (src.startsWith('http') && !src.includes('logos')) {
+                return src;
             }
-        });
-        return firstImg;
+        }
+        return null;
     } catch (e) {
         console.error('[AutoImage] DDG Fallback Error:', e);
         return null;
@@ -99,13 +102,7 @@ export async function POST(req: NextRequest) {
         imageUrl = await searchGoogleCSE(query);
         if (imageUrl) strategyUsed = 'Google CSE';
 
-        // 2. Try Google Scraper Lib
-        if (!imageUrl) {
-            imageUrl = await searchGoogleScraper(query);
-            if (imageUrl) strategyUsed = 'Google Scraper';
-        }
-
-        // 3. Try Fallback (HTML Scraping)
+        // 2. Try Fallback (HTML Scraping)
         if (!imageUrl) {
             imageUrl = await searchDuckDuckGo(query);
             if (imageUrl) strategyUsed = 'DDG/Google Lite';
@@ -121,24 +118,11 @@ export async function POST(req: NextRequest) {
         console.log(`[AutoImage] Found image via ${strategyUsed}: ${imageUrl.substring(0, 50)}...`);
 
         // Upload to Cloudinary
-        const uploadResult = await new Promise<any>((resolve, reject) => {
-            cloudinary.uploader.upload(imageUrl!, {
-                folder: 'blog-auto-images',
-                access_mode: 'public',
-                resource_type: 'image',
-                transformation: [
-                    { width: 1200, crop: "limit" },
-                    { quality: "auto", fetch_format: "auto" }
-                ]
-            }, (error, result) => {
-                if (error) reject(error);
-                else resolve(result);
-            });
-        });
+        const secureUrl = await uploadToCloudinary(imageUrl);
 
         return NextResponse.json({
             success: true,
-            url: uploadResult.secure_url,
+            url: secureUrl,
             strategy: strategyUsed,
             original_source: imageUrl
         });

@@ -21,7 +21,8 @@ export interface UploadResult {
 export async function uploadBufferToCloudinary(
     buffer: Buffer,
     folder: string,
-    publicId?: string
+    publicId?: string,
+    transformation?: Array<Record<string, unknown>>
 ): Promise<UploadResult> {
     return new Promise((resolve, reject) => {
         const uploadOptions: Record<string, unknown> = {
@@ -33,6 +34,10 @@ export async function uploadBufferToCloudinary(
 
         if (publicId) {
             uploadOptions.public_id = publicId;
+        }
+
+        if (transformation) {
+            uploadOptions.transformation = transformation;
         }
 
         const uploadStream = cloudinary.uploader.upload_stream(

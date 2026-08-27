@@ -2,11 +2,21 @@
 // URL: /api/og-blog?title=Mi Post&author=Binary Studio&date=2025-10-29
 import { ImageResponse } from 'next/og';
 
-export const runtime = 'edge';
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  
+  const url = new URL(request.url);
+  const { searchParams } = url;
+
+  // Cache en Cloudflare Cache API: las OG images son inmutables por URL
+  // y satori consume mucha CPU (límite free: 10ms/request)
+  const cache = caches.default;
+  const cacheKey = new Request(url.toString(), { method: 'GET' });
+  const cached = await cache.match(cacheKey);
+  if (cached) {
+    return cached;
+  }
+
   const title = searchParams.get('title') || 'Post del Blog';
   const author = searchParams.get('author') || 'Binary Studio';
   const date = searchParams.get('date');
@@ -140,4 +150,11 @@ export async function GET(request: Request) {
       height: 630,
     }
   );
+
+  // Guardar en cache por 7 días (las OG images no cambian por URL)
+  const headers = new Headers(response.headers);
+  headers.set('Cache-Control', 'public, max-age=604800, immutable');
+  const cachedResponse = new Response(response.body, { status: response.status, headers });
+  await cache.put(cacheKey, cachedResponse.clone());
+  return cachedResponse;
 }

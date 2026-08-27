@@ -66,10 +66,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     categoryName = category?.nombre || '';
   }
 
-  // Usar imagen de portada si existe, sino generar OG image dinámica
+  // Usar imagen de portada si existe, sino OG image estática (generada en build), sino endpoint dinámico
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://secretnetwork.co';
   const imageUrl = post.imagen_portada_url ||
-    `${baseUrl}/api/og-blog?title=${encodeURIComponent(post.titulo)}&author=${encodeURIComponent(post.autor || 'Binary Studio')}&date=${encodeURIComponent(post.fecha_publicacion)}&category=${encodeURIComponent(categoryName)}`;
+    `${baseUrl}/og/${slug}.png`;
 
   return {
     title: `${post.titulo} | Secret Network Blog`,

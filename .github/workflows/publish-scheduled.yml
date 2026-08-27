@@ -1,0 +1,19 @@
+name: Publish Scheduled Posts
+
+on:
+  schedule:
+    - cron: "0 9 * * *"
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger publish endpoint
+        run: |
+          curl -fsS -X GET \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            "https://secretnetwork.co/api/cron/publish-scheduled" \
+            || curl -fsS -X GET \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            "https://secret-network.01studiobinary.workers.dev/api/cron/publish-scheduled"

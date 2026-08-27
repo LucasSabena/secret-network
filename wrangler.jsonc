@@ -1,0 +1,31 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "secret-network",
+  "account_id": "7fbf2105084395bdd88ca662d7f33054",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-08-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "binding": "ASSETS",
+    "directory": ".open-next/assets"
+  },
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "secret-network"
+    }
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "NEXT_INC_CACHE_KV",
+      "id": "fbd48d204e804a0d9c18d8dcfa8d43f1"
+    }
+  ],
+  "routes": [
+    { "pattern": "secretnetwork.co", "custom_domain": true },
+    { "pattern": "www.secretnetwork.co", "custom_domain": true }
+  ],
+  "observability": {
+    "enabled": true
+  }
+}

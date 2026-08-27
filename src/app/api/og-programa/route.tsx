@@ -2,18 +2,28 @@
 // URL: /api/og-programa?nombre=Photoshop&categoria=Edición de Imagen&icon=https://...
 import { ImageResponse } from 'next/og';
 
-export const runtime = 'edge';
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  
+  const url = new URL(request.url);
+  const { searchParams } = url;
+
+  // Cache en Cloudflare Cache API: las OG images son inmutables por URL
+  // y satori consume mucha CPU (límite free: 10ms/request)
+  const cache = caches.default;
+  const cacheKey = new Request(url.toString(), { method: 'GET' });
+  const cached = await cache.match(cacheKey);
+  if (cached) {
+    return cached;
+  }
+
   const nombre = searchParams.get('nombre') || 'Programa';
   const categoria = searchParams.get('categoria') || 'Herramienta de Diseño';
   const iconUrl = searchParams.get('icon');
   const isOpenSource = searchParams.get('opensource') === 'true';
   const isRecommended = searchParams.get('recommended') === 'true';
 
-  return new ImageResponse(
+  const response = new ImageResponse(
     (
       <div
         style={{
@@ -153,4 +163,11 @@ export async function GET(request: Request) {
       height: 630,
     }
   );
+
+  // Guardar en cache por 7 días (las OG images no cambian por URL)
+  const headers = new Headers(response.headers);
+  headers.set('Cache-Control', 'public, max-age=604800, immutable');
+  const cachedResponse = new Response(response.body, { status: response.status, headers });
+  await cache.put(cacheKey, cachedResponse.clone());
+  return cachedResponse;
 }

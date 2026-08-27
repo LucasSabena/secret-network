@@ -1,6 +1,38 @@
 import type { NextConfig } from "next";
+import { defineCloudflareConfig } from "@opennextjs/cloudflare";
 
 const nextConfig: NextConfig = {
+  openNextConfig: defineCloudflareConfig({
+    incrementalCache: "kv-incremental-cache",
+    tagCache: "do-sharded-tag-cache",
+  }),
+  // Excluir archivos de next/dist/compiled que el tracing copia de forma conservadora
+  // pero que no se usan en runtime (verificado: ninguno es importado por el código de la app).
+  // Reduce el bundle del Worker ~1.8MB gzip para entrar en el límite de 3MiB del plan free.
+  outputFileTracingExcludes: {
+    '*': [
+      'node_modules/next/dist/compiled/next-devtools/**',
+      'node_modules/next/dist/compiled/@next/font/dist/fontkit/**',
+      'node_modules/next/dist/compiled/next-server/app-page-experimental.runtime.prod.js',
+      'node_modules/next/dist/compiled/next-server/app-page-turbo-experimental.runtime.prod.js',
+      'node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.prod.js',
+      'node_modules/next/dist/compiled/next-server/pages-turbo.runtime.prod.js',
+      'node_modules/next/dist/compiled/edge-runtime/**',
+      'node_modules/next/dist/compiled/@edge-runtime/**',
+      'node_modules/next/dist/compiled/crypto-browserify/**',
+      'node_modules/next/dist/compiled/@vercel/nft/**',
+      'node_modules/next/dist/compiled/cssnano-simple/**',
+      'node_modules/next/dist/compiled/compression/**',
+      'node_modules/next/dist/compiled/comment-json/**',
+      'node_modules/next/dist/compiled/conf/**',
+      'node_modules/next/dist/compiled/jsonwebtoken/**',
+      'node_modules/react-dom/cjs/react-dom-server.edge.development.js',
+      'node_modules/react-dom/cjs/react-dom-server.browser.development.js',
+      'node_modules/react-dom/cjs/react-dom-server-legacy.browser.development.js',
+      'node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js',
+      'node_modules/react-dom/cjs/react-dom-server.node.development.js',
+    ],
+  },
   // Optimizaciones de rendimiento
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',

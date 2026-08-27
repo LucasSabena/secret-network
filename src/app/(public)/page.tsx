@@ -1,12 +1,13 @@
 // FILE: src/app/page.tsx
 
-import { createClient } from "@/lib/supabase";
+import { createStaticClient } from "@/lib/supabase";
 import { Hero } from "@/components/layout/hero";
 import { ProgramsListClient } from "@/components/shared/programs-list-client";
+import type { Anunciante } from "@/lib/types";
 
-// ⚡ ISR: Regenerar esta página cada hora (3600 segundos)
-// Esto mejora drásticamente la velocidad al servir páginas pre-renderizadas
-export const revalidate = 3600; // 1 hora
+// ⚡ SSG: Pre-renderizada en build time (cero CPU en runtime en Cloudflare Workers)
+// El plan free de Workers tiene 10ms de CPU por request; el render dinámico lo supera.
+export const dynamic = 'force-static';
 
 // 🚀 Generar metadata para SEO
 export const metadata = {
@@ -25,13 +26,14 @@ export const metadata = {
  * This is a Server Component that fetches data and passes it to client components.
  */
 export default async function HomePage() {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
   
   // 🚀 Optimización: Fetch paralelo de todos los datos necesarios
   const [
     { data: programas, error: programasError },
     { data: todasCategorias },
     { data: modelosPrecios },
+    { data: anunciante },
   ] = await Promise.all([
     supabase
       .from('programas')
@@ -46,6 +48,17 @@ export default async function HomePage() {
       .from('modelos_de_precios')
       .select('*')
       .order('nombre', { ascending: true }),
+    // Primer anunciante activo y dentro de la ventana de campaña
+    supabase
+      .from('anunciantes')
+      .select('*')
+      .eq('activo', true)
+      .or('fecha_inicio.is.null,fecha_inicio.lte.' + new Date().toISOString().slice(0, 10))
+      .or('fecha_fin.is.null,fecha_fin.gte.' + new Date().toISOString().slice(0, 10))
+      .order('orden', { ascending: true })
+      .order('id', { ascending: true })
+      .limit(1)
+      .maybeSingle(),
   ]);
 
   // Separar categorías principales y subcategorías
@@ -145,6 +158,7 @@ export default async function HomePage() {
           subcategorias={subcatsData || []}
           modelosPrecios={modelosPrecios || []}
           programasModelosPrecios={programasModelosPrecios || []}
+          ad={(anunciante as Anunciante | null) ?? null}
         />
       </section>
     </main>

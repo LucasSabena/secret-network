@@ -8,6 +8,16 @@ export const dynamic = 'force-dynamic';
  * RSS Feed para el blog
  */
 export async function GET() {
+  // Cache en Cloudflare Cache API: el plan free tiene 10ms de CPU por request
+  // y la query a Supabase + render lo supera. En hits, el cache no consume CPU.
+  // (caches solo existe en runtime Workers, no en build Node)
+  const cache = (globalThis as any).caches?.default;
+  const cacheKey = new Request('https://secretnetwork.co/rss.xml', { method: 'GET' });
+  const cached = cache ? await cache.match(cacheKey) : null;
+  if (cached) {
+    return cached;
+  }
+
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://secretnetwork.co';
   const supabase = createStaticClient();
 
@@ -45,10 +55,21 @@ export async function GET() {
   </channel>
 </rss>`;
 
-  return new NextResponse(rss, {
+  const response = new NextResponse(rss, {
     headers: {
       'Content-Type': 'application/xml',
       'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate',
     },
   });
+
+  // Guardar en cache por 1 hora
+  if (cache) {
+    const cachedResponse = new Response(response.body, {
+      status: response.status,
+      headers: response.headers,
+    });
+    await cache.put(cacheKey, cachedResponse.clone());
+    return cachedResponse;
+  }
+  return response;
 }

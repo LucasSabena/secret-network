@@ -21,7 +21,6 @@ import { JsonLdOrganization } from "@/components/seo/json-ld-organization";
 import { JsonLdWebsite } from "@/components/seo/json-ld-website";
 import { JsonLdSitelinksSearch } from "@/components/seo/json-ld-sitelinks-search";
 import { Toaster } from "@/components/ui/toaster";
-import { Analytics } from "@vercel/analytics/next";
 import { SmoothScrollWrapper } from "@/components/layout/smooth-scroll-wrapper";
 import { ServiceWorkerRegister } from "@/components/shared/service-worker-register";
 
@@ -185,9 +184,6 @@ export default function RootLayout({
 
         {/* Google Analytics - Solo en producción */}
         {process.env.NODE_ENV === 'production' && <GoogleAnalytics measurementId={gaId} />}
-        
-        {/* Vercel Analytics */}
-        <Analytics />
         
         {/* Service Worker para cache offline */}
         <ServiceWorkerRegister />

@@ -84,10 +84,10 @@ export async function generateMetadata({ params }: ProgramPageProps): Promise<Me
 
   const description = stripHtml(programa.descripcion_corta || programa.descripcion_larga) || `Descubre ${programa.nombre}, una herramienta de diseño profesional.`;
 
-  // Usar imagen de captura si existe, sino generar OG image dinámica
+  // Usar imagen de captura si existe, sino OG image estática (generada en build), sino endpoint dinámico
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://secretnetwork.co';
   const imageUrl = programa.captura_url ||
-    `${baseUrl}/api/og-programa?nombre=${encodeURIComponent(programa.nombre)}&categoria=${encodeURIComponent(categoria?.nombre || 'Herramienta de Diseño')}&icon=${encodeURIComponent(programa.icono_url || '')}&opensource=${programa.es_open_source}&recommended=${programa.es_recomendado}`;
+    `${baseUrl}/og/${slug}.png`;
 
   return {
     title: programa.nombre,

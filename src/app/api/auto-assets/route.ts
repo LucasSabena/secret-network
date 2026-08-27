@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import sharp from 'sharp';
 import { uploadBufferToCloudinary, uploadUrlToCloudinary } from '@/lib/cloudinary-server';
 import { supabaseRouteClient } from '@/lib/supabase-server';
 
@@ -163,85 +162,10 @@ async function fetchLogo(url: string): Promise<Buffer | null> {
  * - Cuadrado: logo max 500x500
  * - Muy horizontal: ajustar al ancho con padding vertical
  * - Muy vertical: ajustar al alto con padding horizontal
+ *
+ * Se delega a Cloudinary (c_pad + b_transparent) porque sharp no está disponible
+ * en Cloudflare Workers (binarios nativos excluidos por OpenNext).
  */
-async function processLogoWithSafeSpace(logoBuffer: Buffer): Promise<Buffer> {
-    const CANVAS_SIZE = 1000;
-    const MAX_LOGO_SIZE = 500; // 50% del canvas para logos cuadrados
-    const PADDING = 250; // (1000 - 500) / 2
-
-    try {
-        // Get image metadata
-        const metadata = await sharp(logoBuffer).metadata();
-        const width = metadata.width || 100;
-        const height = metadata.height || 100;
-        const aspectRatio = width / height;
-
-        let targetWidth: number;
-        let targetHeight: number;
-
-        if (aspectRatio > 1.5) {
-            // Muy horizontal: ajustar al ancho disponible (con más padding)
-            targetWidth = Math.min(width, CANVAS_SIZE - PADDING);
-            targetHeight = Math.round(targetWidth / aspectRatio);
-        } else if (aspectRatio < 0.67) {
-            // Muy vertical: ajustar al alto disponible (con más padding)
-            targetHeight = Math.min(height, CANVAS_SIZE - PADDING);
-            targetWidth = Math.round(targetHeight * aspectRatio);
-        } else {
-            // Más o menos cuadrado: usar tamaño máximo
-            if (width > height) {
-                targetWidth = MAX_LOGO_SIZE;
-                targetHeight = Math.round(MAX_LOGO_SIZE / aspectRatio);
-            } else {
-                targetHeight = MAX_LOGO_SIZE;
-                targetWidth = Math.round(MAX_LOGO_SIZE * aspectRatio);
-            }
-        }
-
-        // Resize the logo
-        const resizedLogo = await sharp(logoBuffer)
-            .resize(targetWidth, targetHeight, {
-                fit: 'inside',
-                withoutEnlargement: false,
-            })
-            .png()
-            .toBuffer();
-
-        // Get the actual size after resize
-        const resizedMetadata = await sharp(resizedLogo).metadata();
-        const finalWidth = resizedMetadata.width || targetWidth;
-        const finalHeight = resizedMetadata.height || targetHeight;
-
-        // Calculate position to center
-        const left = Math.round((CANVAS_SIZE - finalWidth) / 2);
-        const top = Math.round((CANVAS_SIZE - finalHeight) / 2);
-
-        // Create TRANSPARENT canvas and composite the logo
-        const result = await sharp({
-            create: {
-                width: CANVAS_SIZE,
-                height: CANVAS_SIZE,
-                channels: 4,
-                background: { r: 0, g: 0, b: 0, alpha: 0 },
-            },
-        })
-            .composite([
-                {
-                    input: resizedLogo,
-                    left,
-                    top,
-                },
-            ])
-            .png()
-            .toBuffer();
-
-        console.log(`Logo processed: ${width}x${height} -> ${finalWidth}x${finalHeight} centered in ${CANVAS_SIZE}x${CANVAS_SIZE}`);
-        return result;
-    } catch (error) {
-        console.error('Error processing logo:', error);
-        throw new Error('Failed to process logo');
-    }
-}
 
 /**
  * POST /api/auto-assets
@@ -317,11 +241,14 @@ export async function POST(request: NextRequest) {
 
             if (logoBuffer) {
                 try {
-                    const processedLogo = await processLogoWithSafeSpace(logoBuffer);
                     const uploaded = await uploadBufferToCloudinary(
-                        processedLogo,
+                        logoBuffer,
                         'programas/icons',
-                        `${publicIdBase}-icon`
+                        `${publicIdBase}-icon`,
+                        [
+                            { width: 1000, height: 1000, crop: 'pad', background: 'transparent' },
+                            { width: 500, crop: 'limit' },
+                        ]
                     );
                     result.logoUrl = uploaded.secure_url;
                     console.log('Logo uploaded:', result.logoUrl);
